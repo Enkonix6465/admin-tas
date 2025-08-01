@@ -89,9 +89,9 @@ const Analytics = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-2">
       {/* Minimal Header */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Analytics</span>
           <span className="px-1 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">Live Data</span>
