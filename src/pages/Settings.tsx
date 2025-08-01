@@ -667,7 +667,7 @@ export default function Settings() {
               </div>
 
               {/* Save Button */}
-              <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
+              <div className="px-3 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
                 <div className="flex justify-end space-x-3">
                   <button className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
                     Cancel
