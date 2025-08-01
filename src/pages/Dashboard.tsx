@@ -382,7 +382,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3 overflow-y-auto">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-2 overflow-y-auto">
       {/* Offline Mode Banner */}
       {!navigator.onLine && (
         <div className="mb-4 p-3 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg flex items-center gap-3">
@@ -399,8 +399,8 @@ const Dashboard = () => {
       )}
 
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-3">
+      <div className="mb-2">
+        <div className="flex items-center justify-between mb-2">
           <div>
             <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">Active</p>
@@ -464,7 +464,7 @@ const Dashboard = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-3">
         <StatCard
           title="Total Projects"
           value={totalProjects}
@@ -498,7 +498,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
         {/* Projects Section */}
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
