@@ -291,12 +291,12 @@ const Dashboard = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
+        className="bg-white dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
         onClick={() => navigate('/projects', { state: { selectedProject: project.id } })}
       >
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-sm font-medium">
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex items-start gap-2">
+            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-medium">
               {project.name ? project.name.charAt(0).toUpperCase() : 'P'}
             </div>
             <div>
