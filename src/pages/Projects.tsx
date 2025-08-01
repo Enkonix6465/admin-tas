@@ -172,7 +172,7 @@ function Projects() {
         {sortedProjects.map((project: any) => {
           const team = teams.find((t) => t.id === project.teamId);
           return (
-            <div key={project.id} className="p-4 bg-white rounded shadow">
+            <div key={project.id} className="p-3 bg-white rounded shadow">
               <h2 className="font-semibold text-lg">{project.name}</h2>
               <p className="text-sm text-gray-500">{project.description}</p>
               <p className="text-sm text-gray-500 mt-1">
