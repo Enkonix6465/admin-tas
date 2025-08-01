@@ -203,7 +203,7 @@ function Layout() {
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
                     }`}
                   >
-                    <Grid3X3 className="w-3 h-3" />
+                    <Grid3X3 className="w-4 h-4" />
                     Overview
                   </Link>
                   <Link
