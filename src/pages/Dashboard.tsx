@@ -224,36 +224,36 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3 overflow-y-auto">
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
-            <p className="text-gray-600 dark:text-gray-400">Active</p>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">Active</p>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
               <Filter className="w-4 h-4" />
               Filter
               <ChevronDown className="w-4 h-4" />
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            <button className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
               <Plus className="w-4 h-4" />
               New
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
               Share
             </button>
-            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-              <MoreHorizontal className="w-5 h-5" />
+            <button className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors">
+              <MoreHorizontal className="w-4 h-4" />
             </button>
           </div>
         </div>
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         <StatCard
           title="Total Projects"
           value={totalProjects}
