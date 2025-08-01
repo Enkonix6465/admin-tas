@@ -291,7 +291,7 @@ const Dashboard = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-lg p-2 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
+        className="bg-white dark:bg-gray-800 rounded-lg p-1.5 sm:p-2 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
         onClick={() => navigate('/projects', { state: { selectedProject: project.id } })}
       >
         <div className="flex items-start justify-between mb-2">
