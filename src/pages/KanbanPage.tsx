@@ -423,11 +423,28 @@ const KanbanPage = () => {
 
   return (
     <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
+      {/* Offline Mode Banner */}
+      {!navigator.onLine && (
+        <div className="mb-3 p-2 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
+          <div>
+            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
+              You're currently offline
+            </p>
+            <p className="text-xs text-yellow-700 dark:text-yellow-400">
+              Task changes may not save until connection is restored
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Project Board [2024]</span>
-          <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded">On track</span>
+          <span className="px-2 py-0.5 text-xs bg-green-100 text-green-700 rounded">
+            {navigator.onLine ? 'On track' : 'Offline'}
+          </span>
           <span className="px-2 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">
             {filteredTasks.length} tasks
           </span>
