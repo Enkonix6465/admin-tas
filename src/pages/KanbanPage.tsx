@@ -35,6 +35,7 @@ const KanbanPage = () => {
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [newTaskColumn, setNewTaskColumn] = useState("");
   const [draggedTask, setDraggedTask] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [newTaskForm, setNewTaskForm] = useState({
     title: "",
     description: "",
