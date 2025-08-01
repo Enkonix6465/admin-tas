@@ -123,7 +123,6 @@ export function LoginForm({
               </div>
             </form>
 
-            <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 relative hidden md:block">
               
               <img
                 src="https://cdn.pixabay.com/photo/2016/11/08/05/10/students-1807505_1280.jpg"
@@ -131,7 +130,7 @@ export function LoginForm({
                 className="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-overlay"
               />
               
-            </div>
+            
           </CardContent>
         </Card>
       
