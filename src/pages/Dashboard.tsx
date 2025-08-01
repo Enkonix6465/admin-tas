@@ -246,15 +246,15 @@ const Dashboard = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 ${
+      className={`bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 ${
         onClick ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''
       }`}
       onClick={onClick}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <div className={`p-2 rounded-lg ${
+          <div className="flex items-center gap-2 mb-1">
+            <div className={`p-1.5 rounded-lg ${
               color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/20' :
               color === 'yellow' ? 'bg-yellow-50 dark:bg-yellow-900/20' :
               color === 'green' ? 'bg-green-50 dark:bg-green-900/20' :
