@@ -195,6 +195,7 @@ export default function ProjectTasksViewer() {
         status="On track"
         statusColor="bg-green-100 text-green-700"
         tabs={tabs}
+        onTabChange={setActiveTab}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
         searchPlaceholder="Search tasks..."
