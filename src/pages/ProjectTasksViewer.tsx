@@ -415,6 +415,8 @@ export default function ProjectTasksViewer() {
     },
   ];
 
+  console.log('Current activeTab:', activeTab);
+
   return (
     <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
       <PageHeader
