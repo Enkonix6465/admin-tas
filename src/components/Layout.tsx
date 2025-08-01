@@ -422,6 +422,18 @@ function Layout() {
                 <Calendar className="w-3 h-3" />
                 Calendar
               </Link>
+              <Link
+                to="/settings"
+                onClick={closeSidebar}
+                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                  isActive("/settings")
+                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                }`}
+              >
+                <Settings className="w-3 h-3" />
+                Settings
+              </Link>
             </div>
           </nav>
         </div>
