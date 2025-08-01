@@ -123,6 +123,7 @@ export function LoginForm({
               </div>
             </form>
 
+            <div className=" relative hidden md:block">
               
               <img
                 src="https://cdn.pixabay.com/photo/2016/11/08/05/10/students-1807505_1280.jpg"
