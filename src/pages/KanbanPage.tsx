@@ -426,6 +426,20 @@ const KanbanPage = () => {
     </motion.div>
   );
 
+  if (loading) {
+    return (
+      <div className="h-full bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Loading Kanban board...</p>
+          <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+            If this takes too long, there might be a connection issue
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
       {/* Offline Mode Banner */}
