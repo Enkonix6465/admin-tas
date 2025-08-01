@@ -304,7 +304,7 @@ export default function ProjectTasksViewer() {
                         transition={{ delay: index * 0.05 }}
                         className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                       >
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-start gap-3">
                             {getStatusIcon(task.status)}
                             <div>
@@ -319,7 +319,7 @@ export default function ProjectTasksViewer() {
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(
                               task.status
@@ -328,7 +328,7 @@ export default function ProjectTasksViewer() {
                             {task.status.replace("_", " ")}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             <img
                               src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
@@ -346,13 +346,13 @@ export default function ProjectTasksViewer() {
                             </span>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-gray-100">
                             <Calendar className="w-4 h-4 text-gray-400" />
                             {task.due_date}
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <div className="w-full">
                             <div className="flex items-center justify-between mb-1">
                               <span className="text-xs text-gray-600 dark:text-gray-400">
@@ -380,7 +380,7 @@ export default function ProjectTasksViewer() {
                             </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
                             {task.status === "completed"
                               ? calculatePerformance(
@@ -391,7 +391,7 @@ export default function ProjectTasksViewer() {
                               : "-"}
                           </span>
                         </td>
-                        <td className="px-6 py-4">
+                        <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             {task.progress_link && (
                               <a
