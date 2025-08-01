@@ -408,11 +408,11 @@ const Dashboard = () => {
           <div className="flex items-center gap-1 sm:gap-2">
             <button
               onClick={() => setShowFilterModal(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Filter className="w-4 h-4" />
-              Filter
-              <ChevronDown className="w-4 h-4" />
+              <Filter className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Filter</span>
+              <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
             
             <div className="relative">
