@@ -434,19 +434,18 @@ function Layout() {
           </nav>
         </div>
 
-        {/* User Profile - Minimal */}
-        <div className="border-t border-gray-200 dark:border-gray-700 px-2 py-1">
-          <div className="flex items-center gap-2">
-            <img
-              src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                user?.email || "User"
-              )}`}
-              alt="avatar"
-              className="w-6 h-6 rounded-full"
-            />
+        {/* User Profile */}
+        <div className="border-t border-gray-200 dark:border-gray-700 px-2 py-2">
+          <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 rounded px-2 py-1.5">
+            <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+              CE
+            </div>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate">
-                {user?.email?.split("@")[0] || "User"}
+              <p className="text-xs font-medium text-gray-900 dark:text-gray-100">
+                ceo
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                localhost:5173/ProjectDashboard
               </p>
             </div>
             <button
