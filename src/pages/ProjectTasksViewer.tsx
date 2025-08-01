@@ -150,6 +150,224 @@ export default function ProjectTasksViewer() {
 
   const selectedProject = projects.find((proj: any) => proj.id === selectedProjectId);
 
+  // Board View Component
+  const BoardView = () => {
+    const columns = [
+      { id: "pending", title: "To Do", tasks: searchedTasks.filter(t => t.status === "pending") },
+      { id: "in_progress", title: "In Progress", tasks: searchedTasks.filter(t => t.status === "in_progress") },
+      { id: "completed", title: "Done", tasks: searchedTasks.filter(t => t.status === "completed") },
+    ];
+
+    const TaskCard = ({ task }: { task: any }) => (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 mb-3 cursor-pointer hover:shadow-md transition-shadow"
+      >
+        <div className="flex items-start justify-between mb-2">
+          <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2">
+            {task.title}
+          </h4>
+          <button className="text-gray-400 hover:text-gray-600 p-0.5">
+            <MoreHorizontal className="w-3 h-3" />
+          </button>
+        </div>
+
+        {task.description && (
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+            {task.description}
+          </p>
+        )}
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img
+              src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                employeesMap[task.assigned_to]?.name || task.assigned_to
+              )}`}
+              alt="avatar"
+              className="w-5 h-5 rounded-full"
+            />
+            <span className="text-xs text-gray-600 dark:text-gray-400">
+              {employeesMap[task.assigned_to]?.name || task.assigned_to}
+            </span>
+          </div>
+
+          {task.due_date && (
+            <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+              <Calendar className="w-3 h-3" />
+              {task.due_date}
+            </div>
+          )}
+        </div>
+
+        {task.priority === "high" && (
+          <div className="mt-2">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 text-xs rounded-full">
+              <Flag className="w-2 h-2" />
+              High Priority
+            </span>
+          </div>
+        )}
+      </motion.div>
+    );
+
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
+        {columns.map((column) => (
+          <div key={column.id} className="flex flex-col h-full">
+            <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+              <div className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${
+                  column.id === "pending" ? "bg-gray-400" :
+                  column.id === "in_progress" ? "bg-blue-500" : "bg-green-500"
+                }`} />
+                <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                  {column.title}
+                </h3>
+                <span className="bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs px-2 py-0.5 rounded-full">
+                  {column.tasks.length}
+                </span>
+              </div>
+              <button className="text-gray-400 hover:text-gray-600 p-1">
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-2">
+              {column.tasks.map((task: any) => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+
+              {column.tasks.length === 0 && (
+                <div className="text-center py-8 text-gray-400 dark:text-gray-500">
+                  <Circle className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No tasks</p>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Timeline View Component
+  const TimelineView = () => {
+    const sortedTasks = [...searchedTasks].sort((a, b) => {
+      const dateA = new Date(a.due_date || a.created_at?.seconds * 1000 || Date.now());
+      const dateB = new Date(b.due_date || b.created_at?.seconds * 1000 || Date.now());
+      return dateA.getTime() - dateB.getTime();
+    });
+
+    const getMonthYear = (dateStr: string | any) => {
+      let date;
+      if (typeof dateStr === 'string') {
+        date = new Date(dateStr);
+      } else if (dateStr?.seconds) {
+        date = new Date(dateStr.seconds * 1000);
+      } else {
+        date = new Date();
+      }
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    };
+
+    const groupedTasks = sortedTasks.reduce((acc, task) => {
+      const monthYear = getMonthYear(task.due_date || task.created_at);
+      if (!acc[monthYear]) acc[monthYear] = [];
+      acc[monthYear].push(task);
+      return acc;
+    }, {} as Record<string, any[]>);
+
+    return (
+      <div className="space-y-6">
+        {Object.entries(groupedTasks).map(([monthYear, tasks]) => (
+          <div key={monthYear} className="relative">
+            <div className="sticky top-0 bg-gray-50 dark:bg-gray-900 py-2 z-10">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <Calendar className="w-5 h-5" />
+                {monthYear}
+              </h3>
+            </div>
+
+            <div className="relative pl-8">
+              <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-gray-700" />
+
+              <div className="space-y-4">
+                {tasks.map((task: any, index: number) => (
+                  <motion.div
+                    key={task.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="relative"
+                  >
+                    <div className={`absolute -left-5 w-3 h-3 rounded-full border-2 border-white dark:border-gray-900 ${
+                      task.status === "completed" ? "bg-green-500" :
+                      task.status === "in_progress" ? "bg-blue-500" : "bg-gray-400"
+                    }`} />
+
+                    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 ml-2">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+                            {task.title}
+                          </h4>
+                          {task.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+                              {task.description}
+                            </p>
+                          )}
+                        </div>
+                        <span className={`px-2 py-1 text-xs rounded-full ${getStatusColor(task.status)}`}>
+                          {task.status.replace("_", " ")}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                              employeesMap[task.assigned_to]?.name || task.assigned_to
+                            )}`}
+                            alt="avatar"
+                            className="w-5 h-5 rounded-full"
+                          />
+                          <span className="text-gray-600 dark:text-gray-400">
+                            {employeesMap[task.assigned_to]?.name || task.assigned_to}
+                          </span>
+                        </div>
+
+                        {task.due_date && (
+                          <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+                            <Clock className="w-3 h-3" />
+                            Due {task.due_date}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {sortedTasks.length === 0 && (
+          <div className="text-center py-12">
+            <Calendar className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+              No tasks to display
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              Select a project to view its timeline
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const filterContent = (
     <div className="space-y-4">
       <div>
