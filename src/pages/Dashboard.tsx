@@ -136,7 +136,14 @@ const Dashboard = () => {
                   {column.count}
                 </span>
               </div>
-              <button className="text-gray-400 hover:text-gray-600 p-1">
+              <button
+                onClick={() => {
+                  // You could open a modal to add new task to this column
+                  console.log(`Add new task to ${column.title}`);
+                }}
+                className="text-gray-400 hover:text-gray-600 p-1"
+                title={`Add task to ${column.title}`}
+              >
                 <Plus className="w-4 h-4" />
               </button>
             </div>
