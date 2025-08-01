@@ -733,12 +733,13 @@ export default function Settings() {
                   >
                     Cancel
                   </button>
-                  <button 
+                  <button
                     onClick={handleSave}
-                    className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    disabled={saving}
+                    className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Save className="w-4 h-4" />
-                    <span>Save Changes</span>
+                    <span>{saving ? "Saving..." : "Save Changes"}</span>
                   </button>
                 </div>
               </div>
