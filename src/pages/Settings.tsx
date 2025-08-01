@@ -675,15 +675,15 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4 py-2">
-        <div className="mb-3">
-          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Manage your account settings and preferences
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-3">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar Navigation */}
           <div className="lg:w-64 flex-shrink-0">
             <nav className="space-y-1">
@@ -693,7 +693,7 @@ export default function Settings() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center space-x-2 px-3 py-2 text-left rounded-lg transition-colors ${
+                    className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${
                       activeTab === tab.id
                         ? "bg-blue-600 text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -710,12 +710,12 @@ export default function Settings() {
           {/* Content Area */}
           <div className="flex-1">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-              <div className="px-3 py-3">
+              <div className="px-6 py-6">
                 {renderTabContent()}
               </div>
 
               {/* Save Button */}
-              <div className="px-3 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
+              <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
                 <div className="flex justify-end space-x-3">
                   <button className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
                     Cancel
