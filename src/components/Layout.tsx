@@ -228,9 +228,46 @@ function Layout() {
               >
                 <Menu className="h-4 w-4" />
               </button>
-              <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
-                <span>Project Board [2023]</span>
-                <ChevronDown className="w-3 h-3" />
+              <div className="relative project-dropdown">
+                <button
+                  onClick={() => setProjectOpen(!projectOpen)}
+                  className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded px-1 py-1"
+                >
+                  <span>Project Board [2023]</span>
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {projectOpen && (
+                  <div className="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-10 p-2">
+                    <div className="space-y-1">
+                      <div className="px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300">Recent Projects</div>
+                      <button
+                        onClick={() => setProjectOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        📋 Project Board [2023]
+                      </button>
+                      <button
+                        onClick={() => setProjectOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        🚀 Product Launch Q4
+                      </button>
+                      <button
+                        onClick={() => setProjectOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        💼 Client Portal
+                      </button>
+                      <hr className="my-1 border-gray-200 dark:border-gray-700" />
+                      <button
+                        onClick={() => setProjectOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-blue-600"
+                      >
+                        + Create project
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
               <span className="px-1 py-0.5 text-xs bg-green-100 text-green-700 rounded">On track</span>
             </div>
