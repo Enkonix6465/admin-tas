@@ -78,12 +78,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <div className="flex items-center gap-2">
             {customActions}
             {showShare && (
-              <button className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              <button className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                 Share
               </button>
             )}
             {showSettings && (
-              <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+              <button className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
                 <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </button>
             )}
