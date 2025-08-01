@@ -202,7 +202,14 @@ const Dashboard = () => {
               )}
 
               {/* Add Task Button */}
-              <button className="w-full flex items-center gap-2 p-2 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded border-2 border-dashed border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+              <button
+                onClick={() => {
+                  // You could open a modal to add new task to this column
+                  console.log(`Add new task to ${column.title}`);
+                }}
+                className="w-full flex items-center gap-2 p-2 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded border-2 border-dashed border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
+                title={`Add task to ${column.title}`}
+              >
                 <Plus className="w-3 h-3" />
                 Add task
               </button>
