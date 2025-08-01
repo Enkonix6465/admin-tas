@@ -89,7 +89,7 @@ const Analytics = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-1 sm:p-2">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
       {/* Minimal Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -143,7 +143,7 @@ const Analytics = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-1 sm:gap-2 mb-2 sm:mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         {[
           { icon: Activity, label: "Total Tasks", value: tasks.length || 44, change: "+12%", color: "blue" },
           { icon: CheckCircle, label: "Completed", value: taskStatusData[2].value, change: "+8%", color: "green" },
@@ -155,12 +155,12 @@ const Analytics = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-1.5 sm:p-2"
+            className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-6"
           >
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">{stat.label}</p>
-                <p className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">{stat.value}</p>
+                <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{stat.value}</p>
                 <p className="text-xs text-green-600 dark:text-green-400">{stat.change}</p>
               </div>
               <div className={`p-2 bg-${stat.color}-100 dark:bg-${stat.color}-900/20 rounded`}>
