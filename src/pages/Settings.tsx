@@ -93,6 +93,7 @@ export default function Settings() {
       return;
     }
 
+    setSaving(true);
     try {
       const userSettingsRef = doc(db, "userSettings", user.uid);
 
@@ -110,6 +111,8 @@ export default function Settings() {
     } catch (error) {
       console.error("Error saving settings:", error);
       toast.error("Failed to save settings");
+    } finally {
+      setSaving(false);
     }
   };
 
