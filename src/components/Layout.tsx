@@ -104,15 +104,7 @@ function Layout() {
     }));
   };
 
-  const menuItems = [
-    { path: "/", icon: LayoutDashboard, label: "Dashboard" },
-    { path: "/KanbanPage", icon: CheckSquare, label: "Board" },
-    { path: "/calendar", icon: Calendar, label: "Calendar" },
-    { path: "/ProjectDashboard", icon: Briefcase, label: "Projects" },
-    { path: "/MyTasks", icon: Clock, label: "My Tasks" },
-    { path: "/Analytics", icon: BarChart3, label: "Analytics" },
-    { path: "/settings", icon: Settings, label: "Settings" },
-  ];
+
 
   return (
     <div className="min-h-screen h-screen bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
