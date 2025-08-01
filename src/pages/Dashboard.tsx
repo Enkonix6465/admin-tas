@@ -405,8 +405,8 @@ const Dashboard = () => {
             <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">Active</p>
           </div>
-          <div className="flex items-center gap-2">
-            <button 
+          <div className="flex items-center gap-1 sm:gap-2">
+            <button
               onClick={() => setShowFilterModal(true)}
               className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
