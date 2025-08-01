@@ -627,9 +627,9 @@ export default function Settings() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+      <div className="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4 py-2">
+        <div className="mb-3">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Manage your account settings and preferences
           </p>
@@ -645,7 +645,7 @@ export default function Settings() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${
+                    className={`w-full flex items-center space-x-2 px-3 py-2 text-left rounded-lg transition-colors ${
                       activeTab === tab.id
                         ? "bg-blue-600 text-white"
                         : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
