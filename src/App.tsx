@@ -55,6 +55,7 @@ function App() {
   return (
     <>
       <Toaster position="top-right" />
+      <ConnectionStatus />
       <Routes>
         <Route
           path="/login"
