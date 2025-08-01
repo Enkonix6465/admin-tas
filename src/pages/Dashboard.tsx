@@ -511,7 +511,7 @@ const Dashboard = () => {
                 View All <ExternalLink className="w-3 h-3" />
               </button>
             </div>
-            <div className="p-3 space-y-2">
+            <div className="p-2 sm:p-3 space-y-1 sm:space-y-2">
               {projects.length > 0 ? (
                 projects.slice(0, 3).map((project: any) => (
                   <ProjectCard key={project.id} project={project} />
