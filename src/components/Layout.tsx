@@ -38,6 +38,8 @@ function Layout() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  const [projectOpen, setProjectOpen] = useState(false);
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
