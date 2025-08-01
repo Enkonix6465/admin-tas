@@ -662,7 +662,7 @@ export default function Settings() {
           {/* Content Area */}
           <div className="flex-1">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-              <div className="px-6 py-8">
+              <div className="px-4 py-6">
                 {renderTabContent()}
               </div>
 
