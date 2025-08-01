@@ -139,6 +139,7 @@ export default function Settings() {
     const loadSettings = async () => {
       if (!user?.uid) return;
 
+      setLoading(true);
       try {
         const userSettingsRef = doc(db, "userSettings", user.uid);
         const settingsSnap = await getDoc(userSettingsRef);
@@ -149,9 +150,13 @@ export default function Settings() {
           if (data.notifications) setNotifications(prev => ({ ...prev, ...data.notifications }));
           if (data.privacy) setPrivacy(prev => ({ ...prev, ...data.privacy }));
           if (data.preferences) setPreferences(prev => ({ ...prev, ...data.preferences }));
+          toast.success("Settings loaded successfully!");
         }
       } catch (error) {
         console.error("Error loading settings:", error);
+        toast.error("Failed to load settings");
+      } finally {
+        setLoading(false);
       }
     };
 
