@@ -246,7 +246,7 @@ const Dashboard = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white dark:bg-gray-800 rounded-lg p-2 sm:p-3 border border-gray-200 dark:border-gray-700 ${
+      className={`bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 ${
         onClick ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''
       }`}
       onClick={onClick}
@@ -270,7 +270,7 @@ const Dashboard = () => {
             <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</h3>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</span>
+            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</span>
             {change && (
               <span className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" />
@@ -382,7 +382,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-1 sm:p-2 overflow-y-auto">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto">
       {/* Offline Mode Banner */}
       {!navigator.onLine && (
         <div className="mb-4 p-3 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg flex items-center gap-3">
@@ -402,7 +402,7 @@ const Dashboard = () => {
       <div className="mb-2">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <h1 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">Active</p>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
@@ -464,7 +464,7 @@ const Dashboard = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 sm:gap-2 mb-2 sm:mb-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
           title="Total Projects"
           value={totalProjects}
@@ -498,7 +498,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Projects Section */}
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
