@@ -1,0 +1,609 @@
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../lib/firebase";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  CartesianGrid,
+  BarChart,
+  Bar,
+} from "recharts";
+import { useAuthStore } from "../store/authStore";
+import PageHeader from "../components/PageHeader";
+import { motion } from "framer-motion";
+import {
+  Users,
+  TrendingUp,
+  Clock,
+  CheckCircle,
+  BarChart3,
+  Calendar,
+  Target,
+  Award,
+  Activity,
+  AlertCircle,
+  User,
+} from "lucide-react";
+
+export default function EmployeePerformancePage() {
+  const { user } = useAuthStore();
+  const [tasks, setTasks] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [employees, setEmployees] = useState([]);
+  const [groupedEmployees, setGroupedEmployees] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [noTeam, setNoTeam] = useState(false);
+  const [performanceData, setPerformanceData] = useState({});
+  const [monthChartData, setMonthChartData] = useState([]);
+  const [dateChartData, setDateChartData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!user?.uid) {
+          setLoading(false);
+          return;
+        }
+
+        const teamsSnap = await getDocs(collection(db, "teams"));
+
+        if (teamsSnap.empty) {
+          setEmployees([]);
+          setGroupedEmployees([]);
+          setNoTeam(true);
+          setLoading(false);
+          return;
+        }
+
+        const empSnap = await getDocs(collection(db, "employees"));
+        const allEmployees = empSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        const grouped = teamsSnap.docs.map((teamDoc) => {
+          const teamData = teamDoc.data();
+          const memberIds = teamData.members || [];
+          const members = allEmployees.filter((emp) =>
+            memberIds.includes(emp.id)
+          );
+          const lead = allEmployees.find(
+            (emp) => emp.id === teamData.created_by
+          );
+
+          return {
+            teamId: teamDoc.id,
+            teamName: teamData.teamName || "Unnamed Team",
+            teamLead: lead?.name || "Unknown Lead",
+            members,
+          };
+        });
+
+        setGroupedEmployees(grouped);
+        setEmployees(allEmployees);
+
+        const taskSnap = await getDocs(collection(db, "tasks"));
+        const tasksData = taskSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setTasks(tasksData);
+      } catch (error) {
+        console.error("Error loading data", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [user?.uid]);
+
+  useEffect(() => {
+    if (!selectedEmployee || tasks.length === 0) return;
+
+    const empTasks = tasks.filter(
+      (task) => task.assigned_to === selectedEmployee.id
+    );
+    const perf = {
+      total: empTasks.length,
+      completed: 0,
+      onTime: 0,
+      reassigned: 0,
+    };
+
+    const dateMap = {};
+    const monthMap = {};
+
+    empTasks.forEach((task) => {
+      const {
+        progress_status,
+        due_date,
+        progress_updated_at,
+        reassign_history = [],
+      } = task;
+
+      const completeDate = progress_updated_at?.toDate?.() || new Date();
+      const dateKey = completeDate.toISOString().split("T")[0];
+      const monthKey = completeDate.toISOString().slice(0, 7);
+
+      if (!monthMap[monthKey])
+        monthMap[monthKey] = { Completed: 0, Reassigned: 0 };
+      if (!dateMap[dateKey]) dateMap[dateKey] = { Completed: 0, Reassigned: 0 };
+
+      if (progress_status === "completed") {
+        perf.completed++;
+        const due = new Date(due_date);
+        if (completeDate <= due) {
+          perf.onTime++;
+        }
+        dateMap[dateKey].Completed++;
+        monthMap[monthKey].Completed++;
+      }
+
+      if (reassign_history.length > 0) {
+        const count = reassign_history.length;
+        perf.reassigned += count;
+        dateMap[dateKey].Reassigned += count;
+        monthMap[monthKey].Reassigned += count;
+      }
+    });
+
+    const completionRate = (perf.completed / perf.total) * 100 || 0;
+    const onTimeRate =
+      perf.completed > 0 ? (perf.onTime / perf.completed) * 100 : 0;
+
+    const team = groupedEmployees.find((g) =>
+      g.members.some((m) => m.id === selectedEmployee.id)
+    );
+
+    const peerMembers =
+      team?.members?.filter((m) => m.id !== selectedEmployee.id) || [];
+    const peerTasks = tasks.filter((t) =>
+      peerMembers.some((m) => m.id === t.assigned_to)
+    );
+
+    const avgWorkload =
+      peerMembers.length > 0 ? peerTasks.length / peerMembers.length : 0;
+
+    const totalPerformanceScore = (
+      ((completionRate * 0.6 + onTimeRate * 0.4) / 100) *
+      100
+    ).toFixed(2);
+
+    setPerformanceData({
+      ...perf,
+      completionRate,
+      onTimeRate,
+      workloadComparison: {
+        employee: perf.total,
+        average: avgWorkload.toFixed(1),
+      },
+      totalPerformanceScore,
+    });
+
+    const dateData = Object.entries(dateMap).map(([date, val]) => ({
+      date,
+      ...val,
+    }));
+
+    const monthData = Object.entries(monthMap).map(([month, val]) => ({
+      month,
+      ...val,
+    }));
+
+    setDateChartData(dateData);
+    setMonthChartData(monthData);
+  }, [selectedEmployee, tasks, groupedEmployees]);
+
+  const filteredEmployees = groupedEmployees.map(team => ({
+    ...team,
+    members: team.members.filter(emp => 
+      searchTerm
+        ? emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          emp.department?.toLowerCase().includes(searchTerm.toLowerCase())
+        : true
+    )
+  })).filter(team => team.members.length > 0);
+
+  const tabs = [
+    {
+      id: "overview",
+      label: "Overview",
+      icon: BarChart3,
+      active: true,
+    },
+    
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading performance data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (noTeam) {
+    return (
+      <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
+        <PageHeader
+          title="Performance Matrix"
+          status="No Access"
+          statusColor="bg-red-100 text-red-700"
+          tabs={tabs}
+          showActions={false}
+        />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <AlertCircle className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+              Access Restricted
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400">
+              You are not a team leader and cannot access performance data.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
+      <PageHeader
+        title="Performance Matrix"
+        subtitle={selectedEmployee ? `• ${selectedEmployee.name}` : ""}
+        status="Active"
+        statusColor="bg-green-100 text-green-700"
+        tabs={tabs}
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchPlaceholder="Search employees..."
+        showFilters={false}
+      />
+
+      <div className="flex-1 overflow-hidden flex">
+        {/* Employee Sidebar */}
+        <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              Team Members
+            </h2>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            {filteredEmployees.map((team) => (
+              <div key={team.teamId}>
+                <div className="mb-3">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                    {team.teamName}
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Lead: {team.teamLead}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  {team.members.map((emp) => {
+                    const empTasks = tasks.filter(t => t.assigned_to === emp.id);
+                    const completedTasks = empTasks.filter(t => t.progress_status === "completed");
+                    const completionRate = empTasks.length > 0 ? (completedTasks.length / empTasks.length) * 100 : 0;
+                    
+                    return (
+                      <motion.div
+                        key={emp.id}
+                        whileHover={{ scale: 1.02 }}
+                        onClick={() => setSelectedEmployee(emp)}
+                        className={`p-3 rounded-lg cursor-pointer border transition-all ${
+                          selectedEmployee?.id === emp.id
+                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                            : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <img
+                            src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                              emp.name || emp.email
+                            )}`}
+                            alt="avatar"
+                            className="w-8 h-8 rounded-full"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
+                              {emp.name}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                              {emp.department}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            {empTasks.length} tasks
+                          </span>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                            {completionRate.toFixed(0)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                          <div
+                            className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                            style={{ width: `${completionRate}%` }}
+                          ></div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 overflow-y-auto">
+          {selectedEmployee ? (
+            <div className="p-6 space-y-6">
+              {/* Employee Header */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="flex items-center gap-4">
+                  <img
+                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                      selectedEmployee.name || selectedEmployee.email
+                    )}`}
+                    alt="avatar"
+                    className="w-16 h-16 rounded-full"
+                  />
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      {selectedEmployee.name}
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      {selectedEmployee.department}
+                    </p>
+                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-1">
+                        <User className="w-4 h-4" />
+                        Employee ID: {selectedEmployee.id.slice(-6)}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <CheckCircle className="w-4 h-4" />
+                        Performance Score: {performanceData.totalPerformanceScore}%
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard
+                  label="Tasks Assigned"
+                  value={performanceData.total}
+                  icon={Target}
+                  color="blue"
+                />
+                <StatCard
+                  label="Tasks Completed"
+                  value={performanceData.completed}
+                  icon={CheckCircle}
+                  color="green"
+                  subtitle={`${performanceData.completionRate?.toFixed(1)}% completion rate`}
+                />
+                <StatCard
+                  label="On-Time Completion"
+                  value={performanceData.onTime}
+                  icon={Clock}
+                  color="blue"
+                  subtitle={`${performanceData.onTimeRate?.toFixed(1)}% on-time rate`}
+                />
+                <StatCard
+                  label="Reassignments"
+                  value={performanceData.reassigned}
+                  icon={Activity}
+                  color="yellow"
+                />
+              </div>
+
+              {/* Charts */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Monthly Performance */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                    Monthly Performance
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={monthChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="Completed" fill="#10b981" />
+                      <Bar dataKey="Reassigned" fill="#f59e0b" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Daily Trends */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                    Daily Activity Trends
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={dateChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="date" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Line type="monotone" dataKey="Completed" stroke="#3b82f6" strokeWidth={2} />
+                      <Line type="monotone" dataKey="Reassigned" stroke="#f59e0b" strokeWidth={2} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Task Details Table */}
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    Task Details
+                  </h3>
+                </div>
+                <div className="overflow-x-auto max-h-96">
+                  <table className="w-full">
+                    <thead className="bg-gray-50 dark:bg-gray-800/50 sticky top-0">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Task
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Due Date
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Completion
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Reassigned
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                      {tasks
+                        .filter((t) => t.assigned_to === selectedEmployee.id)
+                        .map((task, index) => {
+                          const due = new Date(task.due_date);
+                          const completed = task.progress_updated_at?.toDate?.();
+                          const isOnTime = completed && completed <= due;
+                          const isLate = completed && completed > due;
+                          
+                          return (
+                            <motion.tr
+                              key={task.id}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                            >
+                              <td className="px-6 py-4">
+                                <div>
+                                  <div className="font-medium text-gray-900 dark:text-gray-100">
+                                    {task.title}
+                                  </div>
+                                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                                    {task.task_id}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span
+                                  className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                                    task.progress_status === "completed"
+                                      ? "bg-green-100 text-green-800"
+                                      : task.progress_status === "in_progress"
+                                      ? "bg-blue-100 text-blue-800"
+                                      : "bg-gray-100 text-gray-800"
+                                  }`}
+                                >
+                                  {task.progress_status}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                                {task.due_date}
+                              </td>
+                              <td className="px-6 py-4">
+                                {task.progress_status === "completed" ? (
+                                  <span
+                                    className={`text-sm font-medium ${
+                                      isOnTime
+                                        ? "text-green-600"
+                                        : isLate
+                                        ? "text-red-600"
+                                        : "text-gray-600"
+                                    }`}
+                                  >
+                                    {isOnTime ? "On Time" : isLate ? "Late" : "On Time"}
+                                  </span>
+                                ) : (
+                                  <span className="text-sm text-gray-500">Pending</span>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                                {task.reassign_history?.length || 0}
+                              </td>
+                            </motion.tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <Users className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  Select an Employee
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Choose a team member from the sidebar to view their performance metrics.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const StatCard = ({ label, value, icon: Icon, color = "blue", subtitle }) => {
+  const colorMap = {
+    blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/20",
+    green: "bg-green-100 text-green-600 dark:bg-green-900/20",
+    yellow: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20",
+    red: "bg-red-100 text-red-600 dark:bg-red-900/20",
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+    >
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            {label}
+          </p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            {value}
+          </p>
+          {subtitle && (
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {subtitle}
+            </p>
+          )}
+        </div>
+        <div className={`p-3 rounded-lg ${colorMap[color]}`}>
+          <Icon className="w-6 h-6" />
+        </div>
+      </div>
+    </motion.div>
+  );
+};

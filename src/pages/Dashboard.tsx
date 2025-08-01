@@ -1,0 +1,445 @@
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../lib/firebase";
+import { motion } from "framer-motion";
+import {
+  Star,
+  Settings,
+  Share2,
+  Search,
+  Filter,
+  ChevronDown,
+  Plus,
+  MoreHorizontal,
+  Calendar,
+  Users,
+  Clock,
+  CheckCircle,
+  Circle,
+  AlertCircle,
+  TrendingUp,
+  Activity,
+  Target,
+  Briefcase,
+} from "lucide-react";
+
+const Dashboard = () => {
+  const [projects, setProjects] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [filterDate, setFilterDate] = useState("");
+  const [selectedProject, setSelectedProject] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  useEffect(() => {
+    fetchAllData();
+  }, []);
+
+  const fetchAllData = async () => {
+    const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] =
+      await Promise.all([
+        getDocs(collection(db, "projects")),
+        getDocs(collection(db, "tasks")),
+        getDocs(collection(db, "teams")),
+        getDocs(collection(db, "employees")),
+      ]);
+
+    setProjects(
+      projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    );
+    setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    setEmployees(
+      employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+    );
+  };
+
+  const getEmployeeName = (empId: string) =>
+    employees.find((emp: any) => emp.id === empId)?.name || "-";
+  const getTeamName = (teamId: string) =>
+    teams.find((team: any) => team.id === teamId)?.teamName || "-";
+  const getProjectTasks = (projectId: string) =>
+    tasks.filter((t: any) => t.project_id === projectId);
+
+  const filteredTasks = tasks.filter((task: any) => {
+    const matchesDate = filterDate ? task.due_date === filterDate : true;
+    const matchesProject = selectedProject
+      ? task.project_id === selectedProject
+      : true;
+    const matchesSearch = searchTerm
+      ? task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      : true;
+    return matchesDate && matchesProject && matchesSearch;
+  });
+
+  const pendingTasks = filteredTasks.filter((t: any) => t.status === "pending");
+  const completedTasks = filteredTasks.filter((t: any) => t.status === "completed");
+  const inProgressTasks = filteredTasks.filter((t: any) => t.status === "in_progress");
+
+  const isOverdue = (task: any) => {
+    const today = new Date().toISOString().split("T")[0];
+    return task.due_date < today && task.status !== "completed";
+  };
+
+  const overdueTasks = filteredTasks.filter(isOverdue);
+
+  const getProjectProgress = (projectId: string) => {
+    const projectTasks = getProjectTasks(projectId);
+    if (projectTasks.length === 0) return 0;
+    const completed = projectTasks.filter((t: any) => t.status === "completed").length;
+    return Math.round((completed / projectTasks.length) * 100);
+  };
+
+  const recentTasks = tasks
+    .sort((a: any, b: any) => new Date(b.created_at?.seconds * 1000).getTime() - new Date(a.created_at?.seconds * 1000).getTime())
+    .slice(0, 5);
+
+  return (
+    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+              Dashboard Overview
+            </h1>
+            <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full font-medium">
+              Active
+            </span>
+            <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+              <Star className="w-4 h-4 text-gray-400" />
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              Share
+            </button>
+            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+              <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            </button>
+          </div>
+        </div>
+
+        {/* Toolbar */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 border-b-2 border-blue-500 pb-2">
+              <Activity className="w-4 h-4 text-blue-600" />
+              <span className="text-sm font-medium text-blue-600">Overview</span>
+            </div>
+            
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div className="relative">
+              <button
+                onClick={() => setFilterOpen(!filterOpen)}
+                className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                <Filter className="w-4 h-4" />
+                Filter
+                <ChevronDown className="w-4 h-4" />
+              </button>
+
+              {filterOpen && (
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 p-4">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Due Date
+                      </label>
+                      <input
+                        type="date"
+                        value={filterDate}
+                        onChange={(e) => setFilterDate(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Project
+                      </label>
+                      <select
+                        value={selectedProject}
+                        onChange={(e) => setSelectedProject(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="">All Projects</option>
+                        {projects.map((project: any) => (
+                          <option key={project.id} value={project.id}>
+                            {project.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+              <Plus className="w-4 h-4" />
+              New
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-y-auto p-6">
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Total Projects
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {projects.length}
+                </p>
+              </div>
+              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                <Briefcase className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-sm">
+              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+              <span className="text-green-600 dark:text-green-400 font-medium">
+                +12%
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 ml-1">
+                from last month
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Pending Tasks
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {pendingTasks.length}
+                </p>
+              </div>
+              <div className="p-3 bg-yellow-100 dark:bg-yellow-900/20 rounded-lg">
+                <Clock className="w-6 h-6 text-yellow-600" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-sm">
+              <AlertCircle className="w-4 h-4 text-yellow-500 mr-1" />
+              <span className="text-yellow-600 dark:text-yellow-400 font-medium">
+                {overdueTasks.length} overdue
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  In Progress
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {inProgressTasks.length}
+                </p>
+              </div>
+              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+                <Activity className="w-6 h-6 text-blue-600" />
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div
+                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${tasks.length > 0 ? (inProgressTasks.length / tasks.length) * 100 : 0}%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Completed
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {completedTasks.length}
+                </p>
+              </div>
+              <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+            <div className="mt-4 flex items-center text-sm">
+              <Target className="w-4 h-4 text-green-500 mr-1" />
+              <span className="text-green-600 dark:text-green-400 font-medium">
+                {tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0}%
+              </span>
+              <span className="text-gray-600 dark:text-gray-400 ml-1">
+                completion rate
+              </span>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Projects List */}
+          <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    Projects
+                  </h2>
+                  <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                    View All
+                  </button>
+                </div>
+              </div>
+              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                {projects.slice(0, 5).map((project: any, index: number) => {
+                  const progress = getProjectProgress(project.id);
+                  const projectTasks = getProjectTasks(project.id);
+                  return (
+                    <motion.div
+                      key={project.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    >
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                          <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                            {project.name}
+                          </h3>
+                          <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
+                            {projectTasks.length} tasks
+                          </span>
+                        </div>
+                        <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                          <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                        </button>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        {project.description}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+                            <Calendar className="w-3 h-3" />
+                            {project.deadline}
+                          </div>
+                          <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+                            <Users className="w-3 h-3" />
+                            {getTeamName(project.teamId)}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div
+                              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${progress}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            {progress}%
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Recent Activity */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Recent Tasks
+              </h2>
+            </div>
+            <div className="p-6 space-y-4">
+              {recentTasks.map((task: any, index: number) => (
+                <motion.div
+                  key={task.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex items-start gap-3"
+                >
+                  <div className="flex-shrink-0 mt-1">
+                    {task.status === "completed" ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : task.status === "in_progress" ? (
+                      <Circle className="w-4 h-4 text-blue-500" />
+                    ) : (
+                      <Circle className="w-4 h-4 text-gray-400" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                      {task.title}
+                    </p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      Assigned to {getEmployeeName(task.assigned_to)}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500">
+                      Due: {task.due_date}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

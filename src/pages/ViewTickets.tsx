@@ -1,0 +1,340 @@
+import React, { useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
+import { db } from "../lib/firebase";
+import { format } from "date-fns";
+
+const AdminTicketsPage = () => {
+  const [tickets, setTickets] = useState<any[]>([]);
+  const [projectsMap, setProjectsMap] = useState<any>({});
+  const [teamLeadMap, setTeamLeadMap] = useState<any>({});
+  const [statusFilter, setStatusFilter] = useState("");
+  const [projectFilter, setProjectFilter] = useState("");
+  const [editingTicket, setEditingTicket] = useState<any>(null);
+  const [editValues, setEditValues] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+  });
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      const ticketSnapshot = await getDocs(collection(db, "raiseTickets"));
+      const fetchedTickets: any[] = [];
+      const projectIds = new Set<string>();
+      const teamLeadIds = new Set<string>();
+
+      ticketSnapshot.forEach((doc) => {
+        const data = doc.data();
+        fetchedTickets.push({ id: doc.id, ...data });
+        if (data.projectId) projectIds.add(data.projectId);
+        if (data.teamLeadId) teamLeadIds.add(data.teamLeadId);
+      });
+
+      const projectMap: any = {};
+      await Promise.all(
+        Array.from(projectIds).map(async (id) => {
+          const projRef = doc(db, "projects", id);
+          const projSnap = await getDoc(projRef);
+          projectMap[id] = projSnap.exists()
+            ? projSnap.data().name || id
+            : "Unknown Project";
+        })
+      );
+
+      const leadMap: any = {};
+      await Promise.all(
+        Array.from(teamLeadIds).map(async (id) => {
+          const leadRef = doc(db, "employees", id);
+          const leadSnap = await getDoc(leadRef);
+          const data = leadSnap.data();
+          leadMap[id] = leadSnap.exists() ? data?.name || id : "Unknown";
+        })
+      );
+
+      setProjectsMap(projectMap);
+      setTeamLeadMap(leadMap);
+      setTickets(fetchedTickets);
+    };
+
+    fetchTickets();
+  }, []);
+
+  const filteredTickets = tickets.filter((ticket) => {
+    const matchesStatus = statusFilter ? ticket.status === statusFilter : true;
+    const matchesProject = projectFilter
+      ? projectsMap[ticket.projectId] === projectFilter
+      : true;
+    return matchesStatus && matchesProject;
+  });
+
+  const uniqueProjectNames = Array.from(new Set(Object.values(projectsMap)));
+  const uniqueStatuses = Array.from(new Set(tickets.map((t) => t.status)));
+
+  const getReviewColor = (review: string) => {
+    switch (review?.toLowerCase()) {
+      case "done":
+        return "text-green-600 font-semibold";
+      case "pending":
+        return "text-red-600 font-semibold";
+      case "in progress":
+        return "text-blue-600 font-semibold";
+      default:
+        return "text-gray-600";
+    }
+  };
+
+  const isPastDue = (dueDate: string) => {
+    try {
+      return new Date(dueDate) < new Date();
+    } catch {
+      return false;
+    }
+  };
+
+  const handleReviewChange = async (ticketId: string, newReview: string) => {
+    try {
+      await updateDoc(doc(db, "raiseTickets", ticketId), { review: newReview });
+      setTickets((prev) =>
+        prev.map((ticket) =>
+          ticket.id === ticketId ? { ...ticket, review: newReview } : ticket
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update review:", error);
+    }
+  };
+
+  const handleEditClick = (ticket: any) => {
+    setEditingTicket(ticket);
+    setEditValues({
+      title: ticket.title || "",
+      description: ticket.description || "",
+      dueDate: ticket.dueDate || "",
+    });
+  };
+
+  const handleEditSave = async () => {
+    try {
+      await updateDoc(doc(db, "raiseTickets", editingTicket.id), {
+        ...editValues,
+      });
+      setTickets((prev) =>
+        prev.map((ticket) =>
+          ticket.id === editingTicket.id ? { ...ticket, ...editValues } : ticket
+        )
+      );
+      setEditingTicket(null);
+    } catch (error) {
+      console.error("Failed to save edits:", error);
+    }
+  };
+
+  const handleDelete = async (ticketId: string) => {
+    try {
+      await deleteDoc(doc(db, "raiseTickets", ticketId));
+      setTickets((prev) => prev.filter((t) => t.id !== ticketId));
+    } catch (error) {
+      console.error("Failed to delete ticket:", error);
+    }
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">All Tickets</h1>
+
+      <div className="flex gap-4 mb-4">
+        <select
+          className="border p-2 rounded"
+          value={projectFilter}
+          onChange={(e) => setProjectFilter(e.target.value)}
+        >
+          <option value="">Filter by Project</option>
+          {uniqueProjectNames.map((name) => (
+            <option key={name}>{name}</option>
+          ))}
+        </select>
+
+        <select
+          className="border p-2 rounded"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="">Filter by Status</option>
+          {uniqueStatuses.map((status) => (
+            <option key={status}>{status}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="overflow-auto rounded border">
+        <table className="min-w-[1200px] w-full border-collapse text-sm text-left">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="p-2 border">Ticket ID</th>
+              <th className="p-2 border">Title</th>
+              <th className="p-2 border">Description</th>
+              <th className="p-2 border">Priority</th>
+              <th className="p-2 border">Status</th>
+              <th className="p-2 border">Due Date</th>
+              <th className="p-2 border">Project</th>
+              <th className="p-2 border">Created By</th>
+              <th className="p-2 border">Created At</th>
+              <th className="p-2 border">Team Lead</th>
+              <th className="p-2 border">Review</th>
+              <th className="p-2 border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredTickets.map((ticket) => (
+              <tr key={ticket.id} className="hover:bg-gray-50">
+                <td className="p-2 border">{ticket.projectTicketId}</td>
+                <td className="p-2 border">{ticket.title}</td>
+                <td className="p-2 border">{ticket.description}</td>
+                <td className="p-2 border">{ticket.priority}</td>
+                <td className="px-4 py-2 border">
+                  <span
+                    className={`px-2 py-1 rounded-full text-white text-xs font-medium ${
+                      ticket.status === "Done"
+                        ? "bg-green-500"
+                        : ticket.status === "Pending"
+                        ? "bg-red-500"
+                        : ticket.status === "Progress"
+                        ? "bg-blue-500"
+                        : "bg-gray-400"
+                    }`}
+                  >
+                    {ticket.status}
+                  </span>
+                </td>
+                <td
+                  className={`p-2 border ${
+                    isPastDue(ticket.dueDate)
+                      ? "text-red-600 font-semibold"
+                      : ""
+                  }`}
+                >
+                  {ticket.dueDate || "N/A"}
+                </td>
+                <td className="p-2 border">
+                  {projectsMap[ticket.projectId] || ticket.projectId}
+                </td>
+                <td className="p-2 border">{ticket.createdByName}</td>
+                <td className="p-2 border">
+                  {ticket.createdAt?.seconds
+                    ? format(
+                        new Date(ticket.createdAt.seconds * 1000),
+                        "yyyy-MM-dd HH:mm"
+                      )
+                    : "N/A"}
+                </td>
+                <td className="p-2 border">
+                  {teamLeadMap[ticket.teamLeadId] || ticket.teamLeadId}
+                </td>
+                <td className="p-2 border">
+                  <select
+                    className={`border px-2 py-1 w-full rounded ${getReviewColor(
+                      ticket.review
+                    )}`}
+                    value={ticket.review || ""}
+                    onChange={(e) =>
+                      handleReviewChange(ticket.id, e.target.value)
+                    }
+                  >
+                    <option value="">Select Review</option>
+                    <option value="Pending">Pending</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Done">Done</option>
+                  </select>
+                </td>
+                <td className="p-2 border space-x-2">
+                  <button
+                    className="text-blue-600 underline"
+                    onClick={() => handleEditClick(ticket)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="text-red-600 underline"
+                    onClick={() => handleDelete(ticket.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Edit Modal */}
+      {editingTicket && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-[400px] shadow-lg">
+            <h2 className="text-lg font-bold mb-4">Edit Ticket</h2>
+            <label className="block mb-2">
+              Title:
+              <input
+                type="text"
+                className="w-full border p-2 rounded mt-1"
+                value={editValues.title}
+                onChange={(e) =>
+                  setEditValues((prev) => ({ ...prev, title: e.target.value }))
+                }
+              />
+            </label>
+            <label className="block mb-2">
+              Description:
+              <textarea
+                className="w-full border p-2 rounded mt-1"
+                value={editValues.description}
+                onChange={(e) =>
+                  setEditValues((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+              />
+            </label>
+            <label className="block mb-4">
+              Due Date:
+              <input
+                type="date"
+                className="w-full border p-2 rounded mt-1"
+                value={editValues.dueDate}
+                onChange={(e) =>
+                  setEditValues((prev) => ({
+                    ...prev,
+                    dueDate: e.target.value,
+                  }))
+                }
+              />
+            </label>
+            <div className="flex justify-end gap-4">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => setEditingTicket(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded"
+                onClick={handleEditSave}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminTicketsPage;
