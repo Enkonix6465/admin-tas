@@ -128,7 +128,7 @@ function Projects() {
     });
 
   return (
-    <div className="p-6">
+    <div className="p-4">
       <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
         <div>
           <h1 className="text-xl font-bold">Projects</h1>
