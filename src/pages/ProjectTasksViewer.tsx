@@ -471,14 +471,14 @@ export default function ProjectTasksViewer() {
           </div>
         </div>
 
-        {/* Tasks Table */}
+        {/* Content Views */}
         <AnimatePresence>
           {selectedProjectId && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
+              className={`${activeTab === 'table' ? 'bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden' : ''}`}
             >
               <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
