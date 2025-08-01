@@ -123,8 +123,8 @@ export function LoginForm({
               </div>
             </form>
 
-            <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 relative hidden md:block">
-              <div className="absolute inset-0 bg-black/20"></div>
+            <div >
+              
               <img
                 src="https://cdn.pixabay.com/photo/2016/11/08/05/10/students-1807505_1280.jpg"
                 alt="Students working together"
