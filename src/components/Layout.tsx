@@ -40,6 +40,12 @@ function Layout() {
   const [sortOpen, setSortOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    dashboard: true,
+    projects: false,
+    tickets: false,
+    administration: false,
+  });
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme");
