@@ -643,25 +643,7 @@ function Layout() {
                 Share
               </button>
 
-              <div className="flex items-center gap-1">
-                <img
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                    user?.email || "User"
-                  )}`}
-                  alt="avatar"
-                  className="w-5 h-5 rounded-full"
-                />
-                <img
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=User2`}
-                  alt="avatar"
-                  className="w-5 h-5 rounded-full -ml-1"
-                />
-                <img
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=User3`}
-                  alt="avatar"
-                  className="w-5 h-5 rounded-full -ml-1"
-                />
-              </div>
+             
             </div>
           </div>
         </header>
