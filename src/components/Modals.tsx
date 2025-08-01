@@ -229,14 +229,19 @@ export const NewProjectModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
     setLoading(true);
     try {
+      // Check if Firebase is available
+      if (!db) {
+        throw new Error("Database connection not available");
+      }
+
       await addDoc(collection(db, "projects"), {
         ...formData,
-        created_by: user?.uid,
+        created_by: user?.uid || "anonymous",
         created_at: Timestamp.now(),
         project_id: `PROJ-${Date.now()}`,
         progress: 0
       });
-      
+
       toast.success("Project created successfully!");
       setFormData({
         name: "",
@@ -250,9 +255,19 @@ export const NewProjectModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         client: ""
       });
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating project:", error);
-      toast.error("Failed to create project");
+
+      // Provide specific error messages
+      if (error.code === 'unavailable') {
+        toast.error("Service temporarily unavailable. Please try again later.");
+      } else if (error.code === 'permission-denied') {
+        toast.error("You don't have permission to create projects.");
+      } else if (error.message?.includes('Failed to fetch')) {
+        toast.error("Network connection error. Please check your internet connection.");
+      } else {
+        toast.error(`Failed to create project: ${error.message || 'Unknown error'}`);
+      }
     } finally {
       setLoading(false);
     }
