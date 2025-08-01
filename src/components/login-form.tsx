@@ -59,7 +59,7 @@ export function LoginForm({
                   </p>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-base font-medium">Email</Label>
                     <Input
@@ -69,10 +69,10 @@ export function LoginForm({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="h-12 text-base transition-all duration-300 focus:scale-[1.02] focus:shadow-lg border-2 focus:border-purple-500"
+                      className="h-10 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg border-2 focus:border-purple-500"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="password" className="text-base font-medium">Password</Label>
@@ -89,7 +89,7 @@ export function LoginForm({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="h-12 text-base transition-all duration-300 focus:scale-[1.02] focus:shadow-lg border-2 focus:border-purple-500"
+                      className="h-10 transition-all duration-300 focus:scale-[1.02] focus:shadow-lg border-2 focus:border-purple-500"
                     />
                   </div>
                 </div>
