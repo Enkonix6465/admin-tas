@@ -450,7 +450,7 @@ const Reports = () => {
         </div>
 
         {/* Report Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-3">
           {reportData.type ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
