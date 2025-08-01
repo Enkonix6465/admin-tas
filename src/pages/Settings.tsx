@@ -129,6 +129,30 @@ export default function Settings() {
     setTheme(newTheme);
   };
 
+  // Load settings from database on component mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (!user?.uid) return;
+
+      try {
+        const userSettingsRef = doc(db, "userSettings", user.uid);
+        const settingsSnap = await getDoc(userSettingsRef);
+
+        if (settingsSnap.exists()) {
+          const data = settingsSnap.data();
+          if (data.profile) setProfile(prev => ({ ...prev, ...data.profile }));
+          if (data.notifications) setNotifications(prev => ({ ...prev, ...data.notifications }));
+          if (data.privacy) setPrivacy(prev => ({ ...prev, ...data.privacy }));
+          if (data.preferences) setPreferences(prev => ({ ...prev, ...data.preferences }));
+        }
+      } catch (error) {
+        console.error("Error loading settings:", error);
+      }
+    };
+
+    loadSettings();
+  }, [user?.uid]);
+
   const renderProfileTab = () => (
     <div className="space-y-2 sm:space-y-3">
       <div className="flex items-center space-x-6">
