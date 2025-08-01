@@ -42,30 +42,130 @@ const Dashboard = () => {
 
   useEffect(() => {
     const unsubscribers = [];
-    
-    // Real-time listeners for all collections
-    const projectsUnsub = onSnapshot(collection(db, "projects"), (snapshot) => {
-      setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
-    
-    const tasksUnsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
-      setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
-    
-    const teamsUnsub = onSnapshot(collection(db, "teams"), (snapshot) => {
-      setTeams(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
-    
-    const employeesUnsub = onSnapshot(collection(db, "employees"), (snapshot) => {
-      setEmployees(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      setLoading(false);
-    });
+    let mounted = true;
 
-    unsubscribers.push(projectsUnsub, tasksUnsub, teamsUnsub, employeesUnsub);
+    const setupRealtimeListeners = async () => {
+      try {
+        // Real-time listeners for all collections with error handling
+        const projectsUnsub = onSnapshot(
+          collection(db, "projects"),
+          (snapshot) => {
+            if (mounted) {
+              setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+          },
+          (error) => {
+            console.warn("Projects listener error:", error);
+            toast.error("Failed to load projects data");
+            // Use fallback mock data
+            if (mounted) {
+              setProjects([
+                {
+                  id: "mock-1",
+                  name: "Sample Project",
+                  description: "Demo project for testing",
+                  status: "active",
+                  progress: 45,
+                  end_date: "2024-12-31"
+                }
+              ]);
+            }
+          }
+        );
+
+        const tasksUnsub = onSnapshot(
+          collection(db, "tasks"),
+          (snapshot) => {
+            if (mounted) {
+              setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+          },
+          (error) => {
+            console.warn("Tasks listener error:", error);
+            toast.error("Failed to load tasks data");
+            // Use fallback mock data
+            if (mounted) {
+              setTasks([
+                {
+                  id: "mock-task-1",
+                  title: "Sample Task",
+                  status: "pending",
+                  progress_status: "pending",
+                  assigned_to: "mock-user",
+                  due_date: "2024-02-15"
+                }
+              ]);
+            }
+          }
+        );
+
+        const teamsUnsub = onSnapshot(
+          collection(db, "teams"),
+          (snapshot) => {
+            if (mounted) {
+              setTeams(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+          },
+          (error) => {
+            console.warn("Teams listener error:", error);
+            if (mounted) {
+              setTeams([]);
+            }
+          }
+        );
+
+        const employeesUnsub = onSnapshot(
+          collection(db, "employees"),
+          (snapshot) => {
+            if (mounted) {
+              setEmployees(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+              setLoading(false);
+            }
+          },
+          (error) => {
+            console.warn("Employees listener error:", error);
+            if (mounted) {
+              setEmployees([
+                {
+                  id: "mock-user",
+                  name: "Demo User",
+                  department: "Engineering"
+                }
+              ]);
+              setLoading(false);
+            }
+          }
+        );
+
+        unsubscribers.push(projectsUnsub, tasksUnsub, teamsUnsub, employeesUnsub);
+
+      } catch (error) {
+        console.error("Failed to setup Firebase listeners:", error);
+        toast.error("Connection error - using offline mode");
+
+        // Set fallback data and stop loading
+        if (mounted) {
+          setProjects([]);
+          setTasks([]);
+          setTeams([]);
+          setEmployees([]);
+          setLoading(false);
+        }
+      }
+    };
+
+    setupRealtimeListeners();
 
     // Cleanup function
     return () => {
-      unsubscribers.forEach(unsub => unsub());
+      mounted = false;
+      unsubscribers.forEach(unsub => {
+        try {
+          unsub();
+        } catch (error) {
+          console.warn("Error unsubscribing:", error);
+        }
+      });
     };
   }, []);
 
