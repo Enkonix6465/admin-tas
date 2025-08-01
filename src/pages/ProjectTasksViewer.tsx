@@ -171,19 +171,19 @@ export default function ProjectTasksViewer() {
       id: "table",
       label: "Table",
       icon: FileText,
-      active: true,
+      active: activeTab === "table",
     },
     {
       id: "board",
       label: "Board",
       icon: Users,
-      active: false,
+      active: activeTab === "board",
     },
     {
       id: "timeline",
       label: "Timeline",
       icon: Calendar,
-      active: false,
+      active: activeTab === "timeline",
     },
   ];
 
