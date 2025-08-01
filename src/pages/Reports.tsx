@@ -415,7 +415,7 @@ const Reports = () => {
             </h2>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+          <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-1 sm:space-y-2">
             {reportTypes.map((report) => (
               <motion.button
                 key={report.id}
@@ -450,7 +450,7 @@ const Reports = () => {
         </div>
 
         {/* Report Content */}
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className="flex-1 overflow-y-auto p-2 sm:p-3">
           {reportData.type ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -458,7 +458,7 @@ const Reports = () => {
               className="space-y-6"
             >
               {/* Report Header */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-2 sm:p-3">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                     {reportData.type}
