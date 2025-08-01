@@ -143,7 +143,7 @@ const Analytics = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-3">
         {[
           { icon: Activity, label: "Total Tasks", value: tasks.length || 44, change: "+12%", color: "blue" },
           { icon: CheckCircle, label: "Completed", value: taskStatusData[2].value, change: "+8%", color: "green" },
