@@ -15,6 +15,11 @@ import {
   ExternalLink,
   Filter,
   Search,
+  MoreHorizontal,
+  Plus,
+  ArrowRight,
+  ChevronRight,
+  Flag,
 } from "lucide-react";
 
 export default function ProjectTasksViewer() {
