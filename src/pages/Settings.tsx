@@ -1,686 +1,690 @@
-import React, { useEffect, useState } from "react";
-import {
-  collection,
-  getDocs,
-  query,
-  where,
-  // ... other imports if needed
-} from "firebase/firestore";
-
-import { db } from "../lib/firebase";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  CartesianGrid,
-  BarChart,
-  Bar,
-} from "recharts";
+import React, { useState } from "react";
 import { useAuthStore } from "../store/authStore";
-export default function EmployeePerformancePage() {
-  const { user } = useAuthStore(); // ✅ Move this here
+import { useThemeStore } from "../store/themeStore";
+import {
+  User,
+  Bell,
+  Shield,
+  Monitor,
+  Globe,
+  Palette,
+  Save,
+  Camera,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Eye,
+  EyeOff,
+  Moon,
+  Sun,
+  Volume2,
+  VolumeX,
+  Smartphone,
+  Lock,
+  Key,
+  Download,
+  Trash2,
+  AlertTriangle,
+  Settings as SettingsIcon,
+} from "lucide-react";
 
-  const [tasks, setTasks] = useState([]);
-  //const [employees, setEmployees] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [employees, setEmployees] = useState([]);
-  const [groupedEmployees, setGroupedEmployees] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [noTeam, setNoTeam] = useState(false);
+export default function Settings() {
+  const { user, signOut } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
+  
+  // State for different settings sections
+  const [activeTab, setActiveTab] = useState("profile");
+  const [showPassword, setShowPassword] = useState(false);
+  const [notifications, setNotifications] = useState({
+    email: true,
+    push: true,
+    desktop: false,
+    sound: true,
+    taskUpdates: true,
+    projectDeadlines: true,
+    teamNotifications: false,
+  });
+  
+  const [profile, setProfile] = useState({
+    name: user?.displayName || "John Doe",
+    email: user?.email || "john.doe@example.com",
+    phone: "+1 (555) 123-4567",
+    location: "San Francisco, CA",
+    timezone: "PST",
+    department: "Engineering",
+    jobTitle: "Project Manager",
+    bio: "Experienced project manager with 5+ years in tech startups.",
+  });
 
-  //const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [performanceData, setPerformanceData] = useState({});
-  const [monthChartData, setMonthChartData] = useState([]);
-  const [dateChartData, setDateChartData] = useState([]);
-  console.log("👤 Current user from store:", user);
-  const [lowPerformers, setLowPerformers] = useState([]);
-  const [showLowPerformers, setShowLowPerformers] = useState(false);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("🔥 useEffect triggered");
-        console.log("👤 Current user:", user);
+  const [privacy, setPrivacy] = useState({
+    profileVisibility: "team",
+    activityStatus: true,
+    lastSeen: false,
+    readReceipts: true,
+  });
 
-        if (!user?.uid) {
-          console.warn("⚠️ User UID not available yet");
-          setLoading(false);
-          return;
-        }
+  const [preferences, setPreferences] = useState({
+    language: "en",
+    dateFormat: "MM/DD/YYYY",
+    timeFormat: "12h",
+    startOfWeek: "monday",
+    defaultView: "dashboard",
+  });
 
-        const teamsSnap = await getDocs(collection(db, "teams"));
+  const tabs = [
+    { id: "profile", label: "Profile", icon: User },
+    { id: "notifications", label: "Notifications", icon: Bell },
+    { id: "privacy", label: "Privacy", icon: Shield },
+    { id: "appearance", label: "Appearance", icon: Palette },
+    { id: "preferences", label: "Preferences", icon: SettingsIcon },
+    { id: "security", label: "Security", icon: Lock },
+    { id: "account", label: "Account", icon: Key },
+  ];
 
-        if (teamsSnap.empty) {
-          console.warn("❌ No teams found for this user");
-          setEmployees([]);
-          setGroupedEmployees([]);
-          setNoTeam(true); // 👈
-          setLoading(false); // 👈
-          return;
-        }
+  const handleSave = () => {
+    // Save settings logic here
+    console.log("Settings saved!");
+  };
 
-        const empSnap = await getDocs(collection(db, "employees"));
-        const allEmployees = empSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        const grouped = teamsSnap.docs.map((teamDoc) => {
-          const teamData = teamDoc.data();
-          const memberIds = teamData.members || [];
-
-          const members = allEmployees.filter((emp) =>
-            memberIds.includes(emp.id)
-          );
-
-          const lead = allEmployees.find(
-            (emp) => emp.id === teamData.created_by
-          );
-
-          return {
-            teamId: teamDoc.id,
-            teamName: teamData.teamName || "Unnamed Team",
-            teamLead: lead?.name || "Unknown Lead",
-            members,
-          };
-        });
-
-        setGroupedEmployees(grouped);
-
-        const flatEmployees = grouped.flatMap((g) => g.members);
-        setEmployees(allEmployees); // 🔁 Use full list for lookups
-
-        const taskSnap = await getDocs(collection(db, "tasks"));
-        const tasksData = taskSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setTasks(tasksData);
-      } catch (error) {
-        console.error("❌ Error loading data", error);
-      } finally {
-        setLoading(false); // 👈 Ensure it ends
-      }
-    };
-
-    fetchData();
-  }, [user?.uid]);
-
-  useEffect(() => {
-    if (!selectedEmployee || tasks.length === 0) return;
-
-    const empTasks = tasks.filter(
-      (task) => task.assigned_to === selectedEmployee.id
-    );
-    const perf = {
-      total: empTasks.length,
-      completed: 0,
-      onTime: 0,
-      reassigned: 0,
-    };
-
-    const dateMap = {};
-    const monthMap = {};
-
-    empTasks.forEach((task) => {
-      const {
-        progress_status,
-        due_date,
-        progress_updated_at,
-        reassign_history = [],
-      } = task;
-
-      const completeDate = progress_updated_at?.toDate?.() || new Date();
-      const dateKey = completeDate.toISOString().split("T")[0];
-      const monthKey = completeDate.toISOString().slice(0, 7);
-
-      if (!monthMap[monthKey])
-        monthMap[monthKey] = { Completed: 0, Reassigned: 0 };
-      if (!dateMap[dateKey]) dateMap[dateKey] = { Completed: 0, Reassigned: 0 };
-
-      if (progress_status === "completed") {
-        perf.completed++;
-
-        const due = new Date(due_date);
-        if (completeDate <= due) {
-          perf.onTime++;
-        }
-
-        dateMap[dateKey].Completed++;
-        monthMap[monthKey].Completed++;
-      }
-
-      if (reassign_history.length > 0) {
-        const count = reassign_history.length;
-        perf.reassigned += count;
-        dateMap[dateKey].Reassigned += count;
-        monthMap[monthKey].Reassigned += count;
-      }
-    });
-
-    const completionRate = (perf.completed / perf.total) * 100 || 0;
-    const onTimeRate =
-      perf.completed > 0 ? (perf.onTime / perf.completed) * 100 : 0;
-
-    const team = groupedEmployees.find((g) =>
-      g.members.some((m) => m.id === selectedEmployee.id)
-    );
-
-    const peerMembers =
-      team?.members?.filter((m) => m.id !== selectedEmployee.id) || [];
-    const peerTasks = tasks.filter((t) =>
-      peerMembers.some((m) => m.id === t.assigned_to)
-    );
-
-    const avgWorkload =
-      peerMembers.length > 0 ? peerTasks.length / peerMembers.length : 0;
-
-    const totalPerformanceScore = (
-      ((completionRate * 0.6 + onTimeRate * 0.4) / 100) *
-      100
-    ).toFixed(2);
-
-    setPerformanceData({
-      ...perf,
-      completionRate,
-      onTimeRate,
-      workloadComparison: {
-        employee: perf.total,
-        average: avgWorkload.toFixed(1),
-      },
-      totalPerformanceScore,
-    });
-
-    const dateData = Object.entries(dateMap).map(([date, val]) => ({
-      date,
-      ...val,
+  const toggleNotification = (key: string) => {
+    setNotifications(prev => ({
+      ...prev,
+      [key]: !prev[key]
     }));
+  };
 
-    const monthData = Object.entries(monthMap).map(([month, val]) => ({
-      month,
-      ...val,
+  const togglePrivacy = (key: string) => {
+    setPrivacy(prev => ({
+      ...prev,
+      [key]: !prev[key]
     }));
+  };
 
-    setDateChartData(dateData);
-    setMonthChartData(monthData);
-  }, [selectedEmployee, tasks, groupedEmployees]);
-  useEffect(() => {
-    if (tasks.length === 0 || employees.length === 0) return;
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
+    setTheme(newTheme);
+  };
 
-    const calculateScore = (empId) => {
-      const empTasks = tasks.filter((task) => task.assigned_to === empId);
-      if (empTasks.length === 0) return 100; // No tasks = full score by default
-
-      let completed = 0;
-      let onTime = 0;
-
-      empTasks.forEach((task) => {
-        if (task.progress_status === "completed") {
-          completed++;
-          const completeDate =
-            task.progress_updated_at?.toDate?.() || new Date();
-          const due = new Date(task.due_date);
-          if (completeDate <= due) {
-            onTime++;
-          }
-        }
-      });
-
-      const completionRate = (completed / empTasks.length) * 100;
-      const onTimeRate = completed > 0 ? (onTime / completed) * 100 : 0;
-
-      const totalPerformanceScore =
-        ((completionRate * 0.6 + onTimeRate * 0.4) / 100) * 100;
-
-      return totalPerformanceScore;
-    };
-
-    const low = employees
-      .map((emp) => ({
-        ...emp,
-        performanceScore: calculateScore(emp.id),
-      }))
-      .filter((emp) => emp.performanceScore < 80);
-
-    setLowPerformers(low);
-  }, [tasks, employees]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
-          <svg
-            className="animate-spin h-10 w-10 text-blue-500 mx-auto mb-4"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-              fill="none"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8H4z"
-            />
-          </svg>
-          <p className="text-gray-600 font-medium">Loading data...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (noTeam) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-gray-600 text-lg font-semibold">
-          You are not a team leader.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[85vh] overflow-hidden p-4">
-      {/* Left Section: Toggle + Team Members + Underperformers */}
-      <div className="col-span-1 space-y-4 overflow-y-auto pr-2">
-        {/* Header & Toggle Button */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-800">Team Overview</h2>
-          <button
-            onClick={() => setShowLowPerformers(!showLowPerformers)}
-            className="px-3 py-1.5 bg-red-400 text-white text-sm rounded shadow hover:bg-red-500 transition"
-          >
-            {showLowPerformers ? "Hide Low Performers" : "Show Low Performers"}
+  const renderProfileTab = () => (
+    <div className="space-y-6">
+      <div className="flex items-center space-x-6">
+        <div className="relative">
+          <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+            {profile.name.split(' ').map(n => n[0]).join('')}
+          </div>
+          <button className="absolute bottom-0 right-0 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600">
+            <Camera className="w-4 h-4 text-gray-600 dark:text-gray-400" />
           </button>
         </div>
-
-        {/* Underperformers List */}
-        {showLowPerformers && (
-          <div className="bg-red-50 border border-red-200 rounded-lg shadow p-3 overflow-y-auto max-h-[250px]">
-            <h3 className="text-sm font-bold text-red-700 mb-2">
-              Underperformers (Score &lt; 80%)
-            </h3>
-            {lowPerformers.length > 0 ? (
-              <ul className="space-y-2">
-                {lowPerformers.map((emp) => (
-                  <li
-                    key={emp.id}
-                    onClick={() => setSelectedEmployee(emp)}
-                    className={`p-2 rounded border border-red-300 cursor-pointer text-sm ${
-                      selectedEmployee?.id === emp.id
-                        ? "bg-red-100"
-                        : "hover:bg-red-200"
-                    }`}
-                  >
-                    <p className="font-semibold text-gray-800">{emp.name}</p>
-                    <p className="text-xs text-gray-600">
-                      {emp.department} |{" "}
-                      {emp.performanceScore?.toFixed(2) ?? "N/A"}%
-                    </p>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-gray-500">No underperformers found.</p>
-            )}
-          </div>
-        )}
-
-        {/* Team Members */}
-        <div className="bg-white border border-gray-200 rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold text-blue-800 mb-3">
-            Team Members
-          </h3>
-          {groupedEmployees.length > 0 ? (
-            groupedEmployees.map((team) => (
-              <div key={team.teamId} className="mb-4">
-                <h4 className="text-sm font-semibold text-blue-600">
-                  {team.teamName}
-                </h4>
-                <p className="text-xs text-gray-500 mb-2">
-                  Lead: {team.teamLead}
-                </p>
-                <ul className="space-y-2">
-                  {team.members.map((emp) => (
-                    <li
-                      key={emp.id}
-                      onClick={() => setSelectedEmployee(emp)}
-                      className={`p-2 rounded border text-sm cursor-pointer ${
-                        selectedEmployee?.id === emp.id
-                          ? "bg-blue-100 border-blue-500"
-                          : "hover:bg-blue-50 border-gray-200"
-                      }`}
-                    >
-                      <p className="font-semibold text-gray-800">{emp.name}</p>
-                      <p className="text-xs text-gray-500">
-                        {emp.department} |{" "}
-                        {emp.performanceScore?.toFixed(2) ?? "N/A"}%
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No team members available.</p>
-          )}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{profile.name}</h3>
+          <p className="text-gray-600 dark:text-gray-400">{profile.jobTitle}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-500">{profile.department}</p>
         </div>
       </div>
 
-      {/* Right Section: Dashboard */}
-      <div className="col-span-1 lg:col-span-3 bg-white rounded-lg shadow p-6 overflow-y-auto">
-        {selectedEmployee ? (
-          <>
-            {/* Header */}
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {selectedEmployee.name}
-              </h2>
-              <p className="text-sm text-gray-500">
-                {selectedEmployee.department}
-              </p>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Full Name
+          </label>
+          <input
+            type="text"
+            value={profile.name}
+            onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
 
-            {/* Summary Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <SummaryCard
-                label="Tasks Assigned"
-                value={performanceData.total}
-              />
-              <SummaryCard
-                label="Tasks Completed"
-                value={performanceData.completed}
-                color="green"
-              />
-              <SummaryCard
-                label="Reassigned"
-                value={performanceData.reassigned}
-                color="yellow"
-              />
-              <SummaryCard
-                label="On-Time"
-                value={`${
-                  performanceData.onTime
-                } (${performanceData.onTimeRate?.toFixed(1)}%)`}
-                color="blue"
-              />
-              <SummaryCard
-                label="Total Performance Score"
-                value={`${performanceData.totalPerformanceScore}%`}
-                color="blue"
-              />
-            </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Job Title
+          </label>
+          <input
+            type="text"
+            value={profile.jobTitle}
+            onChange={(e) => setProfile(prev => ({ ...prev, jobTitle: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
 
-            {/* Completion Bar */}
-            <div className="mb-6">
-              <p className="text-sm font-semibold text-gray-600 mb-1">
-                Completion Rate
-              </p>
-              <div className="w-full bg-gray-200 h-4 rounded-full">
-                <div
-                  className="bg-blue-500 h-4 rounded-full"
-                  style={{ width: `${performanceData.completionRate}%` }}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <Mail className="w-4 h-4 inline mr-2" />
+            Email
+          </label>
+          <input
+            type="email"
+            value={profile.email}
+            onChange={(e) => setProfile(prev => ({ ...prev, email: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <Phone className="w-4 h-4 inline mr-2" />
+            Phone
+          </label>
+          <input
+            type="tel"
+            value={profile.phone}
+            onChange={(e) => setProfile(prev => ({ ...prev, phone: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <MapPin className="w-4 h-4 inline mr-2" />
+            Location
+          </label>
+          <input
+            type="text"
+            value={profile.location}
+            onChange={(e) => setProfile(prev => ({ ...prev, location: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Department
+          </label>
+          <select
+            value={profile.department}
+            onChange={(e) => setProfile(prev => ({ ...prev, department: e.target.value }))}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option>Engineering</option>
+            <option>Design</option>
+            <option>Product</option>
+            <option>Marketing</option>
+            <option>Sales</option>
+            <option>HR</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Bio
+        </label>
+        <textarea
+          value={profile.bio}
+          onChange={(e) => setProfile(prev => ({ ...prev, bio: e.target.value }))}
+          rows={3}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          placeholder="Tell us about yourself..."
+        />
+      </div>
+    </div>
+  );
+
+  const renderNotificationsTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Notification Channels</h3>
+        <div className="space-y-4">
+          {[
+            { key: 'email', label: 'Email Notifications', icon: Mail },
+            { key: 'push', label: 'Push Notifications', icon: Smartphone },
+            { key: 'desktop', label: 'Desktop Notifications', icon: Monitor },
+            { key: 'sound', label: 'Sound Effects', icon: notifications.sound ? Volume2 : VolumeX },
+          ].map(({ key, label, icon: Icon }) => (
+            <div key={key} className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <Icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <span className="text-gray-900 dark:text-gray-100">{label}</span>
+              </div>
+              <button
+                onClick={() => toggleNotification(key)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications[key] ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${
+                    notifications[key] ? 'translate-x-6' : 'translate-x-1'
+                  }`}
                 />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Activity Notifications</h3>
+        <div className="space-y-4">
+          {[
+            { key: 'taskUpdates', label: 'Task Updates & Comments' },
+            { key: 'projectDeadlines', label: 'Project Deadlines' },
+            { key: 'teamNotifications', label: 'Team Announcements' },
+          ].map(({ key, label }) => (
+            <div key={key} className="flex items-center justify-between">
+              <span className="text-gray-900 dark:text-gray-100">{label}</span>
+              <button
+                onClick={() => toggleNotification(key)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  notifications[key] ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${
+                    notifications[key] ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPrivacyTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Profile Visibility</h3>
+        <div className="space-y-3">
+          {[
+            { value: 'public', label: 'Public - Everyone can see your profile' },
+            { value: 'team', label: 'Team Only - Only team members can see your profile' },
+            { value: 'private', label: 'Private - Only you can see your profile' },
+          ].map(({ value, label }) => (
+            <label key={value} className="flex items-center space-x-3 cursor-pointer">
+              <input
+                type="radio"
+                name="profileVisibility"
+                value={value}
+                checked={privacy.profileVisibility === value}
+                onChange={(e) => setPrivacy(prev => ({ ...prev, profileVisibility: e.target.value }))}
+                className="w-4 h-4 text-blue-600"
+              />
+              <span className="text-gray-900 dark:text-gray-100">{label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Activity & Status</h3>
+        <div className="space-y-4">
+          {[
+            { key: 'activityStatus', label: 'Show when I\'m active', description: 'Let others see when you\'re online' },
+            { key: 'lastSeen', label: 'Show last seen', description: 'Display when you were last active' },
+            { key: 'readReceipts', label: 'Read receipts', description: 'Let others know when you\'ve read their messages' },
+          ].map(({ key, label, description }) => (
+            <div key={key} className="flex items-center justify-between">
+              <div>
+                <span className="text-gray-900 dark:text-gray-100 font-medium">{label}</span>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{description}</p>
               </div>
-              <p className="text-xs text-gray-600 mt-1">
-                {performanceData.completionRate?.toFixed(1)}%
-              </p>
+              <button
+                onClick={() => togglePrivacy(key)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  privacy[key] ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white transition-transform ${
+                    privacy[key] ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
             </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 
-            {/* Month-wise Chart */}
-            <div className="mb-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Month-wise Task Summary
-              </h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={monthChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="Completed" fill="#10b981" />
-                  <Bar dataKey="Reassigned" fill="#f59e0b" />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+  const renderAppearanceTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Theme</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[
+            { value: 'light', label: 'Light', icon: Sun },
+            { value: 'dark', label: 'Dark', icon: Moon },
+            { value: 'system', label: 'System', icon: Monitor },
+          ].map(({ value, label, icon: Icon }) => (
+            <button
+              key={value}
+              onClick={() => handleThemeChange(value as 'light' | 'dark' | 'system')}
+              className={`p-4 rounded-lg border-2 transition-colors ${
+                theme === value
+                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
+                  : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+            >
+              <Icon className="w-8 h-8 mx-auto mb-2 text-gray-600 dark:text-gray-400" />
+              <span className="block text-sm font-medium text-gray-900 dark:text-gray-100">{label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
-            {/* Date-wise Chart */}
-            <div className="mb-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Date-wise Performance
-              </h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={dateChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="Completed" stroke="#3b82f6" />
-                  <Line type="monotone" dataKey="Reassigned" stroke="#f59e0b" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-
-            {/* Task Detail Table */}
-            <div>
-              <h3 className="font-semibold text-lg mb-2">
-                Detailed Task Information
-              </h3>
-              <div className="overflow-x-auto max-h-[400px] border rounded shadow-inner">
-                <table className="min-w-full divide-y divide-gray-200 text-sm">
-                  <thead className="bg-gray-100 sticky top-0 z-10">
-                    <tr>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Ticket ID
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Title
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Description
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Status
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Due Date
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Created At
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Updated At
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Reassigned
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Completion Status
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Created By
-                      </th>
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Review
-                      </th>
-
-                      <th className="px-4 py-2 text-left font-semibold text-gray-600">
-                        Comments
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 bg-white">
-                    {tasks
-                      .filter((t) => t.assigned_to === selectedEmployee.id)
-                      .map((task) => (
-                        <tr key={task.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-2 font-medium text-gray-800">
-                            {task.task_id}
-                          </td>
-
-                          <td className="px-4 py-2 text-gray-700">
-                            {task.title}
-                          </td>
-                          <td className="px-4 py-2 text-gray-600">
-                            {task.description || "-"}
-                          </td>
-                          <td className="px-4 py-2">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                task.progress_status === "completed"
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-yellow-100 text-yellow-700"
-                              }`}
-                            >
-                              {task.progress_status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-2 text-gray-600">
-                            {task.due_date || "-"}
-                          </td>
-                          <td className="px-4 py-2 text-gray-500">
-                            {task.created_at?.toDate?.().toLocaleString() ||
-                              "-"}
-                          </td>
-                          <td className="px-4 py-2 text-gray-500">
-                            {task.progress_updated_at
-                              ?.toDate?.()
-                              .toLocaleString() || "-"}
-                          </td>
-                          <td className="px-4 py-2 text-center text-gray-600">
-                            {task.reassign_history?.length || 0}
-                          </td>
-                          <td className="px-4 py-2 text-sm font-medium">
-                            {(() => {
-                              const due = new Date(task.due_date);
-                              const completed =
-                                task.progress_updated_at?.toDate?.();
-                              if (!completed || isNaN(due)) return "-";
-
-                              // Strip time for date-only comparison
-                              const dueDate = new Date(
-                                due.getFullYear(),
-                                due.getMonth(),
-                                due.getDate()
-                              );
-                              const completeDate = new Date(
-                                completed.getFullYear(),
-                                completed.getMonth(),
-                                completed.getDate()
-                              );
-
-                              const diffTime =
-                                completeDate.getTime() - dueDate.getTime();
-                              const diffDays = Math.floor(
-                                diffTime / (1000 * 60 * 60 * 24)
-                              );
-
-                              if (diffDays < 0) {
-                                return (
-                                  <span className="text-green-600 font-medium">
-                                    Early by {Math.abs(diffDays)} day
-                                    {Math.abs(diffDays) !== 1 ? "s" : ""}
-                                  </span>
-                                );
-                              } else if (diffDays === 0) {
-                                return (
-                                  <span className="text-gray-700 font-medium">
-                                    On Time
-                                  </span>
-                                );
-                              } else {
-                                return (
-                                  <span className="text-red-600 font-semibold">
-                                    Delayed by {diffDays} day
-                                    {diffDays !== 1 ? "s" : ""}
-                                  </span>
-                                );
-                              }
-                            })()}
-                          </td>
-                          <td className="px-4 py-2 text-gray-700 text-sm">
-                            {(() => {
-                              const creator = employees.find(
-                                (emp) =>
-                                  emp.id?.trim() === task.created_by?.trim()
-                              );
-                              return creator?.name || task.created_by || "-";
-                            })()}
-                          </td>
-
-                          <td className="px-4 py-2">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                task.status === "completed"
-                                  ? "bg-green-100 text-green-700"
-                                  : "bg-yellow-100 text-yellow-700"
-                              }`}
-                            >
-                              {task.status}
-                            </span>
-                          </td>
-                          <td className="px-4 py-2 text-gray-500">
-                            {task.comments?.length > 0 ? (
-                              <div className="relative group cursor-pointer">
-                                <span className="underline text-blue-500">
-                                  {task.comments.length} comment(s)
-                                </span>
-                                <div className="absolute z-20 hidden group-hover:block bg-white border rounded shadow p-2 text-xs w-64 mt-1">
-                                  {task.comments.map((c, i) => (
-                                    <div key={i} className="mb-1">
-                                      <p className="text-gray-700">
-                                        • {c.text}
-                                      </p>
-                                      <p className="text-gray-400 text-[10px]">
-                                        {new Date(c.timestamp).toLocaleString()}
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ) : (
-                              "-"
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="text-gray-500 text-center py-32 text-lg font-medium">
-            Select an employee to view performance.
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Interface Preferences</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Sidebar Density
+            </label>
+            <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+              <option>Compact</option>
+              <option>Comfortable</option>
+              <option>Spacious</option>
+            </select>
           </div>
-        )}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Animation Speed
+            </label>
+            <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+              <option>Disabled</option>
+              <option>Slow</option>
+              <option>Normal</option>
+              <option>Fast</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderPreferencesTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Language & Region</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <Globe className="w-4 h-4 inline mr-2" />
+              Language
+            </label>
+            <select
+              value={preferences.language}
+              onChange={(e) => setPreferences(prev => ({ ...prev, language: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Timezone
+            </label>
+            <select
+              value={preferences.timezone}
+              onChange={(e) => setProfile(prev => ({ ...prev, timezone: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="PST">Pacific (PST)</option>
+              <option value="MST">Mountain (MST)</option>
+              <option value="CST">Central (CST)</option>
+              <option value="EST">Eastern (EST)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Date & Time Format</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <Calendar className="w-4 h-4 inline mr-2" />
+              Date Format
+            </label>
+            <select
+              value={preferences.dateFormat}
+              onChange={(e) => setPreferences(prev => ({ ...prev, dateFormat: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+              <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+              <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Time Format
+            </label>
+            <select
+              value={preferences.timeFormat}
+              onChange={(e) => setPreferences(prev => ({ ...prev, timeFormat: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="12h">12 Hour</option>
+              <option value="24h">24 Hour</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Start of Week
+            </label>
+            <select
+              value={preferences.startOfWeek}
+              onChange={(e) => setPreferences(prev => ({ ...prev, startOfWeek: e.target.value }))}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="sunday">Sunday</option>
+              <option value="monday">Monday</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSecurityTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Password</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Current Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                placeholder="Enter current password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4 text-gray-400" />
+                ) : (
+                  <Eye className="h-4 w-4 text-gray-400" />
+                )}
+              </button>
+            </div>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              New Password
+            </label>
+            <input
+              type="password"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              placeholder="Enter new password"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Confirm New Password
+            </label>
+            <input
+              type="password"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              placeholder="Confirm new password"
+            />
+          </div>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            Update Password
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Two-Factor Authentication</h3>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-gray-900 dark:text-gray-100 font-medium">Enable 2FA</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Add an extra layer of security to your account</p>
+          </div>
+          <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+            Setup 2FA
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Active Sessions</h3>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-md">
+            <div className="flex items-center space-x-3">
+              <Monitor className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <div>
+                <p className="font-medium text-gray-900 dark:text-gray-100">Current Session</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Chrome on macOS • San Francisco, CA</p>
+              </div>
+            </div>
+            <span className="text-sm text-green-600 font-medium">Active now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderAccountTab = () => (
+    <div className="space-y-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Data Export</h3>
+        <div className="space-y-3">
+          <p className="text-gray-600 dark:text-gray-400">
+            Download a copy of your data including projects, tasks, and activity history.
+          </p>
+          <button className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            <Download className="w-4 h-4" />
+            <span>Request Data Export</span>
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-6 border border-red-200 dark:border-red-800">
+        <h3 className="text-lg font-medium text-red-900 dark:text-red-300 mb-4 flex items-center">
+          <AlertTriangle className="w-5 h-5 mr-2" />
+          Danger Zone
+        </h3>
+        <div className="space-y-4">
+          <div>
+            <h4 className="font-medium text-red-900 dark:text-red-300">Delete Account</h4>
+            <p className="text-sm text-red-700 dark:text-red-400 mb-3">
+              Once you delete your account, there is no going back. Please be certain.
+            </p>
+            <button className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+              <Trash2 className="w-4 h-4" />
+              <span>Delete Account</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "profile":
+        return renderProfileTab();
+      case "notifications":
+        return renderNotificationsTab();
+      case "privacy":
+        return renderPrivacyTab();
+      case "appearance":
+        return renderAppearanceTab();
+      case "preferences":
+        return renderPreferencesTab();
+      case "security":
+        return renderSecurityTab();
+      case "account":
+        return renderAccountTab();
+      default:
+        return renderProfileTab();
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Manage your account settings and preferences
+          </p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar Navigation */}
+          <div className="lg:w-64 flex-shrink-0">
+            <nav className="space-y-1">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 text-left rounded-lg transition-colors ${
+                      activeTab === tab.id
+                        ? "bg-blue-600 text-white"
+                        : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="font-medium">{tab.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+
+          {/* Content Area */}
+          <div className="flex-1">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+              <div className="px-4 py-6">
+                {renderTabContent()}
+              </div>
+
+              {/* Save Button */}
+              <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
+                <div className="flex justify-end space-x-3">
+                  <button className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleSave}
+                    className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  >
+                    <Save className="w-4 h-4" />
+                    <span>Save Changes</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-const SummaryCard = ({ label, value, color = "blue" }) => {
-  const colorMap = {
-    blue: "text-blue-600",
-    green: "text-green-600",
-    yellow: "text-yellow-600",
-  };
-
-  return (
-    <div className="bg-gray-50 rounded-md shadow-inner p-4 border">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className={`text-xl font-bold ${colorMap[color]}`}>{value}</p>
-    </div>
-  );
-};

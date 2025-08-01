@@ -25,6 +25,8 @@ import Reports from "./pages/Reports";
 import { View } from "lucide-react";
 import PerformMatrix from "./pages/PerformMatrix";
 import Makeleader from "./pages/Makeleader";
+import ConnectionStatus from "./components/ConnectionStatus";
+import ErrorBoundary from "./components/ErrorBoundary";
 function App() {
   const { user, loading } = useAuthStore();
   const { theme } = useThemeStore();
@@ -52,8 +54,9 @@ function App() {
   }
 
   return (
-    <>
+    <ErrorBoundary>
       <Toaster position="top-right" />
+      <ConnectionStatus />
       <Routes>
         <Route
           path="/login"
@@ -82,7 +85,7 @@ function App() {
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }
 

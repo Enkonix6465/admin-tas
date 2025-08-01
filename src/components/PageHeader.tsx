@@ -54,11 +54,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   showSettings = true,
 }) => {
   return (
-    <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+    <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
       {/* Header Row */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             {title}
           </h1>
           <span className={`px-2 py-1 text-xs rounded-full font-medium ${statusColor}`}>
@@ -78,12 +78,12 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           <div className="flex items-center gap-2">
             {customActions}
             {showShare && (
-              <button className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+              <button className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                 Share
               </button>
             )}
             {showSettings && (
-              <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+              <button className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
                 <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
               </button>
             )}
@@ -122,7 +122,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
                 placeholder={searchPlaceholder}
                 value={searchValue}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="pl-8 pr-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           )}
@@ -132,7 +132,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             <div className="relative">
               <button
                 onClick={onFilterToggle}
-                className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <Filter className="w-4 h-4" />
                 Filter
@@ -148,7 +148,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           )}
 
           {/* Add Button */}
-          <button className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
+          <button className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700">
             <Plus className="w-4 h-4" />
             Add
           </button>
