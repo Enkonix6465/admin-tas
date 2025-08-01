@@ -45,33 +45,139 @@ const KanbanPage = () => {
 
   useEffect(() => {
     const unsubscribers: any[] = [];
-    
-    // Real-time listeners for data
-    const tasksUnsub = onSnapshot(collection(db, "tasks"), (snapshot) => {
-      setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    }, (error) => {
-      console.warn("Tasks listener error:", error);
-      setTasks([]);
-    });
+    let mounted = true;
 
-    const projectsUnsub = onSnapshot(collection(db, "projects"), (snapshot) => {
-      setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    }, (error) => {
-      console.warn("Projects listener error:", error);
-      setProjects([]);
-    });
+    const setupRealtimeListeners = async () => {
+      try {
+        // Real-time listeners for data with comprehensive error handling
+        const tasksUnsub = onSnapshot(
+          collection(db, "tasks"),
+          (snapshot) => {
+            if (mounted) {
+              setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+          },
+          (error) => {
+            console.warn("Tasks listener error:", error);
+            toast.error("Failed to load tasks data");
+            if (mounted) {
+              // Set fallback mock data for tasks
+              setTasks([
+                {
+                  id: "mock-task-1",
+                  title: "Sample Task",
+                  description: "This is a sample task for demonstration",
+                  status: "pending",
+                  progress_status: "pending",
+                  priority: "medium",
+                  assigned_to: "mock-user",
+                  due_date: "2024-02-15",
+                  created_at: { seconds: Date.now() / 1000 }
+                },
+                {
+                  id: "mock-task-2",
+                  title: "In Progress Task",
+                  description: "Task currently being worked on",
+                  status: "in_progress",
+                  progress_status: "in_progress",
+                  priority: "high",
+                  assigned_to: "mock-user-2",
+                  due_date: "2024-02-20",
+                  created_at: { seconds: Date.now() / 1000 }
+                },
+                {
+                  id: "mock-task-3",
+                  title: "Completed Task",
+                  description: "Task that has been completed",
+                  status: "completed",
+                  progress_status: "completed",
+                  priority: "low",
+                  assigned_to: "mock-user-3",
+                  due_date: "2024-02-10",
+                  created_at: { seconds: Date.now() / 1000 }
+                }
+              ]);
+            }
+          }
+        );
 
-    const employeesUnsub = onSnapshot(collection(db, "employees"), (snapshot) => {
-      setEmployees(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    }, (error) => {
-      console.warn("Employees listener error:", error);
-      setEmployees([]);
-    });
+        const projectsUnsub = onSnapshot(
+          collection(db, "projects"),
+          (snapshot) => {
+            if (mounted) {
+              setProjects(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+          },
+          (error) => {
+            console.warn("Projects listener error:", error);
+            if (mounted) {
+              setProjects([
+                {
+                  id: "mock-project-1",
+                  name: "Sample Project",
+                  description: "Demo project for testing"
+                }
+              ]);
+            }
+          }
+        );
 
-    unsubscribers.push(tasksUnsub, projectsUnsub, employeesUnsub);
+        const employeesUnsub = onSnapshot(
+          collection(db, "employees"),
+          (snapshot) => {
+            if (mounted) {
+              setEmployees(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+            }
+          },
+          (error) => {
+            console.warn("Employees listener error:", error);
+            if (mounted) {
+              setEmployees([
+                {
+                  id: "mock-user",
+                  name: "Demo User",
+                  email: "demo@example.com"
+                },
+                {
+                  id: "mock-user-2",
+                  name: "Test User",
+                  email: "test@example.com"
+                },
+                {
+                  id: "mock-user-3",
+                  name: "Sample User",
+                  email: "sample@example.com"
+                }
+              ]);
+            }
+          }
+        );
+
+        unsubscribers.push(tasksUnsub, projectsUnsub, employeesUnsub);
+      } catch (error) {
+        console.error("Failed to setup Firebase listeners:", error);
+        toast.error("Connection error - using offline mode");
+
+        if (mounted) {
+          // Set fallback data when Firebase is completely unavailable
+          setTasks([]);
+          setProjects([]);
+          setEmployees([]);
+        }
+      }
+    };
+
+    setupRealtimeListeners();
 
     return () => {
-      unsubscribers.forEach(unsub => unsub());
+      mounted = false;
+      unsubscribers.forEach(unsub => {
+        try {
+          unsub();
+        } catch (error) {
+          console.warn("Error unsubscribing:", error);
+        }
+      });
     };
   }, []);
 
