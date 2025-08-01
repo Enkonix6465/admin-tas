@@ -57,6 +57,7 @@ const KanbanPage = () => {
           (snapshot) => {
             if (mounted) {
               setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+              setLoading(false);
             }
           },
           (error) => {
@@ -99,6 +100,7 @@ const KanbanPage = () => {
                   created_at: { seconds: Date.now() / 1000 }
                 }
               ]);
+              setLoading(false);
             }
           }
         );
