@@ -291,16 +291,31 @@ const KanbanPage = () => {
   // Update task status when moved between columns
   const handleTaskMove = async (task: any, newStatus: string) => {
     try {
+      // Check if Firebase is available
+      if (!db) {
+        throw new Error("Database connection not available");
+      }
+
       await updateDoc(doc(db, "tasks", task.id), {
         status: newStatus,
         progress_status: newStatus,
         progress_updated_at: Timestamp.now(),
       });
 
-      toast.success(`Task moved to ${newStatus}`);
-    } catch (error) {
+      toast.success(`Task moved to ${newStatus.replace('_', ' ')}`);
+    } catch (error: any) {
       console.error("Error updating task:", error);
-      toast.error("Failed to update task");
+
+      // Provide specific error messages
+      if (error.code === 'unavailable') {
+        toast.error("Service temporarily unavailable. Changes not saved.");
+      } else if (error.code === 'permission-denied') {
+        toast.error("You don't have permission to update tasks.");
+      } else if (error.message?.includes('Failed to fetch')) {
+        toast.error("Network connection error. Please check your internet connection.");
+      } else {
+        toast.error(`Failed to update task: ${error.message || 'Unknown error'}`);
+      }
     }
   };
 
