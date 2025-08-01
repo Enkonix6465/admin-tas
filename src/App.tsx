@@ -25,6 +25,7 @@ import Reports from "./pages/Reports";
 import { View } from "lucide-react";
 import PerformMatrix from "./pages/PerformMatrix";
 import Makeleader from "./pages/Makeleader";
+import ConnectionStatus from "./components/ConnectionStatus";
 function App() {
   const { user, loading } = useAuthStore();
   const { theme } = useThemeStore();
