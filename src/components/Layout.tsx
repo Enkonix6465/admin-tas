@@ -193,7 +193,7 @@ function Layout() {
               </button>
 
               <button className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <Sort className="w-3 h-3" />
+                <ArrowUpDown className="w-3 h-3" />
                 Sort
               </button>
 
