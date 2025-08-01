@@ -223,7 +223,7 @@ export default function Settings() {
 
   const renderNotificationsTab = () => (
     <div className="space-y-6">
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Notification Channels</h3>
         <div className="space-y-4">
           {[
@@ -254,7 +254,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Activity Notifications</h3>
         <div className="space-y-4">
           {[
@@ -285,7 +285,7 @@ export default function Settings() {
 
   const renderPrivacyTab = () => (
     <div className="space-y-6">
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Profile Visibility</h3>
         <div className="space-y-3">
           {[
@@ -308,7 +308,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Activity & Status</h3>
         <div className="space-y-4">
           {[
@@ -342,7 +342,7 @@ export default function Settings() {
 
   const renderAppearanceTab = () => (
     <div className="space-y-6">
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Theme</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
@@ -366,7 +366,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Interface Preferences</h3>
         <div className="space-y-4">
           <div>
@@ -397,7 +397,7 @@ export default function Settings() {
 
   const renderPreferencesTab = () => (
     <div className="space-y-6">
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Language & Region</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -434,7 +434,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Date & Time Format</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
@@ -485,7 +485,7 @@ export default function Settings() {
 
   const renderSecurityTab = () => (
     <div className="space-y-6">
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Password</h3>
         <div className="space-y-4">
           <div>
@@ -537,7 +537,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Two-Factor Authentication</h3>
         <div className="flex items-center justify-between">
           <div>
@@ -550,7 +550,7 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Active Sessions</h3>
         <div className="space-y-3">
           <div className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-md">
@@ -570,7 +570,7 @@ export default function Settings() {
 
   const renderAccountTab = () => (
     <div className="space-y-6">
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-6">
+      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Data Export</h3>
         <div className="space-y-3">
           <p className="text-gray-600 dark:text-gray-400">
