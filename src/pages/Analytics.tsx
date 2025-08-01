@@ -172,7 +172,7 @@ const Analytics = () => {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Task Status Pie Chart */}
         <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3">
           <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Task Status</h3>
