@@ -32,6 +32,11 @@ export default function ProjectTasksViewer() {
   const [filterOpen, setFilterOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("table");
 
+  const handleTabChange = (tabId: string) => {
+    console.log('Tab changed to:', tabId);
+    setActiveTab(tabId);
+  };
+
   useEffect(() => {
     const fetchProjects = async () => {
       const snap = await getDocs(collection(db, "projects"));
