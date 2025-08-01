@@ -25,6 +25,7 @@ export default function ProjectTasksViewer() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("table");
 
   useEffect(() => {
     const fetchProjects = async () => {
