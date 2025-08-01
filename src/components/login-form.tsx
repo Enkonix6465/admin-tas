@@ -40,25 +40,16 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <div className="relative group">
-        {/* Animated border */}
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-lg opacity-75 animate-spin-slow"></div>
-        
-        <Card className="relative overflow-hidden p-0 bg-white dark:bg-gray-900 border-0 shadow-2xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-purple-50/50 to-pink-50/50 dark:from-blue-900/20 dark:via-purple-900/20 dark:to-pink-900/20"></div>
+      <Card className="overflow-hidden p-0 shadow-2xl border border-gray-200 dark:border-gray-700">
           
-          <CardContent className="relative grid p-0 md:grid-cols-2">
+        <CardContent className="grid p-0 md:grid-cols-2">
             <form className="p-8 md:p-12" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-8">
                 <div className="flex flex-col items-center text-center space-y-4">
-                  <div className="relative">
-                    <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    </div>
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur opacity-50 animate-pulse"></div>
+                  <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
                   </div>
                   <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                     Welcome back
@@ -135,8 +126,8 @@ export function LoginForm({
             <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 relative hidden md:block">
               <div className="absolute inset-0 bg-black/20"></div>
               <img
-                src="/placeholder.svg"
-                alt="Enkonix Login"
+                src="https://cdn.pixabay.com/photo/2016/11/08/05/10/students-1807505_1280.jpg"
+              alt="Students working together"
                 className="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-overlay"
               />
               <div className="absolute inset-0 flex items-center justify-center">
@@ -153,7 +144,6 @@ export function LoginForm({
             </div>
           </CardContent>
         </Card>
-      </div>
       
       <div className="text-muted-foreground text-center text-xs text-balance">
         By continuing, you agree to our{" "}
