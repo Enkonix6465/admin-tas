@@ -415,7 +415,7 @@ const Reports = () => {
             </h2>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-6 space-y-3">
+          <div className="flex-1 overflow-y-auto p-3 space-y-2">
             {reportTypes.map((report) => (
               <motion.button
                 key={report.id}
