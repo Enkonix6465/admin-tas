@@ -203,13 +203,13 @@ export default function ProjectTasksViewer() {
         filterContent={filterContent}
       />
 
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-4">
         {/* Project Selection */}
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3">
             Select Project
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {projects.map((project: any) => (
               <motion.button
                 key={project.id}
