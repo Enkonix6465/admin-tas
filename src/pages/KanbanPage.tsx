@@ -247,6 +247,11 @@ const KanbanPage = () => {
     }
 
     try {
+      // Check if Firebase is available
+      if (!db) {
+        throw new Error("Database connection not available");
+      }
+
       await addDoc(collection(db, "tasks"), {
         ...newTaskForm,
         status: newTaskColumn || "pending",
@@ -267,9 +272,19 @@ const KanbanPage = () => {
       });
       setShowNewTaskModal(false);
       setNewTaskColumn("");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error adding task:", error);
-      toast.error("Failed to add task");
+
+      // Provide specific error messages
+      if (error.code === 'unavailable') {
+        toast.error("Service temporarily unavailable. Please try again later.");
+      } else if (error.code === 'permission-denied') {
+        toast.error("You don't have permission to add tasks.");
+      } else if (error.message?.includes('Failed to fetch')) {
+        toast.error("Network connection error. Please check your internet connection.");
+      } else {
+        toast.error(`Failed to add task: ${error.message || 'Unknown error'}`);
+      }
     }
   };
 
