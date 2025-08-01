@@ -416,13 +416,13 @@ const Dashboard = () => {
             </button>
             
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setShowNewDropdown(!showNewDropdown)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
-                <Plus className="w-4 h-4" />
-                New
-                <ChevronDown className="w-4 h-4" />
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">New</span>
+                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
               
               {showNewDropdown && (
