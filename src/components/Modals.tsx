@@ -34,14 +34,19 @@ export const NewTaskModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
 
     setLoading(true);
     try {
+      // Check if Firebase is available
+      if (!db) {
+        throw new Error("Database connection not available");
+      }
+
       await addDoc(collection(db, "tasks"), {
         ...formData,
-        created_by: user?.uid,
+        created_by: user?.uid || "anonymous",
         created_at: Timestamp.now(),
         progress_status: "pending",
         task_id: `TASK-${Date.now()}`
       });
-      
+
       toast.success("Task created successfully!");
       setFormData({
         title: "",
@@ -54,9 +59,19 @@ export const NewTaskModal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
         tags: []
       });
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating task:", error);
-      toast.error("Failed to create task");
+
+      // Provide specific error messages
+      if (error.code === 'unavailable') {
+        toast.error("Service temporarily unavailable. Please try again later.");
+      } else if (error.code === 'permission-denied') {
+        toast.error("You don't have permission to create tasks.");
+      } else if (error.message?.includes('Failed to fetch')) {
+        toast.error("Network connection error. Please check your internet connection.");
+      } else {
+        toast.error(`Failed to create task: ${error.message || 'Unknown error'}`);
+      }
     } finally {
       setLoading(false);
     }
