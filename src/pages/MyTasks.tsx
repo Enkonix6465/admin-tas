@@ -269,7 +269,7 @@ export default function MyTasks() {
                   {filteredTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                 <FileText className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function MyTasks() {
                   {inProgressTasks}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                 <Activity className="w-6 h-6 text-blue-600" />
               </div>
             </div>
