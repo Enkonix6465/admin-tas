@@ -635,7 +635,7 @@ export default function Settings() {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-6">
           {/* Sidebar Navigation */}
           <div className="lg:w-64 flex-shrink-0">
             <nav className="space-y-1">
