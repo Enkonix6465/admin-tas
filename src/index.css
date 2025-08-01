@@ -14,7 +14,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-size: 0.875rem; /* 14px for compact feel */
+  font-size: 0.8125rem; /* 13px for more compact feel */
 }
 .ql-container {
   min-height: 300px;
