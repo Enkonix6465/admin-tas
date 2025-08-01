@@ -64,11 +64,17 @@ function Layout() {
       if (sortOpen && !target.closest('.sort-dropdown')) {
         setSortOpen(false);
       }
+      if (workspaceOpen && !target.closest('.workspace-dropdown')) {
+        setWorkspaceOpen(false);
+      }
+      if (projectOpen && !target.closest('.project-dropdown')) {
+        setProjectOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [filterOpen, sortOpen]);
+  }, [filterOpen, sortOpen, workspaceOpen, projectOpen]);
 
   const toggleTheme = () => {
     const newTheme = !isDarkMode;
