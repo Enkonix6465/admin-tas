@@ -50,6 +50,24 @@ function Layout() {
     document.documentElement.classList.toggle("dark", enabledDark);
   }, []);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (!event.target) return;
+      const target = event.target as Element;
+
+      if (filterOpen && !target.closest('.filter-dropdown')) {
+        setFilterOpen(false);
+      }
+      if (sortOpen && !target.closest('.sort-dropdown')) {
+        setSortOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [filterOpen, sortOpen]);
+
   const toggleTheme = () => {
     const newTheme = !isDarkMode;
     setIsDarkMode(newTheme);
