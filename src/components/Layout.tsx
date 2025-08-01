@@ -189,15 +189,99 @@ function Layout() {
                 />
               </div>
 
-              <button className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <Filter className="w-3 h-3" />
-                Filter
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setFilterOpen(!filterOpen)}
+                  className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <Filter className="w-3 h-3" />
+                  Filter
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {filterOpen && (
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-10 p-3">
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Status
+                        </label>
+                        <select className="w-full px-2 py-1 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                          <option>All Status</option>
+                          <option>Active</option>
+                          <option>Completed</option>
+                          <option>On Hold</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                          Assignee
+                        </label>
+                        <select className="w-full px-2 py-1 text-xs border border-gray-200 dark:border-gray-700 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                          <option>All Members</option>
+                          <option>Me</option>
+                          <option>Team Lead</option>
+                          <option>Unassigned</option>
+                        </select>
+                      </div>
+                      <div className="flex justify-between pt-2">
+                        <button
+                          onClick={() => setFilterOpen(false)}
+                          className="px-2 py-1 text-xs text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+                        >
+                          Clear
+                        </button>
+                        <button
+                          onClick={() => setFilterOpen(false)}
+                          className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
-              <button className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <ArrowUpDown className="w-3 h-3" />
-                Sort
-              </button>
+              <div className="relative">
+                <button
+                  onClick={() => setSortOpen(!sortOpen)}
+                  className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
+                >
+                  <ArrowUpDown className="w-3 h-3" />
+                  Sort
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+                {sortOpen && (
+                  <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-10 p-2">
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => setSortOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        Date Created
+                      </button>
+                      <button
+                        onClick={() => setSortOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        Due Date
+                      </button>
+                      <button
+                        onClick={() => setSortOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        Priority
+                      </button>
+                      <button
+                        onClick={() => setSortOpen(false)}
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                      >
+                        Alphabetical
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <button className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
                 Share
