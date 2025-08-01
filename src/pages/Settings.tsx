@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthStore } from "../store/authStore";
+import { db } from "../lib/firebase";
+import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
 import { useThemeStore } from "../store/themeStore";
 import {
   User,
@@ -82,9 +85,30 @@ export default function Settings() {
     { id: "account", label: "Account", icon: Key },
   ];
 
-  const handleSave = () => {
-    // Save settings logic here
-    console.log("Settings saved!");
+  const handleSave = async () => {
+    if (!user?.uid) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    try {
+      const userSettingsRef = doc(db, "userSettings", user.uid);
+
+      const settingsData = {
+        profile,
+        notifications,
+        privacy,
+        preferences,
+        theme,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await setDoc(userSettingsRef, settingsData, { merge: true });
+      toast.success("Settings saved successfully!");
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      toast.error("Failed to save settings");
+    }
   };
 
   const toggleNotification = (key: string) => {
