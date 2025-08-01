@@ -106,7 +106,7 @@ export default function Settings() {
   };
 
   const renderProfileTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="flex items-center space-x-6">
         <div className="relative">
           <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
@@ -222,7 +222,7 @@ export default function Settings() {
   );
 
   const renderNotificationsTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Notification Channels</h3>
         <div className="space-y-4">
@@ -284,7 +284,7 @@ export default function Settings() {
   );
 
   const renderPrivacyTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Profile Visibility</h3>
         <div className="space-y-3">
@@ -341,7 +341,7 @@ export default function Settings() {
   );
 
   const renderAppearanceTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Theme</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -396,7 +396,7 @@ export default function Settings() {
   );
 
   const renderPreferencesTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Language & Region</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -484,7 +484,7 @@ export default function Settings() {
   );
 
   const renderSecurityTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Password</h3>
         <div className="space-y-4">
@@ -569,7 +569,7 @@ export default function Settings() {
   );
 
   const renderAccountTab = () => (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-3">
       <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Data Export</h3>
         <div className="space-y-3">
