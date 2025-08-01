@@ -28,6 +28,10 @@ import {
   Clock,
   Filter,
   ArrowUpDown,
+  Grid3X3,
+  TrendingUp,
+  Target,
+  Activity,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
