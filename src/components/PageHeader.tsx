@@ -58,7 +58,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
       {/* Header Row */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-3">
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             {title}
           </h1>
           <span className={`px-2 py-1 text-xs rounded-full font-medium ${statusColor}`}>
