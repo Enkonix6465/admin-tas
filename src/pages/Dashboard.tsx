@@ -383,6 +383,21 @@ const Dashboard = () => {
 
   return (
     <div className="h-full bg-gray-50 dark:bg-gray-900 p-3 overflow-y-auto">
+      {/* Offline Mode Banner */}
+      {!navigator.onLine && (
+        <div className="mb-4 p-3 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg flex items-center gap-3">
+          <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+          <div>
+            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
+              You're currently offline
+            </p>
+            <p className="text-xs text-yellow-700 dark:text-yellow-400">
+              Some features may not work properly until connection is restored
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-4">
         <div className="flex items-center justify-between mb-3">
