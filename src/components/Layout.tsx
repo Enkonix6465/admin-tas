@@ -184,24 +184,253 @@ function Layout() {
           </div>
         </div>
 
-        {/* Navigation - Minimal */}
+        {/* Navigation - Hierarchical */}
         <div className="flex-1 overflow-y-auto px-2 py-1">
           <nav className="space-y-1">
-            {menuItems.map((item) => (
+
+            {/* Dashboard Section */}
+            <div>
+              <button
+                onClick={() => toggleSection('dashboard')}
+                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <div className="flex items-center gap-2">
+                  <Grid3X3 className="w-3 h-3" />
+                  Dashboard
+                </div>
+                <ChevronDown className={`w-3 h-3 transition-transform ${expandedSections.dashboard ? 'rotate-0' : '-rotate-90'}`} />
+              </button>
+              {expandedSections.dashboard && (
+                <div className="ml-5 mt-1 space-y-1">
+                  <Link
+                    to="/"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <Grid3X3 className="w-3 h-3" />
+                    Overview
+                  </Link>
+                  <Link
+                    to="/PerformMatrix"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/PerformMatrix")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <TrendingUp className="w-3 h-3" />
+                    Performance
+                  </Link>
+                  <Link
+                    to="/KanbanPage"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/KanbanPage")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <CheckSquare className="w-3 h-3" />
+                    Kanban Board
+                  </Link>
+                  <Link
+                    to="/Analytics"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/Analytics")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <BarChart3 className="w-3 h-3" />
+                    Analytics
+                  </Link>
+                  <Link
+                    to="/Reports"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/Reports")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <FileText className="w-3 h-3" />
+                    Reports
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Projects Section */}
+            <div>
+              <button
+                onClick={() => toggleSection('projects')}
+                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <div className="flex items-center gap-2">
+                  <Briefcase className="w-3 h-3" />
+                  Projects
+                </div>
+                <ChevronDown className={`w-3 h-3 transition-transform ${expandedSections.projects ? 'rotate-0' : '-rotate-90'}`} />
+              </button>
+              {expandedSections.projects && (
+                <div className="ml-5 mt-1 space-y-1">
+                  <Link
+                    to="/ProjectTasksViewer"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/ProjectTasksViewer")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <FileText className="w-3 h-3" />
+                    Project Tasks
+                  </Link>
+                  <Link
+                    to="/ProjectDashboard"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/ProjectDashboard")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <Briefcase className="w-3 h-3" />
+                    Project Dashboard
+                  </Link>
+                  <Link
+                    to="/ProjectDocCreator"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/ProjectDocCreator")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <FileText className="w-3 h-3" />
+                    Document Creator
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Tickets Section */}
+            <div>
+              <button
+                onClick={() => toggleSection('tickets')}
+                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <div className="flex items-center gap-2">
+                  <CheckSquare className="w-3 h-3" />
+                  Tickets
+                </div>
+                <ChevronRight className={`w-3 h-3 transition-transform ${expandedSections.tickets ? 'rotate-90' : 'rotate-0'}`} />
+              </button>
+              {expandedSections.tickets && (
+                <div className="ml-5 mt-1 space-y-1">
+                  <Link
+                    to="/RaiseProjectTicket"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/RaiseProjectTicket")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <Plus className="w-3 h-3" />
+                    Raise Ticket
+                  </Link>
+                  <Link
+                    to="/ViewTickets"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/ViewTickets")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <CheckSquare className="w-3 h-3" />
+                    View Tickets
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Administration Section */}
+            <div>
+              <button
+                onClick={() => toggleSection('administration')}
+                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              >
+                <div className="flex items-center gap-2">
+                  <Shield className="w-3 h-3" />
+                  Administration
+                </div>
+                <ChevronRight className={`w-3 h-3 transition-transform ${expandedSections.administration ? 'rotate-90' : 'rotate-0'}`} />
+              </button>
+              {expandedSections.administration && (
+                <div className="ml-5 mt-1 space-y-1">
+                  <Link
+                    to="/AddUsers"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/AddUsers")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <UserPlus className="w-3 h-3" />
+                    Add Users
+                  </Link>
+                  <Link
+                    to="/Makeleader"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded transition-colors ${
+                      isActive("/Makeleader")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <Users className="w-3 h-3" />
+                    Make Team Lead
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Standalone Items */}
+            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
               <Link
-                key={item.path}
-                to={item.path}
+                to="/MyTasks"
                 onClick={closeSidebar}
                 className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
-                  isActive(item.path)
+                  isActive("/MyTasks")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
                 }`}
               >
-                <item.icon className="w-3 h-3" />
-                {item.label}
+                <Clock className="w-3 h-3" />
+                My Tasks
               </Link>
-            ))}
+              <Link
+                to="/calendar"
+                onClick={closeSidebar}
+                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                  isActive("/calendar")
+                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                }`}
+              >
+                <Calendar className="w-3 h-3" />
+                Calendar
+              </Link>
+            </div>
           </nav>
         </div>
 
