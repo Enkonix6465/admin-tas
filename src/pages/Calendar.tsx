@@ -52,7 +52,7 @@ const Calendar = () => {
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-2">
       {/* Minimal Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
