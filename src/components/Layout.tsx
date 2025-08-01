@@ -27,7 +27,7 @@ import {
   BarChart3,
   Clock,
   Filter,
-  Sort,
+  ArrowUpDown,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
