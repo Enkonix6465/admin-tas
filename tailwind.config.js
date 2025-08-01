@@ -54,6 +54,10 @@ export default {
       animation: {
         "fade-in": "fadeIn 0.3s ease-out",
         "slide-in": "slideIn 0.4s ease-in-out",
+        "spin-slow": "spin-slow 3s linear infinite",
+        "gradient-x": "gradient-x 15s ease infinite",
+        "tilt": "tilt 10s infinite linear",
+        "border-beam": "border-beam 1.5s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -63,6 +67,36 @@ export default {
         slideIn: {
           "0%": { transform: "translateY(-10px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+        "spin-slow": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
+        },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+        tilt: {
+          "0%, 50%, 100%": {
+            transform: "rotate(0deg)",
+          },
+          "25%": {
+            transform: "rotate(1deg)",
+          },
+          "75%": {
+            transform: "rotate(-1deg)",
+          },
+        },
+        "border-beam": {
+          "100%": {
+            "offset-distance": "100%",
+          },
         },
       },
     },
