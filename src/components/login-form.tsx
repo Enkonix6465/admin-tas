@@ -94,30 +94,24 @@ export function LoginForm({
                   </div>
                 </div>
 
-                <Button
-                  type="submit"
-                  className="neon-btn w-full h-12 text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 transition-all duration-300 transform hover:scale-[1.02] shadow-lg text-white border-0"
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl text-white border-0" 
                   disabled={isLoading}
                 >
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                  <div className="relative z-10">
-                    {isLoading ? (
-                      <div className="flex items-center space-x-3">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Signing in...</span>
-                      </div>
-                    ) : (
-                      <span className="flex items-center space-x-2">
-                        <span>Login</span>
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                      </span>
-                    )}
-                  </div>
+                  {isLoading ? (
+                    <div className="flex items-center space-x-3">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Signing in...</span>
+                    </div>
+                  ) : (
+                    <span className="flex items-center space-x-2">
+                      <span>Login</span>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </span>
+                  )}
                 </Button>
 
                 <div className="text-center text-sm">
@@ -139,12 +133,8 @@ export function LoginForm({
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white space-y-4">
                   <h2 className="text-3xl font-bold">Enkonix</h2>
-                  <p className="text-xl opacity-90">Project Management Platform</p>
-                  <div className="flex space-x-2 justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                    <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                  </div>
+                 
+                  
                 </div>
               </div>
             </div>
