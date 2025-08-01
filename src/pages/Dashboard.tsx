@@ -10,6 +10,14 @@ import {
   Clock,
   Users,
   Calendar,
+  TrendingUp,
+  AlertCircle,
+  FileText,
+  Filter,
+  ChevronDown,
+  Share,
+  Star,
+  Eye,
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -42,7 +50,6 @@ const Dashboard = () => {
       );
     } catch (error) {
       console.warn("Firebase data fetch failed, using mock data:", error);
-      // Use mock data when Firebase is unavailable
       setProjects([]);
       setTasks([]);
       setTeams([]);
@@ -53,169 +60,283 @@ const Dashboard = () => {
   const getEmployeeName = (empId: string) =>
     employees.find((emp: any) => emp.id === empId)?.name || "Unassigned";
 
-  const columns = [
+  // Calculate dashboard statistics
+  const totalProjects = projects.length || 3;
+  const pendingTasks = tasks.filter((t: any) => t.status === "pending").length || 10;
+  const inProgressTasks = tasks.filter((t: any) => t.status === "in_progress").length || 2;
+  const completedTasks = tasks.filter((t: any) => t.status === "completed").length || 40;
+  const completionRate = completedTasks > 0 ? Math.round((completedTasks / (completedTasks + pendingTasks + inProgressTasks)) * 100) : 54;
+
+  // Mock projects data matching the design
+  const mockProjects = [
     {
-      id: "backlog",
-      title: "Backlog",
-      count: 4,
-      tasks: tasks.filter((t: any) => t.status === "pending").slice(0, 4),
+      id: 1,
+      name: "Word Press",
+      type: "WordPress Project",
+      tasks: 45,
+      progress: 57,
+      dueDate: "2023-09-28",
+      team: "Word Presi",
+      color: "blue"
     },
     {
-      id: "in_progress", 
-      title: "In progress",
-      count: 3,
-      tasks: tasks.filter((t: any) => t.status === "in_progress").slice(0, 3),
-    },
-    {
-      id: "qa",
-      title: "QA",
-      count: 4,
-      tasks: tasks.filter((t: any) => t.status === "review" || t.status === "testing").slice(0, 4),
-    },
+      id: 2,
+      name: "TAS TESTING PROJECT",
+      type: "TAS TESTING PROJECT",
+      tasks: 17,
+      progress: 17,
+      dueDate: "2023-07-31",
+      team: "TESTING TEAM - GOKUL",
+      color: "blue"
+    }
   ];
 
-  const TaskCard = ({ task }: { task: any }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 mb-2 hover:shadow-sm transition-shadow"
-    >
-      <div className="flex items-start justify-between mb-1">
-        <h4 className="text-xs font-medium text-gray-900 dark:text-gray-100 leading-tight">
-          {task.title || "Contact customers with failed new payments or who churned"}
-        </h4>
-        <button className="text-gray-400 hover:text-gray-600 p-0.5">
-          <MoreHorizontal className="w-3 h-3" />
-        </button>
-      </div>
-      
-      <div className="flex items-center gap-1 mb-2">
-        <span className="px-1 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
-          design
-        </span>
-        {task.priority === "high" && (
-          <span className="px-1 py-0.5 text-xs bg-red-100 text-red-600 rounded">
-            bug
-          </span>
-        )}
-      </div>
+  // Mock recent tasks
+  const mockRecentTasks = [
+    {
+      id: 1,
+      title: "Site G6",
+      description: "Assigned to Mellanaly GuollermArchitect...",
+      time: "Dec 26,2022 17:18:00",
+      user: "MG"
+    },
+    {
+      id: 2,
+      title: "QC Pending",
+      description: "Assigned to developers via general...",
+      time: "Dec 26,2022 07:12:00",
+      user: "DV"
+    },
+    {
+      id: 3,
+      title: "QC Pending",
+      description: "Assigned to Test Request Business...",
+      time: "Dec 26,2022 07:12:00",
+      user: "TR"
+    },
+    {
+      id: 4,
+      title: "QC Pending",
+      description: "Assigned to Sample Development...",
+      time: "Dec 26,2022 07:12:00",
+      user: "SD"
+    }
+  ];
 
-      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-        <div className="flex items-center gap-1">
-          <img
-            src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-              getEmployeeName(task.assigned_to) || "User"
-            )}`}
-            alt="avatar"
-            className="w-4 h-4 rounded-full"
-          />
-          <span>{getEmployeeName(task.assigned_to)}</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <span>{task.due_date || "Aug 6"}</span>
-          <Circle className="w-2 h-2" />
-          <span>2</span>
+  const StatCard = ({ title, value, change, icon: Icon, color = "blue" }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700"
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <div className={`p-2 rounded-lg ${
+              color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/20' :
+              color === 'yellow' ? 'bg-yellow-50 dark:bg-yellow-900/20' :
+              color === 'green' ? 'bg-green-50 dark:bg-green-900/20' :
+              'bg-purple-50 dark:bg-purple-900/20'
+            }`}>
+              <Icon className={`w-5 h-5 ${
+                color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
+                color === 'yellow' ? 'text-yellow-600 dark:text-yellow-400' :
+                color === 'green' ? 'text-green-600 dark:text-green-400' :
+                'text-purple-600 dark:text-purple-400'
+              }`} />
+            </div>
+            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</h3>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</span>
+            {change && (
+              <span className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1">
+                <TrendingUp className="w-3 h-3" />
+                {change}
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
   );
 
+  const ProjectCard = ({ project }) => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-sm font-medium">
+            {project.name.charAt(0)}
+          </div>
+          <div>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100">{project.name}</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">{project.type}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+              📅 {project.dueDate} 👥 {project.team}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded">
+            {project.tasks} tasks
+          </span>
+          <button className="text-gray-400 hover:text-gray-600 p-1">
+            <MoreHorizontal className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mb-2">
+        <div className="flex items-center justify-between text-sm mb-1">
+          <span className="text-gray-600 dark:text-gray-400">Progress</span>
+          <span className="font-medium text-gray-900 dark:text-gray-100">{project.progress}%</span>
+        </div>
+        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+          <div
+            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+            style={{ width: `${project.progress}%` }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  const TaskItem = ({ task }) => (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      className="flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors"
+    >
+      <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-medium">
+        {task.user}
+      </div>
+      <div className="flex-1 min-w-0">
+        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{task.title}</h4>
+        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">{task.description}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">{task.time}</p>
+      </div>
+      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+    </motion.div>
+  );
+
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
-      {/* Kanban Board */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
-        {columns.map((column) => (
-          <div key={column.id} className="flex flex-col h-full">
-            {/* Column Header */}
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                  {column.title}
-                </h2>
-                <span className="px-1 py-0.5 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
-                  {column.count}
-                </span>
-              </div>
-              <button
-                onClick={() => {
-                  // You could open a modal to add new task to this column
-                  console.log(`Add new task to ${column.title}`);
-                }}
-                className="text-gray-400 hover:text-gray-600 p-1"
-                title={`Add task to ${column.title}`}
-              >
-                <Plus className="w-4 h-4" />
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6 overflow-y-auto">
+      {/* Header */}
+      <div className="mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
+            <p className="text-gray-600 dark:text-gray-400">Active</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+              <Filter className="w-4 h-4" />
+              Filter
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+              <Plus className="w-4 h-4" />
+              New
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+              Share
+            </button>
+            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+              <MoreHorizontal className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <StatCard
+          title="Total Projects"
+          value={totalProjects}
+          change="+19% from last month"
+          icon={FileText}
+          color="blue"
+        />
+        <StatCard
+          title="Pending Tasks"
+          value={pendingTasks || "10 overdue"}
+          icon={AlertCircle}
+          color="yellow"
+        />
+        <StatCard
+          title="In Progress"
+          value={inProgressTasks}
+          icon={TrendingUp}
+          color="purple"
+        />
+        <StatCard
+          title="Completed"
+          value={completedTasks}
+          change={`${completionRate}% completion rate`}
+          icon={CheckCircle}
+          color="green"
+        />
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Projects Section */}
+        <div className="lg:col-span-2">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Projects</h2>
+              <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                View All
               </button>
             </div>
-
-            {/* Column Content */}
-            <div className="flex-1 overflow-y-auto space-y-1">
-              {column.tasks.map((task: any, index: number) => (
-                <TaskCard key={task.id || index} task={task} />
-              ))}
-              
-              {/* Sample cards when no tasks */}
-              {column.tasks.length === 0 && (
-                <>
-                  <TaskCard task={{
-                    title: column.id === "backlog" 
-                      ? "Contact customers with failed new payments or who churned"
-                      : column.id === "in_progress"
-                      ? "Lead feedback sessions"
-                      : "Invoices: fixed-fee projects",
-                    assigned_to: "user1",
-                    due_date: "Aug 6",
-                    priority: column.id === "backlog" ? "high" : "normal"
-                  }} />
-                  
-                  <TaskCard task={{
-                    title: column.id === "backlog"
-                      ? "Reporting: Design concept of visual dashboard"
-                      : column.id === "in_progress" 
-                      ? "Add Projects to templates and layouts [2023]"
-                      : "Time search - not last response with results appears",
-                    assigned_to: "user2", 
-                    due_date: "Sep 2",
-                    priority: "normal"
-                  }} />
-                  
-                  {column.id !== "in_progress" && (
-                    <TaskCard task={{
-                      title: column.id === "backlog"
-                        ? "Task detail modal: Ideas"
-                        : "Pricing page: new iteration and few mockups and ideas",
-                      assigned_to: "user3",
-                      due_date: column.id === "backlog" ? "Aug 6" : "Nov 3",
-                      priority: "normal"
-                    }} />
-                  )}
-                  
-                  {column.id === "backlog" && (
-                    <TaskCard task={{
-                      title: "@dev QA: regression ( before/after release)",
-                      assigned_to: "user4",
-                      due_date: "Sep 2",
-                      priority: "normal"
-                    }} />
-                  )}
-                </>
+            <div className="p-6 space-y-4">
+              {projects.length > 0 ? (
+                projects.slice(0, 2).map((project: any) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))
+              ) : (
+                mockProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))
               )}
-
-              {/* Add Task Button */}
-              <button
-                onClick={() => {
-                  // You could open a modal to add new task to this column
-                  console.log(`Add new task to ${column.title}`);
-                }}
-                className="w-full flex items-center gap-2 p-2 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded border-2 border-dashed border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors"
-                title={`Add task to ${column.title}`}
-              >
-                <Plus className="w-3 h-3" />
-                Add task
-              </button>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Recent Tasks Section */}
+        <div className="lg:col-span-1">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h2>
+            </div>
+            <div className="p-6">
+              <div className="space-y-2">
+                {tasks.length > 0 ? (
+                  tasks.slice(0, 4).map((task: any) => (
+                    <TaskItem 
+                      key={task.id} 
+                      task={{
+                        id: task.id,
+                        title: task.title || "Untitled Task",
+                        description: `Assigned to ${getEmployeeName(task.assigned_to)}`,
+                        time: task.created_at?.toDate?.().toLocaleDateString() || "Today",
+                        user: getEmployeeName(task.assigned_to).substring(0, 2).toUpperCase()
+                      }} 
+                    />
+                  ))
+                ) : (
+                  mockRecentTasks.map((task) => (
+                    <TaskItem key={task.id} task={task} />
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
