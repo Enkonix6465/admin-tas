@@ -167,6 +167,7 @@ const KanbanPage = () => {
           setTasks([]);
           setProjects([]);
           setEmployees([]);
+          setLoading(false);
         }
       }
     };

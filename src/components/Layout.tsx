@@ -488,7 +488,7 @@ function Layout() {
                   onClick={() => setProjectOpen(!projectOpen)}
                   className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded px-1 py-1"
                 >
-                  <span>Project Board [2023]</span>
+                  <span>Project Board </span>
                   <ChevronDown className="w-3 h-3" />
                 </button>
                 {projectOpen && (
@@ -499,7 +499,7 @@ function Layout() {
                         onClick={() => setProjectOpen(false)}
                         className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                       >
-                        📋 Project Board [2023]
+                        📋 Project Board
                       </button>
                       <button
                         onClick={() => setProjectOpen(false)}
