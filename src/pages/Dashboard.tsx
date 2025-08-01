@@ -287,13 +287,13 @@ const Dashboard = () => {
         {/* Projects Section */}
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Projects</h2>
               <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
                 View All
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-4 space-y-3">
               {projects.length > 0 ? (
                 projects.slice(0, 2).map((project: any) => (
                   <ProjectCard key={project.id} project={project} />
