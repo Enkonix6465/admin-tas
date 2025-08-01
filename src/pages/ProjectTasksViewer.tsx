@@ -472,13 +472,14 @@ export default function ProjectTasksViewer() {
         </div>
 
         {/* Content Views */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {selectedProjectId && (
             <motion.div
-              key={activeTab}
+              key={`${selectedProjectId}-${activeTab}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
               className="h-full"
             >
               {/* Table View */}
