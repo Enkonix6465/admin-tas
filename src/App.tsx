@@ -54,7 +54,7 @@ function App() {
   }
 
   return (
-    <>
+    <ErrorBoundary>
       <Toaster position="top-right" />
       <ConnectionStatus />
       <Routes>
@@ -85,7 +85,7 @@ function App() {
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }
 
