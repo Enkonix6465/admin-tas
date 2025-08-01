@@ -52,12 +52,12 @@ const Calendar = () => {
   const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-1 sm:p-2">
       {/* Minimal Header */}
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Calendar</span>
-          <span className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <span className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100">Calendar</span>
+          <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100">
             {format(currentDate, "MMMM yyyy")}
           </span>
         </div>

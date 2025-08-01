@@ -89,9 +89,9 @@ const Analytics = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
       {/* Minimal Header */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-900 dark:text-gray-100">Analytics</span>
           <span className="px-1 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">Live Data</span>
@@ -143,7 +143,7 @@ const Analytics = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         {[
           { icon: Activity, label: "Total Tasks", value: tasks.length || 44, change: "+12%", color: "blue" },
           { icon: CheckCircle, label: "Completed", value: taskStatusData[2].value, change: "+8%", color: "green" },
@@ -155,7 +155,7 @@ const Analytics = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3"
+            className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-6"
           >
             <div className="flex items-center justify-between">
               <div>
@@ -172,7 +172,7 @@ const Analytics = () => {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         {/* Task Status Pie Chart */}
         <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3">
           <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Task Status</h3>

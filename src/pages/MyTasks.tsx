@@ -251,9 +251,9 @@ export default function MyTasks() {
         filterContent={filterContent}
       />
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-6">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -269,7 +269,7 @@ export default function MyTasks() {
                   {filteredTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                 <FileText className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -290,7 +290,7 @@ export default function MyTasks() {
                   {inProgressTasks}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
+              <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
                 <Activity className="w-6 h-6 text-blue-600" />
               </div>
             </div>

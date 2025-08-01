@@ -362,7 +362,7 @@ const KanbanPage = () => {
       animate={{ opacity: 1, y: 0 }}
       draggable
       onDragStart={(e) => handleDragStart(e, task)}
-      className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3 mb-2 hover:shadow-md transition-shadow cursor-move"
+      className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2 sm:p-3 mb-1 sm:mb-2 hover:shadow-md transition-shadow cursor-move"
     >
       <div className="flex items-start justify-between mb-2">
         <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-tight">
@@ -441,7 +441,7 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-1 sm:p-2">
       {/* Offline Mode Banner */}
       {!navigator.onLine && (
         <div className="mb-3 p-2 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded flex items-center gap-2">
@@ -557,7 +557,7 @@ const KanbanPage = () => {
       </div>
 
       {/* Kanban Board with 4 columns including Done */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3 lg:gap-4 h-full">
         {columns.map((column) => (
           <div 
             key={column.id} 
@@ -638,7 +638,7 @@ const KanbanPage = () => {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-md mx-4 bg-white dark:bg-gray-800 rounded-lg shadow-xl"
             >
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-2 sm:p-3 border-b border-gray-200 dark:border-gray-700">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Add New Task
                 </h2>
@@ -650,7 +650,7 @@ const KanbanPage = () => {
                 </button>
               </div>
 
-              <div className="p-4 space-y-4">
+              <div className="p-2 sm:p-3 space-y-2 sm:space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Task Title

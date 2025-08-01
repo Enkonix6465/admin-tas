@@ -246,15 +246,15 @@ const Dashboard = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700 ${
+      className={`bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 ${
         onClick ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''
       }`}
       onClick={onClick}
     >
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <div className={`p-2 rounded-lg ${
+          <div className="flex items-center gap-2 mb-1">
+            <div className={`p-1.5 rounded-lg ${
               color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/20' :
               color === 'yellow' ? 'bg-yellow-50 dark:bg-yellow-900/20' :
               color === 'green' ? 'bg-green-50 dark:bg-green-900/20' :
@@ -291,12 +291,12 @@ const Dashboard = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
+        className="bg-white dark:bg-gray-800 rounded-lg p-1.5 sm:p-2 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
         onClick={() => navigate('/projects', { state: { selectedProject: project.id } })}
       >
-        <div className="flex items-start justify-between mb-3">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white text-sm font-medium">
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex items-start gap-2">
+            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-medium">
               {project.name ? project.name.charAt(0).toUpperCase() : 'P'}
             </div>
             <div>
@@ -382,7 +382,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-3 overflow-y-auto">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto">
       {/* Offline Mode Banner */}
       {!navigator.onLine && (
         <div className="mb-4 p-3 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg flex items-center gap-3">
@@ -399,30 +399,30 @@ const Dashboard = () => {
       )}
 
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-3">
+      <div className="mb-2">
+        <div className="flex items-center justify-between mb-2">
           <div>
-            <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">Active</p>
           </div>
-          <div className="flex items-center gap-2">
-            <button 
+          <div className="flex items-center gap-1 sm:gap-2">
+            <button
               onClick={() => setShowFilterModal(true)}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              <Filter className="w-4 h-4" />
-              Filter
-              <ChevronDown className="w-4 h-4" />
+              <Filter className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Filter</span>
+              <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
             
             <div className="relative">
-              <button 
+              <button
                 onClick={() => setShowNewDropdown(!showNewDropdown)}
-                className="flex items-center gap-2 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
-                <Plus className="w-4 h-4" />
-                New
-                <ChevronDown className="w-4 h-4" />
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline">New</span>
+                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
               
               {showNewDropdown && (
@@ -464,7 +464,7 @@ const Dashboard = () => {
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard
           title="Total Projects"
           value={totalProjects}
@@ -498,11 +498,11 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Projects Section */}
         <div className="lg:col-span-2">
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Projects</h2>
               <button 
                 onClick={() => navigate('/projects')}
@@ -511,7 +511,7 @@ const Dashboard = () => {
                 View All <ExternalLink className="w-3 h-3" />
               </button>
             </div>
-            <div className="p-4 space-y-3">
+            <div className="p-6 space-y-4">
               {projects.length > 0 ? (
                 projects.slice(0, 3).map((project: any) => (
                   <ProjectCard key={project.id} project={project} />
@@ -535,7 +535,7 @@ const Dashboard = () => {
         {/* Recent Tasks Section */}
         <div className="lg:col-span-1">
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h2>
               <button 
                 onClick={() => navigate('/mytasks')}
@@ -544,7 +544,7 @@ const Dashboard = () => {
                 View All <ExternalLink className="w-3 h-3" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="p-3">
               <div className="space-y-2">
                 {filteredTasks.length > 0 ? (
                   filteredTasks.slice(0, 5).map((task: any) => (

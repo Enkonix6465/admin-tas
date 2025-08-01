@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuthStore } from "../store/authStore";
+import { db } from "../lib/firebase";
+import { doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
 import { useThemeStore } from "../store/themeStore";
 import {
   User,
@@ -35,6 +38,8 @@ export default function Settings() {
   
   // State for different settings sections
   const [activeTab, setActiveTab] = useState("profile");
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [notifications, setNotifications] = useState({
     email: true,
@@ -82,9 +87,33 @@ export default function Settings() {
     { id: "account", label: "Account", icon: Key },
   ];
 
-  const handleSave = () => {
-    // Save settings logic here
-    console.log("Settings saved!");
+  const handleSave = async () => {
+    if (!user?.uid) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const userSettingsRef = doc(db, "userSettings", user.uid);
+
+      const settingsData = {
+        profile,
+        notifications,
+        privacy,
+        preferences,
+        theme,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await setDoc(userSettingsRef, settingsData, { merge: true });
+      toast.success("Settings saved successfully!");
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      toast.error("Failed to save settings");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const toggleNotification = (key: string) => {
@@ -104,6 +133,35 @@ export default function Settings() {
   const handleThemeChange = (newTheme: 'light' | 'dark' | 'system') => {
     setTheme(newTheme);
   };
+
+  // Load settings from database on component mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      if (!user?.uid) return;
+
+      setLoading(true);
+      try {
+        const userSettingsRef = doc(db, "userSettings", user.uid);
+        const settingsSnap = await getDoc(userSettingsRef);
+
+        if (settingsSnap.exists()) {
+          const data = settingsSnap.data();
+          if (data.profile) setProfile(prev => ({ ...prev, ...data.profile }));
+          if (data.notifications) setNotifications(prev => ({ ...prev, ...data.notifications }));
+          if (data.privacy) setPrivacy(prev => ({ ...prev, ...data.privacy }));
+          if (data.preferences) setPreferences(prev => ({ ...prev, ...data.preferences }));
+          toast.success("Settings loaded successfully!");
+        }
+      } catch (error) {
+        console.error("Error loading settings:", error);
+        toast.error("Failed to load settings");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSettings();
+  }, [user?.uid]);
 
   const renderProfileTab = () => (
     <div className="space-y-6">
@@ -628,8 +686,8 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">Settings</h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Manage your account settings and preferences
           </p>
@@ -662,22 +720,26 @@ export default function Settings() {
           {/* Content Area */}
           <div className="flex-1">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
-              <div className="px-4 py-6">
+              <div className="px-6 py-6">
                 {renderTabContent()}
               </div>
 
               {/* Save Button */}
               <div className="px-6 py-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700 rounded-b-lg">
                 <div className="flex justify-end space-x-3">
-                  <button className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors">
+                  <button
+                    onClick={() => window.location.reload()}
+                    className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+                  >
                     Cancel
                   </button>
-                  <button 
+                  <button
                     onClick={handleSave}
-                    className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                    disabled={saving}
+                    className="flex items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Save className="w-4 h-4" />
-                    <span>Save Changes</span>
+                    <span>{saving ? "Saving..." : "Save Changes"}</span>
                   </button>
                 </div>
               </div>

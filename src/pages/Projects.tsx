@@ -128,8 +128,8 @@ function Projects() {
     });
 
   return (
-    <div className="p-4">
-      <div className="flex flex-col md:flex-row justify-between mb-3 gap-3">
+    <div className="p-6">
+      <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
         <div>
           <h1 className="text-xl font-bold">Projects</h1>
           <input
@@ -168,11 +168,11 @@ function Projects() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {sortedProjects.map((project: any) => {
           const team = teams.find((t) => t.id === project.teamId);
           return (
-            <div key={project.id} className="p-4 bg-white rounded shadow">
+            <div key={project.id} className="p-6 bg-white rounded shadow">
               <h2 className="font-semibold text-lg">{project.name}</h2>
               <p className="text-sm text-gray-500">{project.description}</p>
               <p className="text-sm text-gray-500 mt-1">
