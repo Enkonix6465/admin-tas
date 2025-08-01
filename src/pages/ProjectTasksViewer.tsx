@@ -663,13 +663,13 @@ export default function ProjectTasksViewer() {
 
               {/* Board View */}
               {activeTab === 'board' && (
-                <div className="h-full">
+                <div key="board-view" className="h-full">
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       {selectedProject?.name} - Board View
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {searchedTasks.length} tasks
+                      {searchedTasks.length} tasks • Active Tab: {activeTab}
                     </p>
                   </div>
                   <BoardView />
@@ -678,13 +678,13 @@ export default function ProjectTasksViewer() {
 
               {/* Timeline View */}
               {activeTab === 'timeline' && (
-                <div className="h-full">
+                <div key="timeline-view" className="h-full">
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       {selectedProject?.name} - Timeline View
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {searchedTasks.length} tasks
+                      {searchedTasks.length} tasks • Active Tab: {activeTab}
                     </p>
                   </div>
                   <TimelineView />
