@@ -128,10 +128,10 @@ function Projects() {
     });
 
   return (
-    <div className="p-2">
-      <div className="flex flex-col md:flex-row justify-between mb-2 gap-2">
+    <div className="p-1 sm:p-2">
+      <div className="flex flex-col md:flex-row justify-between mb-1 sm:mb-2 gap-1 sm:gap-2">
         <div>
-          <h1 className="text-xl font-bold">Projects</h1>
+          <h1 className="text-lg sm:text-xl font-bold">Projects</h1>
           <input
             type="text"
             placeholder="Search Projects..."
@@ -168,12 +168,12 @@ function Projects() {
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-2 sm:gap-3 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {sortedProjects.map((project: any) => {
           const team = teams.find((t) => t.id === project.teamId);
           return (
-            <div key={project.id} className="p-3 bg-white rounded shadow">
-              <h2 className="font-semibold text-lg">{project.name}</h2>
+            <div key={project.id} className="p-2 sm:p-3 bg-white rounded shadow">
+              <h2 className="font-semibold text-base sm:text-lg">{project.name}</h2>
               <p className="text-sm text-gray-500">{project.description}</p>
               <p className="text-sm text-gray-500 mt-1">
                 Team: {team?.teamName || "N/A"}
