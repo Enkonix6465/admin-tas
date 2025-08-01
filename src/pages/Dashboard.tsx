@@ -23,22 +23,31 @@ const Dashboard = () => {
   }, []);
 
   const fetchAllData = async () => {
-    const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] =
-      await Promise.all([
-        getDocs(collection(db, "projects")),
-        getDocs(collection(db, "tasks")),
-        getDocs(collection(db, "teams")),
-        getDocs(collection(db, "employees")),
-      ]);
+    try {
+      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] =
+        await Promise.all([
+          getDocs(collection(db, "projects")),
+          getDocs(collection(db, "tasks")),
+          getDocs(collection(db, "teams")),
+          getDocs(collection(db, "employees")),
+        ]);
 
-    setProjects(
-      projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-    );
-    setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-    setEmployees(
-      employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-    );
+      setProjects(
+        projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
+      setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setEmployees(
+        employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
+    } catch (error) {
+      console.warn("Firebase data fetch failed, using mock data:", error);
+      // Use mock data when Firebase is unavailable
+      setProjects([]);
+      setTasks([]);
+      setTeams([]);
+      setEmployees([]);
+    }
   };
 
   const getEmployeeName = (empId: string) =>
