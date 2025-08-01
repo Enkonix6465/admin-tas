@@ -122,13 +122,14 @@ export function LoginForm({
                 </div>
               </div>
             </form>
-            
-            
+
+            <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 relative hidden md:block">
+              <div className="absolute inset-0 bg-black/20"></div>
               <img
                 src="https://cdn.pixabay.com/photo/2016/11/08/05/10/students-1807505_1280.jpg"
-              alt="Students working together"
+                alt="Students working together"
                 className="absolute inset-0 h-full w-full object-cover opacity-80 mix-blend-overlay"
-              
+              />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white space-y-4">
                   <h2 className="text-3xl font-bold">Enkonix</h2>
