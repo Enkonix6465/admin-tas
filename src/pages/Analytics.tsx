@@ -155,7 +155,7 @@ const Analytics = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3"
+            className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-2"
           >
             <div className="flex items-center justify-between">
               <div>
