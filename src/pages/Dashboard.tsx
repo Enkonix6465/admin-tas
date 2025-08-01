@@ -310,10 +310,10 @@ const Dashboard = () => {
         {/* Recent Tasks Section */}
         <div className="lg:col-span-1">
           <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h2>
             </div>
-            <div className="p-6">
+            <div className="p-4">
               <div className="space-y-2">
                 {tasks.length > 0 ? (
                   tasks.slice(0, 4).map((task: any) => (
