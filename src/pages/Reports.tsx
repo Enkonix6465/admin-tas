@@ -569,24 +569,63 @@ const Reports = () => {
       performanceTrends,
       skillsData: Object.values(skillsData),
       chartData: {
+        // Overall team comparison
         completionRates: employeeStats.map(emp => ({
           name: emp.name.split(' ')[0],
-          completionRate: emp.completionRate,
-          onTimeRate: emp.onTimeRate,
+          completionRate: Math.round(emp.completionRate),
+          onTimeRate: Math.round(emp.onTimeRate),
           totalTasks: emp.totalTasks,
-          efficiency: emp.efficiency
+          efficiency: Math.round(emp.efficiency),
+          qualityScore: Math.round(emp.qualityScore)
         })),
+
+        // Workload distribution
         workloadDistribution: employeeStats.map(emp => ({
           name: emp.name.split(' ')[0],
           pending: emp.pendingTasks,
           inProgress: emp.inProgressTasks,
           completed: emp.completedTasks,
+          review: emp.reviewTasks,
+          overdue: emp.overdueTasks,
           total: emp.totalTasks
         })),
-        skillsRadar: selectedEmployee !== "all" ? 
-          employeeStats.find(emp => emp.id === selectedEmployee)?.skills?.map(skill => ({
+
+        // Performance trends comparison
+        performanceTrends: employeeStats.map(emp => ({
+          name: emp.name.split(' ')[0],
+          current: emp.recentCompletions,
+          previous: emp.previousCompletions,
+          trend: emp.trendDirection,
+          productivity: Math.round(emp.productivity)
+        })),
+
+        // Quality vs Productivity scatter
+        qualityProductivity: employeeStats.map(emp => ({
+          name: emp.name.split(' ')[0],
+          quality: Math.round(emp.qualityScore),
+          productivity: Math.round(emp.productivity),
+          efficiency: Math.round(emp.efficiency),
+          totalTasks: emp.totalTasks,
+          department: emp.department
+        })),
+
+        // Reassignment analysis
+        reassignmentAnalysis: employeeStats.map(emp => ({
+          name: emp.name.split(' ')[0],
+          reassignmentRate: Math.round(emp.reassignmentRate),
+          totalTasks: emp.totalTasks,
+          reassignedTasks: emp.reassignedTasks
+        })),
+
+        // Individual employee data (when specific employee selected)
+        individualData: selectedEmployee !== "all" ? getIndividualEmployeeData(selectedEmployee) : null,
+
+        // Skills radar for individual employee
+        skillsRadar: selectedEmployee !== "all" ?
+          employeeStats.find(emp => emp.id === selectedEmployee)?.skills?.map((skill, index) => ({
             skill,
-            proficiency: Math.floor(Math.random() * 30) + 70 // Mock proficiency
+            proficiency: 70 + (index * 7) % 30, // More realistic proficiency distribution
+            experience: Math.floor(Math.random() * 5) + 1 // Years of experience
           })) || [] : [],
       }
     };
