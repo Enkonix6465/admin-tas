@@ -726,48 +726,138 @@ const Dashboard = () => {
     );
   };
 
-  // Team Member Card
-  const TeamMemberCard = ({ member }) => (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.05 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all cursor-pointer"
-      onClick={() => navigate('/team', { state: { selectedMember: member.id } })}
-    >
-      <div className="text-center">
-        <div className="relative inline-block mb-3">
-          <img
-            src={member.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
-            alt={member.name}
-            className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
-          />
-          <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-            member.status === 'online' ? 'bg-green-500' :
-            member.status === 'busy' ? 'bg-red-500' :
-            member.status === 'away' ? 'bg-yellow-500' :
-            'bg-gray-400'
-          }`} />
-        </div>
-        <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
-          {member.name}
-        </h4>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-          {member.role}
-        </p>
-        <div className="flex justify-center gap-3 text-xs text-gray-500">
-          <span className="flex items-center gap-1">
-            <CheckCircle className="w-3 h-3" />
-            {member.tasks_completed || 0}
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {member.tasks_pending || 0}
-          </span>
-        </div>
+  // Enhanced Team Member Card with Lead Functionality
+  const TeamMemberCard = ({ member, isExpanded = false, onToggleExpand = null }) => {
+    const isTeamLead = member.isTeamLead;
+    const teamMembers = isTeamLead ? employees.filter(emp => member.teamMembers?.includes(emp.id)) : [];
+
+    return (
+      <div className="space-y-3">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.02 }}
+          className={`bg-white dark:bg-gray-800 rounded-2xl p-4 border-2 transition-all cursor-pointer ${
+            isTeamLead
+              ? 'border-blue-200 dark:border-blue-700 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-gray-800'
+              : 'border-gray-100 dark:border-gray-700 hover:shadow-lg'
+          }`}
+          onClick={() => {
+            if (isTeamLead && onToggleExpand) {
+              onToggleExpand();
+            } else {
+              navigate('/team', { state: { selectedMember: member.id } });
+            }
+          }}
+        >
+          <div className="text-center">
+            <div className="relative inline-block mb-3">
+              <img
+                src={member.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
+                alt={member.name}
+                className={`w-12 h-12 rounded-full border-2 shadow-lg ${
+                  isTeamLead ? 'border-blue-500' : 'border-white'
+                }`}
+              />
+              <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                member.status === 'online' ? 'bg-green-500' :
+                member.status === 'busy' ? 'bg-red-500' :
+                member.status === 'away' ? 'bg-yellow-500' : 'bg-gray-400'
+              }`} />
+              {isTeamLead && (
+                <div className="absolute -top-1 -left-1 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                  <Star className="w-3 h-3 text-white" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                {member.name}
+              </h4>
+              {isTeamLead && (
+                <motion.div
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="w-4 h-4 text-blue-600" />
+                </motion.div>
+              )}
+            </div>
+
+            <p className={`text-xs mb-2 ${
+              isTeamLead ? 'text-blue-600 font-medium' : 'text-gray-500 dark:text-gray-400'
+            }`}>
+              {member.role}
+            </p>
+
+            {isTeamLead && (
+              <p className="text-xs text-blue-500 mb-2">
+                Team: {teamMembers.length} members
+              </p>
+            )}
+
+            <div className="flex justify-center gap-3 text-xs text-gray-500">
+              <span className="flex items-center gap-1">
+                <CheckCircle className="w-3 h-3" />
+                {member.tasks_completed || 0}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {member.tasks_pending || 0}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Team Members (shown when expanded) */}
+        <AnimatePresence>
+          {isTeamLead && isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="ml-4 space-y-2"
+            >
+              {teamMembers.map((teamMember) => (
+                <motion.div
+                  key={teamMember.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => navigate('/team', { state: { selectedMember: teamMember.id } })}
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={teamMember.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${teamMember.name}`}
+                      alt={teamMember.name}
+                      className="w-8 h-8 rounded-full border border-gray-300"
+                    />
+                    <div className="flex-1">
+                      <h5 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {teamMember.name}
+                      </h5>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {teamMember.role}
+                      </p>
+                    </div>
+                    <div className="flex gap-2 text-xs">
+                      <span className="text-emerald-600">
+                        {teamMember.tasks_completed || 0}
+                      </span>
+                      <span className="text-blue-600">
+                        {teamMember.tasks_pending || 0}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </motion.div>
-  );
+    );
+  };
 
   if (loading) {
     return (
