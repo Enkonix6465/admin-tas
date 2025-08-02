@@ -120,7 +120,7 @@ function Layout() {
               onClick={() => setWorkspaceOpen(!workspaceOpen)}
               className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-3 py-2 transition-all duration-200 hover:shadow-md"
             >
-              <span className="text-base font-medium text-gray-900 dark:text-gray-100">Enkonix Tas</span>
+              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Enkonix Tas</span>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
             {workspaceOpen && (
