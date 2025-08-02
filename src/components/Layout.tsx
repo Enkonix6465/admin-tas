@@ -441,7 +441,7 @@ function Layout() {
         {/* User Profile */}
         <div className="border-t border-gray-200 dark:border-gray-700 px-3 py-2 bg-gradient-to-r from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
           <div className="flex items-center gap-3 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg px-3 py-2 shadow-sm">
-            <div className="w-7 h-7 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white text-xs font-semibold shadow-md">
+            <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white text-xs font-semibold shadow-md">
               CE
             </div>
             <div className="flex-1 min-w-0">
