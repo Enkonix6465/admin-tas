@@ -37,10 +37,21 @@ const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState("month"); // month, week, day
+  const [viewMode, setViewMode] = useState("month"); // month, week, day, timeline
   const [selectedProject, setSelectedProject] = useState("all");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [activeView, setActiveView] = useState("calendar"); // calendar, timeline
+  const [filters, setFilters] = useState({
+    status: [],
+    priority: [],
+    projects: []
+  });
+  const [tempFilters, setTempFilters] = useState({
+    status: [],
+    priority: [],
+    projects: []
+  });
 
   useEffect(() => {
     fetchEvents();
