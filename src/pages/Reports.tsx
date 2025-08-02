@@ -2036,34 +2036,41 @@ const Reports = () => {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="space-y-2">
-                                  <div className="flex items-center">
-                                    <span className="text-xs text-gray-600 dark:text-gray-400 w-16">Completion:</span>
-                                    <div className="flex items-center">
-                                      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
-                                        {Math.round(emp.completionRate)}%
+                                <div className="space-y-3">
+                                  <div className="text-center">
+                                    <div className={`text-2xl font-bold ${
+                                      (emp.overallPerformanceScore || 0) >= 70 ? 'text-green-600' :
+                                      (emp.overallPerformanceScore || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
+                                    }`}>
+                                      {Math.round(emp.overallPerformanceScore || 0)}%
+                                    </div>
+                                    <div className="text-xs text-gray-500">Overall Score</div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-1 text-xs">
+                                    <div className="text-center">
+                                      <div className="font-semibold text-blue-600">
+                                        {Math.round(emp.completionRate || 0)}%
                                       </div>
-                                      <div className="w-12 bg-gray-200 rounded-full h-1.5">
-                                        <div
-                                          className="bg-blue-600 h-1.5 rounded-full"
-                                          style={{ width: `${emp.completionRate}%` }}
-                                        ></div>
+                                      <div className="text-gray-500">Completion</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="font-semibold text-green-600">
+                                        {Math.round(emp.onTimeRate || 0)}%
                                       </div>
+                                      <div className="text-gray-500">On-Time</div>
                                     </div>
                                   </div>
-                                  <div className="flex items-center">
-                                    <span className="text-xs text-gray-600 dark:text-gray-400 w-16">On-Time:</span>
-                                    <div className="flex items-center">
-                                      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
-                                        {Math.round(emp.onTimeRate)}%
-                                      </div>
-                                      <div className="w-12 bg-gray-200 rounded-full h-1.5">
-                                        <div
-                                          className="bg-green-600 h-1.5 rounded-full"
-                                          style={{ width: `${emp.onTimeRate}%` }}
-                                        ></div>
-                                      </div>
-                                    </div>
+                                  <div className={`w-full h-2 rounded-full ${
+                                    (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-100' :
+                                    (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-100' : 'bg-red-100'
+                                  }`}>
+                                    <div
+                                      className={`h-2 rounded-full ${
+                                        (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-500' :
+                                        (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                                      }`}
+                                      style={{ width: `${Math.min(100, emp.overallPerformanceScore || 0)}%` }}
+                                    ></div>
                                   </div>
                                 </div>
                               </td>
