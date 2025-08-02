@@ -510,28 +510,28 @@ export default function ProjectDashboard() {
               title="Total Projects"
               value={projects.length}
               icon={Briefcase}
-              color="from-blue-500 to-indigo-600"
+              color="from-black to-gray-800"
               subtitle="Across all teams"
             />
             <StatsCard
               title="Active Projects"
               value={projects.filter(p => p.status === 'active').length}
               icon={Zap}
-              color="from-green-500 to-emerald-600"
+              color="from-gray-600 to-gray-800"
               subtitle="Currently running"
             />
             <StatsCard
               title="Completed"
               value={projects.filter(p => p.status === 'completed').length}
               icon={CheckCircle}
-              color="from-purple-500 to-pink-600"
+              color="from-gray-400 to-gray-600"
               subtitle="Successfully delivered"
             />
             <StatsCard
               title="Team Performance"
               value="92%"
               icon={Award}
-              color="from-yellow-500 to-orange-600"
+              color="from-gray-300 to-gray-500"
               subtitle="Average success rate"
             />
           </motion.div>
