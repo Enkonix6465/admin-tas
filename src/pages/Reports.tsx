@@ -1143,30 +1143,78 @@ const Reports = () => {
                     {/* Team Overview Charts (when "All Employees" selected) */}
                     {selectedEmployee === "all" && (
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                        {/* Enhanced Performance Comparison */}
+                        {/* Enhanced Team Performance Radar Chart */}
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-                            Team Performance Overview
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                            **Team Performance Overview**
                           </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            **Comprehensive team metrics analysis**
+                          </p>
+
+                          {/* Top Performer Badge */}
+                          {reportData.summary.topPerformer && (
+                            <div className="mb-4 p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
+                                  <Star className="w-4 h-4 text-white" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-bold text-yellow-800 dark:text-yellow-200">
+                                    **Top Performer: {reportData.summary.topPerformer.name}**
+                                  </p>
+                                  <p className="text-xs text-yellow-700 dark:text-yellow-300">
+                                    **{Math.round(reportData.summary.topPerformer.completionRate)}% completion rate**
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
-                              <BarChart data={reportData.chartData.completionRates}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                                <XAxis dataKey="name" stroke="#6b7280" />
-                                <YAxis stroke="#6b7280" />
+                              <RadarChart data={reportData.chartData.completionRates.map(emp => ({
+                                ...emp,
+                                fullName: employees.find(e => e.name.includes(emp.name))?.name || emp.name
+                              }))}>
+                                <PolarGrid stroke="#374151" />
+                                <PolarAngleAxis dataKey="fullName" tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 'bold' }} />
+                                <PolarRadiusAxis domain={[0, 100]} tick={{ fill: '#6b7280', fontSize: 10 }} />
+                                <Radar
+                                  name="**Completion Rate**"
+                                  dataKey="completionRate"
+                                  stroke="#3b82f6"
+                                  fill="#3b82f6"
+                                  fillOpacity={0.3}
+                                  strokeWidth={3}
+                                />
+                                <Radar
+                                  name="**Quality Score**"
+                                  dataKey="qualityScore"
+                                  stroke="#8b5cf6"
+                                  fill="#8b5cf6"
+                                  fillOpacity={0.2}
+                                  strokeWidth={3}
+                                />
+                                <Radar
+                                  name="**On-Time Rate**"
+                                  dataKey="onTimeRate"
+                                  stroke="#10b981"
+                                  fill="#10b981"
+                                  fillOpacity={0.2}
+                                  strokeWidth={3}
+                                />
                                 <Tooltip
                                   contentStyle={{
                                     backgroundColor: '#1f2937',
                                     border: 'none',
                                     borderRadius: '12px',
-                                    color: '#f9fafb'
+                                    color: '#f9fafb',
+                                    fontWeight: 'bold'
                                   }}
                                 />
                                 <Legend />
-                                <Bar dataKey="completionRate" fill="#3b82f6" name="Completion Rate %" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="qualityScore" fill="#8b5cf6" name="Quality Score" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="onTimeRate" fill="#10b981" name="On-Time Rate %" radius={[4, 4, 0, 0]} />
-                              </BarChart>
+                              </RadarChart>
                             </ResponsiveContainer>
                           </div>
                         </div>
