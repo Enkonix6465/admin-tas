@@ -978,61 +978,285 @@ const Reports = () => {
 
                 {/* Charts Section */}
                 {selectedReport === "employee-performance" && reportData.chartData && (
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                    {/* Completion Rate Chart */}
-                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-                        Performance Comparison
-                      </h3>
-                      <div className="h-80">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={reportData.chartData.completionRates}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                            <XAxis dataKey="name" stroke="#6b7280" />
-                            <YAxis stroke="#6b7280" />
-                            <Tooltip 
-                              contentStyle={{ 
-                                backgroundColor: '#1f2937', 
-                                border: 'none', 
-                                borderRadius: '12px',
-                                color: '#f9fafb'
-                              }}
+                  <div className="space-y-6">
+                    {/* Individual Employee Analysis (when specific employee selected) */}
+                    {selectedEmployee !== "all" && reportData.chartData.individualData && (
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        {/* Individual Performance Overview */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <div className="flex items-center gap-4 mb-4">
+                            <img
+                              src={reportData.chartData.individualData.employee.avatar}
+                              alt={reportData.chartData.individualData.employee.name}
+                              className="w-16 h-16 rounded-full border-4 border-blue-200"
                             />
-                            <Legend />
-                            <Bar dataKey="completionRate" fill="#3b82f6" name="Completion Rate %" radius={[4, 4, 0, 0]} />
-                            <Bar dataKey="onTimeRate" fill="#10b981" name="On-Time Rate %" radius={[4, 4, 0, 0]} />
-                          </BarChart>
-                        </ResponsiveContainer>
-                      </div>
-                    </div>
+                            <div>
+                              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                {reportData.chartData.individualData.employee.name}
+                              </h3>
+                              <p className="text-gray-600 dark:text-gray-400">
+                                {reportData.chartData.individualData.employee.role} • {reportData.chartData.individualData.employee.department}
+                              </p>
+                              <div className="flex items-center gap-4 mt-2">
+                                <div className="text-center">
+                                  <div className="text-2xl font-bold text-blue-600">
+                                    {Math.round(reportData.chartData.individualData.employee.completionRate)}%
+                                  </div>
+                                  <div className="text-xs text-gray-500">Completion</div>
+                                </div>
+                                <div className="text-center">
+                                  <div className="text-2xl font-bold text-green-600">
+                                    {Math.round(reportData.chartData.individualData.employee.qualityScore)}
+                                  </div>
+                                  <div className="text-xs text-gray-500">Quality Score</div>
+                                </div>
+                                <div className="text-center">
+                                  <div className="text-2xl font-bold text-purple-600">
+                                    {reportData.chartData.individualData.employee.avgCompletionTime}d
+                                  </div>
+                                  <div className="text-xs text-gray-500">Avg. Time</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-                    {/* Workload Distribution */}
-                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-                        Workload Distribution
-                      </h3>
-                      <div className="h-80">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <BarChart data={reportData.chartData.workloadDistribution}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                            <XAxis dataKey="name" stroke="#6b7280" />
-                            <YAxis stroke="#6b7280" />
-                            <Tooltip 
-                              contentStyle={{ 
-                                backgroundColor: '#1f2937', 
-                                border: 'none', 
-                                borderRadius: '12px',
-                                color: '#f9fafb'
-                              }}
-                            />
-                            <Legend />
-                            <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
-                            <Bar dataKey="inProgress" stackId="a" fill="#3b82f6" name="In Progress" />
-                            <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
-                          </BarChart>
-                        </ResponsiveContainer>
+                        {/* Individual Task Status Distribution */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Task Status Distribution
+                          </h3>
+                          <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <RechartsPieChart>
+                                <Pie
+                                  data={reportData.chartData.individualData.statusDistribution}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={40}
+                                  outerRadius={80}
+                                  dataKey="value"
+                                  label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
+                                >
+                                  {reportData.chartData.individualData.statusDistribution.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={entry.color} />
+                                  ))}
+                                </Pie>
+                                <Tooltip />
+                              </RechartsPieChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Weekly Performance Trend */}
+                        <div className="xl:col-span-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Weekly Performance Trend (Last 12 Weeks)
+                          </h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={reportData.chartData.individualData.weeklyPerformance}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                <XAxis dataKey="week" stroke="#6b7280" />
+                                <YAxis stroke="#6b7280" />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: '#1f2937',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#f9fafb'
+                                  }}
+                                />
+                                <Legend />
+                                <Line type="monotone" dataKey="assigned" stroke="#f59e0b" strokeWidth={3} name="Tasks Assigned" />
+                                <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Tasks Completed" />
+                                <Line type="monotone" dataKey="onTime" stroke="#3b82f6" strokeWidth={3} name="On-Time Completions" />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Priority Performance Analysis */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Priority Performance
+                          </h3>
+                          <div className="h-64">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={reportData.chartData.individualData.priorityPerformance}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                <XAxis dataKey="priority" stroke="#6b7280" />
+                                <YAxis stroke="#6b7280" />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: '#1f2937',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#f9fafb'
+                                  }}
+                                />
+                                <Legend />
+                                <Bar dataKey="assigned" fill="#94a3b8" name="Assigned" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="completed" fill="#10b981" name="Completed" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="overdue" fill="#ef4444" name="Overdue" radius={[4, 4, 0, 0]} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Skills Radar Chart */}
+                        {reportData.chartData.skillsRadar.length > 0 && (
+                          <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                              Skills Assessment
+                            </h3>
+                            <div className="h-64">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <RadarChart data={reportData.chartData.skillsRadar}>
+                                  <PolarGrid stroke="#374151" />
+                                  <PolarAngleAxis dataKey="skill" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                                  <PolarRadiusAxis domain={[0, 100]} tick={{ fill: '#6b7280', fontSize: 10 }} />
+                                  <Radar
+                                    name="Proficiency"
+                                    dataKey="proficiency"
+                                    stroke="#3b82f6"
+                                    fill="#3b82f6"
+                                    fillOpacity={0.3}
+                                    strokeWidth={2}
+                                  />
+                                  <Tooltip
+                                    contentStyle={{
+                                      backgroundColor: '#1f2937',
+                                      border: 'none',
+                                      borderRadius: '12px',
+                                      color: '#f9fafb'
+                                    }}
+                                  />
+                                </RadarChart>
+                              </ResponsiveContainer>
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
+
+                    {/* Team Overview Charts (when "All Employees" selected) */}
+                    {selectedEmployee === "all" && (
+                      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                        {/* Enhanced Performance Comparison */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Team Performance Overview
+                          </h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={reportData.chartData.completionRates}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                <XAxis dataKey="name" stroke="#6b7280" />
+                                <YAxis stroke="#6b7280" />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: '#1f2937',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#f9fafb'
+                                  }}
+                                />
+                                <Legend />
+                                <Bar dataKey="completionRate" fill="#3b82f6" name="Completion Rate %" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="qualityScore" fill="#8b5cf6" name="Quality Score" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="onTimeRate" fill="#10b981" name="On-Time Rate %" radius={[4, 4, 0, 0]} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Enhanced Workload Distribution */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Workload Distribution
+                          </h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={reportData.chartData.workloadDistribution}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                <XAxis dataKey="name" stroke="#6b7280" />
+                                <YAxis stroke="#6b7280" />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: '#1f2937',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#f9fafb'
+                                  }}
+                                />
+                                <Legend />
+                                <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
+                                <Bar dataKey="inProgress" stackId="a" fill="#3b82f6" name="In Progress" />
+                                <Bar dataKey="review" stackId="a" fill="#8b5cf6" name="Review" />
+                                <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
+                                <Bar dataKey="overdue" stackId="a" fill="#ef4444" name="Overdue" />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Quality vs Productivity Analysis */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Quality vs Productivity Matrix
+                          </h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={reportData.chartData.qualityProductivity}>
+                                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                  <XAxis dataKey="name" stroke="#6b7280" />
+                                  <YAxis stroke="#6b7280" />
+                                  <Tooltip
+                                    contentStyle={{
+                                      backgroundColor: '#1f2937',
+                                      border: 'none',
+                                      borderRadius: '12px',
+                                      color: '#f9fafb'
+                                    }}
+                                  />
+                                  <Legend />
+                                  <Bar dataKey="quality" fill="#8b5cf6" name="Quality Score" radius={[4, 4, 0, 0]} />
+                                  <Bar dataKey="productivity" fill="#06b6d4" name="Productivity Score" radius={[4, 4, 0, 0]} />
+                                </BarChart>
+                              </ResponsiveContainer>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Reassignment Analysis */}
+                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                            Task Reassignment Analysis
+                          </h3>
+                          <div className="h-80">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <BarChart data={reportData.chartData.reassignmentAnalysis}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                <XAxis dataKey="name" stroke="#6b7280" />
+                                <YAxis stroke="#6b7280" />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: '#1f2937',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#f9fafb'
+                                  }}
+                                />
+                                <Legend />
+                                <Bar dataKey="reassignmentRate" fill="#f59e0b" name="Reassignment Rate %" radius={[4, 4, 0, 0]} />
+                              </BarChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Performance Trends */}
                     {reportData.performanceTrends && (
