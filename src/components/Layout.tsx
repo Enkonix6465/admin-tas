@@ -474,7 +474,7 @@ function Layout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Minimal Top Header */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+        <header className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 px-4 py-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
