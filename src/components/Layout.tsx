@@ -111,7 +111,7 @@ function Layout() {
       {/* Minimal Sidebar */}
       <div className={`${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[240px] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out flex flex-col`}>
+      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[200px] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out flex flex-col`}>
 
         {/* Minimal Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
