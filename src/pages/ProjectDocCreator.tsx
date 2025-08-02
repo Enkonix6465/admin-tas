@@ -52,7 +52,7 @@ import {
   Search,
   Filter,
   Share,
-  Template,
+  Layout,
   Sparkles,
   Zap,
   Bookmark,
