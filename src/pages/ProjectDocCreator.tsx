@@ -548,7 +548,7 @@ const ProjectDocCreator = () => {
     {
       id: "templates",
       label: "Templates",
-      icon: Template,
+      icon: Layout,
       active: activeTab === "templates",
     },
   ];
