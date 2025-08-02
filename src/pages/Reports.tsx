@@ -270,6 +270,10 @@ const Reports = () => {
   };
 
   const generateEmployeePerformanceReport = (filteredTasks) => {
+    if (!employees || !Array.isArray(employees)) {
+      return { type: "Employee Performance Report", summary: {}, employeeStats: [], chartData: {} };
+    }
+
     const employeeStats = employees.map(employee => {
       const empTasks = filteredTasks.filter(t => t.assigned_to === employee.id);
       const completedTasks = empTasks.filter(t => t.status === "completed");
