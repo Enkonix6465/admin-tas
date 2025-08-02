@@ -773,8 +773,8 @@ const KanbanPage = () => {
       </div>
 
       {/* Enhanced Kanban Board */}
-      <div className="flex-1 p-6 overflow-x-auto">
-        <div className="flex gap-6 h-full min-w-max">
+      <div className="flex-1 min-h-0 p-6">
+        <div className="flex gap-6 h-full min-w-max overflow-x-auto">
           {columns.map((column) => (
             <motion.div 
               key={column.id} 
