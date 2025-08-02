@@ -155,7 +155,27 @@ const Calendar = () => {
       const eventMatches = isSameDay(event.date, date);
       const projectMatches = selectedProject === "all" || event.project_id === selectedProject;
       const searchMatches = !searchTerm || event.title.toLowerCase().includes(searchTerm.toLowerCase());
-      return eventMatches && projectMatches && searchMatches;
+
+      // Apply filter criteria
+      const statusMatches = filters.status.length === 0 || filters.status.includes(event.status);
+      const priorityMatches = filters.priority.length === 0 || filters.priority.includes(event.priority);
+      const projectFilterMatches = filters.projects.length === 0 || filters.projects.includes(event.project_id);
+
+      return eventMatches && projectMatches && searchMatches && statusMatches && priorityMatches && projectFilterMatches;
+    });
+  };
+
+  const getAllFilteredEvents = () => {
+    return events.filter(event => {
+      const projectMatches = selectedProject === "all" || event.project_id === selectedProject;
+      const searchMatches = !searchTerm || event.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+      // Apply filter criteria
+      const statusMatches = filters.status.length === 0 || filters.status.includes(event.status);
+      const priorityMatches = filters.priority.length === 0 || filters.priority.includes(event.priority);
+      const projectFilterMatches = filters.projects.length === 0 || filters.projects.includes(event.project_id);
+
+      return projectMatches && searchMatches && statusMatches && priorityMatches && projectFilterMatches;
     });
   };
 
