@@ -84,6 +84,9 @@ const Reports = () => {
               }));
               setTasks(tasksData);
               console.log("Real-time tasks data loaded:", tasksData.length, "tasks");
+              if (tasksData.length > 0) {
+                toast.success(`📊 Loaded ${tasksData.length} tasks from database`);
+              }
             }
           },
           (error) => {
