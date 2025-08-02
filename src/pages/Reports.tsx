@@ -158,6 +158,9 @@ const Reports = () => {
               }));
               setEmployees(employeesData);
               console.log("Real-time employees data loaded:", employeesData.length, "employees");
+              if (employeesData.length > 0) {
+                toast.success(`👥 Real-time employee data connected! (${employeesData.length} employees)`);
+              }
               setLoading(false);
             }
           },
