@@ -85,7 +85,7 @@ const Reports = () => {
               setTasks(tasksData);
               console.log("Real-time tasks data loaded:", tasksData.length, "tasks");
               if (tasksData.length > 0) {
-                toast.success(`�� Loaded ${tasksData.length} tasks from database`);
+                toast.success(`📊 Loaded ${tasksData.length} tasks from database`);
               }
             }
           },
@@ -403,27 +403,144 @@ const Reports = () => {
       ));
     }
 
-    // Performance trends over time
+    // Enhanced performance trends over time (last 30 days)
     const performanceTrends = [];
     for (let i = 29; i >= 0; i--) {
       const date = new Date(new Date().getTime() - i * 24 * 60 * 60 * 1000);
       const dateStr = date.toISOString().split('T')[0];
-      
+
       const dayData = {
         date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        dateISO: dateStr,
+        totalCompleted: 0,
+        totalAssigned: 0,
         ...{}
       };
 
       employeeStats.forEach(emp => {
-        const empTasksOnDay = filteredTasks.filter(t => {
+        const empCompletedOnDay = filteredTasks.filter(t => {
           const completedAt = t.progress_updated_at?.toDate ? t.progress_updated_at.toDate() : null;
           return completedAt && completedAt.toISOString().split('T')[0] === dateStr && t.assigned_to === emp.id && t.status === "completed";
         });
-        dayData[emp.name] = empTasksOnDay.length;
+
+        const empAssignedOnDay = filteredTasks.filter(t => {
+          const createdAt = t.created_at?.toDate ? t.created_at.toDate() : new Date(t.created_at);
+          return createdAt.toISOString().split('T')[0] === dateStr && t.assigned_to === emp.id;
+        });
+
+        dayData[emp.name + '_completed'] = empCompletedOnDay.length;
+        dayData[emp.name + '_assigned'] = empAssignedOnDay.length;
+        dayData[emp.name] = empCompletedOnDay.length; // For backward compatibility
+        dayData.totalCompleted += empCompletedOnDay.length;
+        dayData.totalAssigned += empAssignedOnDay.length;
       });
 
       performanceTrends.push(dayData);
     }
+
+    // Individual employee detailed analysis (for selected employee)
+    const getIndividualEmployeeData = (empId) => {
+      const emp = employeeStats.find(e => e.id === empId);
+      if (!emp) return null;
+
+      const empTasks = filteredTasks.filter(t => t.assigned_to === empId);
+
+      // Status progression timeline
+      const statusProgression = [];
+      empTasks.forEach(task => {
+        const events = [];
+
+        if (task.created_at) {
+          events.push({
+            date: task.created_at.toDate ? task.created_at.toDate() : new Date(task.created_at),
+            status: 'assigned',
+            task: task.title
+          });
+        }
+
+        if (task.progress_updated_at && task.status === 'completed') {
+          events.push({
+            date: task.progress_updated_at.toDate ? task.progress_updated_at.toDate() : new Date(task.progress_updated_at),
+            status: 'completed',
+            task: task.title
+          });
+        }
+
+        statusProgression.push(...events);
+      });
+
+      statusProgression.sort((a, b) => a.date - b.date);
+
+      // Weekly performance breakdown
+      const weeklyPerformance = [];
+      for (let i = 11; i >= 0; i--) {
+        const weekStart = new Date(new Date().getTime() - i * 7 * 24 * 60 * 60 * 1000);
+        const weekEnd = new Date(weekStart.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+        const weekTasks = empTasks.filter(t => {
+          const createdAt = t.created_at?.toDate ? t.created_at.toDate() : new Date(t.created_at);
+          return createdAt >= weekStart && createdAt < weekEnd;
+        });
+
+        const weekCompleted = weekTasks.filter(t => t.status === 'completed').length;
+        const weekOnTime = weekTasks.filter(t => {
+          if (t.status !== 'completed' || !t.progress_updated_at || !t.due_date) return false;
+          const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
+          const dueDate = new Date(t.due_date);
+          return completedDate <= dueDate;
+        }).length;
+
+        weeklyPerformance.push({
+          week: `Week ${12-i}`,
+          weekStart: weekStart.toLocaleDateString(),
+          assigned: weekTasks.length,
+          completed: weekCompleted,
+          onTime: weekOnTime,
+          completionRate: weekTasks.length > 0 ? (weekCompleted / weekTasks.length * 100) : 0,
+          onTimeRate: weekCompleted > 0 ? (weekOnTime / weekCompleted * 100) : 0
+        });
+      }
+
+      // Task priority performance
+      const priorityPerformance = [
+        {
+          priority: 'High',
+          assigned: empTasks.filter(t => t.priority === 'high').length,
+          completed: empTasks.filter(t => t.priority === 'high' && t.status === 'completed').length,
+          overdue: empTasks.filter(t => t.priority === 'high' && new Date(t.due_date) < new Date() && t.status !== 'completed').length
+        },
+        {
+          priority: 'Medium',
+          assigned: empTasks.filter(t => t.priority === 'medium').length,
+          completed: empTasks.filter(t => t.priority === 'medium' && t.status === 'completed').length,
+          overdue: empTasks.filter(t => t.priority === 'medium' && new Date(t.due_date) < new Date() && t.status !== 'completed').length
+        },
+        {
+          priority: 'Low',
+          assigned: empTasks.filter(t => t.priority === 'low').length,
+          completed: empTasks.filter(t => t.priority === 'low' && t.status === 'completed').length,
+          overdue: empTasks.filter(t => t.priority === 'low' && new Date(t.due_date) < new Date() && t.status !== 'completed').length
+        }
+      ];
+
+      // Task status distribution for pie chart
+      const statusDistribution = [
+        { name: 'Completed', value: emp.completedTasks, color: '#10b981' },
+        { name: 'In Progress', value: emp.inProgressTasks, color: '#3b82f6' },
+        { name: 'Pending', value: emp.pendingTasks, color: '#f59e0b' },
+        { name: 'Review', value: emp.reviewTasks, color: '#8b5cf6' },
+        { name: 'Overdue', value: emp.overdueTasks, color: '#ef4444' }
+      ].filter(item => item.value > 0);
+
+      return {
+        employee: emp,
+        statusProgression,
+        weeklyPerformance,
+        priorityPerformance,
+        statusDistribution,
+        recentTasks: empTasks.slice(-10).reverse() // Last 10 tasks
+      };
+    };
 
     // Skills analysis
     const skillsData = {};
