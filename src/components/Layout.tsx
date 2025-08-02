@@ -114,7 +114,7 @@ function Layout() {
       } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[200px] bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-300 ease-in-out flex flex-col`}>
 
         {/* Minimal Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-700">
           <div className="relative workspace-dropdown">
             <button
               onClick={() => setWorkspaceOpen(!workspaceOpen)}
