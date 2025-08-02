@@ -107,20 +107,20 @@ function Layout() {
 
 
   return (
-    <div className="min-h-screen h-screen bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
+    <div className="min-h-screen h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex overflow-hidden">
       {/* Minimal Sidebar */}
       <div className={`${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[240px] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out flex flex-col`}>
+      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[200px] bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-300 ease-in-out flex flex-col`}>
 
         {/* Minimal Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-700">
           <div className="relative workspace-dropdown">
             <button
               onClick={() => setWorkspaceOpen(!workspaceOpen)}
-              className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded px-2 py-2"
+              className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-3 py-2 transition-all duration-200 hover:shadow-md"
             >
-              <span className="text-base font-medium text-gray-900 dark:text-gray-100">Enkonix Tas</span>
+              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">Enkonix Tas</span>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
             {workspaceOpen && (
@@ -165,26 +165,26 @@ function Layout() {
         </div>
 
         {/* Search - Minimal */}
-        <div className="px-3 py-2">
+        <div className="px-4 py-2">
           <div className="relative">
             <Search className="w-3 h-3 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               placeholder="Search"
-              className="w-full pl-6 pr-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-6 pr-2 py-1.5 text-xs border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm transition-all duration-200"
             />
           </div>
         </div>
 
         {/* Navigation - Hierarchical */}
-        <div className="flex-1 overflow-y-auto px-2 py-1">
+        <div className="flex-1 overflow-y-auto px-3 py-1">
           <nav className="space-y-1">
 
             {/* Dashboard Section */}
             <div>
               <button
                 onClick={() => toggleSection('dashboard')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4" />
@@ -197,7 +197,7 @@ function Layout() {
                   <Link
                     to="/"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -209,7 +209,7 @@ function Layout() {
                   <Link
                     to="/PerformMatrix"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/PerformMatrix")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -221,7 +221,7 @@ function Layout() {
                   <Link
                     to="/KanbanPage"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/KanbanPage")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -233,7 +233,7 @@ function Layout() {
                   <Link
                     to="/Analytics"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/Analytics")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -245,7 +245,7 @@ function Layout() {
                   <Link
                     to="/Reports"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/Reports")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -262,7 +262,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('projects')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4" />
@@ -275,7 +275,7 @@ function Layout() {
                   <Link
                     to="/ProjectTasksViewer"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ProjectTasksViewer")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -287,7 +287,7 @@ function Layout() {
                   <Link
                     to="/ProjectDashboard"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ProjectDashboard")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -299,7 +299,7 @@ function Layout() {
                   <Link
                     to="/ProjectDocCreator"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ProjectDocCreator")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -316,7 +316,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('tickets')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <CheckSquare className="w-4 h-4" />
@@ -329,7 +329,7 @@ function Layout() {
                   <Link
                     to="/RaiseProjectTicket"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/RaiseProjectTicket")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -341,7 +341,7 @@ function Layout() {
                   <Link
                     to="/ViewTickets"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ViewTickets")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -358,7 +358,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('administration')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4" />
@@ -371,7 +371,7 @@ function Layout() {
                   <Link
                     to="/AddUsers"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/AddUsers")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -383,7 +383,7 @@ function Layout() {
                   <Link
                     to="/Makeleader"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2 text-sm rounded transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/Makeleader")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -401,7 +401,7 @@ function Layout() {
               <Link
                 to="/MyTasks"
                 onClick={closeSidebar}
-                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                   isActive("/MyTasks")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -413,7 +413,7 @@ function Layout() {
               <Link
                 to="/calendar"
                 onClick={closeSidebar}
-                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                   isActive("/calendar")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -425,7 +425,7 @@ function Layout() {
               <Link
                 to="/settings"
                 onClick={closeSidebar}
-                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                   isActive("/settings")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -439,9 +439,9 @@ function Layout() {
         </div>
 
         {/* User Profile */}
-        <div className="border-t border-gray-200 dark:border-gray-700 px-2 py-2">
-          <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 rounded px-2 py-1.5">
-            <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+        <div className="border-t border-gray-200 dark:border-gray-700 px-3 py-2 bg-gradient-to-r from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-600 rounded-lg px-3 py-2 shadow-sm">
+            <div className="w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white text-xs font-semibold shadow-md">
               CE
             </div>
             <div className="flex-1 min-w-0">
@@ -474,7 +474,7 @@ function Layout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Minimal Top Header */}
-        <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+        <header className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 px-4 py-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
@@ -486,7 +486,7 @@ function Layout() {
               <div className="relative project-dropdown">
                 <button
                   onClick={() => setProjectOpen(!projectOpen)}
-                  className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded px-1 py-1"
+                  className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-2 py-1.5 transition-all duration-200 hover:shadow-sm"
                 >
                   <span>Project Board </span>
                   <ChevronDown className="w-4 h-4" />
@@ -534,14 +534,14 @@ function Layout() {
                 <input
                   type="text"
                   placeholder="Search"
-                  className="pl-6 pr-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent w-32"
+                  className="pl-6 pr-2 py-1.5 text-xs border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-36 shadow-sm transition-all duration-200"
                 />
               </div>
 
               <div className="relative filter-dropdown">
                 <button
                   onClick={() => setFilterOpen(!filterOpen)}
-                  className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 shadow-sm transition-all duration-200 hover:shadow-md"
                 >
                   <Filter className="w-4 h-4" />
                   Filter
@@ -594,7 +594,7 @@ function Layout() {
               <div className="relative sort-dropdown">
                 <button
                   onClick={() => setSortOpen(!sortOpen)}
-                  className="flex items-center gap-1 px-2 py-1 text-xs border border-gray-200 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 shadow-sm transition-all duration-200 hover:shadow-md"
                 >
                   <ArrowUpDown className="w-4 h-4" />
                   Sort
@@ -637,7 +637,7 @@ function Layout() {
                   navigator.clipboard.writeText(window.location.href);
                   // You could add a toast notification here
                 }}
-                className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-3 py-1.5 text-xs bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-md transition-all duration-200 hover:shadow-lg transform hover:scale-105"
                 title="Copy project link"
               >
                 Share
@@ -649,7 +649,7 @@ function Layout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-white/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

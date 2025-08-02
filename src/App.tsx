@@ -25,7 +25,7 @@ import Reports from "./pages/Reports";
 import { View } from "lucide-react";
 import PerformMatrix from "./pages/PerformMatrix";
 import Makeleader from "./pages/Makeleader";
-import ConnectionStatus from "./components/ConnectionStatus";
+import { ConnectionStatusIndicator } from "./components/ConnectionStatusIndicator";
 import ErrorBoundary from "./components/ErrorBoundary";
 function App() {
   const { user, loading } = useAuthStore();
@@ -56,7 +56,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Toaster position="top-right" />
-      <ConnectionStatus />
+      <ConnectionStatusIndicator />
       <Routes>
         <Route
           path="/login"
