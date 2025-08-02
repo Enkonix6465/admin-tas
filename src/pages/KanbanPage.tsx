@@ -424,21 +424,40 @@ const KanbanPage = () => {
 
   const TaskCard = ({ task }: { task: any }) => {
     const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "completed";
-    
+
+    const getCardBgColor = () => {
+      if (isOverdue) return 'bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-red-200 dark:border-red-700';
+
+      switch (task.status) {
+        case 'completed':
+          return 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-700';
+        case 'in_progress':
+          return 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-700';
+        case 'review':
+          return 'bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-yellow-200 dark:border-yellow-700';
+        default:
+          return 'bg-gradient-to-br from-slate-50 to-gray-50 dark:from-gray-800 dark:to-gray-750 border-gray-200 dark:border-gray-600';
+      }
+    };
+
     return (
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+        whileHover={{
+          y: -4,
+          scale: 1.02,
+          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+        }}
+        whileTap={{ scale: 0.98 }}
+        layout
         draggable
         onDragStart={(e) => handleDragStart(e, task)}
         onClick={() => {
           setSelectedTask(task);
           setShowTaskDetailModal(true);
         }}
-        className={`bg-white dark:bg-gray-800 rounded-xl border-2 ${
-          isOverdue ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20' : 'border-gray-100 dark:border-gray-600'
-        } p-4 mb-3 hover:shadow-lg transition-all cursor-pointer group relative overflow-hidden`}
+        className={`${getCardBgColor()} rounded-xl border-2 p-4 mb-3 hover:shadow-lg transition-all duration-300 cursor-pointer group relative overflow-hidden backdrop-blur-sm`}
       >
         {/* Priority stripe */}
         <div className={`absolute top-0 left-0 w-full h-1 ${
