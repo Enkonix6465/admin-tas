@@ -525,12 +525,12 @@ const Dashboard = () => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, scale: 1.02 }}
       className={`bg-gradient-to-br ${
-        color === 'blue' ? 'from-blue-500 to-indigo-600' :
-        color === 'green' ? 'from-emerald-500 to-green-600' :
-        color === 'yellow' ? 'from-amber-500 to-orange-600' :
-        color === 'red' ? 'from-red-500 to-pink-600' :
-        color === 'purple' ? 'from-purple-500 to-indigo-600' :
-        'from-gray-500 to-slate-600'
+        color === 'blue' ? 'from-sky-400 to-blue-500' :
+        color === 'green' ? 'from-emerald-400 to-teal-500' :
+        color === 'yellow' ? 'from-yellow-400 to-amber-500' :
+        color === 'red' ? 'from-rose-400 to-pink-500' :
+        color === 'purple' ? 'from-violet-400 to-purple-500' :
+        'from-slate-400 to-gray-500'
       } rounded-2xl p-6 text-white ${
         onClick ? 'cursor-pointer hover:shadow-2xl' : 'hover:shadow-lg'
       } transition-all duration-300 relative overflow-hidden group shadow-lg`}
