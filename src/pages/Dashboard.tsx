@@ -1336,10 +1336,23 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {employees.map((member: any) => (
-                <TeamMemberCard key={member.id} member={member} />
+              {employees.filter(emp => emp.isTeamLead).map((member: any) => (
+                <TeamMemberCard
+                  key={member.id}
+                  member={member}
+                  isExpanded={expandedTeamLeads.has(member.id)}
+                  onToggleExpand={() => {
+                    const newExpanded = new Set(expandedTeamLeads);
+                    if (newExpanded.has(member.id)) {
+                      newExpanded.delete(member.id);
+                    } else {
+                      newExpanded.add(member.id);
+                    }
+                    setExpandedTeamLeads(newExpanded);
+                  }}
+                />
               ))}
             </motion.div>
           )}
