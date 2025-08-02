@@ -287,7 +287,8 @@ const Reports = () => {
       const pendingTasks = empTasks.filter(t => t.status === "pending");
       const reviewTasks = empTasks.filter(t => t.status === "review");
 
-      // Enhanced metrics for individual analysis
+      // Enhanced timing-based performance metrics
+      const today = new Date();
       const onTimeTasks = completedTasks.filter(t => {
         if (!t.progress_updated_at || !t.due_date) return false;
         const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
@@ -295,10 +296,31 @@ const Reports = () => {
         return completedDate <= dueDate;
       });
 
+      const lateTasks = completedTasks.filter(t => {
+        if (!t.progress_updated_at || !t.due_date) return false;
+        const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
+        const dueDate = new Date(t.due_date);
+        return completedDate > dueDate;
+      });
+
       const overdueTasks = empTasks.filter(t => {
         if (!t.due_date || t.status === "completed") return false;
-        return new Date(t.due_date) < new Date();
+        return new Date(t.due_date) < today;
       });
+
+      const pendingOverdueTasks = pendingTasks.filter(t => {
+        if (!t.due_date) return false;
+        return new Date(t.due_date) < today;
+      });
+
+      // Calculate delay days for late completed tasks
+      const avgDelayDays = lateTasks.length > 0 ?
+        lateTasks.reduce((acc, task) => {
+          const completedDate = task.progress_updated_at.toDate ? task.progress_updated_at.toDate() : new Date(task.progress_updated_at);
+          const dueDate = new Date(task.due_date);
+          const delayDays = Math.ceil((completedDate - dueDate) / (1000 * 60 * 60 * 24));
+          return acc + delayDays;
+        }, 0) / lateTasks.length : 0;
 
       // Task reassignment analysis
       const reassignedTasks = empTasks.filter(t => t.reassigned_from || t.reassignment_history);
@@ -320,8 +342,13 @@ const Reports = () => {
           return acc;
         }, 0) / completedTasks.length : 0;
 
-      // Quality metrics
+      // Enhanced performance scoring based on timing
+      const timingScore = calculateTimingScore(empTasks, onTimeTasks, lateTasks, overdueTasks, pendingOverdueTasks);
       const qualityScore = calculateQualityScore(empTasks, onTimeTasks, reassignedTasks);
+
+      // Performance classification
+      const overallPerformanceScore = (timingScore * 0.5) + (qualityScore * 0.3) + ((empTasks.length > 0 ? (completedTasks.length / empTasks.length * 100) : 0) * 0.2);
+      const performanceLevel = getPerformanceLevel(overallPerformanceScore, timingScore, overdueTasks.length, lateTasks.length);
 
       // Productivity trends (last 7 days vs previous 7 days)
       const now = new Date();
@@ -357,12 +384,21 @@ const Reports = () => {
         inProgressTasks: inProgressTasks.length,
         reviewTasks: reviewTasks.length,
         overdueTasks: overdueTasks.length,
+        lateTasks: lateTasks.length,
+        onTimeTasks: onTimeTasks.length,
+        pendingOverdueTasks: pendingOverdueTasks.length,
 
         // Performance metrics
         completionRate: empTasks.length > 0 ? (completedTasks.length / empTasks.length * 100) : 0,
         onTimeRate: completedTasks.length > 0 ? (onTimeTasks.length / completedTasks.length * 100) : 0,
+        lateRate: completedTasks.length > 0 ? (lateTasks.length / completedTasks.length * 100) : 0,
+        overdueRate: empTasks.length > 0 ? (overdueTasks.length / empTasks.length * 100) : 0,
         avgCompletionTime: Math.round(avgCompletionTime * 10) / 10,
+        avgDelayDays: Math.round(avgDelayDays * 10) / 10,
+        timingScore,
         qualityScore,
+        overallPerformanceScore: Math.round(overallPerformanceScore),
+        performanceLevel,
 
         // Priority analysis
         highPriorityTasks: highPriorityTasks.length,
@@ -384,6 +420,28 @@ const Reports = () => {
       };
     });
 
+    // Helper function to calculate timing-based performance score
+    function calculateTimingScore(tasks, onTimeTasks, lateTasks, overdueTasks, pendingOverdueTasks) {
+      if (tasks.length === 0) return 0;
+
+      const onTimeWeight = 0.4;
+      const lateTasksPenalty = 0.25;
+      const overdueTasksPenalty = 0.25;
+      const pendingOverduePenalty = 0.1;
+
+      const onTimeScore = tasks.length > 0 ? (onTimeTasks.length / tasks.length) * 100 : 0;
+      const lateTasksScore = tasks.length > 0 ? (lateTasks.length / tasks.length) * 100 : 0;
+      const overdueTasksScore = tasks.length > 0 ? (overdueTasks.length / tasks.length) * 100 : 0;
+      const pendingOverdueScore = tasks.length > 0 ? (pendingOverdueTasks.length / tasks.length) * 100 : 0;
+
+      return Math.max(0, Math.min(100,
+        (onTimeScore * onTimeWeight) -
+        (lateTasksScore * lateTasksPenalty) -
+        (overdueTasksScore * overdueTasksPenalty) -
+        (pendingOverdueScore * pendingOverduePenalty)
+      ));
+    }
+
     // Helper function to calculate quality score
     function calculateQualityScore(tasks, onTimeTasks, reassignedTasks) {
       if (tasks.length === 0) return 0;
@@ -401,6 +459,21 @@ const Reports = () => {
         (completionScore * completionWeight) -
         (reassignmentPenaltyScore * reassignmentPenalty)
       ));
+    }
+
+    // Helper function to determine performance level
+    function getPerformanceLevel(overallScore, timingScore, overdueCount, lateCount) {
+      if (overallScore >= 85 && timingScore >= 80 && overdueCount === 0) {
+        return { level: 'excellent', color: 'green', description: 'Excellent Performance' };
+      } else if (overallScore >= 70 && timingScore >= 60) {
+        return { level: 'good', color: 'blue', description: 'Good Performance' };
+      } else if (overallScore >= 50 && timingScore >= 40) {
+        return { level: 'average', color: 'yellow', description: 'Average Performance' };
+      } else if (overallScore >= 30 || overdueCount > 3 || lateCount > 5) {
+        return { level: 'needs_improvement', color: 'orange', description: 'Needs Improvement' };
+      } else {
+        return { level: 'critical', color: 'red', description: 'Critical - Urgent Action Required' };
+      }
     }
 
     // Enhanced performance trends over time (last 30 days)
@@ -556,6 +629,82 @@ const Reports = () => {
       }
     });
 
+    // Identify low performers for targeted improvement
+    const lowPerformers = employeeStats.filter(emp =>
+      emp.performanceLevel.level === 'needs_improvement' ||
+      emp.performanceLevel.level === 'critical' ||
+      emp.overdueRate > 20 ||
+      emp.lateRate > 30 ||
+      emp.timingScore < 50
+    ).sort((a, b) => a.overallPerformanceScore - b.overallPerformanceScore);
+
+    // Generate performance improvement recommendations
+    const getPerformanceRecommendations = (emp) => {
+      const recommendations = [];
+
+      if (emp.overdueRate > 20) {
+        recommendations.push({
+          priority: 'high',
+          category: 'Time Management',
+          issue: `${emp.overdueRate.toFixed(1)}% of tasks are overdue`,
+          suggestion: 'Implement daily task prioritization and deadline tracking system',
+          action: 'Schedule weekly check-ins with supervisor for workload management'
+        });
+      }
+
+      if (emp.lateRate > 30) {
+        recommendations.push({
+          priority: 'high',
+          category: 'Deadline Adherence',
+          issue: `${emp.lateRate.toFixed(1)}% of completed tasks were delivered late`,
+          suggestion: 'Break down large tasks into smaller milestones with buffer time',
+          action: 'Attend time management training workshop'
+        });
+      }
+
+      if (emp.avgDelayDays > 3) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'Planning',
+          issue: `Average delay of ${emp.avgDelayDays} days on completed tasks`,
+          suggestion: 'Improve task estimation and add 20% buffer time to deadlines',
+          action: 'Use project management tools for better timeline planning'
+        });
+      }
+
+      if (emp.reassignmentRate > 15) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'Task Stability',
+          issue: `${emp.reassignmentRate.toFixed(1)}% of tasks require reassignment`,
+          suggestion: 'Improve initial task understanding and requirements gathering',
+          action: 'Request detailed briefings before accepting new tasks'
+        });
+      }
+
+      if (emp.completionRate < 70) {
+        recommendations.push({
+          priority: 'high',
+          category: 'Productivity',
+          issue: `Only ${emp.completionRate.toFixed(1)}% task completion rate`,
+          suggestion: 'Focus on completing existing tasks before taking on new ones',
+          action: 'Reduce current workload and implement daily progress tracking'
+        });
+      }
+
+      if (emp.trendDirection === 'down') {
+        recommendations.push({
+          priority: 'medium',
+          category: 'Performance Trend',
+          issue: 'Declining performance trend over recent weeks',
+          suggestion: 'Identify and address root causes of performance decline',
+          action: 'Schedule performance review meeting to discuss challenges'
+        });
+      }
+
+      return recommendations;
+    };
+
     return {
       type: "Employee Performance Report",
       summary: {
@@ -563,9 +712,19 @@ const Reports = () => {
         activeEmployees: employeeStats.filter(e => e.totalTasks > 0).length,
         averageCompletionRate: Math.round(employeeStats.reduce((acc, e) => acc + e.completionRate, 0) / employees.length),
         averageOnTimeRate: Math.round(employeeStats.reduce((acc, e) => acc + e.onTimeRate, 0) / employees.length),
-        topPerformer: employeeStats.reduce((max, emp) => emp.completionRate > max.completionRate ? emp : max, employeeStats[0] || {}),
+        averageTimingScore: Math.round(employeeStats.reduce((acc, e) => acc + e.timingScore, 0) / employees.length),
+        lowPerformersCount: lowPerformers.length,
+        criticalPerformersCount: employeeStats.filter(e => e.performanceLevel.level === 'critical').length,
+        needsImprovementCount: employeeStats.filter(e => e.performanceLevel.level === 'needs_improvement').length,
+        topPerformer: employeeStats.reduce((max, emp) => emp.overallPerformanceScore > max.overallPerformanceScore ? emp : max, employeeStats[0] || {}),
+        lowestPerformer: lowPerformers.length > 0 ? lowPerformers[0] : null,
       },
-      employeeStats: employeeStats.sort((a, b) => b.completionRate - a.completionRate),
+      employeeStats: employeeStats.sort((a, b) => a.overallPerformanceScore - b.overallPerformanceScore),
+      lowPerformers: lowPerformers.map(emp => ({
+        ...emp,
+        recommendations: getPerformanceRecommendations(emp)
+      })),
+      performanceRecommendations: getPerformanceRecommendations,
       performanceTrends,
       skillsData: Object.values(skillsData),
       chartData: {
@@ -1152,24 +1311,41 @@ const Reports = () => {
                             **Comprehensive team metrics analysis**
                           </p>
 
-                          {/* Top Performer Badge */}
-                          {reportData.summary.topPerformer && (
-                            <div className="mb-4 p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                  <Star className="w-4 h-4 text-white" />
+                          {/* Low Performers Alert */}
+                          {reportData.summary.lowPerformersCount > 0 && (
+                            <div className="mb-4 p-4 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl border border-red-200 dark:border-red-800">
+                              <div className="flex items-start gap-3">
+                                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                  <AlertCircle className="w-4 h-4 text-white" />
                                 </div>
-                                <div>
-                                  <p className="text-sm font-bold text-yellow-800 dark:text-yellow-200">
-                                    **Top Performer: {reportData.summary.topPerformer.name}**
+                                <div className="flex-1">
+                                  <p className="text-sm font-bold text-red-800 dark:text-red-200 mb-1">
+                                    **Performance Alert: {reportData.summary.lowPerformersCount} Team Member{reportData.summary.lowPerformersCount > 1 ? 's' : ''} Need{reportData.summary.lowPerformersCount === 1 ? 's' : ''} Attention**
                                   </p>
-                                  <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                                    **{Math.round(reportData.summary.topPerformer.completionRate)}% completion rate**
+                                  <p className="text-xs text-red-700 dark:text-red-300 mb-2">
+                                    **{reportData.summary.criticalPerformersCount} critical, {reportData.summary.needsImprovementCount} need improvement**
                                   </p>
+                                  {reportData.summary.lowestPerformer && (
+                                    <p className="text-xs text-red-600 dark:text-red-400">
+                                      **Priority: {reportData.summary.lowestPerformer.name} - {reportData.summary.lowestPerformer.performanceLevel.description}**
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             </div>
                           )}
+
+                          {/* Performance Summary Stats */}
+                          <div className="mb-4 grid grid-cols-2 gap-3">
+                            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                              <div className="text-sm font-semibold text-blue-800 dark:text-blue-200">Avg Timing Score</div>
+                              <div className="text-lg font-bold text-blue-900 dark:text-blue-100">{reportData.summary.averageTimingScore}%</div>
+                            </div>
+                            <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                              <div className="text-sm font-semibold text-green-800 dark:text-green-200">On-Time Rate</div>
+                              <div className="text-lg font-bold text-green-900 dark:text-green-100">{reportData.summary.averageOnTimeRate}%</div>
+                            </div>
+                          </div>
 
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
