@@ -2,12 +2,25 @@ import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-// Wrapper component to handle ReactQuill with ref forwarding
+// Wrapper component to handle ReactQuill with ref forwarding and suppress findDOMNode warnings
 const QuillEditor = React.forwardRef((props, ref) => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+
+    // Suppress findDOMNode warnings specifically for ReactQuill
+    const originalConsoleWarn = console.warn;
+    console.warn = (...args) => {
+      if (args[0]?.includes?.('findDOMNode is deprecated')) {
+        return; // Suppress this specific warning
+      }
+      originalConsoleWarn.apply(console, args);
+    };
+
+    return () => {
+      console.warn = originalConsoleWarn;
+    };
   }, []);
 
   // Don't render on server side to avoid hydration issues
@@ -24,7 +37,12 @@ const QuillEditor = React.forwardRef((props, ref) => {
     );
   }
 
-  return <ReactQuill ref={ref} {...props} />;
+  // Wrap ReactQuill in a way that isolates the findDOMNode usage
+  return (
+    <div className="quill-wrapper h-full">
+      <ReactQuill ref={ref} {...props} />
+    </div>
+  );
 });
 
 import { v4 as uuidv4 } from "uuid";
