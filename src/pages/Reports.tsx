@@ -28,6 +28,7 @@ import {
   TrendingDown,
   AlertCircle,
 } from "lucide-react";
+import toast from "react-hot-toast";
 import {
   BarChart,
   Bar,
