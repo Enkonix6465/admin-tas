@@ -771,9 +771,80 @@ const Dashboard = () => {
 
 
             
-            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-              <Bell className="w-5 h-5" />
-            </button>
+            <div className="relative">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <Bell className="w-5 h-5" />
+                {unreadNotifications > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                  </span>
+                )}
+              </button>
+
+              {showNotifications && (
+                <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 max-h-96 overflow-y-auto">
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      Notifications
+                    </h3>
+                    <p className="text-sm text-gray-500">{notifications.length} notifications</p>
+                  </div>
+
+                  <div className="max-h-80 overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          onClick={() => {
+                            notification.action();
+                            setShowNotifications(false);
+                          }}
+                          className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`w-2 h-2 rounded-full mt-2 ${
+                              notification.type === 'urgent' ? 'bg-red-500' :
+                              notification.type === 'warning' ? 'bg-yellow-500' :
+                              'bg-blue-500'
+                            }`} />
+                            <div className="flex-1">
+                              <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                {notification.title}
+                              </h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                {notification.message}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-2">
+                                {new Date(notification.time).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-8 text-center">
+                        <Bell className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                        <p className="text-gray-500">No notifications</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {notifications.length > 0 && (
+                    <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                      <button
+                        onClick={() => setShowNotifications(false)}
+                        className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium"
+                      >
+                        Mark all as read
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
