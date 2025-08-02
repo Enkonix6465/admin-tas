@@ -331,17 +331,23 @@ const Dashboard = () => {
 
   const handleShare = async () => {
     try {
-      // Check if Clipboard API is available
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(window.location.href);
-        toast.success("Dashboard link copied! 📋");
-      } else {
-        // Fallback for when Clipboard API is not available
-        fallbackCopyTextToClipboard(window.location.href);
+      // Check if we're in a secure context and Clipboard API is available
+      if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
+        // Check clipboard permissions first
+        const permission = await navigator.permissions?.query?.({ name: 'clipboard-write' as PermissionName });
+
+        if (permission?.state === 'granted' || permission?.state === 'prompt') {
+          await navigator.clipboard.writeText(window.location.href);
+          toast.success("Dashboard link copied! 📋");
+          return;
+        }
       }
+
+      // If Clipboard API is not available or permission denied, use fallback
+      fallbackCopyTextToClipboard(window.location.href);
     } catch (error) {
       console.error("Failed to copy:", error);
-      // Try fallback method
+      // Always try fallback method on any error
       fallbackCopyTextToClipboard(window.location.href);
     }
   };
