@@ -800,7 +800,7 @@ const Dashboard = () => {
       </div>
 
       {/* Enhanced Content */}
-      <div className="flex-1 p-6 overflow-y-auto">
+      <div className="flex-1 min-h-0 p-6 overflow-y-auto">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
