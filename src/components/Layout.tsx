@@ -178,7 +178,7 @@ function Layout() {
 
         {/* Navigation - Hierarchical */}
         <div className="flex-1 overflow-y-auto px-3 py-2">
-          <nav className="space-y-1">
+          <nav className="space-y-2">
 
             {/* Dashboard Section */}
             <div>
