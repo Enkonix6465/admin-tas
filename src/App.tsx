@@ -56,7 +56,7 @@ function App() {
   return (
     <ErrorBoundary>
       <Toaster position="top-right" />
-      <ConnectionStatus />
+      <ConnectionStatusIndicator />
       <Routes>
         <Route
           path="/login"
