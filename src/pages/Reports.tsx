@@ -2075,24 +2075,45 @@ const Reports = () => {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-center">
-                                <div className="flex flex-col items-center">
-                                  <div className={`text-2xl font-bold ${
-                                    emp.qualityScore >= 80 ? 'text-green-600' :
-                                    emp.qualityScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                                <div className="flex flex-col items-center space-y-2">
+                                  <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs font-semibold ${
+                                    emp.performanceLevel?.level === 'critical' ? 'bg-red-100 text-red-800 border border-red-200' :
+                                    emp.performanceLevel?.level === 'needs_improvement' ? 'bg-orange-100 text-orange-800 border border-orange-200' :
+                                    emp.performanceLevel?.level === 'average' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                                    emp.performanceLevel?.level === 'good' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                    'bg-green-100 text-green-800 border border-green-200'
                                   }`}>
-                                    {Math.round(emp.qualityScore)}
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      emp.performanceLevel?.level === 'critical' ? 'bg-red-500' :
+                                      emp.performanceLevel?.level === 'needs_improvement' ? 'bg-orange-500' :
+                                      emp.performanceLevel?.level === 'average' ? 'bg-yellow-500' :
+                                      emp.performanceLevel?.level === 'good' ? 'bg-blue-500' : 'bg-green-500'
+                                    }`}></div>
+                                    **{emp.performanceLevel?.description || 'Analyzing...'}**
                                   </div>
-                                  <div className="text-xs text-gray-500">Quality Score</div>
-                                  <div className={`w-16 h-2 rounded-full mt-1 ${
-                                    emp.qualityScore >= 80 ? 'bg-green-100' :
-                                    emp.qualityScore >= 60 ? 'bg-yellow-100' : 'bg-red-100'
+
+                                  <div className="grid grid-cols-2 gap-1 text-xs w-full">
+                                    <div className="text-center">
+                                      <div className="font-bold text-gray-800">{Math.round(emp.qualityScore || 0)}</div>
+                                      <div className="text-gray-500">Quality</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="font-bold text-gray-800">{Math.round(emp.timingScore || 0)}</div>
+                                      <div className="text-gray-500">Timing</div>
+                                    </div>
+                                  </div>
+
+                                  {/* Progress indicator */}
+                                  <div className={`w-full h-1.5 rounded-full ${
+                                    (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-100' :
+                                    (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-100' : 'bg-red-100'
                                   }`}>
                                     <div
-                                      className={`h-2 rounded-full ${
-                                        emp.qualityScore >= 80 ? 'bg-green-500' :
-                                        emp.qualityScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                      className={`h-1.5 rounded-full ${
+                                        (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-500' :
+                                        (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-500' : 'bg-red-500'
                                       }`}
-                                      style={{ width: `${emp.qualityScore}%` }}
+                                      style={{ width: `${Math.min(100, emp.overallPerformanceScore || 0)}%` }}
                                     ></div>
                                   </div>
                                 </div>
