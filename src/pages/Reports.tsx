@@ -85,7 +85,7 @@ const Reports = () => {
               setTasks(tasksData);
               console.log("Real-time tasks data loaded:", tasksData.length, "tasks");
               if (tasksData.length > 0) {
-                toast.success(`📊 Loaded ${tasksData.length} tasks from database`);
+                toast.success(`�� Loaded ${tasksData.length} tasks from database`);
               }
             }
           },
@@ -283,6 +283,11 @@ const Reports = () => {
     const employeeStats = employees.map(employee => {
       const empTasks = filteredTasks.filter(t => t.assigned_to === employee.id);
       const completedTasks = empTasks.filter(t => t.status === "completed");
+      const inProgressTasks = empTasks.filter(t => t.status === "in_progress");
+      const pendingTasks = empTasks.filter(t => t.status === "pending");
+      const reviewTasks = empTasks.filter(t => t.status === "review");
+
+      // Enhanced metrics for individual analysis
       const onTimeTasks = completedTasks.filter(t => {
         if (!t.progress_updated_at || !t.due_date) return false;
         const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
@@ -290,8 +295,22 @@ const Reports = () => {
         return completedDate <= dueDate;
       });
 
+      const overdueTasks = empTasks.filter(t => {
+        if (!t.due_date || t.status === "completed") return false;
+        return new Date(t.due_date) < new Date();
+      });
+
+      // Task reassignment analysis
+      const reassignedTasks = empTasks.filter(t => t.reassigned_from || t.reassignment_history);
+      const reassignmentRate = empTasks.length > 0 ? (reassignedTasks.length / empTasks.length * 100) : 0;
+
+      // Priority distribution analysis
       const highPriorityTasks = empTasks.filter(t => t.priority === "high");
-      const avgCompletionTime = completedTasks.length > 0 ? 
+      const mediumPriorityTasks = empTasks.filter(t => t.priority === "medium");
+      const lowPriorityTasks = empTasks.filter(t => t.priority === "low");
+
+      // Time-based performance
+      const avgCompletionTime = completedTasks.length > 0 ?
         completedTasks.reduce((acc, task) => {
           if (task.created_at && task.progress_updated_at) {
             const start = task.created_at.toDate ? task.created_at.toDate() : new Date(task.created_at);
@@ -301,6 +320,27 @@ const Reports = () => {
           return acc;
         }, 0) / completedTasks.length : 0;
 
+      // Quality metrics
+      const qualityScore = calculateQualityScore(empTasks, onTimeTasks, reassignedTasks);
+
+      // Productivity trends (last 7 days vs previous 7 days)
+      const now = new Date();
+      const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const previous7Days = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+      const recentCompletions = completedTasks.filter(t => {
+        const completedDate = t.progress_updated_at?.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
+        return completedDate >= last7Days;
+      }).length;
+
+      const previousCompletions = completedTasks.filter(t => {
+        const completedDate = t.progress_updated_at?.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
+        return completedDate >= previous7Days && completedDate < last7Days;
+      }).length;
+
+      const trendDirection = recentCompletions > previousCompletions ? 'up' :
+                           recentCompletions < previousCompletions ? 'down' : 'stable';
+
       return {
         id: employee.id,
         name: employee.name,
@@ -309,19 +349,59 @@ const Reports = () => {
         role: employee.role,
         avatar: employee.avatar,
         skills: employee.skills || [],
+
+        // Task counts
         totalTasks: empTasks.length,
         completedTasks: completedTasks.length,
-        pendingTasks: empTasks.filter(t => t.status === "pending").length,
-        inProgressTasks: empTasks.filter(t => t.status === "in_progress").length,
-        onTimeTasks: onTimeTasks.length,
-        highPriorityCompleted: completedTasks.filter(t => t.priority === "high").length,
+        pendingTasks: pendingTasks.length,
+        inProgressTasks: inProgressTasks.length,
+        reviewTasks: reviewTasks.length,
+        overdueTasks: overdueTasks.length,
+
+        // Performance metrics
         completionRate: empTasks.length > 0 ? (completedTasks.length / empTasks.length * 100) : 0,
         onTimeRate: completedTasks.length > 0 ? (onTimeTasks.length / completedTasks.length * 100) : 0,
         avgCompletionTime: Math.round(avgCompletionTime * 10) / 10,
+        qualityScore,
+
+        // Priority analysis
+        highPriorityTasks: highPriorityTasks.length,
+        mediumPriorityTasks: mediumPriorityTasks.length,
+        lowPriorityTasks: lowPriorityTasks.length,
+        highPriorityCompleted: completedTasks.filter(t => t.priority === "high").length,
+
+        // Reassignment analysis
+        reassignedTasks: reassignedTasks.length,
+        reassignmentRate,
+
+        // Trend analysis
+        recentCompletions,
+        previousCompletions,
+        trendDirection,
+        productivity: empTasks.length > 0 ? Math.min(100, (completedTasks.length / empTasks.length) * 100) : 0,
         efficiency: empTasks.length > 0 ? Math.min(100, (onTimeTasks.length / empTasks.length) * 150) : 0,
         workload: empTasks.length,
       };
     });
+
+    // Helper function to calculate quality score
+    function calculateQualityScore(tasks, onTimeTasks, reassignedTasks) {
+      if (tasks.length === 0) return 0;
+
+      const onTimeWeight = 0.4;
+      const reassignmentPenalty = 0.3;
+      const completionWeight = 0.3;
+
+      const onTimeScore = tasks.length > 0 ? (onTimeTasks.length / tasks.length) * 100 : 0;
+      const reassignmentPenaltyScore = tasks.length > 0 ? (reassignedTasks.length / tasks.length) * 100 : 0;
+      const completionScore = tasks.length > 0 ? (tasks.filter(t => t.status === "completed").length / tasks.length) * 100 : 0;
+
+      return Math.max(0, Math.min(100,
+        (onTimeScore * onTimeWeight) +
+        (completionScore * completionWeight) -
+        (reassignmentPenaltyScore * reassignmentPenalty)
+      ));
+    }
 
     // Performance trends over time
     const performanceTrends = [];
