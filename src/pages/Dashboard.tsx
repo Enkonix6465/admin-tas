@@ -329,81 +329,7 @@ const Dashboard = () => {
     return tasks.filter((t: any) => t.project_id === projectId).length;
   };
 
-  const handleShare = async () => {
-    try {
-      // Check if we're in a secure context and Clipboard API is available
-      if (window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText) {
-        // Check clipboard permissions first
-        const permission = await navigator.permissions?.query?.({ name: 'clipboard-write' as PermissionName });
 
-        if (permission?.state === 'granted' || permission?.state === 'prompt') {
-          await navigator.clipboard.writeText(window.location.href);
-          toast.success("Dashboard link copied! 📋");
-          return;
-        }
-      }
-
-      // If Clipboard API is not available or permission denied, use fallback
-      fallbackCopyTextToClipboard(window.location.href);
-    } catch (error) {
-      console.error("Failed to copy:", error);
-      // Always try fallback method on any error
-      fallbackCopyTextToClipboard(window.location.href);
-    }
-  };
-
-  const fallbackCopyTextToClipboard = (text: string) => {
-    try {
-      // Create a temporary textarea element
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      textArea.setAttribute('readonly', '');
-
-      // Position it off-screen
-      textArea.style.position = "absolute";
-      textArea.style.left = "-9999px";
-      textArea.style.top = "-9999px";
-      textArea.style.opacity = "0";
-      textArea.style.pointerEvents = "none";
-      textArea.style.fontSize = "12pt"; // Prevent iOS zoom
-
-      document.body.appendChild(textArea);
-
-      // Select the text
-      textArea.select();
-      textArea.setSelectionRange(0, 99999); // For mobile devices
-
-      // Try to copy
-      let successful = false;
-      try {
-        successful = document.execCommand('copy');
-      } catch (copyErr) {
-        console.warn('execCommand copy failed:', copyErr);
-      }
-
-      document.body.removeChild(textArea);
-
-      if (successful) {
-        toast.success("Dashboard link copied! 📋");
-      } else {
-        // Show user the URL they can manually copy
-        const shortUrl = text.length > 60 ? text.substring(0, 60) + "..." : text;
-        toast.error(`Cannot copy automatically. URL: ${shortUrl}`, {
-          duration: 6000,
-          style: {
-            maxWidth: '500px',
-            wordBreak: 'break-all'
-          }
-        });
-      }
-    } catch (err) {
-      console.error('Fallback copy failed:', err);
-      // Last resort - show user they need to copy manually
-      toast.error("Please copy the URL manually from your browser address bar.", {
-        duration: 5000
-      });
-    }
-  };
 
   const handleApplyFilter = (newFilters: any) => {
     setFilters(newFilters);
@@ -780,13 +706,7 @@ const Dashboard = () => {
               )}
             </div>
 
-            <button 
-              onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
-            >
-              <Share className="w-4 h-4" />
-              <span className="hidden sm:inline">Share</span>
-            </button>
+
             
             <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
               <Bell className="w-5 h-5" />
