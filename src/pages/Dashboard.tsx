@@ -394,20 +394,21 @@ const Dashboard = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, scale: 1.02 }}
-      className={`bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 ${
+      className={`bg-gradient-to-br ${
+        color === 'blue' ? 'from-blue-500 to-indigo-600' :
+        color === 'green' ? 'from-emerald-500 to-green-600' :
+        color === 'yellow' ? 'from-amber-500 to-orange-600' :
+        color === 'red' ? 'from-red-500 to-pink-600' :
+        color === 'purple' ? 'from-purple-500 to-indigo-600' :
+        'from-gray-500 to-slate-600'
+      } rounded-2xl p-6 text-white ${
         onClick ? 'cursor-pointer hover:shadow-2xl' : 'hover:shadow-lg'
-      } transition-all duration-300 relative overflow-hidden group`}
+      } transition-all duration-300 relative overflow-hidden group shadow-lg`}
       onClick={onClick}
     >
-      {/* Background gradient */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${
-        color === 'blue' ? 'from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10' :
-        color === 'green' ? 'from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10' :
-        color === 'yellow' ? 'from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10' :
-        color === 'red' ? 'from-red-50 to-pink-50 dark:from-red-900/10 dark:to-pink-900/10' :
-        color === 'purple' ? 'from-purple-50 to-indigo-50 dark:from-purple-900/10 dark:to-indigo-900/10' :
-        'from-gray-50 to-slate-50 dark:from-gray-900/10 dark:to-slate-900/10'
-      } opacity-50 group-hover:opacity-100 transition-opacity`} />
+      {/* Animated background pattern */}
+      <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500" />
       
       <div className="relative">
         <div className="flex items-start justify-between mb-4">
