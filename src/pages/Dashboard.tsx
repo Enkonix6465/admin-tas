@@ -1188,8 +1188,21 @@ const Dashboard = () => {
                   </div>
                   <div className="p-6">
                     <div className="grid grid-cols-1 gap-4">
-                      {employees.slice(0, 3).map((member: any) => (
-                        <TeamMemberCard key={member.id} member={member} />
+                      {employees.filter(emp => emp.isTeamLead).slice(0, 3).map((member: any) => (
+                        <TeamMemberCard
+                          key={member.id}
+                          member={member}
+                          isExpanded={expandedTeamLeads.has(member.id)}
+                          onToggleExpand={() => {
+                            const newExpanded = new Set(expandedTeamLeads);
+                            if (newExpanded.has(member.id)) {
+                              newExpanded.delete(member.id);
+                            } else {
+                              newExpanded.add(member.id);
+                            }
+                            setExpandedTeamLeads(newExpanded);
+                          }}
+                        />
                       ))}
                     </div>
                   </div>
