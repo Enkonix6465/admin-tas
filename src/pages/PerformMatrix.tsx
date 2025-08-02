@@ -511,40 +511,163 @@ export default function EmployeePerformancePage() {
                 />
               </div>
 
-              {/* Charts */}
+              {/* Enhanced Charts */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Monthly Performance */}
+                {/* Performance Trends (Last 30 Days) */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-                    Monthly Performance
-                  </h3>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      Performance Trends (Last 30 Days)
+                    </h3>
+                    <div className="flex items-center gap-1">
+                      <TrendingUp className="w-4 h-4 text-green-500" />
+                      <span className="text-sm text-green-600 font-medium">
+                        {performanceTrends.length > 0 ? `${performanceTrends[performanceTrends.length - 1]?.performance?.toFixed(1)}%` : '0%'}
+                      </span>
+                    </div>
+                  </div>
                   <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={monthChartData}>
+                    <AreaChart data={performanceTrends}>
+                      <defs>
+                        <linearGradient id="performanceGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                       <YAxis />
                       <Tooltip />
-                      <Legend />
-                      <Bar dataKey="Completed" fill="#10b981" />
-                      <Bar dataKey="Reassigned" fill="#f59e0b" />
-                    </BarChart>
+                      <Area
+                        type="monotone"
+                        dataKey="performance"
+                        stroke="#3b82f6"
+                        fillOpacity={1}
+                        fill="url(#performanceGradient)"
+                        strokeWidth={2}
+                      />
+                    </AreaChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Daily Trends */}
+                {/* Quality vs Productivity Matrix */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      Quality vs Productivity Matrix
+                    </h3>
+                    <div className="flex items-center gap-1">
+                      <Trophy className="w-4 h-4 text-yellow-500" />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {qualityProductivityData.length} tasks analyzed
+                      </span>
+                    </div>
+                  </div>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <ScatterChart data={qualityProductivityData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis
+                        type="number"
+                        dataKey="productivity"
+                        name="Productivity"
+                        domain={[0, 120]}
+                        tick={{ fontSize: 10 }}
+                      />
+                      <YAxis
+                        type="number"
+                        dataKey="quality"
+                        name="Quality"
+                        domain={[40, 100]}
+                        tick={{ fontSize: 10 }}
+                      />
+                      <Tooltip
+                        cursor={{ strokeDasharray: '3 3' }}
+                        content={({ active, payload }) => {
+                          if (active && payload && payload[0]) {
+                            const data = payload[0].payload;
+                            return (
+                              <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
+                                <p className="font-medium text-gray-900 dark:text-gray-100">{data.title}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  Quality: {data.quality?.toFixed(1)}%
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
+                                  Productivity: {data.productivity?.toFixed(1)}
+                                </p>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Scatter dataKey="quality" fill="#8884d8" />
+                    </ScatterChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Monthly Performance Radar */}
+                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                    Monthly Performance Overview
+                  </h3>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <RadarChart data={monthChartData.slice(-6)}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="month" />
+                      <PolarRadiusAxis angle={90} domain={[0, 'dataMax']} />
+                      <Radar
+                        name="Completed"
+                        dataKey="Completed"
+                        stroke="#10b981"
+                        fill="#10b981"
+                        fillOpacity={0.3}
+                        strokeWidth={2}
+                      />
+                      <Radar
+                        name="Reassigned"
+                        dataKey="Reassigned"
+                        stroke="#f59e0b"
+                        fill="#f59e0b"
+                        fillOpacity={0.3}
+                        strokeWidth={2}
+                      />
+                      <Legend />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                </div>
+
+                {/* Daily Activity Trends */}
                 <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
                     Daily Activity Trends
                   </h3>
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={dateChartData}>
+                    <LineChart data={dateChartData.slice(-14)}>
+                      <defs>
+                        <linearGradient id="completedGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Line type="monotone" dataKey="Completed" stroke="#3b82f6" strokeWidth={2} />
-                      <Line type="monotone" dataKey="Reassigned" stroke="#f59e0b" strokeWidth={2} />
+                      <Area
+                        type="monotone"
+                        dataKey="Completed"
+                        stroke="#10b981"
+                        fill="url(#completedGradient)"
+                        strokeWidth={2}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="Reassigned"
+                        stroke="#f59e0b"
+                        strokeWidth={2}
+                        strokeDasharray="5 5"
+                      />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
