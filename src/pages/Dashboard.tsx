@@ -410,38 +410,29 @@ const Dashboard = () => {
       <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 bg-white/10 rounded-full group-hover:scale-110 transition-transform duration-500" />
       
-      <div className="relative">
+      <div className="relative z-10">
         <div className="flex items-start justify-between mb-4">
-          <div className={`p-3 rounded-2xl ${
-            color === 'blue' ? 'bg-blue-500' :
-            color === 'green' ? 'bg-emerald-500' :
-            color === 'yellow' ? 'bg-amber-500' :
-            color === 'red' ? 'bg-red-500' :
-            color === 'purple' ? 'bg-purple-500' :
-            'bg-gray-500'
-          } shadow-lg`}>
+          <div className="p-3 rounded-2xl bg-white/20 backdrop-blur-sm shadow-lg">
             <Icon className="w-6 h-6 text-white" />
           </div>
           {onClick && (
-            <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+            <ArrowRight className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
           )}
         </div>
-        
+
         <div>
-          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</h3>
+          <h3 className="text-sm font-medium text-white/80 mb-1">{title}</h3>
           <div className="flex items-baseline gap-2 mb-1">
-            <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">{value}</span>
+            <span className="text-3xl font-bold text-white">{value}</span>
             {change && (
-              <span className={`text-sm font-medium flex items-center gap-1 ${
-                trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-600' : 'text-gray-500'
-              }`}>
+              <span className="text-sm font-medium flex items-center gap-1 text-white/90">
                 {trend === 'up' && <TrendingUp className="w-3 h-3" />}
                 {change}
               </span>
             )}
           </div>
           {subtitle && (
-            <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>
+            <p className="text-xs text-white/70">{subtitle}</p>
           )}
         </div>
       </div>
