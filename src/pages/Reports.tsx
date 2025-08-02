@@ -923,7 +923,7 @@ const Reports = () => {
         </div>
 
         {/* Report Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 min-h-0 overflow-y-auto p-6">
           <AnimatePresence mode="wait">
             {reportData.type && (
               <motion.div
