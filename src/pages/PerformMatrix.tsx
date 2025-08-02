@@ -12,6 +12,15 @@ import {
   CartesianGrid,
   BarChart,
   Bar,
+  AreaChart,
+  Area,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  ScatterChart,
+  Scatter,
 } from "recharts";
 import { useAuthStore } from "../store/authStore";
 import PageHeader from "../components/PageHeader";
@@ -28,6 +37,10 @@ import {
   Activity,
   AlertCircle,
   User,
+  Download,
+  Star,
+  Zap,
+  Trophy,
 } from "lucide-react";
 
 export default function EmployeePerformancePage() {
@@ -42,6 +55,9 @@ export default function EmployeePerformancePage() {
   const [monthChartData, setMonthChartData] = useState([]);
   const [dateChartData, setDateChartData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [bestDay, setBestDay] = useState(null);
+  const [qualityProductivityData, setQualityProductivityData] = useState([]);
+  const [performanceTrends, setPerformanceTrends] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
