@@ -495,7 +495,7 @@ const Reports = () => {
     link.href = url;
     link.download = `${reportData.type || "report"}_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
-    toast.success("Report exported successfully! 📊");
+    toast.success("Real-time report exported successfully! 📊✨");
   };
 
   const reportTypes = [
