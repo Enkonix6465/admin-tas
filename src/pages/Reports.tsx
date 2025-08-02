@@ -1219,32 +1219,78 @@ const Reports = () => {
                           </div>
                         </div>
 
-                        {/* Enhanced Workload Distribution */}
+                        {/* Enhanced Workload Bubble Chart */}
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-                            Workload Distribution
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                            **Team Workload Analysis**
                           </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            **Interactive workload distribution by team member**
+                          </p>
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
-                              <BarChart data={reportData.chartData.workloadDistribution}>
+                              <LineChart data={reportData.chartData.workloadDistribution.map(emp => ({
+                                ...emp,
+                                fullName: employees.find(e => e.name.includes(emp.name))?.name || emp.name,
+                                efficiency: Math.round((emp.completed / Math.max(emp.total, 1)) * 100)
+                              }))}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                                <XAxis dataKey="name" stroke="#6b7280" />
-                                <YAxis stroke="#6b7280" />
+                                <XAxis
+                                  dataKey="fullName"
+                                  stroke="#6b7280"
+                                  tick={{ fontSize: 12, fontWeight: 'bold' }}
+                                  angle={-45}
+                                  textAnchor="end"
+                                  height={100}
+                                />
+                                <YAxis stroke="#6b7280" tick={{ fontWeight: 'bold' }} />
                                 <Tooltip
                                   contentStyle={{
                                     backgroundColor: '#1f2937',
                                     border: 'none',
                                     borderRadius: '12px',
-                                    color: '#f9fafb'
+                                    color: '#f9fafb',
+                                    fontWeight: 'bold'
                                   }}
+                                  formatter={(value, name) => [`**${value}**`, `**${name}**`]}
                                 />
                                 <Legend />
-                                <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
-                                <Bar dataKey="inProgress" stackId="a" fill="#3b82f6" name="In Progress" />
-                                <Bar dataKey="review" stackId="a" fill="#8b5cf6" name="Review" />
-                                <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
-                                <Bar dataKey="overdue" stackId="a" fill="#ef4444" name="Overdue" />
-                              </BarChart>
+                                <Line
+                                  type="monotone"
+                                  dataKey="completed"
+                                  stroke="#10b981"
+                                  strokeWidth={4}
+                                  name="**Completed Tasks**"
+                                  dot={{ fill: '#10b981', strokeWidth: 2, r: 6 }}
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="inProgress"
+                                  stroke="#3b82f6"
+                                  strokeWidth={4}
+                                  name="**In Progress**"
+                                  dot={{ fill: '#3b82f6', strokeWidth: 2, r: 6 }}
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="pending"
+                                  stroke="#f59e0b"
+                                  strokeWidth={4}
+                                  name="**Pending Tasks**"
+                                  dot={{ fill: '#f59e0b', strokeWidth: 2, r: 6 }}
+                                />
+                                {reportData.chartData.workloadDistribution.some(emp => emp.overdue > 0) && (
+                                  <Line
+                                    type="monotone"
+                                    dataKey="overdue"
+                                    stroke="#ef4444"
+                                    strokeWidth={4}
+                                    name="**Overdue**"
+                                    dot={{ fill: '#ef4444', strokeWidth: 2, r: 6 }}
+                                    strokeDasharray="5 5"
+                                  />
+                                )}
+                              </LineChart>
                             </ResponsiveContainer>
                           </div>
                         </div>
