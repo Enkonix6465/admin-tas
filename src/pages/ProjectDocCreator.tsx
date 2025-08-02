@@ -822,7 +822,7 @@ const ProjectDocCreator = () => {
                     </div>
                     {selectedTemplate && (
                       <div className="flex items-center gap-2">
-                        <Template className="w-4 h-4 text-purple-500" />
+                        <Layout className="w-4 h-4 text-purple-500" />
                         <span className="text-purple-600">From {selectedTemplate.name} template</span>
                       </div>
                     )}
