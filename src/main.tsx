@@ -5,6 +5,21 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import App from './App.tsx';
 import './index.css';
 
+// Suppress React findDOMNode warning specifically for ReactQuill
+// This is a known issue with react-quill library that doesn't affect functionality
+const originalConsoleWarn = console.warn;
+console.warn = (...args) => {
+  // Filter out findDOMNode warnings from ReactQuill
+  if (
+    typeof args[0] === 'string' &&
+    args[0].includes('findDOMNode is deprecated')
+  ) {
+    return;
+  }
+  // Allow all other warnings to pass through
+  originalConsoleWarn.apply(console, args);
+};
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
