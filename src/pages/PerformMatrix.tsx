@@ -654,11 +654,10 @@ export default function EmployeePerformancePage() {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Area
+                      <Line
                         type="monotone"
                         dataKey="Completed"
                         stroke="#10b981"
-                        fill="url(#completedGradient)"
                         strokeWidth={2}
                       />
                       <Line
