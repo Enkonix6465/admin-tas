@@ -533,16 +533,24 @@ const KanbanPage = () => {
 
         {/* Tags */}
         {task.tags && (
-          <div className="flex flex-wrap gap-1 mb-3">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-wrap gap-2 mb-3"
+          >
             {task.tags.split(',').map((tag: string, index: number) => (
-              <span
+              <motion.span
                 key={index}
-                className="px-2 py-0.5 text-xs bg-blue-100 text-blue-600 rounded-md"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.05 }}
+                className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-lg border border-blue-200 font-medium shadow-sm"
               >
                 #{tag.trim()}
-              </span>
+              </motion.span>
             ))}
-          </div>
+          </motion.div>
         )}
 
         {/* Project Badge */}
