@@ -238,6 +238,40 @@ const Calendar = () => {
     toast.success("Settings panel opened! ⚙️");
   };
 
+  const applyFilters = () => {
+    setFilters({ ...tempFilters });
+    setFilterOpen(false);
+    toast.success("Filters applied successfully! 🔍");
+  };
+
+  const clearFilters = () => {
+    const emptyFilters = { status: [], priority: [], projects: [] };
+    setTempFilters(emptyFilters);
+    setFilters(emptyFilters);
+    setFilterOpen(false);
+    toast.success("Filters cleared! ✨");
+  };
+
+  const handleFilterChange = (type: string, value: string) => {
+    setTempFilters(prev => ({
+      ...prev,
+      [type]: prev[type].includes(value)
+        ? prev[type].filter(item => item !== value)
+        : [...prev[type], value]
+    }));
+  };
+
+  const toggleView = (view: string) => {
+    setActiveView(view);
+    if (view === "timeline") {
+      setViewMode("timeline");
+      toast.success("Timeline view activated! 📅");
+    } else {
+      setViewMode("month");
+      toast.success("Calendar view activated! 📅");
+    }
+  };
+
   return (
     <div className="h-full bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
       {/* Project Sidebar */}
