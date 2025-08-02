@@ -975,7 +975,7 @@ const Dashboard = () => {
 
 
             
-            <div className="relative">
+            <div className="relative dropdown-container">
               <button
                 onClick={() => setShowNotifications(!showNotifications)}
                 className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
