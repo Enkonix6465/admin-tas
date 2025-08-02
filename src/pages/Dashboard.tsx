@@ -64,6 +64,7 @@ const Dashboard = () => {
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   useEffect(() => {
     const unsubscribers = [];
