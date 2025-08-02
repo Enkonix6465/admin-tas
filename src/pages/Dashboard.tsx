@@ -208,34 +208,100 @@ const Dashboard = () => {
                   id: "mock-user-1",
                   name: "Sarah Johnson",
                   email: "sarah@company.com",
-                  role: "Senior Designer",
+                  role: "Design Team Lead",
                   department: "Design",
                   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
                   status: "online",
                   tasks_completed: 28,
-                  tasks_pending: 5
+                  tasks_pending: 5,
+                  isTeamLead: true,
+                  teamMembers: ["mock-user-4", "mock-user-5"]
                 },
                 {
                   id: "mock-user-2",
                   name: "Mike Chen",
                   email: "mike@company.com",
-                  role: "Full Stack Developer",
+                  role: "Engineering Team Lead",
                   department: "Engineering",
                   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
                   status: "busy",
                   tasks_completed: 42,
-                  tasks_pending: 8
+                  tasks_pending: 8,
+                  isTeamLead: true,
+                  teamMembers: ["mock-user-6", "mock-user-7"]
                 },
                 {
                   id: "mock-user-3",
                   name: "Emily Davis",
                   email: "emily@company.com",
-                  role: "Product Manager",
+                  role: "Product Team Lead",
                   department: "Product",
                   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
                   status: "away",
                   tasks_completed: 35,
-                  tasks_pending: 3
+                  tasks_pending: 3,
+                  isTeamLead: true,
+                  teamMembers: ["mock-user-8"]
+                },
+                {
+                  id: "mock-user-4",
+                  name: "Alice Cooper",
+                  email: "alice@company.com",
+                  role: "UI Designer",
+                  department: "Design",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+                  status: "online",
+                  tasks_completed: 15,
+                  tasks_pending: 3,
+                  teamLead: "mock-user-1"
+                },
+                {
+                  id: "mock-user-5",
+                  name: "Bob Wilson",
+                  email: "bob@company.com",
+                  role: "UX Designer",
+                  department: "Design",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+                  status: "busy",
+                  tasks_completed: 22,
+                  tasks_pending: 4,
+                  teamLead: "mock-user-1"
+                },
+                {
+                  id: "mock-user-6",
+                  name: "Carol Smith",
+                  email: "carol@company.com",
+                  role: "Frontend Developer",
+                  department: "Engineering",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol",
+                  status: "online",
+                  tasks_completed: 38,
+                  tasks_pending: 6,
+                  teamLead: "mock-user-2"
+                },
+                {
+                  id: "mock-user-7",
+                  name: "David Lee",
+                  email: "david@company.com",
+                  role: "Backend Developer",
+                  department: "Engineering",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+                  status: "away",
+                  tasks_completed: 31,
+                  tasks_pending: 7,
+                  teamLead: "mock-user-2"
+                },
+                {
+                  id: "mock-user-8",
+                  name: "Grace Kim",
+                  email: "grace@company.com",
+                  role: "Product Analyst",
+                  department: "Product",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Grace",
+                  status: "online",
+                  tasks_completed: 19,
+                  tasks_pending: 2,
+                  teamLead: "mock-user-3"
                 }
               ]);
               setLoading(false);
