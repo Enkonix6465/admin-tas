@@ -273,30 +273,54 @@ const Calendar = () => {
   };
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
+    <div className="h-full bg-stone-100 dark:bg-gray-900 flex overflow-hidden">
       {/* Project Sidebar */}
-      <motion.div 
-        initial={{ x: -280 }}
-        animate={{ x: sidebarOpen ? 0 : -280 }}
+      <motion.div
+        initial={{ x: -300 }}
+        animate={{ x: sidebarOpen ? 0 : -300 }}
         transition={{ type: "spring", damping: 20 }}
-        className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 overflow-hidden"
+        className="w-80 bg-stone-50 dark:bg-gray-800 border-r border-stone-200 dark:border-gray-700 flex flex-col flex-shrink-0 overflow-hidden shadow-lg"
       >
         {/* Sidebar Header */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+        <div className="p-6 border-b border-stone-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              Project Board [2023]
-            </h2>
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                Project Board [{new Date().getFullYear()}]
+              </h2>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setSidebarOpen(!sidebarOpen)}
+                className="p-1.5 hover:bg-stone-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+              >
+                {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              </motion.button>
+            </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span className="text-xs text-gray-500">ON TRACK</span>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-            <span className="text-blue-600 font-medium">Calendar</span>
+            <button
+              onClick={() => toggleView("calendar")}
+              className={`px-2 py-1 rounded transition-colors ${
+                activeView === "calendar" ? "text-blue-600 font-medium bg-blue-50" : "hover:bg-stone-200"
+              }`}
+            >
+              Calendar
+            </button>
             <span>•</span>
-            <span>Timeline</span>
+            <button
+              onClick={() => toggleView("timeline")}
+              className={`px-2 py-1 rounded transition-colors ${
+                activeView === "timeline" ? "text-blue-600 font-medium bg-blue-50" : "hover:bg-stone-200"
+              }`}
+            >
+              Timeline
+            </button>
           </div>
         </div>
 
