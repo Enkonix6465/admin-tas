@@ -306,8 +306,92 @@ textarea {
   @apply bg-gray-800 border-gray-700;
 }
 
-/* Minimal Design Components */
+/* Enhanced Responsive Design Components */
 @layer components {
+  /* Responsive utility classes */
+  .mobile-scroll {
+    @apply overflow-x-auto scrollbar-hide;
+  }
+
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  .mobile-flex {
+    @apply flex flex-col sm:flex-row;
+  }
+
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+
+  .mobile-padding {
+    @apply p-3 sm:p-4 md:p-6;
+  }
+
+  .mobile-gap {
+    @apply gap-2 sm:gap-4 md:gap-6;
+  }
+
+  /* Hide scrollbars while maintaining functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Text clamping utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Glass morphism effect */
+  .glass-effect {
+    @apply backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/20 dark:border-gray-700/50;
+  }
+
+  /* Gradient text utility */
+  .gradient-text {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent;
+  }
+
+  /* Card hover effects */
+  .card-hover {
+    @apply hover:shadow-2xl hover:-translate-y-1 transition-all duration-300;
+  }
+
+  /* Enhanced button styles */
+  .btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl px-4 py-2 hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+
+  /* Enhanced form inputs */
+  .input-field {
+    @apply px-4 py-2 border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+  }
+
+  /* Mobile-specific kanban column sizing */
+  .mobile-kanban-column {
+    @apply w-72 sm:w-80 md:w-72 lg:w-80 flex-shrink-0;
+  }
+
   /* Minimal scrollbars */
   .scrollbar-thin::-webkit-scrollbar {
     width: 4px;
@@ -360,4 +444,131 @@ textarea {
   .shadow-minimal-lg {
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   }
+
+  /* Mobile-specific styles */
+  @screen max-sm {
+    .mobile-kanban-column {
+      @apply w-64;
+    }
+
+    .mobile-task-card {
+      @apply p-3 text-sm;
+    }
+
+    .mobile-header {
+      @apply p-4 text-lg;
+    }
+
+    .mobile-sidebar {
+      @apply w-64;
+    }
+
+    .mobile-modal {
+      @apply mx-2 my-4 max-h-[90vh] overflow-y-auto;
+    }
+  }
+
+  /* Touch-friendly mobile interactions */
+  @media (hover: none) and (pointer: coarse) {
+    .card-hover:hover {
+      transform: none;
+      box-shadow: inherit;
+    }
+
+    .mobile-touch-target {
+      @apply min-h-[44px] min-w-[44px];
+    }
+  }
+}
+
+/* Custom animations for better UX */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-gentle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Better scrollbars for webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode scrollbars */
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
