@@ -839,47 +839,62 @@ const KanbanPage = () => {
               onDrop={(e) => handleDrop(e, column.status)}
             >
               {/* Enhanced Column Header */}
-              <div className={`bg-gradient-to-r ${column.color} rounded-t-xl p-4 border-2 ${column.borderColor}`}>
-                <div className="flex items-center justify-between mb-2">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`bg-gradient-to-r ${column.color} rounded-t-xl p-4 border-2 ${column.borderColor} relative overflow-hidden`}
+              >
+                <div className="absolute inset-0 bg-white/5"></div>
+                <div className="relative flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg bg-white/80 flex items-center justify-center ${column.iconColor}`}>
-                      {column.id === "pending" && <Circle className="w-4 h-4" />}
-                      {column.id === "in_progress" && <Clock className="w-4 h-4" />}
-                      {column.id === "review" && <Eye className="w-4 h-4" />}
-                      {column.id === "completed" && <CheckCircle className="w-4 h-4" />}
-                    </div>
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className={`w-10 h-10 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center ${column.iconColor} shadow-lg`}
+                    >
+                      {column.id === "pending" && <Circle className="w-5 h-5" />}
+                      {column.id === "in_progress" && <Clock className="w-5 h-5" />}
+                      {column.id === "review" && <Eye className="w-5 h-5" />}
+                      {column.id === "completed" && <CheckCircle className="w-5 h-5" />}
+                    </motion.div>
                     <div>
                       <h2 className="text-sm font-bold text-gray-900 dark:text-gray-100">
                         {column.title}
                       </h2>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">
+                      <motion.p
+                        key={column.tasks.length}
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        className="text-xs text-gray-600 dark:text-gray-400 font-medium"
+                      >
                         {column.tasks.length} tasks
-                      </p>
+                      </motion.p>
                     </div>
                   </div>
-                  
-                  <button 
+
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => {
                       setNewTaskColumn(column.status);
                       setShowNewTaskModal(true);
                     }}
-                    className="w-6 h-6 bg-white/80 rounded-lg flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-white transition-all"
+                    className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-white transition-all shadow-lg"
                     title={`Add task to ${column.title}`}
                   >
                     <Plus className="w-4 h-4" />
-                  </button>
+                  </motion.button>
                 </div>
 
-                {/* Progress indicator */}
-                <div className="w-full bg-white/50 rounded-full h-1">
-                  <div
-                    className="bg-gray-700 h-1 rounded-full transition-all duration-300"
-                    style={{ 
-                      width: `${Math.min((column.tasks.length / Math.max(filteredTasks.length, 1)) * 100, 100)}%` 
-                    }}
+                {/* Enhanced Progress indicator */}
+                <div className="relative w-full bg-white/30 rounded-full h-2 overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${Math.min((column.tasks.length / Math.max(filteredTasks.length, 1)) * 100, 100)}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="bg-gradient-to-r from-gray-700 to-gray-800 h-2 rounded-full shadow-sm"
                   />
                 </div>
-              </div>
+              </motion.div>
 
               {/* Enhanced Column Content */}
               <div className={`flex-1 ${column.bgColor} dark:bg-gray-800/50 rounded-b-xl border-2 border-t-0 ${column.borderColor} p-4 overflow-y-auto`}>
