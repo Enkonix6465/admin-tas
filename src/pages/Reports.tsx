@@ -1299,6 +1299,141 @@ const Reports = () => {
                       </div>
                     )}
 
+                    {/* Low Performers Analysis Section */}
+                    {selectedEmployee === "all" && reportData.lowPerformers && reportData.lowPerformers.length > 0 && (
+                      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-red-200/50 dark:border-red-700/50 p-6 mb-6">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
+                            <TrendingDown className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                              **Low Performers Analysis & Recommendations**
+                            </h3>
+                            <p className="text-sm text-red-600 dark:text-red-400">
+                              **{reportData.lowPerformers.length} team members require immediate attention**
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {reportData.lowPerformers.slice(0, 4).map((emp, index) => (
+                            <motion.div
+                              key={emp.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/10 dark:to-orange-900/10 rounded-xl p-5 border border-red-200 dark:border-red-800"
+                            >
+                              {/* Employee Header */}
+                              <div className="flex items-center gap-3 mb-4">
+                                <img
+                                  src={emp.avatar}
+                                  alt={emp.name}
+                                  className="w-12 h-12 rounded-full border-2 border-red-200"
+                                />
+                                <div className="flex-1">
+                                  <h4 className="font-bold text-gray-900 dark:text-gray-100">{emp.name}</h4>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">{emp.role} • {emp.department}</p>
+                                  <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                                    emp.performanceLevel.level === 'critical' ? 'bg-red-100 text-red-800' :
+                                    'bg-orange-100 text-orange-800'
+                                  }`}>
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      emp.performanceLevel.level === 'critical' ? 'bg-red-500' : 'bg-orange-500'
+                                    }`}></div>
+                                    {emp.performanceLevel.description}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Performance Metrics */}
+                              <div className="grid grid-cols-2 gap-3 mb-4">
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-red-600">{Math.round(emp.overallPerformanceScore)}%</div>
+                                  <div className="text-xs text-gray-600">Overall Score</div>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-orange-600">{Math.round(emp.timingScore)}%</div>
+                                  <div className="text-xs text-gray-600">Timing Score</div>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-red-500">{emp.overdueTasks}</div>
+                                  <div className="text-xs text-gray-600">Overdue Tasks</div>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-yellow-600">{emp.lateTasks}</div>
+                                  <div className="text-xs text-gray-600">Late Completions</div>
+                                </div>
+                              </div>
+
+                              {/* Key Issues */}
+                              <div className="mb-4">
+                                <h5 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">**Key Issues:**</h5>
+                                <div className="space-y-1">
+                                  {emp.overdueRate > 20 && (
+                                    <div className="text-xs text-red-600 flex items-center gap-1">
+                                      <AlertCircle className="w-3 h-3" />
+                                      {emp.overdueRate.toFixed(1)}% overdue rate
+                                    </div>
+                                  )}
+                                  {emp.lateRate > 30 && (
+                                    <div className="text-xs text-orange-600 flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
+                                      {emp.lateRate.toFixed(1)}% late completion rate
+                                    </div>
+                                  )}
+                                  {emp.avgDelayDays > 3 && (
+                                    <div className="text-xs text-yellow-600 flex items-center gap-1">
+                                      <Activity className="w-3 h-3" />
+                                      Avg {emp.avgDelayDays} days delay
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Top Recommendations */}
+                              <div>
+                                <h5 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">**Immediate Actions:**</h5>
+                                <div className="space-y-2">
+                                  {emp.recommendations.slice(0, 2).map((rec, i) => (
+                                    <div key={i} className="p-2 bg-white/80 dark:bg-gray-700/80 rounded-lg">
+                                      <div className="flex items-center gap-2 mb-1">
+                                        <div className={`w-2 h-2 rounded-full ${
+                                          rec.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
+                                        }`}></div>
+                                        <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">{rec.category}</span>
+                                      </div>
+                                      <p className="text-xs text-gray-600 dark:text-gray-400">{rec.suggestion}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Action Button */}
+                              <div className="mt-4 pt-3 border-t border-red-200 dark:border-red-800">
+                                <button
+                                  onClick={() => setSelectedEmployee(emp.id)}
+                                  className="w-full px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1"
+                                >
+                                  <User className="w-3 h-3" />
+                                  View Detailed Analysis
+                                </button>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        {reportData.lowPerformers.length > 4 && (
+                          <div className="mt-4 text-center">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              **+{reportData.lowPerformers.length - 4} more team members need attention**
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Team Overview Charts (when "All Employees" selected) */}
                     {selectedEmployee === "all" && (
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
