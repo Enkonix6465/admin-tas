@@ -649,7 +649,7 @@ function Layout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-white/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
