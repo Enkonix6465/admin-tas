@@ -359,6 +359,7 @@ export default function EmployeePerformancePage() {
               a.click();
               document.body.removeChild(a);
               URL.revokeObjectURL(url);
+              toast.success(`Performance report exported for ${selectedEmployee.name}! 📊`);
             }
           }}
           className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
