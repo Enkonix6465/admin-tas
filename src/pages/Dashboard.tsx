@@ -10,6 +10,7 @@ import {
   CheckCircle,
   Clock,
   Users,
+  User,
   Calendar,
   TrendingUp,
   AlertCircle,
