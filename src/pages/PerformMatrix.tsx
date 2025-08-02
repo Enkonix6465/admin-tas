@@ -325,6 +325,49 @@ export default function EmployeePerformancePage() {
         showFilters={false}
       />
 
+      {/* Actions Bar */}
+      <div className="px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+        <div className="flex items-center gap-4">
+          {bestDay && (
+            <div className="flex items-center gap-2 text-sm">
+              <Star className="w-4 h-4 text-yellow-500" />
+              <span className="text-gray-600 dark:text-gray-400">Best Day:</span>
+              <span className="font-semibold text-gray-900 dark:text-gray-100">{bestDay.day}</span>
+              <span className="text-xs text-gray-500">({bestDay.performance?.toFixed(1)}% success)</span>
+            </div>
+          )}
+        </div>
+        <button
+          onClick={() => {
+            if (selectedEmployee && performanceData) {
+              const exportData = {
+                employee: selectedEmployee,
+                performance: performanceData,
+                bestDay: bestDay,
+                trends: performanceTrends,
+                qualityProductivity: qualityProductivityData,
+                exportDate: new Date().toISOString()
+              };
+
+              const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `performance-${selectedEmployee.name?.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }
+          }}
+          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          disabled={!selectedEmployee}
+        >
+          <Download className="w-4 h-4" />
+          Export Report
+        </button>
+      </div>
+
       <div className="flex-1 overflow-hidden flex">
         {/* Employee Sidebar */}
         <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col">
