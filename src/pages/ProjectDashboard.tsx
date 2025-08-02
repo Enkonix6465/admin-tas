@@ -398,20 +398,18 @@ export default function ProjectDashboard() {
             </AnimatePresence>
           </div>
 
-          {/* Footer */}
+          {/* Status Footer */}
           <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/20">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-white/70">Budget:</span>
-              <span className="text-sm font-bold">{project.budget}</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1">
+                <Activity className="w-4 h-4 text-white/70" />
+                <span className="text-sm text-white/80 font-medium">Status:</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                project.status === 'active' ? 'bg-green-100 text-green-700' :
-                project.status === 'completed' ? 'bg-blue-100 text-blue-700' :
-                project.status === 'paused' ? 'bg-yellow-100 text-yellow-700' :
-                'bg-purple-100 text-purple-700'
-              }`}>
-                {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+            <div className={`flex items-center gap-2 px-3 py-2 rounded-full border ${getStatusInfo(project.status).color}`}>
+              {getStatusInfo(project.status).icon}
+              <span className="text-sm font-semibold">
+                {getStatusInfo(project.status).label}
               </span>
             </div>
           </div>
