@@ -230,8 +230,14 @@ const Reports = () => {
   }, []);
 
   useEffect(() => {
-    if (tasks.length > 0 && projects.length > 0 && employees.length > 0) {
-      generateReportData();
+    if (Array.isArray(tasks) && Array.isArray(projects) && Array.isArray(employees) &&
+        tasks.length > 0 && projects.length > 0 && employees.length > 0) {
+      try {
+        generateReportData();
+      } catch (error) {
+        console.error("Error generating report data:", error);
+        setReportData({ type: "Error", summary: {}, details: [] });
+      }
     }
   }, [tasks, projects, employees, selectedReport, selectedEmployee, dateRange, selectedProject]);
 
