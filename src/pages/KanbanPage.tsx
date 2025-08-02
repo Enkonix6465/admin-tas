@@ -45,7 +45,7 @@ const KanbanPage = () => {
   const [selectedPriority, setSelectedPriority] = useState("");
   const [selectedAssignee, setSelectedAssignee] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState("board"); // board, list, timeline
+  const [viewMode, setViewMode] = useState("board"); // board, list, timeline, table
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [showTaskDetailModal, setShowTaskDetailModal] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -609,10 +609,11 @@ const KanbanPage = () => {
             {/* View Mode Toggle */}
             <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
               {[
-                { id: "board", icon: Layers, label: "Board" },
-                { id: "list", icon: Eye, label: "List" },
-                { id: "timeline", icon: TrendingUp, label: "Timeline" }
-              ].map((mode) => (
+              { id: "board", icon: Layers, label: "Board" },
+              { id: "list", icon: Eye, label: "List" },
+              { id: "timeline", icon: TrendingUp, label: "Timeline" },
+              { id: "table", icon: Activity, label: "Table" }
+            ].map((mode) => (
                 <button
                   key={mode.id}
                   onClick={() => {
@@ -620,7 +621,11 @@ const KanbanPage = () => {
                     if (mode.id === 'list') {
                       toast.success('Switched to List view! 📋');
                     } else if (mode.id === 'timeline') {
-                      toast.success('Timeline view coming soon! ⏰');
+                      toast.success('Switched to Timeline view! ⏰');
+                    } else if (mode.id === 'table') {
+                      toast.success('Switched to Table view! 📊');
+                    } else if (mode.id === 'board') {
+                      toast.success('Switched to Board view! 📋');
                     }
                   }}
                   className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
@@ -781,8 +786,8 @@ const KanbanPage = () => {
 
       {/* Enhanced Kanban Board */}
       <div className="flex-1 min-h-0 p-6 flex gap-6">
-        {/* Kanban Columns */}
-        <div className="flex gap-6 h-full min-w-max overflow-x-auto flex-1">
+        {viewMode === "board" && (
+          <div className="flex gap-6 h-full min-w-max overflow-x-auto flex-1 w-full">
           {columns.map((column) => (
             <motion.div 
               key={column.id} 
@@ -886,7 +891,8 @@ const KanbanPage = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+          </div>
+        )}
 
         {/* High Priority Tasks Sidebar */}
         <div className="w-80 flex-shrink-0">
