@@ -273,13 +273,17 @@ export default function ProjectDashboard() {
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-                <Briefcase className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 bg-white/25 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
+                <Briefcase className="w-6 h-6 text-white drop-shadow-sm" />
               </div>
-              <div>
-                <span className="text-xs font-medium bg-white/20 px-2 py-1 rounded-full">
+              <div className="flex flex-col gap-1">
+                <span className="text-xs font-semibold bg-white/25 px-3 py-1 rounded-full border border-white/20">
                   Project #{index + 1}
                 </span>
+                <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getStatusInfo(project.status).color}`}>
+                  {getStatusInfo(project.status).icon}
+                  <span>{getStatusInfo(project.status).label}</span>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
