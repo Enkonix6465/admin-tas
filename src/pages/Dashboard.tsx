@@ -337,6 +337,68 @@ const Dashboard = () => {
     toast.success("Filters applied! 🔍");
   };
 
+  // Notification functions
+  const getNotifications = () => {
+    const today = new Date();
+    const notifications = [];
+
+    // Overdue tasks
+    const overdueTasks = tasks.filter(task => {
+      if (!task.due_date || task.status === 'completed') return false;
+      return new Date(task.due_date) < today;
+    });
+
+    overdueTasks.forEach(task => {
+      notifications.push({
+        id: `overdue-${task.id}`,
+        title: "Overdue Task",
+        message: `Task "${task.title}" is overdue`,
+        type: "warning",
+        time: task.due_date,
+        action: () => navigate('/kanbanpage')
+      });
+    });
+
+    // Tasks due today
+    const dueTodayTasks = tasks.filter(task => {
+      if (!task.due_date || task.status === 'completed') return false;
+      const dueDate = new Date(task.due_date);
+      return dueDate.toDateString() === today.toDateString();
+    });
+
+    dueTodayTasks.forEach(task => {
+      notifications.push({
+        id: `due-today-${task.id}`,
+        title: "Due Today",
+        message: `Task "${task.title}" is due today`,
+        type: "info",
+        time: task.due_date,
+        action: () => navigate('/kanbanpage')
+      });
+    });
+
+    // High priority tasks
+    const highPriorityTasks = tasks.filter(task =>
+      task.priority === 'high' && task.status !== 'completed'
+    ).slice(0, 3);
+
+    highPriorityTasks.forEach(task => {
+      notifications.push({
+        id: `high-priority-${task.id}`,
+        title: "High Priority Task",
+        message: `Task "${task.title}" needs attention`,
+        type: "urgent",
+        time: task.created_at?.seconds ? new Date(task.created_at.seconds * 1000).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        action: () => navigate('/kanbanpage')
+      });
+    });
+
+    return notifications.slice(0, 10); // Limit to 10 notifications
+  };
+
+  const notifications = getNotifications();
+  const unreadNotifications = notifications.length;
+
   // Navigate to specific task
   const navigateToTask = (task: any) => {
     navigate('/mytasks', { state: { selectedTask: task.id, highlight: true } });
