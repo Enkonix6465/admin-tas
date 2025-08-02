@@ -82,10 +82,8 @@ function Layout() {
   }, [filterOpen, sortOpen, workspaceOpen, projectOpen]);
 
   const toggleTheme = () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme);
-    localStorage.setItem("theme", newTheme ? "dark" : "light");
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
   };
 
   const isActive = (path: string) => location.pathname === path;
