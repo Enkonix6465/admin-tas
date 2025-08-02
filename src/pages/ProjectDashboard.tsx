@@ -36,6 +36,7 @@ import {
   Trash2,
   Share,
   ExternalLink,
+  X,
   Zap,
   Sparkles,
   Layers,
