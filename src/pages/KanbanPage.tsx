@@ -504,18 +504,31 @@ const KanbanPage = () => {
 
         {/* Progress Bar */}
         {task.progress > 0 && (
-          <div className="mb-3">
-            <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
-              <span>Progress</span>
-              <span>{task.progress}%</span>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-3"
+          >
+            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
+              <span className="font-medium">Progress</span>
+              <motion.span
+                className="font-bold text-blue-600"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                {task.progress}%
+              </motion.span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-1.5">
-              <div
-                className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
-                style={{ width: `${task.progress}%` }}
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 shadow-inner">
+              <motion.div
+                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full shadow-sm"
+                initial={{ width: 0 }}
+                animate={{ width: `${task.progress}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
               />
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Tags */}
