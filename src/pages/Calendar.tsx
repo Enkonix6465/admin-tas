@@ -582,7 +582,7 @@ const Calendar = () => {
                       }}
                       className="w-full text-left px-3 py-2 text-sm hover:bg-stone-100 dark:hover:bg-gray-700 rounded flex items-center gap-2"
                     >
-                      <Sync className="w-3 h-3" />
+                      <RefreshCw className="w-3 h-3" />
                       Sync Settings
                     </button>
                     <button
