@@ -304,7 +304,7 @@ export default function ProjectDashboard() {
                 initial={{ width: 0 }}
                 animate={{ width: `${project.progress}%` }}
                 transition={{ duration: 1, delay: index * 0.1 }}
-                className="h-full bg-gradient-to-r from-yellow-400 to-yellow-200 rounded-full shadow-lg"
+                className="h-full bg-gradient-to-r from-gray-600 to-gray-400 rounded-full shadow-lg"
               />
             </div>
           </div>
