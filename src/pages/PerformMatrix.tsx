@@ -216,6 +216,43 @@ export default function EmployeePerformancePage() {
 
     setDateChartData(dateData);
     setMonthChartData(monthData);
+
+    // Calculate best performing day
+    const dayPerformance = dateData.reduce((acc, item) => {
+      const dayOfWeek = new Date(item.date).toLocaleDateString('en-US', { weekday: 'long' });
+      if (!acc[dayOfWeek]) acc[dayOfWeek] = { completed: 0, total: 0 };
+      acc[dayOfWeek].completed += item.Completed;
+      acc[dayOfWeek].total += item.Completed + item.Reassigned;
+      return acc;
+    }, {});
+
+    const bestPerformingDay = Object.entries(dayPerformance)
+      .map(([day, data]) => ({
+        day,
+        performance: data.total > 0 ? (data.completed / data.total) * 100 : 0,
+        completed: data.completed
+      }))
+      .sort((a, b) => b.performance - a.performance)[0];
+
+    setBestDay(bestPerformingDay);
+
+    // Performance trends for last 30 days
+    const last30Days = dateData.slice(-30).map(item => ({
+      date: item.date,
+      performance: item.Completed > 0 ? (item.Completed / (item.Completed + item.Reassigned)) * 100 : 0,
+      quality: Math.random() * 40 + 60, // Mock quality score
+      productivity: item.Completed * 2 + Math.random() * 20
+    }));
+    setPerformanceTrends(last30Days);
+
+    // Quality vs Productivity matrix
+    const qualityProd = empTasks.map((task, index) => ({
+      quality: Math.random() * 40 + 60, // Mock quality score
+      productivity: (task.progress || 0) + Math.random() * 20,
+      taskId: task.id,
+      title: task.title?.substring(0, 20) + '...'
+    }));
+    setQualityProductivityData(qualityProd);
   }, [selectedEmployee, tasks, groupedEmployees]);
 
   const filteredEmployees = groupedEmployees.map(team => ({
