@@ -2175,16 +2175,31 @@ const Reports = () => {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                <div className="flex gap-2">
+                                <div className="flex flex-col gap-2">
                                   <button
                                     onClick={() => setSelectedEmployee(emp.id)}
-                                    className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                                    className={`px-3 py-2 text-xs font-semibold rounded-lg transition-colors ${
+                                      emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement' ?
+                                      'bg-red-500 hover:bg-red-600 text-white' :
+                                      'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                                    }`}
                                   >
-                                    View Details
+                                    {emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement' ?
+                                      '**🚨 Urgent Review**' : 'View Details'
+                                    }
                                   </button>
-                                  <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                                    Export
-                                  </button>
+
+                                  {(emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement') && (
+                                    <button className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors font-semibold">
+                                      **📋 Action Plan**
+                                    </button>
+                                  )}
+
+                                  {emp.performanceLevel?.level !== 'critical' && emp.performanceLevel?.level !== 'needs_improvement' && (
+                                    <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                                      Export Report
+                                    </button>
+                                  )}
                                 </div>
                               </td>
                             </motion.tr>
