@@ -449,7 +449,7 @@ const KanbanPage = () => {
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-tight mb-1">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-white leading-tight mb-1">
               {task.title}
             </h4>
             <div className="flex items-center gap-2">
@@ -620,7 +620,7 @@ const KanbanPage = () => {
                     if (mode.id === 'list') {
                       toast.success('Switched to List view! 📋');
                     } else if (mode.id === 'timeline') {
-                      toast.success('Timeline view coming soon! ⏰');
+                      toast.success('Timeline view coming soon! ���');
                     }
                   }}
                   className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
