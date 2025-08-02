@@ -875,19 +875,19 @@ const Reports = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden flex">
+      <div className="flex-1 min-h-0 flex">
         {/* Report Types Sidebar */}
         <div className="w-80 border-r border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl flex flex-col">
           <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-              Report Types
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+              **Report Types**
             </h2>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Choose a report to analyze
+            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-1">
+              **Choose a report to analyze**
             </p>
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3">
             {reportTypes.map((report) => (
               <motion.button
                 key={report.id}
