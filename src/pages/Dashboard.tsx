@@ -331,11 +331,50 @@ const Dashboard = () => {
 
   const handleShare = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
-      toast.success("Dashboard link copied! 📋");
+      // Check if Clipboard API is available
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.success("Dashboard link copied! 📋");
+      } else {
+        // Fallback for when Clipboard API is not available
+        fallbackCopyTextToClipboard(window.location.href);
+      }
     } catch (error) {
       console.error("Failed to copy:", error);
-      toast.error("Failed to copy link");
+      // Try fallback method
+      fallbackCopyTextToClipboard(window.location.href);
+    }
+  };
+
+  const fallbackCopyTextToClipboard = (text: string) => {
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+
+      // Avoid scrolling to bottom
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      textArea.style.pointerEvents = "none";
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+
+      if (successful) {
+        toast.success("Dashboard link copied! 📋");
+      } else {
+        // If all copy methods fail, show the URL to user
+        toast.error("Copy not supported. URL: " + text.substring(0, 50) + "...");
+      }
+    } catch (err) {
+      console.error('Fallback copy failed:', err);
+      // Last resort - show a modal or alert with the URL
+      toast.error("Copy not supported. Please manually copy the URL from your browser.");
     }
   };
 
