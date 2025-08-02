@@ -1363,29 +1363,64 @@ const Reports = () => {
                           </div>
                         </div>
 
-                        {/* Reassignment Analysis */}
+                        {/* Reassignment Analysis with Donut Chart */}
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-                            Task Reassignment Analysis
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                            **Task Reassignment Analysis**
                           </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            **Team member task stability indicators**
+                          </p>
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
-                              <BarChart data={reportData.chartData.reassignmentAnalysis}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                                <XAxis dataKey="name" stroke="#6b7280" />
-                                <YAxis stroke="#6b7280" />
+                              <RechartsPieChart>
+                                <Pie
+                                  data={reportData.chartData.reassignmentAnalysis.map(emp => ({
+                                    ...emp,
+                                    fullName: employees.find(e => e.name.includes(emp.name))?.name || emp.name,
+                                    value: emp.reassignmentRate,
+                                    stableRate: 100 - emp.reassignmentRate
+                                  }))}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={80}
+                                  outerRadius={120}
+                                  dataKey="value"
+                                  label={({ fullName, value }) => `**${fullName}: ${Math.round(value)}%**`}
+                                >
+                                  {reportData.chartData.reassignmentAnalysis.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={
+                                      entry.reassignmentRate > 20 ? '#ef4444' :
+                                      entry.reassignmentRate > 10 ? '#f59e0b' : '#10b981'
+                                    } />
+                                  ))}
+                                </Pie>
                                 <Tooltip
                                   contentStyle={{
                                     backgroundColor: '#1f2937',
                                     border: 'none',
                                     borderRadius: '12px',
-                                    color: '#f9fafb'
+                                    color: '#f9fafb',
+                                    fontWeight: 'bold'
                                   }}
+                                  formatter={(value) => [`**${Math.round(value)}%**`, '**Reassignment Rate**']}
                                 />
-                                <Legend />
-                                <Bar dataKey="reassignmentRate" fill="#f59e0b" name="Reassignment Rate %" radius={[4, 4, 0, 0]} />
-                              </BarChart>
+                              </RechartsPieChart>
                             </ResponsiveContainer>
+                          </div>
+                          <div className="flex justify-center gap-4 mt-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                              <span className="text-xs font-bold text-gray-600 dark:text-gray-400">**Low (&lt;10%)**</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                              <span className="text-xs font-bold text-gray-600 dark:text-gray-400">**Medium (10-20%)**</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                              <span className="text-xs font-bold text-gray-600 dark:text-gray-400">**High (&gt;20%)**</span>
+                            </div>
                           </div>
                         </div>
                       </div>
