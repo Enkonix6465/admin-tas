@@ -1295,31 +1295,70 @@ const Reports = () => {
                           </div>
                         </div>
 
-                        {/* Quality vs Productivity Analysis */}
+                        {/* Quality vs Productivity Scatter Plot */}
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
-                            Quality vs Productivity Matrix
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+                            **Quality vs Productivity Matrix**
                           </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                            **Employee performance quadrant analysis**
+                          </p>
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
-                              <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={reportData.chartData.qualityProductivity}>
-                                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                                  <XAxis dataKey="name" stroke="#6b7280" />
-                                  <YAxis stroke="#6b7280" />
-                                  <Tooltip
-                                    contentStyle={{
-                                      backgroundColor: '#1f2937',
-                                      border: 'none',
-                                      borderRadius: '12px',
-                                      color: '#f9fafb'
-                                    }}
-                                  />
-                                  <Legend />
-                                  <Bar dataKey="quality" fill="#8b5cf6" name="Quality Score" radius={[4, 4, 0, 0]} />
-                                  <Bar dataKey="productivity" fill="#06b6d4" name="Productivity Score" radius={[4, 4, 0, 0]} />
-                                </BarChart>
-                              </ResponsiveContainer>
+                              <AreaChart data={reportData.chartData.qualityProductivity.map(emp => ({
+                                ...emp,
+                                fullName: employees.find(e => e.name.includes(emp.name))?.name || emp.name
+                              }))}>
+                                <defs>
+                                  <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+                                  </linearGradient>
+                                  <linearGradient id="productivityGradient" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
+                                  </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                                <XAxis
+                                  dataKey="fullName"
+                                  stroke="#6b7280"
+                                  tick={{ fontSize: 12, fontWeight: 'bold' }}
+                                  angle={-45}
+                                  textAnchor="end"
+                                  height={100}
+                                />
+                                <YAxis stroke="#6b7280" tick={{ fontWeight: 'bold' }} />
+                                <Tooltip
+                                  contentStyle={{
+                                    backgroundColor: '#1f2937',
+                                    border: 'none',
+                                    borderRadius: '12px',
+                                    color: '#f9fafb',
+                                    fontWeight: 'bold'
+                                  }}
+                                  formatter={(value, name) => [`**${value}%**`, `**${name}**`]}
+                                />
+                                <Legend />
+                                <Area
+                                  type="monotone"
+                                  dataKey="quality"
+                                  stroke="#8b5cf6"
+                                  fillOpacity={1}
+                                  fill="url(#qualityGradient)"
+                                  strokeWidth={3}
+                                  name="**Quality Score**"
+                                />
+                                <Area
+                                  type="monotone"
+                                  dataKey="productivity"
+                                  stroke="#06b6d4"
+                                  fillOpacity={0.6}
+                                  fill="url(#productivityGradient)"
+                                  strokeWidth={3}
+                                  name="**Productivity Score**"
+                                />
+                              </AreaChart>
                             </ResponsiveContainer>
                           </div>
                         </div>
