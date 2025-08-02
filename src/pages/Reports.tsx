@@ -686,9 +686,20 @@ const Reports = () => {
                 {/* Report Header */}
                 <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                      {reportData.type}
-                    </h2>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {reportData.type}
+                      </h2>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-1 px-2 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 rounded-full text-xs">
+                          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                          <span>Live Data</span>
+                        </div>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Connected to Firebase
+                        </span>
+                      </div>
+                    </div>
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <Calendar className="w-4 h-4" />
                       Generated {new Date().toLocaleDateString()}
