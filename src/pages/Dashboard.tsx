@@ -1031,13 +1031,100 @@ const Dashboard = () => {
               className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
             >
               <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">All Tasks</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">All Tasks</h2>
+
+                  {/* Task Filters */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    {/* Project Filter */}
+                    <select
+                      value={filters.project || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, project: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Projects</option>
+                      {projects.map((project: any) => (
+                        <option key={project.id} value={project.id}>
+                          {project.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Status Filter */}
+                    <select
+                      value={filters.status || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Status</option>
+                      <option value="pending">Pending</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="review">Review</option>
+                      <option value="completed">Completed</option>
+                    </select>
+
+                    {/* Priority Filter */}
+                    <select
+                      value={filters.priority || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Priority</option>
+                      <option value="high">High</option>
+                      <option value="medium">Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+
+                    {/* Assigned Filter */}
+                    <select
+                      value={filters.assigned || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, assigned: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Assignees</option>
+                      {employees.map((employee: any) => (
+                        <option key={employee.id} value={employee.id}>
+                          {employee.name || employee.email}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Special Filters */}
+                    <div className="flex items-center gap-2">
+                      <label className="flex items-center gap-1 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={filters.overdue || false}
+                          onChange={(e) => setFilters(prev => ({ ...prev, overdue: e.target.checked }))}
+                          className="rounded border-gray-300"
+                        />
+                        <span className="text-gray-700 dark:text-gray-300">Overdue</span>
+                      </label>
+                    </div>
+
+                    {/* Clear Filters */}
+                    {Object.keys(filters).length > 0 && (
+                      <button
+                        onClick={() => setFilters({})}
+                        className="text-sm text-red-600 hover:text-red-700 font-medium"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="p-3">
                 <div className="space-y-1">
-                  {filteredTasks.map((task: any) => (
+                  {getFilteredTasks().map((task: any) => (
                     <TaskItem key={task.id} task={task} showProject={true} />
                   ))}
+                  {getFilteredTasks().length === 0 && (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      <Target className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No tasks match the current filters</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
