@@ -1291,8 +1291,9 @@ const KanbanPage = () => {
           </div>
         )}
 
-        {/* High Priority Tasks Sidebar */}
-        <div className="w-80 flex-shrink-0">
+        {/* High Priority Tasks Sidebar - Only show in board view */}
+        {viewMode === "board" && (
+          <div className="w-80 flex-shrink-0">
           <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl border-2 border-red-200 dark:border-red-800 h-full flex flex-col">
             <div className="p-4 border-b border-red-200 dark:border-red-800">
               <div className="flex items-center gap-3">
@@ -1373,6 +1374,7 @@ const KanbanPage = () => {
             </div>
           </div>
         </div>
+        )}
       </div>
 
       {/* Enhanced New Task Modal */}
