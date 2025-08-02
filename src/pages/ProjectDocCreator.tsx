@@ -59,7 +59,6 @@ import {
   Star,
   Globe,
   Palette,
-  Layout,
   Type,
   Image,
   Code,
