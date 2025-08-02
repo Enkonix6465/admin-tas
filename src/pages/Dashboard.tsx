@@ -689,7 +689,7 @@ const Dashboard = () => {
                 Dashboard Overview
               </h1>
               <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
-                **Welcome back! Here's what's happening with your projects**
+                Welcome back! Here's what's happening with your projects
               </p>
             </div>
             </div>
