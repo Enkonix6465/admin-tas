@@ -800,9 +800,9 @@ const Dashboard = () => {
       </div>
 
       {/* Enhanced Content */}
-      <div className="flex-1 min-h-0 p-6 overflow-y-auto">
+      <div className="flex-1 min-h-0 p-4 sm:p-6 overflow-y-auto">
         {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <StatCard
             title="Active Projects"
             value={stats.activeProjects}
@@ -854,8 +854,8 @@ const Dashboard = () => {
               className="grid grid-cols-1 lg:grid-cols-3 gap-6"
             >
               {/* Recent Projects */}
-              <div className="lg:col-span-2">
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+              <div className="lg:col-span-2 min-h-0">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden h-full flex flex-col">
                   <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Active Projects</h2>
                     <button 
@@ -865,7 +865,7 @@ const Dashboard = () => {
                       View All <ExternalLink className="w-3 h-3" />
                     </button>
                   </div>
-                  <div className="p-6 space-y-4">
+                  <div className="p-4 sm:p-6 space-y-4 flex-1 overflow-y-auto">
                     {projects.slice(0, 3).map((project: any) => (
                       <ProjectCard key={project.id} project={project} />
                     ))}
@@ -887,9 +887,9 @@ const Dashboard = () => {
               </div>
 
               {/* Recent Tasks & Team */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6 min-h-0 flex flex-col">
                 {/* Recent Tasks */}
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden flex-1 flex flex-col">
                   <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Recent Tasks</h2>
                     <button 
@@ -899,7 +899,7 @@ const Dashboard = () => {
                       View All <ExternalLink className="w-3 h-3" />
                     </button>
                   </div>
-                  <div className="p-3">
+                  <div className="p-3 flex-1 overflow-y-auto">
                     <div className="space-y-1">
                       {filteredTasks.slice(0, 5).map((task: any) => (
                         <TaskItem key={task.id} task={task} showProject={true} />
@@ -915,7 +915,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Team Overview */}
-                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden flex-shrink-0">
                   <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Team</h2>
                     <button 
