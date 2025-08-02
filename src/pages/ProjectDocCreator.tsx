@@ -940,7 +940,7 @@ const ProjectDocCreator = () => {
                 </p>
                 <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
                   <div className="flex items-center gap-2">
-                    <Template className="w-4 h-4" />
+                    <Layout className="w-4 h-4" />
                     <span>Professional Templates</span>
                   </div>
                   <div className="flex items-center gap-2">
