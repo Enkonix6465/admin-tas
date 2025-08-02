@@ -338,6 +338,22 @@ const Dashboard = () => {
     };
   }, []);
 
+  // Handle click outside for dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showQuickActions || showNotifications) {
+        const target = event.target as Element;
+        if (!target.closest('.dropdown-container')) {
+          setShowQuickActions(false);
+          setShowNotifications(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showQuickActions, showNotifications]);
+
   const getEmployeeName = (empId: string) =>
     employees.find((emp: any) => emp.id === empId)?.name || "Unassigned";
 
