@@ -802,7 +802,7 @@ const Reports = () => {
                           <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={reportData.performanceTrends}>
                               <defs>
-                                {employees.map((emp, index) => (
+                                {employees && Array.isArray(employees) && employees.map((emp, index) => (
                                   <linearGradient key={emp.id} id={`color${index}`} x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor={colors[index]} stopOpacity={0.8}/>
                                     <stop offset="95%" stopColor={colors[index]} stopOpacity={0.1}/>
