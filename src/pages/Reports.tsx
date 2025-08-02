@@ -2119,22 +2119,58 @@ const Reports = () => {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="space-y-2">
-                                  <div className="flex items-center gap-2">
-                                    <div className={`w-3 h-3 rounded-full ${
+                                <div className="space-y-2 max-w-xs">
+                                  {/* Critical Issues */}
+                                  {(emp.overdueTasks > 0 || emp.lateRate > 30 || emp.overdueRate > 20) && (
+                                    <div className="space-y-1">
+                                      <div className="text-xs font-semibold text-red-700 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        **Critical Issues:**
+                                      </div>
+                                      {emp.overdueTasks > 0 && (
+                                        <div className="text-xs text-red-600">• {emp.overdueTasks} tasks overdue</div>
+                                      )}
+                                      {emp.lateRate > 30 && (
+                                        <div className="text-xs text-red-600">• {emp.lateRate.toFixed(1)}% late completion rate</div>
+                                      )}
+                                      {emp.overdueRate > 20 && (
+                                        <div className="text-xs text-red-600">• {emp.overdueRate.toFixed(1)}% overdue rate</div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* Recommendations */}
+                                  {(emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement') && (
+                                    <div className="space-y-1">
+                                      <div className="text-xs font-semibold text-blue-700 flex items-center gap-1">
+                                        <Zap className="w-3 h-3" />
+                                        **Top Recommendations:**
+                                      </div>
+                                      {emp.overdueTasks > 3 && (
+                                        <div className="text-xs text-blue-600">• Daily task prioritization</div>
+                                      )}
+                                      {emp.lateRate > 30 && (
+                                        <div className="text-xs text-blue-600">• Time management training</div>
+                                      )}
+                                      {emp.avgDelayDays > 3 && (
+                                        <div className="text-xs text-blue-600">• Better task estimation</div>
+                                      )}
+                                      {emp.reassignmentRate > 15 && (
+                                        <div className="text-xs text-blue-600">• Clearer requirements gathering</div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* Performance Trend */}
+                                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+                                    <div className={`w-2 h-2 rounded-full ${
                                       emp.trendDirection === 'up' ? 'bg-green-500' :
                                       emp.trendDirection === 'down' ? 'bg-red-500' : 'bg-gray-400'
                                     }`}></div>
-                                    <span className="text-xs font-semibold">
-                                      {emp.trendDirection === 'up' ? 'Improving' :
+                                    <span className="text-xs text-gray-600">
+                                      **Trend:** {emp.trendDirection === 'up' ? 'Improving' :
                                        emp.trendDirection === 'down' ? 'Declining' : 'Stable'}
                                     </span>
-                                  </div>
-                                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Recent: {emp.recentCompletions} tasks
-                                  </div>
-                                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Previous: {emp.previousCompletions} tasks
                                   </div>
                                 </div>
                               </td>
