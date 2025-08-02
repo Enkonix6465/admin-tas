@@ -399,6 +399,37 @@ const Dashboard = () => {
   const notifications = getNotifications();
   const unreadNotifications = notifications.length;
 
+  // Filter tasks based on current filters
+  const getFilteredTasks = () => {
+    let filtered = [...tasks];
+
+    if (filters.project) {
+      filtered = filtered.filter(task => task.project_id === filters.project);
+    }
+
+    if (filters.status) {
+      filtered = filtered.filter(task => task.status === filters.status || task.progress_status === filters.status);
+    }
+
+    if (filters.priority) {
+      filtered = filtered.filter(task => task.priority === filters.priority);
+    }
+
+    if (filters.assigned) {
+      filtered = filtered.filter(task => task.assigned_to === filters.assigned);
+    }
+
+    if (filters.overdue) {
+      const today = new Date();
+      filtered = filtered.filter(task => {
+        if (!task.due_date || task.status === 'completed') return false;
+        return new Date(task.due_date) < today;
+      });
+    }
+
+    return filtered;
+  };
+
   // Navigate to specific task
   const navigateToTask = (task: any) => {
     navigate('/mytasks', { state: { selectedTask: task.id, highlight: true } });
