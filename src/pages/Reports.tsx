@@ -2004,24 +2004,35 @@ const Reports = () => {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="space-y-2">
-                                  <div className="flex justify-between text-xs">
-                                    <span>Total: {emp.totalTasks}</span>
-                                    <span>✅ {emp.completedTasks}</span>
-                                  </div>
-                                  <div className="flex justify-between text-xs">
-                                    <span>🔄 {emp.inProgressTasks}</span>
-                                    <span>⏳ {emp.pendingTasks}</span>
-                                  </div>
-                                  {emp.overdueTasks > 0 && (
-                                    <div className="text-xs text-red-600">
-                                      ⚠️ {emp.overdueTasks} overdue
+                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="text-center p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                                      <div className="font-bold text-green-700">{emp.onTimeTasks || 0}</div>
+                                      <div className="text-green-600">On-Time</div>
                                     </div>
-                                  )}
-                                  {emp.reassignedTasks > 0 && (
-                                    <div className="text-xs text-orange-600">
-                                      🔄 {emp.reassignedTasks} reassigned
+                                    <div className="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                                      <div className="font-bold text-red-700">{emp.lateTasks || 0}</div>
+                                      <div className="text-red-600">Late</div>
                                     </div>
-                                  )}
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="text-center p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
+                                      <div className="font-bold text-orange-700">{emp.overdueTasks || 0}</div>
+                                      <div className="text-orange-600">Overdue</div>
+                                    </div>
+                                    <div className="text-center p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                                      <div className="font-bold text-yellow-700">{emp.avgDelayDays || 0}d</div>
+                                      <div className="text-yellow-600">Avg Delay</div>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-center">
+                                    <span className={`px-2 py-1 rounded-full ${
+                                      (emp.timingScore || 0) >= 70 ? 'bg-green-100 text-green-700' :
+                                      (emp.timingScore || 0) >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                                      'bg-red-100 text-red-700'
+                                    }`}>
+                                      **Timing Score: {Math.round(emp.timingScore || 0)}%**
+                                    </span>
+                                  </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
