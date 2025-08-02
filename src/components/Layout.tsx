@@ -505,7 +505,7 @@ function Layout() {
                         onClick={() => setProjectOpen(false)}
                         className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                       >
-                        🚀 Product Launch Q4
+                        ���� Product Launch Q4
                       </button>
                       <button
                         onClick={() => setProjectOpen(false)}
@@ -649,7 +649,7 @@ function Layout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-white/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
+        <main className="flex-1 flex flex-col min-h-0 bg-white/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -657,7 +657,7 @@ function Layout() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
-              className="h-full"
+              className="flex-1 min-h-0 overflow-auto"
             >
               <Outlet />
             </motion.div>
