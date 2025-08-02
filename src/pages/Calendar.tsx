@@ -604,144 +604,216 @@ const Calendar = () => {
 
         {/* Calendar Grid */}
         <div className="flex-1 overflow-auto">
-          <div className="h-full bg-white dark:bg-gray-800 m-4 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
-            {/* Week Headers - Only show for month and week view */}
-            {viewMode !== "day" && (
-              <div className={`grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-gray-200 dark:border-gray-700 flex-shrink-0`}>
-                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-                  <div
-                    key={day}
-                    className="p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50"
-                  >
-                    {day}
-                  </div>
-                ))}
+          {activeView === "timeline" ? (
+            // Timeline View
+            <div className="h-full bg-stone-50 dark:bg-gray-800 m-4 rounded-lg border border-stone-200 dark:border-gray-700 overflow-hidden shadow-sm">
+              <div className="p-4 border-b border-stone-200 dark:border-gray-700">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Timeline View</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Events organized chronologically</p>
               </div>
-            )}
 
-            {/* Calendar Days */}
-            <div className={`flex-1 overflow-auto ${
-              viewMode === "day" ? "p-4" : 
-              viewMode === "week" ? "grid grid-cols-7" : 
-              "grid grid-cols-7"
-            }`}>
-              {viewMode === "day" ? (
-                // Day view - single day layout
+              <div className="flex-1 overflow-y-auto p-4">
                 <div className="space-y-4">
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                      {format(currentDate, "EEEE")}
-                    </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-400">
-                      {format(currentDate, "MMMM d, yyyy")}
-                    </p>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    {getEventsForDate(currentDate).map((event, index) => (
+                  {getAllFilteredEvents()
+                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                    .map((event, index) => (
                       <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className={`p-4 rounded-lg border ${getStatusColor(event.status)}`}
-                        style={{ 
-                          borderLeftWidth: "4px",
-                          borderLeftColor: getEventColor(event)
-                        }}
+                        key={event.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="flex items-start gap-4 p-4 bg-white dark:bg-gray-700 rounded-lg border border-stone-200 dark:border-gray-600 hover:shadow-md transition-all"
                       >
-                        <div className="font-medium text-lg mb-2">{event.title}</div>
-                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                          <span className="capitalize">{event.type}</span>
-                          <span>•</span>
-                          <span className="capitalize">{event.status}</span>
-                          {event.priority && (
-                            <>
-                              <span>•</span>
-                              <span className={`capitalize ${
-                                event.priority === "high" ? "text-red-600" :
-                                event.priority === "medium" ? "text-yellow-600" :
-                                "text-green-600"
+                        <div className="flex flex-col items-center">
+                          <div
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: getEventColor(event) }}
+                          />
+                          {index < getAllFilteredEvents().length - 1 && (
+                            <div className="w-0.5 h-8 bg-stone-300 dark:bg-gray-600 mt-2" />
+                          )}
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100">{event.title}</h3>
+                            <span className="text-sm text-gray-500">{format(event.date, "MMM d, yyyy")}</span>
+                          </div>
+
+                          <div className="flex items-center gap-3 text-sm">
+                            <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(event.status)}`}>
+                              {event.status.replace("_", " ")}
+                            </span>
+                            {event.priority && (
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                event.priority === "high" ? "bg-red-100 text-red-700" :
+                                event.priority === "medium" ? "bg-yellow-100 text-yellow-700" :
+                                "bg-green-100 text-green-700"
                               }`}>
                                 {event.priority} priority
                               </span>
-                            </>
-                          )}
+                            )}
+                            {event.project_id && (
+                              <span className="text-gray-600 dark:text-gray-400">
+                                {projects.find(p => p.id === event.project_id)?.name}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </motion.div>
                     ))}
-                    
-                    {getEventsForDate(currentDate).length === 0 && (
-                      <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                        <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                        <p className="text-lg">No events for today</p>
-                        <p className="text-sm">Your schedule is clear!</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                // Week and Month view - grid layout
-                calendarDays.map((day, index) => {
-                  const dayEvents = getEventsForDate(day);
-                  const isToday_ = isToday(day);
-                  const isCurrentMonth = viewMode === "week" || isSameMonth(day, currentDate);
 
-                  return (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: index * 0.01 }}
-                      className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer relative ${
-                        !isCurrentMonth ? "text-gray-400 bg-gray-50/50 dark:bg-gray-800/50" : ""
-                      } ${isToday_ ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
-                      onClick={() => setSelectedDate(day)}
-                    >
-                      <div className={`text-sm font-medium mb-2 ${
-                        isToday_ 
-                          ? "w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs" 
-                          : ""
-                      }`}>
-                        {format(day, "d")}
-                      </div>
-                      
-                      <div className="space-y-1 overflow-hidden">
-                        {dayEvents.slice(0, viewMode === "week" ? 6 : 3).map((event, eventIndex) => (
-                          <motion.div
-                            key={eventIndex}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: eventIndex * 0.1 }}
-                            className={`text-xs px-2 py-1 rounded border text-left cursor-pointer hover:shadow-sm transition-all ${getStatusColor(event.status)}`}
-                            style={{ 
-                              borderLeftWidth: "3px",
-                              borderLeftColor: getEventColor(event)
-                            }}
-                            title={`${event.title} - ${event.status}`}
-                          >
-                            <div className="font-medium truncate">{event.title}</div>
-                            {event.assigned_to && viewMode === "week" && (
-                              <div className="flex items-center gap-1 mt-1 opacity-75">
-                                <User className="w-2 h-2" />
-                                <span className="truncate">Assigned</span>
-                              </div>
-                            )}
-                          </motion.div>
-                        ))}
-                        
-                        {dayEvents.length > (viewMode === "week" ? 6 : 3) && (
-                          <div className="text-xs text-gray-500 px-2 py-1">
-                            +{dayEvents.length - (viewMode === "week" ? 6 : 3)} more
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })
-              )}
+                  {getAllFilteredEvents().length === 0 && (
+                    <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                      <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                      <p className="text-lg">No events found</p>
+                      <p className="text-sm">Try adjusting your filters</p>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            // Calendar View
+            <div className="h-full bg-stone-50 dark:bg-gray-800 m-4 rounded-lg border border-stone-200 dark:border-gray-700 overflow-hidden flex flex-col shadow-sm">
+              {/* Week Headers - Only show for month and week view */}
+              {viewMode !== "day" && (
+                <div className={`grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-stone-200 dark:border-gray-700 flex-shrink-0`}>
+                  {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                    <div
+                      key={day}
+                      className="p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400 bg-stone-100 dark:bg-gray-700/50"
+                    >
+                      {day}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Calendar Days */}
+              <div className={`flex-1 overflow-auto ${
+                viewMode === "day" ? "p-4" :
+                viewMode === "week" ? "grid grid-cols-7" :
+                "grid grid-cols-7"
+              }`}>
+                {viewMode === "day" ? (
+                  // Day view - single day layout
+                  <div className="space-y-4">
+                    <div className="text-center mb-6">
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                        {format(currentDate, "EEEE")}
+                      </h2>
+                      <p className="text-lg text-gray-600 dark:text-gray-400">
+                        {format(currentDate, "MMMM d, yyyy")}
+                      </p>
+                    </div>
+
+                    <div className="space-y-3">
+                      {getEventsForDate(currentDate).map((event, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className={`p-4 rounded-lg border ${getStatusColor(event.status)}`}
+                          style={{
+                            borderLeftWidth: "4px",
+                            borderLeftColor: getEventColor(event)
+                          }}
+                        >
+                          <div className="font-medium text-lg mb-2">{event.title}</div>
+                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                            <span className="capitalize">{event.type}</span>
+                            <span>•</span>
+                            <span className="capitalize">{event.status}</span>
+                            {event.priority && (
+                              <>
+                                <span>•</span>
+                                <span className={`capitalize ${
+                                  event.priority === "high" ? "text-red-600" :
+                                  event.priority === "medium" ? "text-yellow-600" :
+                                  "text-green-600"
+                                }`}>
+                                  {event.priority} priority
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+
+                      {getEventsForDate(currentDate).length === 0 && (
+                        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                          <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                          <p className="text-lg">No events for today</p>
+                          <p className="text-sm">Your schedule is clear!</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  // Week and Month view - grid layout
+                  calendarDays.map((day, index) => {
+                    const dayEvents = getEventsForDate(day);
+                    const isToday_ = isToday(day);
+                    const isCurrentMonth = viewMode === "week" || isSameMonth(day, currentDate);
+
+                    return (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: index * 0.01 }}
+                        className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-stone-200 dark:border-gray-700 hover:bg-stone-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer relative ${
+                          !isCurrentMonth ? "text-gray-400 bg-stone-100/50 dark:bg-gray-800/50" : ""
+                        } ${isToday_ ? "bg-blue-100 dark:bg-blue-900/20" : ""}`}
+                        onClick={() => setSelectedDate(day)}
+                      >
+                        <div className={`text-sm font-medium mb-2 ${
+                          isToday_
+                            ? "w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs"
+                            : ""
+                        }`}>
+                          {format(day, "d")}
+                        </div>
+
+                        <div className="space-y-1 overflow-hidden">
+                          {dayEvents.slice(0, viewMode === "week" ? 6 : 3).map((event, eventIndex) => (
+                            <motion.div
+                              key={eventIndex}
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: eventIndex * 0.1 }}
+                              className={`text-xs px-2 py-1 rounded border text-left cursor-pointer hover:shadow-sm transition-all ${getStatusColor(event.status)}`}
+                              style={{
+                                borderLeftWidth: "3px",
+                                borderLeftColor: getEventColor(event)
+                              }}
+                              title={`${event.title} - ${event.status}`}
+                            >
+                              <div className="font-medium truncate">{event.title}</div>
+                              {event.assigned_to && viewMode === "week" && (
+                                <div className="flex items-center gap-1 mt-1 opacity-75">
+                                  <User className="w-2 h-2" />
+                                  <span className="truncate">Assigned</span>
+                                </div>
+                              )}
+                            </motion.div>
+                          ))}
+
+                          {dayEvents.length > (viewMode === "week" ? 6 : 3) && (
+                            <div className="text-xs text-gray-500 px-2 py-1">
+                              +{dayEvents.length - (viewMode === "week" ? 6 : 3)} more
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
