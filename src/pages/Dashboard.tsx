@@ -686,7 +686,7 @@ const Dashboard = () => {
               </div>
               <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
-                **Dashboard Overview**
+                Dashboard Overview
               </h1>
               <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
                 **Welcome back! Here's what's happening with your projects**
