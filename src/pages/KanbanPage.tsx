@@ -1569,19 +1569,46 @@ const KanbanPage = () => {
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
               className="relative w-full max-w-4xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700"
             >
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-3">
-                  {getPriorityIcon(selectedTask.priority)}
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                    {selectedTask.title}
-                  </h2>
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-black/10"></div>
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.2 }}
+                      className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm"
+                    >
+                      {getPriorityIcon(selectedTask.priority)}
+                    </motion.div>
+                    <div>
+                      <motion.h2
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="text-2xl font-bold text-white"
+                      >
+                        {selectedTask.title}
+                      </motion.h2>
+                      <motion.p
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-blue-100 text-sm"
+                      >
+                        Task #{selectedTask.id?.slice(-8)} • {selectedTask.status?.replace('_', ' ').toUpperCase()}
+                      </motion.p>
+                    </div>
+                  </div>
+                  <motion.button
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    whileHover={{ scale: 1.1, rotate: 90 }}
+                    onClick={() => setShowTaskDetailModal(false)}
+                    className="w-10 h-10 flex items-center justify-center text-white/80 hover:text-white transition-colors rounded-xl hover:bg-white/20 backdrop-blur-sm"
+                  >
+                    <X className="w-5 h-5" />
+                  </motion.button>
                 </div>
-                <button
-                  onClick={() => setShowTaskDetailModal(false)}
-                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  <X className="w-5 h-5" />
-                </button>
               </div>
 
               <div className="p-6">
