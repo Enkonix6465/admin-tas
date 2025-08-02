@@ -193,11 +193,11 @@ export default function ProjectDashboard() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'from-green-500 to-emerald-600';
-      case 'completed': return 'from-blue-500 to-indigo-600';
-      case 'paused': return 'from-yellow-500 to-orange-600';
-      case 'planning': return 'from-purple-500 to-pink-600';
-      default: return 'from-gray-500 to-slate-600';
+      case 'active': return 'from-black to-gray-800';
+      case 'completed': return 'from-gray-600 to-gray-800';
+      case 'paused': return 'from-gray-400 to-gray-600';
+      case 'planning': return 'from-gray-300 to-gray-500';
+      default: return 'from-gray-500 to-gray-700';
     }
   };
 
