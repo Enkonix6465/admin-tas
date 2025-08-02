@@ -88,6 +88,7 @@ const Reports = () => {
           },
           (error) => {
             console.warn("Tasks listener error:", error);
+            toast.error("Failed to load real-time tasks data - using offline mode");
             if (mounted) {
               // Fallback to mock data if Firebase fails
               setTasks([
