@@ -615,7 +615,14 @@ const KanbanPage = () => {
               ].map((mode) => (
                 <button
                   key={mode.id}
-                  onClick={() => setViewMode(mode.id)}
+                  onClick={() => {
+                    setViewMode(mode.id);
+                    if (mode.id === 'list') {
+                      toast.success('Switched to List view! 📋');
+                    } else if (mode.id === 'timeline') {
+                      toast.success('Timeline view coming soon! ⏰');
+                    }
+                  }}
                   className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
                     viewMode === mode.id
                       ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
