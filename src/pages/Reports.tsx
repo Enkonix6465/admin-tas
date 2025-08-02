@@ -1445,22 +1445,22 @@ const Reports = () => {
                               Employee
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Role
+                              Role & Department
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Total Tasks
+                              Task Metrics
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Completed
+                              Performance
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Completion Rate
+                              Quality Score
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              On-Time Rate
+                              Trend & Status
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Avg. Completion Time
+                              Actions
                             </th>
                           </tr>
                         </thead>
