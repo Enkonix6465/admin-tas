@@ -184,7 +184,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('dashboard')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Grid3X3 className="w-4 h-4" />
@@ -262,7 +262,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('projects')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4" />
@@ -316,7 +316,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('tickets')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <CheckSquare className="w-4 h-4" />
@@ -358,7 +358,7 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('administration')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                className="flex items-center justify-between w-full px-3 py-2 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 hover:shadow-sm"
               >
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4" />
