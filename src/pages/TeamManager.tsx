@@ -37,7 +37,8 @@ import {
   UserPlus,
   Settings,
   Sparkles,
-  Building
+  Building,
+  X
 } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
 import { motion, AnimatePresence } from "framer-motion";
