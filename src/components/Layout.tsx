@@ -486,7 +486,7 @@ function Layout() {
               <div className="relative project-dropdown">
                 <button
                   onClick={() => setProjectOpen(!projectOpen)}
-                  className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded px-1 py-1"
+                  className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-2 py-1.5 transition-all duration-200 hover:shadow-sm"
                 >
                   <span>Project Board </span>
                   <ChevronDown className="w-4 h-4" />
