@@ -654,7 +654,7 @@ function Layout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 flex flex-col min-h-0 bg-white/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
+        <main className="flex-1 flex flex-col min-h-0 bg-stone-50/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
