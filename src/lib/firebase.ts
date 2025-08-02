@@ -18,13 +18,13 @@ import {
 } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC3LYpiaTwsM6VzPNjhq1972Gcki7Utd7s",
-  authDomain: "examportal-39e89.firebaseapp.com",
-  projectId: "examportal-39e89",
-  storageBucket: "examportal-39e89.firebasestorage.app",
-  messagingSenderId: "45780204594",
-  appId: "1:45780204594:web:24c9b2ffaf6b0ad05f102b",
-  measurementId: "G-KR98Y1EEK3",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyC3LYpiaTwsM6VzPNjhq1972Gcki7Utd7s",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "examportal-39e89.firebaseapp.com",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "examportal-39e89",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "examportal-39e89.firebasestorage.app",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "45780204594",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:45780204594:web:24c9b2ffaf6b0ad05f102b",
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-KR98Y1EEK3",
 };
 const app = initializeApp(firebaseConfig);
 export const analytics = getAnalytics(app);
