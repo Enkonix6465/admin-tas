@@ -367,79 +367,79 @@ const Calendar = () => {
 
       {/* Main Calendar Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Header */}
-        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-4">
+        {/* Compact Header Bar */}
+        <div className="bg-stone-50 dark:bg-gray-800 border-b border-stone-200 dark:border-gray-700 p-3 flex items-center justify-between flex-shrink-0 shadow-sm">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors lg:hidden"
+              className="p-2 hover:bg-stone-200 dark:hover:bg-gray-700 rounded-lg transition-colors lg:hidden"
             >
-              <Folder className="w-4 h-4" />
+              <Menu className="w-4 h-4" />
             </button>
-            
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                {getDateLabel()}
-              </h1>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={prevPeriod}
-                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={nextPeriod}
-                  className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              {getDateLabel()}
+            </h1>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={prevPeriod}
+                className="p-1 hover:bg-stone-200 dark:hover:bg-gray-700 rounded transition-colors"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={nextPeriod}
+                className="p-1 hover:bg-stone-200 dark:hover:bg-gray-700 rounded transition-colors"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
-              {[
-                { id: "day", icon: Eye, label: "Day" },
-                { id: "week", icon: List, label: "Week" },
-                { id: "month", icon: Grid, label: "Month" }
-              ].map((mode) => (
-                <button
-                  key={mode.id}
-                  onClick={() => setViewMode(mode.id)}
-                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
-                    viewMode === mode.id
-                      ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                  }`}
-                >
-                  <mode.icon className="w-3 h-3" />
-                  <span className="hidden sm:inline">{mode.label}</span>
-                </button>
-              ))}
-            </div>
+            {activeView === "calendar" && (
+              <div className="flex items-center bg-stone-200 dark:bg-gray-700 rounded-lg p-1">
+                {[
+                  { id: "day", icon: Eye, label: "Day" },
+                  { id: "week", icon: List, label: "Week" },
+                  { id: "month", icon: Grid, label: "Month" }
+                ].map((mode) => (
+                  <button
+                    key={mode.id}
+                    onClick={() => setViewMode(mode.id)}
+                    className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-all ${
+                      viewMode === mode.id
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <mode.icon className="w-3 h-3" />
+                    <span className="hidden sm:inline">{mode.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
 
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-3 h-3 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
+                className="pl-7 pr-3 py-1.5 text-sm border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 w-40"
               />
             </div>
 
             <div className="relative">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                className="flex items-center gap-1 px-2 py-1.5 text-sm border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-600 transition-colors"
               >
-                <Filter className="w-4 h-4" />
-                <span>Filter</span>
-                <ChevronDown className="w-4 h-4" />
+                <Filter className="w-3 h-3" />
+                <span className="hidden sm:inline">Filter</span>
+                <ChevronDown className="w-3 h-3" />
               </button>
 
               {filterOpen && (
@@ -447,21 +447,85 @@ const Calendar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 p-4"
+                  className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-700 rounded-lg shadow-xl z-20 p-4"
                 >
-                  <div className="space-y-3">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Filter Events</h3>
+
+                  <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Status
                       </label>
-                      <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
                         {["pending", "in_progress", "review", "completed"].map((status) => (
                           <label key={status} className="flex items-center gap-2 text-sm">
-                            <input type="checkbox" className="rounded" defaultChecked />
+                            <input
+                              type="checkbox"
+                              className="rounded"
+                              checked={tempFilters.status.includes(status)}
+                              onChange={() => handleFilterChange("status", status)}
+                            />
                             <span className="capitalize">{status.replace("_", " ")}</span>
                           </label>
                         ))}
                       </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Priority
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {["high", "medium", "low"].map((priority) => (
+                          <label key={priority} className="flex items-center gap-2 text-sm">
+                            <input
+                              type="checkbox"
+                              className="rounded"
+                              checked={tempFilters.priority.includes(priority)}
+                              onChange={() => handleFilterChange("priority", priority)}
+                            />
+                            <span className="capitalize">{priority}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Projects
+                      </label>
+                      <div className="max-h-32 overflow-y-auto space-y-2">
+                        {projects.map((project) => (
+                          <label key={project.id} className="flex items-center gap-2 text-sm">
+                            <input
+                              type="checkbox"
+                              className="rounded"
+                              checked={tempFilters.projects.includes(project.id)}
+                              onChange={() => handleFilterChange("projects", project.id)}
+                            />
+                            <div
+                              className="w-3 h-3 rounded-sm"
+                              style={{ backgroundColor: project.color }}
+                            />
+                            <span className="truncate">{project.name}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between pt-3 border-t border-stone-200 dark:border-gray-700">
+                      <button
+                        onClick={clearFilters}
+                        className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                      >
+                        Clear All
+                      </button>
+                      <button
+                        onClick={applyFilters}
+                        className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      >
+                        Apply Filters
+                      </button>
                     </div>
                   </div>
                 </motion.div>
@@ -470,15 +534,15 @@ const Calendar = () => {
 
             <button
               onClick={() => setCurrentDate(new Date())}
-              className="px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Today
             </button>
 
             <div className="relative">
-              <button 
+              <button
                 onClick={handleSettings}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                className="p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <Settings className="w-4 h-4" />
               </button>
@@ -488,17 +552,48 @@ const Calendar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 p-3"
+                  className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-700 rounded-lg shadow-lg z-20 p-3"
                 >
                   <div className="space-y-2">
-                    <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <button
+                      onClick={() => {
+                        toast.success("Calendar settings opened! ⚙️");
+                        setSettingsOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-stone-100 dark:hover:bg-gray-700 rounded flex items-center gap-2"
+                    >
+                      <Settings className="w-3 h-3" />
                       Calendar Settings
                     </button>
-                    <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <button
+                      onClick={() => {
+                        toast.success("Exporting calendar data! 📥");
+                        setSettingsOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-stone-100 dark:hover:bg-gray-700 rounded flex items-center gap-2"
+                    >
+                      <Download className="w-3 h-3" />
                       Export Calendar
                     </button>
-                    <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                    <button
+                      onClick={() => {
+                        toast.success("Sync settings configured! 🔄");
+                        setSettingsOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-stone-100 dark:hover:bg-gray-700 rounded flex items-center gap-2"
+                    >
+                      <Sync className="w-3 h-3" />
                       Sync Settings
+                    </button>
+                    <button
+                      onClick={() => {
+                        toast.success("Notifications configured! 🔔");
+                        setSettingsOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-stone-100 dark:hover:bg-gray-700 rounded flex items-center gap-2"
+                    >
+                      <Bell className="w-3 h-3" />
+                      Notifications
                     </button>
                   </div>
                 </motion.div>
