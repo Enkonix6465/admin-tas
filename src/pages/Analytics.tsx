@@ -135,7 +135,29 @@ const Analytics = () => {
               </div>
             )}
           </div>
-          <button className="flex items-center gap-1 px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
+          <button
+            onClick={() => {
+              // Export functionality
+              const data = {
+                tasks: tasks.length,
+                completed: taskStatusData[2].value,
+                team: employees.length,
+                projects: projects.length,
+                exportDate: new Date().toISOString(),
+                taskBreakdown: taskStatusData
+              };
+
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `analytics-report-${new Date().toISOString().split('T')[0]}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }}
+            className="flex items-center gap-1 px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">
             <Download className="w-3 h-3" />
             Export
           </button>
