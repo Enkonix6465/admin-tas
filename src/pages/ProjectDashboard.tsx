@@ -193,11 +193,41 @@ export default function ProjectDashboard() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'from-black to-gray-800';
-      case 'completed': return 'from-gray-600 to-gray-800';
-      case 'paused': return 'from-gray-400 to-gray-600';
-      case 'planning': return 'from-gray-300 to-gray-500';
-      default: return 'from-gray-500 to-gray-700';
+      case 'active': return 'from-emerald-500 to-teal-600';
+      case 'completed': return 'from-blue-500 to-indigo-600';
+      case 'paused': return 'from-amber-500 to-orange-600';
+      case 'planning': return 'from-purple-500 to-violet-600';
+      default: return 'from-slate-500 to-gray-600';
+    }
+  };
+
+  const getStatusInfo = (status) => {
+    switch (status) {
+      case 'active': return {
+        label: 'Active',
+        color: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+        icon: <Zap className="w-3 h-3" />
+      };
+      case 'completed': return {
+        label: 'Completed',
+        color: 'bg-blue-100 text-blue-700 border-blue-200',
+        icon: <CheckCircle className="w-3 h-3" />
+      };
+      case 'paused': return {
+        label: 'Paused',
+        color: 'bg-amber-100 text-amber-700 border-amber-200',
+        icon: <Clock className="w-3 h-3" />
+      };
+      case 'planning': return {
+        label: 'Planning',
+        color: 'bg-purple-100 text-purple-700 border-purple-200',
+        icon: <Target className="w-3 h-3" />
+      };
+      default: return {
+        label: 'Unknown',
+        color: 'bg-gray-100 text-gray-700 border-gray-200',
+        icon: <AlertCircle className="w-3 h-3" />
+      };
     }
   };
 
