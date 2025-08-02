@@ -1911,9 +1911,24 @@ const Reports = () => {
                 {selectedReport === "employee-performance" && reportData.employeeStats && (
                   <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                        Detailed Performance Breakdown
-                      </h3>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                            **Individual Performance Matrix - Timing & Completion Analysis**
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            **Focus on low performers requiring immediate improvement**
+                          </p>
+                        </div>
+                        {reportData.summary.lowPerformersCount > 0 && (
+                          <div className="flex items-center gap-2 px-3 py-2 bg-red-100 dark:bg-red-900/20 rounded-lg">
+                            <AlertCircle className="w-4 h-4 text-red-600" />
+                            <span className="text-sm font-semibold text-red-800 dark:text-red-200">
+                              **{reportData.summary.lowPerformersCount} Need Attention**
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="overflow-x-auto">
