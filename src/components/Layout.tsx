@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { useThemeStore } from "../store/themeStore";
 import {
   LayoutDashboard,
   Users,
@@ -37,9 +38,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 function Layout() {
   const { signOut, user } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
@@ -52,15 +53,9 @@ function Layout() {
   });
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const enabledDark = storedTheme === "dark" || (!storedTheme && prefersDark);
-
-    setIsDarkMode(enabledDark);
-    document.documentElement.classList.toggle("dark", enabledDark);
-  }, []);
+    // Apply theme from store
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -87,10 +82,8 @@ function Layout() {
   }, [filterOpen, sortOpen, workspaceOpen, projectOpen]);
 
   const toggleTheme = () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
-    document.documentElement.classList.toggle("dark", newTheme);
-    localStorage.setItem("theme", newTheme ? "dark" : "light");
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -474,7 +467,7 @@ function Layout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Minimal Top Header */}
-        <header className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700 px-4 py-3 shadow-sm">
+        <header className="bg-stone-100/95 dark:bg-gray-800/95 backdrop-blur-lg border-b border-stone-200 dark:border-gray-700 px-4 py-2 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
@@ -505,7 +498,7 @@ function Layout() {
                         onClick={() => setProjectOpen(false)}
                         className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                       >
-                        🚀 Product Launch Q4
+                        ���� Product Launch Q4
                       </button>
                       <button
                         onClick={() => setProjectOpen(false)}
@@ -643,13 +636,25 @@ function Layout() {
                 Share
               </button>
 
-             
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md"
+                title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              >
+                {theme === 'light' ? (
+                  <Moon className="w-4 h-4" />
+                ) : (
+                  <Sun className="w-4 h-4" />
+                )}
+              </button>
+
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-white/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
+        <main className="flex-1 flex flex-col min-h-0 bg-stone-50/50 dark:bg-gray-900/50 m-2 rounded-xl shadow-lg backdrop-blur-sm">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -657,7 +662,7 @@ function Layout() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
-              className="h-full"
+              className="flex-1 min-h-0 overflow-auto"
             >
               <Outlet />
             </motion.div>
