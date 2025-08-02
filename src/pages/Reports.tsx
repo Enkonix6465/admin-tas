@@ -1476,61 +1476,147 @@ const Reports = () => {
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center">
                                   <img
-                                    className="h-10 w-10 rounded-full"
+                                    className="h-12 w-12 rounded-full border-2 border-gray-200"
                                     src={emp.avatar}
                                     alt={emp.name}
                                   />
                                   <div className="ml-4">
-                                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    <div className="text-sm font-bold text-gray-900 dark:text-gray-100">
                                       {emp.name}
                                     </div>
-                                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                                      {emp.department}
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                      {emp.email}
+                                    </div>
+                                    <div className="flex items-center gap-1 mt-1">
+                                      {emp.skills && emp.skills.slice(0, 2).map((skill, i) => (
+                                        <span key={i} className="px-1 py-0.5 text-xs bg-blue-100 text-blue-600 rounded">
+                                          {skill}
+                                        </span>
+                                      ))}
                                     </div>
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                {emp.role}
-                              </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-gray-100 font-semibold">
-                                  {emp.totalTasks}
+                                <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                  {emp.role}
+                                </div>
+                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                  {emp.department}
+                                </div>
+                                <div className="text-xs text-gray-600 dark:text-gray-300 mt-1">
+                                  Avg: {emp.avgCompletionTime}d completion
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-gray-100 font-semibold">
-                                  {emp.completedTasks}
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
-                                    {Math.round(emp.completionRate)}%
+                                <div className="space-y-2">
+                                  <div className="flex justify-between text-xs">
+                                    <span>Total: {emp.totalTasks}</span>
+                                    <span>✅ {emp.completedTasks}</span>
                                   </div>
-                                  <div className="w-16 bg-gray-200 rounded-full h-2">
+                                  <div className="flex justify-between text-xs">
+                                    <span>🔄 {emp.inProgressTasks}</span>
+                                    <span>⏳ {emp.pendingTasks}</span>
+                                  </div>
+                                  {emp.overdueTasks > 0 && (
+                                    <div className="text-xs text-red-600">
+                                      ⚠️ {emp.overdueTasks} overdue
+                                    </div>
+                                  )}
+                                  {emp.reassignedTasks > 0 && (
+                                    <div className="text-xs text-orange-600">
+                                      🔄 {emp.reassignedTasks} reassigned
+                                    </div>
+                                  )}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="space-y-2">
+                                  <div className="flex items-center">
+                                    <span className="text-xs text-gray-600 dark:text-gray-400 w-16">Completion:</span>
+                                    <div className="flex items-center">
+                                      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
+                                        {Math.round(emp.completionRate)}%
+                                      </div>
+                                      <div className="w-12 bg-gray-200 rounded-full h-1.5">
+                                        <div
+                                          className="bg-blue-600 h-1.5 rounded-full"
+                                          style={{ width: `${emp.completionRate}%` }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center">
+                                    <span className="text-xs text-gray-600 dark:text-gray-400 w-16">On-Time:</span>
+                                    <div className="flex items-center">
+                                      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
+                                        {Math.round(emp.onTimeRate)}%
+                                      </div>
+                                      <div className="w-12 bg-gray-200 rounded-full h-1.5">
+                                        <div
+                                          className="bg-green-600 h-1.5 rounded-full"
+                                          style={{ width: `${emp.onTimeRate}%` }}
+                                        ></div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-center">
+                                <div className="flex flex-col items-center">
+                                  <div className={`text-2xl font-bold ${
+                                    emp.qualityScore >= 80 ? 'text-green-600' :
+                                    emp.qualityScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                                  }`}>
+                                    {Math.round(emp.qualityScore)}
+                                  </div>
+                                  <div className="text-xs text-gray-500">Quality Score</div>
+                                  <div className={`w-16 h-2 rounded-full mt-1 ${
+                                    emp.qualityScore >= 80 ? 'bg-green-100' :
+                                    emp.qualityScore >= 60 ? 'bg-yellow-100' : 'bg-red-100'
+                                  }`}>
                                     <div
-                                      className="bg-blue-600 h-2 rounded-full"
-                                      style={{ width: `${emp.completionRate}%` }}
+                                      className={`h-2 rounded-full ${
+                                        emp.qualityScore >= 80 ? 'bg-green-500' :
+                                        emp.qualityScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                      }`}
+                                      style={{ width: `${emp.qualityScore}%` }}
                                     ></div>
                                   </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
-                                    {Math.round(emp.onTimeRate)}%
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-3 h-3 rounded-full ${
+                                      emp.trendDirection === 'up' ? 'bg-green-500' :
+                                      emp.trendDirection === 'down' ? 'bg-red-500' : 'bg-gray-400'
+                                    }`}></div>
+                                    <span className="text-xs font-semibold">
+                                      {emp.trendDirection === 'up' ? 'Improving' :
+                                       emp.trendDirection === 'down' ? 'Declining' : 'Stable'}
+                                    </span>
                                   </div>
-                                  <div className="w-16 bg-gray-200 rounded-full h-2">
-                                    <div
-                                      className="bg-green-600 h-2 rounded-full"
-                                      style={{ width: `${emp.onTimeRate}%` }}
-                                    ></div>
+                                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                                    Recent: {emp.recentCompletions} tasks
+                                  </div>
+                                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                                    Previous: {emp.previousCompletions} tasks
                                   </div>
                                 </div>
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                {emp.avgCompletionTime} days
+                              <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                <div className="flex gap-2">
+                                  <button
+                                    onClick={() => setSelectedEmployee(emp.id)}
+                                    className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                                  >
+                                    View Details
+                                  </button>
+                                  <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                                    Export
+                                  </button>
+                                </div>
                               </td>
                             </motion.tr>
                           ))}
