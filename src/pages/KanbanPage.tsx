@@ -794,7 +794,7 @@ const KanbanPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: columns.indexOf(column) * 0.1 }}
-              className="flex flex-col w-80 h-full"
+              className="flex flex-col w-80 min-w-80 max-w-80 h-full flex-shrink-0"
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, column.status)}
             >
