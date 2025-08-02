@@ -637,7 +637,7 @@ function Layout() {
                   navigator.clipboard.writeText(window.location.href);
                   // You could add a toast notification here
                 }}
-                className="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="px-3 py-1.5 text-xs bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-md transition-all duration-200 hover:shadow-lg transform hover:scale-105"
                 title="Copy project link"
               >
                 Share
