@@ -294,7 +294,7 @@ const Calendar = () => {
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="p-1.5 hover:bg-stone-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
-                {sidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                <Menu className="w-4 h-4" />
               </motion.button>
             </div>
             <div className="flex items-center gap-2">
