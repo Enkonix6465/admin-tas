@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, addMonths, subMonths, startOfWeek, endOfWeek } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, addMonths, subMonths, startOfWeek, endOfWeek, addDays, startOfDay } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
@@ -19,7 +19,11 @@ import {
   MoreHorizontal,
   User,
   Flag,
+  Grid,
+  List,
+  Eye,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Calendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -31,6 +35,7 @@ const Calendar = () => {
   const [viewMode, setViewMode] = useState("month"); // month, week, day
   const [selectedProject, setSelectedProject] = useState("all");
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -111,11 +116,23 @@ const Calendar = () => {
     }
   };
 
-  const monthStart = startOfMonth(currentDate);
-  const monthEnd = endOfMonth(currentDate);
-  const calendarStart = startOfWeek(monthStart);
-  const calendarEnd = endOfWeek(monthEnd);
-  const calendarDays = eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+  // Calendar date calculations based on view mode
+  const getCalendarDays = () => {
+    if (viewMode === "day") {
+      return [currentDate];
+    } else if (viewMode === "week") {
+      const weekStart = startOfWeek(currentDate);
+      return eachDayOfInterval({ start: weekStart, end: addDays(weekStart, 6) });
+    } else {
+      const monthStart = startOfMonth(currentDate);
+      const monthEnd = endOfMonth(currentDate);
+      const calendarStart = startOfWeek(monthStart);
+      const calendarEnd = endOfWeek(monthEnd);
+      return eachDayOfInterval({ start: calendarStart, end: calendarEnd });
+    }
+  };
+
+  const calendarDays = getCalendarDays();
 
   const getEventsForDate = (date: Date) => {
     return events.filter(event => {
@@ -126,8 +143,25 @@ const Calendar = () => {
     });
   };
 
-  const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
-  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+  const nextPeriod = () => {
+    if (viewMode === "day") {
+      setCurrentDate(addDays(currentDate, 1));
+    } else if (viewMode === "week") {
+      setCurrentDate(addDays(currentDate, 7));
+    } else {
+      setCurrentDate(addMonths(currentDate, 1));
+    }
+  };
+
+  const prevPeriod = () => {
+    if (viewMode === "day") {
+      setCurrentDate(addDays(currentDate, -1));
+    } else if (viewMode === "week") {
+      setCurrentDate(addDays(currentDate, -7));
+    } else {
+      setCurrentDate(subMonths(currentDate, 1));
+    }
+  };
 
   const getEventColor = (event: any) => {
     const project = projects.find(p => p.id === event.project_id);
@@ -151,6 +185,23 @@ const Calendar = () => {
     }
   };
 
+  const getDateLabel = () => {
+    if (viewMode === "day") {
+      return format(currentDate, "EEEE, MMMM d, yyyy");
+    } else if (viewMode === "week") {
+      const weekStart = startOfWeek(currentDate);
+      const weekEnd = addDays(weekStart, 6);
+      return `${format(weekStart, "MMM d")} - ${format(weekEnd, "MMM d, yyyy")}`;
+    } else {
+      return format(currentDate, "MMMM yyyy");
+    }
+  };
+
+  const handleSettings = () => {
+    setSettingsOpen(!settingsOpen);
+    toast.success("Settings panel opened! ⚙️");
+  };
+
   return (
     <div className="h-full bg-gray-50 dark:bg-gray-900 flex overflow-hidden">
       {/* Project Sidebar */}
@@ -158,10 +209,10 @@ const Calendar = () => {
         initial={{ x: -280 }}
         animate={{ x: sidebarOpen ? 0 : -280 }}
         transition={{ type: "spring", damping: 20 }}
-        className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0"
+        className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col flex-shrink-0 overflow-hidden"
       >
         {/* Sidebar Header */}
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Project Board [2023]
@@ -173,11 +224,6 @@ const Calendar = () => {
           </div>
           
           <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-            <Users className="w-4 h-4" />
-            <span>Board</span>
-            <span>•</span>
-            <span>Table</span>
-            <span>•</span>
             <span className="text-blue-600 font-medium">Calendar</span>
             <span>•</span>
             <span>Timeline</span>
@@ -222,31 +268,13 @@ const Calendar = () => {
               </button>
             ))}
           </div>
-
-          {/* Team Section */}
-          <div className="mt-8">
-            <div className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400 mb-3">
-              <Users className="w-3 h-3" />
-              <span>TEAMMATES</span>
-            </div>
-            <div className="space-y-2">
-              {["Invite teammates", "Help docs"].map((item, index) => (
-                <button
-                  key={index}
-                  className="w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </motion.div>
 
       {/* Main Calendar Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Top Header */}
-        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between">
+        <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-4 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -257,17 +285,17 @@ const Calendar = () => {
             
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                {format(currentDate, "MMMM yyyy")}
+                {getDateLabel()}
               </h1>
               <div className="flex items-center gap-1">
                 <button
-                  onClick={prevMonth}
+                  onClick={prevPeriod}
                   className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
-                  onClick={nextMonth}
+                  onClick={nextPeriod}
                   className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -277,6 +305,28 @@ const Calendar = () => {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* View Mode Toggle */}
+            <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+              {[
+                { id: "day", icon: Eye, label: "Day" },
+                { id: "week", icon: List, label: "Week" },
+                { id: "month", icon: Grid, label: "Month" }
+              ].map((mode) => (
+                <button
+                  key={mode.id}
+                  onClick={() => setViewMode(mode.id)}
+                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
+                    viewMode === mode.id
+                      ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                  }`}
+                >
+                  <mode.icon className="w-3 h-3" />
+                  <span className="hidden sm:inline">{mode.label}</span>
+                </button>
+              ))}
+            </div>
+
             <div className="relative">
               <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
@@ -331,85 +381,177 @@ const Calendar = () => {
               Today
             </button>
 
-            <button className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-              <Settings className="w-4 h-4" />
-            </button>
+            <div className="relative">
+              <button 
+                onClick={handleSettings}
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                <Settings className="w-4 h-4" />
+              </button>
+
+              {settingsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-20 p-3"
+                >
+                  <div className="space-y-2">
+                    <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                      Calendar Settings
+                    </button>
+                    <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                      Export Calendar
+                    </button>
+                    <button className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded">
+                      Sync Settings
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Calendar Grid */}
-        <div className="flex-1 bg-white dark:bg-gray-800 m-4 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          {/* Week Headers */}
-          <div className="grid grid-cols-7 border-b border-gray-200 dark:border-gray-700">
-            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-              <div
-                key={day}
-                className="p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50"
-              >
-                {day}
+        <div className="flex-1 overflow-auto">
+          <div className="h-full bg-white dark:bg-gray-800 m-4 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden flex flex-col">
+            {/* Week Headers - Only show for month and week view */}
+            {viewMode !== "day" && (
+              <div className={`grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-gray-200 dark:border-gray-700 flex-shrink-0`}>
+                {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                  <div
+                    key={day}
+                    className="p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700/50"
+                  >
+                    {day}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
 
-          {/* Calendar Days */}
-          <div className="grid grid-cols-7 flex-1">
-            {calendarDays.map((day, index) => {
-              const dayEvents = getEventsForDate(day);
-              const isToday_ = isToday(day);
-              const isCurrentMonth = isSameMonth(day, currentDate);
-
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: index * 0.01 }}
-                  className={`p-2 min-h-[120px] border-r border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer relative ${
-                    !isCurrentMonth ? "text-gray-400 bg-gray-50/50 dark:bg-gray-800/50" : ""
-                  } ${isToday_ ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
-                  onClick={() => setSelectedDate(day)}
-                >
-                  <div className={`text-sm font-medium mb-2 ${
-                    isToday_ 
-                      ? "w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs" 
-                      : ""
-                  }`}>
-                    {format(day, "d")}
+            {/* Calendar Days */}
+            <div className={`flex-1 overflow-auto ${
+              viewMode === "day" ? "p-4" : 
+              viewMode === "week" ? "grid grid-cols-7" : 
+              "grid grid-cols-7"
+            }`}>
+              {viewMode === "day" ? (
+                // Day view - single day layout
+                <div className="space-y-4">
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      {format(currentDate, "EEEE")}
+                    </h2>
+                    <p className="text-lg text-gray-600 dark:text-gray-400">
+                      {format(currentDate, "MMMM d, yyyy")}
+                    </p>
                   </div>
                   
-                  <div className="space-y-1">
-                    {dayEvents.slice(0, 3).map((event, eventIndex) => (
+                  <div className="space-y-3">
+                    {getEventsForDate(currentDate).map((event, index) => (
                       <motion.div
-                        key={eventIndex}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: eventIndex * 0.1 }}
-                        className={`text-xs px-2 py-1 rounded border text-left cursor-pointer hover:shadow-sm transition-all ${getStatusColor(event.status)}`}
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`p-4 rounded-lg border ${getStatusColor(event.status)}`}
                         style={{ 
-                          borderLeftWidth: "3px",
+                          borderLeftWidth: "4px",
                           borderLeftColor: getEventColor(event)
                         }}
-                        title={`${event.title} - ${event.status}`}
                       >
-                        <div className="font-medium truncate">{event.title}</div>
-                        {event.assigned_to && (
-                          <div className="flex items-center gap-1 mt-1 opacity-75">
-                            <User className="w-2 h-2" />
-                            <span className="truncate">Assigned</span>
-                          </div>
-                        )}
+                        <div className="font-medium text-lg mb-2">{event.title}</div>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                          <span className="capitalize">{event.type}</span>
+                          <span>•</span>
+                          <span className="capitalize">{event.status}</span>
+                          {event.priority && (
+                            <>
+                              <span>•</span>
+                              <span className={`capitalize ${
+                                event.priority === "high" ? "text-red-600" :
+                                event.priority === "medium" ? "text-yellow-600" :
+                                "text-green-600"
+                              }`}>
+                                {event.priority} priority
+                              </span>
+                            </>
+                          )}
+                        </div>
                       </motion.div>
                     ))}
                     
-                    {dayEvents.length > 3 && (
-                      <div className="text-xs text-gray-500 px-2 py-1">
-                        +{dayEvents.length - 3} more
+                    {getEventsForDate(currentDate).length === 0 && (
+                      <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                        <p className="text-lg">No events for today</p>
+                        <p className="text-sm">Your schedule is clear!</p>
                       </div>
                     )}
                   </div>
-                </motion.div>
-              );
-            })}
+                </div>
+              ) : (
+                // Week and Month view - grid layout
+                calendarDays.map((day, index) => {
+                  const dayEvents = getEventsForDate(day);
+                  const isToday_ = isToday(day);
+                  const isCurrentMonth = viewMode === "week" || isSameMonth(day, currentDate);
+
+                  return (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: index * 0.01 }}
+                      className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer relative ${
+                        !isCurrentMonth ? "text-gray-400 bg-gray-50/50 dark:bg-gray-800/50" : ""
+                      } ${isToday_ ? "bg-blue-50 dark:bg-blue-900/20" : ""}`}
+                      onClick={() => setSelectedDate(day)}
+                    >
+                      <div className={`text-sm font-medium mb-2 ${
+                        isToday_ 
+                          ? "w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs" 
+                          : ""
+                      }`}>
+                        {format(day, "d")}
+                      </div>
+                      
+                      <div className="space-y-1 overflow-hidden">
+                        {dayEvents.slice(0, viewMode === "week" ? 6 : 3).map((event, eventIndex) => (
+                          <motion.div
+                            key={eventIndex}
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: eventIndex * 0.1 }}
+                            className={`text-xs px-2 py-1 rounded border text-left cursor-pointer hover:shadow-sm transition-all ${getStatusColor(event.status)}`}
+                            style={{ 
+                              borderLeftWidth: "3px",
+                              borderLeftColor: getEventColor(event)
+                            }}
+                            title={`${event.title} - ${event.status}`}
+                          >
+                            <div className="font-medium truncate">{event.title}</div>
+                            {event.assigned_to && viewMode === "week" && (
+                              <div className="flex items-center gap-1 mt-1 opacity-75">
+                                <User className="w-2 h-2" />
+                                <span className="truncate">Assigned</span>
+                              </div>
+                            )}
+                          </motion.div>
+                        ))}
+                        
+                        {dayEvents.length > (viewMode === "week" ? 6 : 3) && (
+                          <div className="text-xs text-gray-500 px-2 py-1">
+                            +{dayEvents.length - (viewMode === "week" ? 6 : 3)} more
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
       </div>
