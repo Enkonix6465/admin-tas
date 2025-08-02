@@ -421,6 +421,10 @@ const Reports = () => {
   };
 
   const generateProjectStatusReport = () => {
+    if (!projects || !Array.isArray(projects)) {
+      return { type: "Project Status Report", summary: {}, chartData: { projectProgress: [] } };
+    }
+
     const projectStats = projects.map(project => {
       const projectTasks = tasks.filter(t => t.project_id === project.id);
       const completedTasks = projectTasks.filter(t => t.status === "completed").length;
