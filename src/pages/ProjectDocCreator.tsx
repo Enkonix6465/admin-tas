@@ -1,30 +1,65 @@
-import React, { useState, useEffect } from "react";
-import ReactQuill from "react-quill";
+import React, { useState, useEffect, Suspense } from "react";
 import "react-quill/dist/quill.snow.css";
 
-// Enhanced wrapper component to handle ReactQuill with proper SSR and deprecation handling
-const QuillEditor = React.forwardRef<ReactQuill, any>((props, ref) => {
+// Dynamic import hook for ReactQuill to reduce initial bundle impact
+const useDynamicQuill = () => {
+  const [ReactQuill, setReactQuill] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadQuill = async () => {
+      try {
+        const module = await import("react-quill");
+        if (mounted) {
+          setReactQuill(() => module.default);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Failed to load ReactQuill:", error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadQuill();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  return { ReactQuill, loading };
+};
+
+// Enhanced wrapper component with dynamic loading and proper error boundaries
+const QuillEditor = React.forwardRef<any, any>((props, ref) => {
   const [mounted, setMounted] = useState(false);
+  const { ReactQuill, loading } = useDynamicQuill();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Don't render on server side to avoid hydration issues
-  if (!mounted) {
+  // Show loading state while mounting or loading ReactQuill
+  if (!mounted || loading || !ReactQuill) {
     return (
       <div className="h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-700 dark:to-gray-800 rounded-xl border-2 border-dashed border-blue-300 dark:border-gray-600">
         <div className="text-center">
           <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
           </div>
-          <p className="text-gray-600 dark:text-gray-300 font-medium">Initializing creative editor...</p>
+          <p className="text-gray-600 dark:text-gray-300 font-medium">
+            {loading ? "Loading editor..." : "Initializing creative editor..."}
+          </p>
         </div>
       </div>
     );
   }
 
-  // Use React.StrictMode to isolate ReactQuill and prevent the warning from bubbling up
+  // Render ReactQuill with error boundary protection
   return (
     <div className="quill-wrapper h-full">
       <ReactQuill ref={ref} {...props} />
