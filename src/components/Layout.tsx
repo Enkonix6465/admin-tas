@@ -439,7 +439,7 @@ function Layout() {
         </div>
 
         {/* User Profile */}
-        <div className="border-t border-gray-200 dark:border-gray-700 px-2 py-2">
+        <div className="border-t border-gray-200 dark:border-gray-700 px-3 py-3 bg-gradient-to-r from-gray-50 to-white dark:from-gray-700 dark:to-gray-800">
           <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 rounded px-2 py-1.5">
             <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
               CE
