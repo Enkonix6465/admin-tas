@@ -821,7 +821,7 @@ const Reports = () => {
                                 }}
                               />
                               <Legend />
-                              {employees.map((emp, index) => (
+                              {employees && Array.isArray(employees) && employees.map((emp, index) => (
                                 <Area
                                   key={emp.id}
                                   type="monotone"
