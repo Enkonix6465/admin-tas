@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { useThemeStore } from "../store/themeStore";
 import {
   LayoutDashboard,
   Users,
