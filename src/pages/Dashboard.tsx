@@ -901,7 +901,7 @@ const Dashboard = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl flex items-center justify-center">
                 <Grid className="w-6 h-6 text-white" />
               </div>
               <div>
