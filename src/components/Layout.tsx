@@ -401,7 +401,7 @@ function Layout() {
               <Link
                 to="/MyTasks"
                 onClick={closeSidebar}
-                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                   isActive("/MyTasks")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -413,7 +413,7 @@ function Layout() {
               <Link
                 to="/calendar"
                 onClick={closeSidebar}
-                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                   isActive("/calendar")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -425,7 +425,7 @@ function Layout() {
               <Link
                 to="/settings"
                 onClick={closeSidebar}
-                className={`flex items-center gap-2 px-2 py-1.5 text-xs rounded transition-colors ${
+                className={`flex items-center gap-2 px-3 py-2 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                   isActive("/settings")
                     ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                     : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
