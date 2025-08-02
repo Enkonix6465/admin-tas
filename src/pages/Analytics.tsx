@@ -89,7 +89,7 @@ const Analytics = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="h-full bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto flex flex-col">
       {/* Minimal Header */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -143,7 +143,7 @@ const Analytics = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6">
         {[
           { icon: Activity, label: "Total Tasks", value: tasks.length || 44, change: "+12%", color: "blue" },
           { icon: CheckCircle, label: "Completed", value: taskStatusData[2].value, change: "+8%", color: "green" },
@@ -172,11 +172,11 @@ const Analytics = () => {
       </div>
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 flex-1 min-h-0">
         {/* Task Status Pie Chart */}
-        <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Task Status</h3>
-          <div className="h-48">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-6 flex flex-col">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Task Status</h3>
+          <div className="h-48 sm:h-64 flex-1">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -210,9 +210,9 @@ const Analytics = () => {
         </div>
 
         {/* Productivity Trend */}
-        <div className="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Productivity Trend</h3>
-          <div className="h-48">
+        <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-6 flex flex-col">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Productivity Trend</h3>
+          <div className="h-48 sm:h-64 flex-1">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={productivityData}>
                 <XAxis dataKey="month" tick={{ fontSize: 12 }} />
@@ -247,9 +247,9 @@ const Analytics = () => {
         </div>
 
         {/* Team Performance */}
-        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 p-3">
-          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">Team Performance</h3>
-          <div className="h-48">
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 sm:p-6 flex flex-col">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Team Performance</h3>
+          <div className="h-48 sm:h-64 flex-1">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={teamPerformanceData}>
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
