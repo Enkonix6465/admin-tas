@@ -197,7 +197,7 @@ function Layout() {
                   <Link
                     to="/"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -209,7 +209,7 @@ function Layout() {
                   <Link
                     to="/PerformMatrix"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/PerformMatrix")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -221,7 +221,7 @@ function Layout() {
                   <Link
                     to="/KanbanPage"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/KanbanPage")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -233,7 +233,7 @@ function Layout() {
                   <Link
                     to="/Analytics"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/Analytics")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -245,7 +245,7 @@ function Layout() {
                   <Link
                     to="/Reports"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/Reports")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -275,7 +275,7 @@ function Layout() {
                   <Link
                     to="/ProjectTasksViewer"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ProjectTasksViewer")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -287,7 +287,7 @@ function Layout() {
                   <Link
                     to="/ProjectDashboard"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ProjectDashboard")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -299,7 +299,7 @@ function Layout() {
                   <Link
                     to="/ProjectDocCreator"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ProjectDocCreator")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -329,7 +329,7 @@ function Layout() {
                   <Link
                     to="/RaiseProjectTicket"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/RaiseProjectTicket")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -341,7 +341,7 @@ function Layout() {
                   <Link
                     to="/ViewTickets"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/ViewTickets")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -371,7 +371,7 @@ function Layout() {
                   <Link
                     to="/AddUsers"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/AddUsers")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
@@ -383,7 +383,7 @@ function Layout() {
                   <Link
                     to="/Makeleader"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/Makeleader")
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
                         : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
