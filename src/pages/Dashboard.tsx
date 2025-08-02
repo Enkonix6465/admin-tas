@@ -65,6 +65,7 @@ const Dashboard = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [expandedTeamLeads, setExpandedTeamLeads] = useState(new Set());
 
   useEffect(() => {
     const unsubscribers = [];
