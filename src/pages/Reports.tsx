@@ -999,7 +999,7 @@ const Reports = () => {
                           </tr>
                         </thead>
                         <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                          {reportData.employeeStats.map((emp, index) => (
+                          {reportData.employeeStats && Array.isArray(reportData.employeeStats) && reportData.employeeStats.map((emp, index) => (
                             <motion.tr 
                               key={emp.id}
                               initial={{ opacity: 0, y: 20 }}
