@@ -38,9 +38,9 @@ import { AnimatePresence, motion } from "framer-motion";
 
 function Layout() {
   const { signOut, user } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOpen, setSortOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
