@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../lib/firebase";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
   Plus,
@@ -20,7 +20,29 @@ import {
   Star,
   Eye,
   Copy,
-  ExternalLink
+  ExternalLink,
+  Activity,
+  Target,
+  Zap,
+  BarChart3,
+  PieChart,
+  ArrowRight,
+  Bell,
+  Search,
+  Grid,
+  List,
+  Settings,
+  Bookmark,
+  MessageSquare,
+  Timer,
+  Award,
+  Flame,
+  Layers,
+  Briefcase,
+  Calendar as CalendarIcon,
+  Mail,
+  MapPin,
+  Phone,
 } from "lucide-react";
 import { NewTaskModal, NewProjectModal, FilterModal } from "../components/Modals";
 import toast from "react-hot-toast";
@@ -33,12 +55,14 @@ const Dashboard = () => {
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({});
+  const [viewMode, setViewMode] = useState("grid"); // grid, list
+  const [activeTab, setActiveTab] = useState("overview"); // overview, projects, tasks, team
   
   // Modal states
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
-  const [showNewDropdown, setShowNewDropdown] = useState(false);
+  const [showQuickActions, setShowQuickActions] = useState(false);
 
   useEffect(() => {
     const unsubscribers = [];
@@ -46,7 +70,6 @@ const Dashboard = () => {
 
     const setupRealtimeListeners = async () => {
       try {
-        // Real-time listeners for all collections with error handling
         const projectsUnsub = onSnapshot(
           collection(db, "projects"),
           (snapshot) => {
@@ -56,17 +79,46 @@ const Dashboard = () => {
           },
           (error) => {
             console.warn("Projects listener error:", error);
-            toast.error("Failed to load projects data");
-            // Use fallback mock data
             if (mounted) {
               setProjects([
                 {
                   id: "mock-1",
-                  name: "Sample Project",
-                  description: "Demo project for testing",
+                  name: "Website Redesign",
+                  description: "Complete redesign of company website with new branding",
                   status: "active",
-                  progress: 45,
-                  end_date: "2024-12-31"
+                  progress: 65,
+                  end_date: "2024-03-15",
+                  priority: "high",
+                  client: "Internal",
+                  team_size: 5,
+                  budget: "$25,000",
+                  color: "#3b82f6"
+                },
+                {
+                  id: "mock-2",
+                  name: "Mobile App Development",
+                  description: "iOS and Android app for customer engagement",
+                  status: "active",
+                  progress: 40,
+                  end_date: "2024-04-30",
+                  priority: "high",
+                  client: "TechCorp",
+                  team_size: 8,
+                  budget: "$80,000",
+                  color: "#10b981"
+                },
+                {
+                  id: "mock-3",
+                  name: "API Integration",
+                  description: "Third-party payment gateway integration",
+                  status: "planning",
+                  progress: 15,
+                  end_date: "2024-02-28",
+                  priority: "medium",
+                  client: "FinanceInc",
+                  team_size: 3,
+                  budget: "$15,000",
+                  color: "#f59e0b"
                 }
               ]);
             }
@@ -82,34 +134,57 @@ const Dashboard = () => {
           },
           (error) => {
             console.warn("Tasks listener error:", error);
-            toast.error("Failed to load tasks data");
-            // Use fallback mock data
             if (mounted) {
               setTasks([
                 {
                   id: "mock-task-1",
-                  title: "Sample Task",
+                  title: "Design System Update",
                   status: "pending",
                   progress_status: "pending",
-                  assigned_to: "mock-user",
-                  due_date: "2024-02-15"
+                  assigned_to: "mock-user-1",
+                  due_date: "2024-02-15",
+                  priority: "high",
+                  project_id: "mock-1",
+                  created_at: { seconds: Date.now() / 1000 - 86400 },
+                  description: "Update design tokens and components"
+                },
+                {
+                  id: "mock-task-2",
+                  title: "API Documentation",
+                  status: "in_progress",
+                  progress_status: "in_progress",
+                  assigned_to: "mock-user-2",
+                  due_date: "2024-02-20",
+                  priority: "medium",
+                  project_id: "mock-2",
+                  created_at: { seconds: Date.now() / 1000 - 172800 },
+                  description: "Complete API documentation for v2"
+                },
+                {
+                  id: "mock-task-3",
+                  title: "User Testing Session",
+                  status: "completed",
+                  progress_status: "completed",
+                  assigned_to: "mock-user-3",
+                  due_date: "2024-02-10",
+                  priority: "high",
+                  project_id: "mock-1",
+                  created_at: { seconds: Date.now() / 1000 - 259200 },
+                  description: "Conduct usability testing"
+                },
+                {
+                  id: "mock-task-4",
+                  title: "Database Migration",
+                  status: "review",
+                  progress_status: "review",
+                  assigned_to: "mock-user-1",
+                  due_date: "2024-02-18",
+                  priority: "high",
+                  project_id: "mock-3",
+                  created_at: { seconds: Date.now() / 1000 - 345600 },
+                  description: "Migrate legacy database to new schema"
                 }
               ]);
-            }
-          }
-        );
-
-        const teamsUnsub = onSnapshot(
-          collection(db, "teams"),
-          (snapshot) => {
-            if (mounted) {
-              setTeams(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-            }
-          },
-          (error) => {
-            console.warn("Teams listener error:", error);
-            if (mounted) {
-              setTeams([]);
             }
           }
         );
@@ -127,9 +202,37 @@ const Dashboard = () => {
             if (mounted) {
               setEmployees([
                 {
-                  id: "mock-user",
-                  name: "Demo User",
-                  department: "Engineering"
+                  id: "mock-user-1",
+                  name: "Sarah Johnson",
+                  email: "sarah@company.com",
+                  role: "Senior Designer",
+                  department: "Design",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+                  status: "online",
+                  tasks_completed: 28,
+                  tasks_pending: 5
+                },
+                {
+                  id: "mock-user-2",
+                  name: "Mike Chen",
+                  email: "mike@company.com",
+                  role: "Full Stack Developer",
+                  department: "Engineering",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
+                  status: "busy",
+                  tasks_completed: 42,
+                  tasks_pending: 8
+                },
+                {
+                  id: "mock-user-3",
+                  name: "Emily Davis",
+                  email: "emily@company.com",
+                  role: "Product Manager",
+                  department: "Product",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+                  status: "away",
+                  tasks_completed: 35,
+                  tasks_pending: 3
                 }
               ]);
               setLoading(false);
@@ -137,17 +240,15 @@ const Dashboard = () => {
           }
         );
 
-        unsubscribers.push(projectsUnsub, tasksUnsub, teamsUnsub, employeesUnsub);
+        unsubscribers.push(projectsUnsub, tasksUnsub, employeesUnsub);
 
       } catch (error) {
         console.error("Failed to setup Firebase listeners:", error);
         toast.error("Connection error - using offline mode");
 
-        // Set fallback data and stop loading
         if (mounted) {
           setProjects([]);
           setTasks([]);
-          setTeams([]);
           setEmployees([]);
           setLoading(false);
         }
@@ -156,7 +257,6 @@ const Dashboard = () => {
 
     setupRealtimeListeners();
 
-    // Cleanup function
     return () => {
       mounted = false;
       unsubscribers.forEach(unsub => {
@@ -172,7 +272,6 @@ const Dashboard = () => {
   const getEmployeeName = (empId: string) =>
     employees.find((emp: any) => emp.id === empId)?.name || "Unassigned";
 
-  // Apply filters to tasks
   const filteredTasks = tasks.filter((task: any) => {
     if (filters.status && task.status !== filters.status) return false;
     if (filters.priority && task.priority !== filters.priority) return false;
@@ -200,22 +299,24 @@ const Dashboard = () => {
     return true;
   });
 
-  // Calculate real dashboard statistics
-  const totalProjects = projects.length;
-  const pendingTasks = filteredTasks.filter((t: any) => t.status === "pending" || t.progress_status === "pending").length;
-  const inProgressTasks = filteredTasks.filter((t: any) => t.status === "in_progress" || t.progress_status === "in_progress").length;
-  const completedTasks = filteredTasks.filter((t: any) => t.status === "completed" || t.progress_status === "completed").length;
-  const totalTasks = pendingTasks + inProgressTasks + completedTasks;
-  const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-  
-  // Get overdue tasks
-  const now = new Date();
-  const overdueTasks = filteredTasks.filter((t: any) => {
-    if (!t.due_date || t.status === 'completed') return false;
-    return new Date(t.due_date) < now;
-  }).length;
+  // Enhanced statistics
+  const stats = {
+    totalProjects: projects.length,
+    activeProjects: projects.filter(p => p.status === 'active').length,
+    pendingTasks: filteredTasks.filter((t: any) => t.status === "pending" || t.progress_status === "pending").length,
+    inProgressTasks: filteredTasks.filter((t: any) => t.status === "in_progress" || t.progress_status === "in_progress").length,
+    completedTasks: filteredTasks.filter((t: any) => t.status === "completed" || t.progress_status === "completed").length,
+    reviewTasks: filteredTasks.filter((t: any) => t.status === "review" || t.progress_status === "review").length,
+    totalTasks: filteredTasks.length,
+    teamMembers: employees.length,
+    overdueTasks: filteredTasks.filter((t: any) => {
+      if (!t.due_date || t.status === 'completed') return false;
+      return new Date(t.due_date) < new Date();
+    }).length
+  };
 
-  // Calculate project progress
+  const completionRate = stats.totalTasks > 0 ? Math.round((stats.completedTasks / stats.totalTasks) * 100) : 0;
+
   const getProjectProgress = (projectId: string) => {
     const projectTasks = tasks.filter((t: any) => t.project_id === projectId);
     if (projectTasks.length === 0) return 0;
@@ -230,7 +331,7 @@ const Dashboard = () => {
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      toast.success("Dashboard link copied to clipboard!");
+      toast.success("Dashboard link copied! 📋");
     } catch (error) {
       console.error("Failed to copy:", error);
       toast.error("Failed to copy link");
@@ -239,142 +340,302 @@ const Dashboard = () => {
 
   const handleApplyFilter = (newFilters: any) => {
     setFilters(newFilters);
-    toast.success("Filters applied successfully!");
+    toast.success("Filters applied! 🔍");
   };
 
-  const StatCard = ({ title, value, change, icon: Icon, color = "blue", onClick = null }) => (
+  // Navigate to specific task
+  const navigateToTask = (task: any) => {
+    navigate('/mytasks', { state: { selectedTask: task.id, highlight: true } });
+  };
+
+  // Enhanced Stat Card Component
+  const StatCard = ({ title, value, change, icon: Icon, color = "blue", trend, onClick = null, subtitle = null }) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 ${
-        onClick ? 'cursor-pointer hover:shadow-lg transition-shadow' : ''
-      }`}
+      whileHover={{ y: -4, scale: 1.02 }}
+      className={`bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 ${
+        onClick ? 'cursor-pointer hover:shadow-2xl' : 'hover:shadow-lg'
+      } transition-all duration-300 relative overflow-hidden group`}
       onClick={onClick}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <div className={`p-1.5 rounded-lg ${
-              color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/20' :
-              color === 'yellow' ? 'bg-yellow-50 dark:bg-yellow-900/20' :
-              color === 'green' ? 'bg-green-50 dark:bg-green-900/20' :
-              'bg-purple-50 dark:bg-purple-900/20'
-            }`}>
-              <Icon className={`w-5 h-5 ${
-                color === 'blue' ? 'text-blue-600 dark:text-blue-400' :
-                color === 'yellow' ? 'text-yellow-600 dark:text-yellow-400' :
-                color === 'green' ? 'text-green-600 dark:text-green-400' :
-                'text-purple-600 dark:text-purple-400'
-              }`} />
-            </div>
-            <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400">{title}</h3>
+      {/* Background gradient */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${
+        color === 'blue' ? 'from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10' :
+        color === 'green' ? 'from-emerald-50 to-green-50 dark:from-emerald-900/10 dark:to-green-900/10' :
+        color === 'yellow' ? 'from-amber-50 to-orange-50 dark:from-amber-900/10 dark:to-orange-900/10' :
+        color === 'red' ? 'from-red-50 to-pink-50 dark:from-red-900/10 dark:to-pink-900/10' :
+        color === 'purple' ? 'from-purple-50 to-indigo-50 dark:from-purple-900/10 dark:to-indigo-900/10' :
+        'from-gray-50 to-slate-50 dark:from-gray-900/10 dark:to-slate-900/10'
+      } opacity-50 group-hover:opacity-100 transition-opacity`} />
+      
+      <div className="relative">
+        <div className="flex items-start justify-between mb-4">
+          <div className={`p-3 rounded-2xl ${
+            color === 'blue' ? 'bg-blue-500' :
+            color === 'green' ? 'bg-emerald-500' :
+            color === 'yellow' ? 'bg-amber-500' :
+            color === 'red' ? 'bg-red-500' :
+            color === 'purple' ? 'bg-purple-500' :
+            'bg-gray-500'
+          } shadow-lg`}>
+            <Icon className="w-6 h-6 text-white" />
           </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</span>
+          {onClick && (
+            <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+          )}
+        </div>
+        
+        <div>
+          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">{title}</h3>
+          <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-3xl font-bold text-gray-900 dark:text-gray-100">{value}</span>
             {change && (
-              <span className="text-sm text-green-600 dark:text-green-400 flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
+              <span className={`text-sm font-medium flex items-center gap-1 ${
+                trend === 'up' ? 'text-emerald-600' : trend === 'down' ? 'text-red-600' : 'text-gray-500'
+              }`}>
+                {trend === 'up' && <TrendingUp className="w-3 h-3" />}
                 {change}
               </span>
             )}
           </div>
+          {subtitle && (
+            <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>
+          )}
         </div>
       </div>
     </motion.div>
   );
 
+  // Enhanced Project Card
   const ProjectCard = ({ project }) => {
-    const progress = getProjectProgress(project.id);
+    const progress = project.progress || getProjectProgress(project.id);
     const taskCount = getProjectTaskCount(project.id);
+    const isOverdue = project.end_date && new Date(project.end_date) < new Date();
     
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-lg p-1.5 sm:p-2 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer"
+        whileHover={{ y: -4, scale: 1.02 }}
+        className="bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700 hover:shadow-2xl transition-all duration-300 cursor-pointer group relative overflow-hidden"
         onClick={() => navigate('/projects', { state: { selectedProject: project.id } })}
       >
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex items-start gap-2">
-            <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center text-white text-xs font-medium">
+        {/* Priority stripe */}
+        <div className={`absolute top-0 left-0 w-full h-1 ${
+          project.priority === 'high' ? 'bg-red-500' :
+          project.priority === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+        }`} />
+
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-start gap-3">
+            <div 
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg"
+              style={{ backgroundColor: project.color || '#6366f1' }}
+            >
               {project.name ? project.name.charAt(0).toUpperCase() : 'P'}
             </div>
-            <div>
-              <h3 className="font-medium text-gray-900 dark:text-gray-100">{project.name || 'Untitled Project'}</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">{project.description || 'No description'}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                📅 {project.end_date ? new Date(project.end_date).toLocaleDateString() : 'No due date'} 
-                {project.client && ` 👤 ${project.client}`}
+            <div className="flex-1">
+              <h3 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-1">
+                {project.name || 'Untitled Project'}
+              </h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+                {project.description || 'No description'}
               </p>
+              <div className="flex items-center gap-3 text-xs text-gray-500">
+                <span className="flex items-center gap-1">
+                  <Users className="w-3 h-3" />
+                  {project.team_size || 0} members
+                </span>
+                <span className="flex items-center gap-1">
+                  <Target className="w-3 h-3" />
+                  {taskCount} tasks
+                </span>
+                {project.budget && (
+                  <span className="flex items-center gap-1">
+                    <Award className="w-3 h-3" />
+                    {project.budget}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 px-2 py-1 rounded">
-              {taskCount} tasks
+          
+          <div className="text-right">
+            <span className={`px-3 py-1 text-xs rounded-full ${
+              project.status === 'active' ? 'bg-green-100 text-green-700' :
+              project.status === 'planning' ? 'bg-blue-100 text-blue-700' :
+              project.status === 'on_hold' ? 'bg-yellow-100 text-yellow-700' :
+              'bg-gray-100 text-gray-700'
+            }`}>
+              {project.status?.replace('_', ' ').toUpperCase() || 'ACTIVE'}
             </span>
-            <button 
-              className="text-gray-400 hover:text-gray-600 p-1"
-              onClick={(e) => {
-                e.stopPropagation();
-                // Add more options here
-              }}
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
+            {isOverdue && (
+              <div className="mt-2">
+                <span className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Overdue
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="mb-2">
-          <div className="flex items-center justify-between text-sm mb-1">
+        {/* Progress Section */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-gray-600 dark:text-gray-400">Progress</span>
-            <span className="font-medium text-gray-900 dark:text-gray-100">{progress}%</span>
+            <span className="font-bold text-gray-900 dark:text-gray-100">{progress}%</span>
           </div>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-            <div
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="h-2 rounded-full"
+              style={{ backgroundColor: project.color || '#6366f1' }}
             />
           </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs text-gray-500">
+            {project.end_date && (
+              <>
+                <Calendar className="w-3 h-3" />
+                <span className={isOverdue ? 'text-red-600' : ''}>
+                  Due {new Date(project.end_date).toLocaleDateString()}
+                </span>
+              </>
+            )}
+          </div>
+          <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
         </div>
       </motion.div>
     );
   };
 
-  const TaskItem = ({ task }) => (
+  // Enhanced Task Item
+  const TaskItem = ({ task, showProject = true }) => {
+    const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== 'completed';
+    const project = projects.find(p => p.id === task.project_id);
+    
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        whileHover={{ x: 4, scale: 1.01 }}
+        className="flex items-center gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-all cursor-pointer group border border-transparent hover:border-gray-200 dark:hover:border-gray-700"
+        onClick={() => navigateToTask(task)}
+      >
+        {/* Status indicator */}
+        <div className={`w-3 h-3 rounded-full ${
+          task.status === 'completed' ? 'bg-emerald-500' :
+          task.status === 'in_progress' ? 'bg-blue-500' :
+          task.status === 'review' ? 'bg-amber-500' :
+          'bg-gray-400'
+        }`} />
+
+        {/* Task content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+              {task.title || 'Untitled Task'}
+            </h4>
+            {task.priority === 'high' && (
+              <Flame className="w-4 h-4 text-red-500" />
+            )}
+            {isOverdue && (
+              <span className="px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded-full">
+                Overdue
+              </span>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-3 text-xs text-gray-500">
+            <span className="flex items-center gap-1">
+              <User className="w-3 h-3" />
+              {getEmployeeName(task.assigned_to)}
+            </span>
+            {task.due_date && (
+              <span className={`flex items-center gap-1 ${isOverdue ? 'text-red-600' : ''}`}>
+                <Calendar className="w-3 h-3" />
+                {new Date(task.due_date).toLocaleDateString()}
+              </span>
+            )}
+            {showProject && project && (
+              <span 
+                className="px-2 py-0.5 text-xs text-white rounded"
+                style={{ backgroundColor: project.color || '#6366f1' }}
+              >
+                {project.name}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+      </motion.div>
+    );
+  };
+
+  // Team Member Card
+  const TeamMemberCard = ({ member }) => (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors cursor-pointer"
-      onClick={() => navigate('/mytasks', { state: { selectedTask: task.id } })}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.05 }}
+      className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all cursor-pointer"
+      onClick={() => navigate('/team', { state: { selectedMember: member.id } })}
     >
-      <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-medium">
-        {getEmployeeName(task.assigned_to).substring(0, 2).toUpperCase() || 'UN'}
-      </div>
-      <div className="flex-1 min-w-0">
-        <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{task.title || 'Untitled Task'}</h4>
-        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
-          Assigned to {getEmployeeName(task.assigned_to)}
+      <div className="text-center">
+        <div className="relative inline-block mb-3">
+          <img
+            src={member.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
+            alt={member.name}
+            className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
+          />
+          <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+            member.status === 'online' ? 'bg-green-500' :
+            member.status === 'busy' ? 'bg-red-500' :
+            member.status === 'away' ? 'bg-yellow-500' :
+            'bg-gray-400'
+          }`} />
+        </div>
+        <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
+          {member.name}
+        </h4>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+          {member.role}
         </p>
-        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-          {task.created_at?.toDate?.().toLocaleDateString() || 'Today'}
-        </p>
+        <div className="flex justify-center gap-3 text-xs text-gray-500">
+          <span className="flex items-center gap-1">
+            <CheckCircle className="w-3 h-3" />
+            {member.tasks_completed || 0}
+          </span>
+          <span className="flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {member.tasks_pending || 0}
+          </span>
+        </div>
       </div>
-      <div className={`w-2 h-2 rounded-full ${
-        task.status === 'completed' || task.progress_status === 'completed' ? 'bg-green-500' : 
-        task.status === 'in_progress' || task.progress_status === 'in_progress' ? 'bg-yellow-500' : 
-        'bg-gray-400'
-      }`}></div>
     </motion.div>
   );
 
   if (loading) {
     return (
-      <div className="h-full bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400">Loading dashboard...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Activity className="w-6 h-6 text-blue-600" />
+            </div>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading your workspace...</p>
           <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
-            If this takes too long, there might be a connection issue
+            Preparing your personalized dashboard
           </p>
         </div>
       </div>
@@ -382,190 +643,306 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 p-4 sm:p-6 overflow-y-auto">
-      {/* Offline Mode Banner */}
-      {!navigator.onLine && (
-        <div className="mb-4 p-3 bg-yellow-100 dark:bg-yellow-900/20 border border-yellow-300 dark:border-yellow-700 rounded-lg flex items-center gap-3">
-          <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
-          <div>
-            <p className="text-sm font-medium text-yellow-800 dark:text-yellow-300">
-              You're currently offline
-            </p>
-            <p className="text-xs text-yellow-700 dark:text-yellow-400">
-              Some features may not work properly until connection is restored
-            </p>
+    <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
+      {/* Enhanced Header */}
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+                <Grid className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  Dashboard Overview
+                </h1>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Welcome back! Here's what's happening with your projects
+                </p>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
 
-      {/* Header */}
-      <div className="mb-2">
-        <div className="flex items-center justify-between mb-2">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">Dashboard Overview</h1>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">Active</p>
-          </div>
-          <div className="flex items-center gap-1 sm:gap-2">
-            <button
-              onClick={() => setShowFilterModal(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            >
-              <Filter className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">Filter</span>
-              <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
-            </button>
-            
+          <div className="flex items-center gap-3">
+            {/* Quick Actions */}
             <div className="relative">
               <button
-                onClick={() => setShowNewDropdown(!showNewDropdown)}
-                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                onClick={() => setShowQuickActions(!showQuickActions)}
+                className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
               >
-                <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">New</span>
-                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Quick Actions</span>
+                <ChevronDown className="w-4 h-4" />
               </button>
               
-              {showNewDropdown && (
-                <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10">
+              {showQuickActions && (
+                <div className="absolute right-0 top-full mt-2 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-10 py-2">
                   <button
                     onClick={() => {
                       setShowNewTaskModal(true);
-                      setShowNewDropdown(false);
+                      setShowQuickActions(false);
                     }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 rounded-t-lg"
+                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3"
                   >
-                    📝 New Task
+                    <Target className="w-4 h-4 text-blue-600" />
+                    <span>New Task</span>
                   </button>
                   <button
                     onClick={() => {
                       setShowNewProjectModal(true);
-                      setShowNewDropdown(false);
+                      setShowQuickActions(false);
                     }}
-                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 rounded-b-lg"
+                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3"
                   >
-                    📁 New Project
+                    <Briefcase className="w-4 h-4 text-green-600" />
+                    <span>New Project</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate('/calendar');
+                      setShowQuickActions(false);
+                    }}
+                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3"
+                  >
+                    <CalendarIcon className="w-4 h-4 text-purple-600" />
+                    <span>Schedule Meeting</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate('/team');
+                      setShowQuickActions(false);
+                    }}
+                    className="w-full text-left px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3"
+                  >
+                    <Users className="w-4 h-4 text-orange-600" />
+                    <span>Invite Team Member</span>
                   </button>
                 </div>
               )}
             </div>
-            
+
             <button 
               onClick={handleShare}
-              className="flex items-center gap-2 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
             >
               <Share className="w-4 h-4" />
-              Share
+              <span className="hidden sm:inline">Share</span>
             </button>
-            <button className="p-1.5 text-gray-400 hover:text-gray-600 transition-colors">
-              <MoreHorizontal className="w-4 h-4" />
+            
+            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+              <Bell className="w-5 h-5" />
             </button>
           </div>
         </div>
+
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
+          {[
+            { id: "overview", label: "Overview", icon: Grid },
+            { id: "projects", label: "Projects", icon: Briefcase },
+            { id: "tasks", label: "Tasks", icon: Target },
+            { id: "team", label: "Team", icon: Users }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-all ${
+                activeTab === tab.id
+                  ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <tab.icon className="w-4 h-4" />
+              <span className="hidden sm:inline">{tab.label}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <StatCard
-          title="Total Projects"
-          value={totalProjects}
-          change={totalProjects > 0 ? "+19% from last month" : null}
-          icon={FileText}
-          color="blue"
-          onClick={() => navigate('/projects')}
-        />
-        <StatCard
-          title="Pending Tasks"
-          value={overdueTasks > 0 ? `${pendingTasks} (${overdueTasks} overdue)` : pendingTasks}
-          icon={AlertCircle}
-          color="yellow"
-          onClick={() => navigate('/mytasks')}
-        />
-        <StatCard
-          title="In Progress"
-          value={inProgressTasks}
-          icon={TrendingUp}
-          color="purple"
-          onClick={() => navigate('/kanbanpage')}
-        />
-        <StatCard
-          title="Completed"
-          value={completedTasks}
-          change={`${completionRate}% completion rate`}
-          icon={CheckCircle}
-          color="green"
-          onClick={() => navigate('/reports')}
-        />
-      </div>
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Projects Section */}
-        <div className="lg:col-span-2">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Projects</h2>
-              <button 
-                onClick={() => navigate('/projects')}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
-              >
-                View All <ExternalLink className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="p-6 space-y-4">
-              {projects.length > 0 ? (
-                projects.slice(0, 3).map((project: any) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))
-              ) : (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <FileText className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p>No projects found</p>
-                  <button 
-                    onClick={() => setShowNewProjectModal(true)}
-                    className="text-blue-600 hover:text-blue-700 text-sm font-medium mt-2"
-                  >
-                    Create your first project
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
+      {/* Enhanced Content */}
+      <div className="flex-1 p-6 overflow-y-auto">
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatCard
+            title="Active Projects"
+            value={stats.activeProjects}
+            change="+2 this week"
+            trend="up"
+            icon={Briefcase}
+            color="blue"
+            onClick={() => navigate('/projects')}
+            subtitle={`${stats.totalProjects} total projects`}
+          />
+          <StatCard
+            title="Tasks in Progress"
+            value={stats.inProgressTasks}
+            change={stats.overdueTasks > 0 ? `${stats.overdueTasks} overdue` : "+5% this week"}
+            trend={stats.overdueTasks > 0 ? "down" : "up"}
+            icon={Timer}
+            color={stats.overdueTasks > 0 ? "red" : "yellow"}
+            onClick={() => navigate('/kanbanpage')}
+            subtitle={`${stats.totalTasks} total tasks`}
+          />
+          <StatCard
+            title="Completed Today"
+            value={stats.completedTasks}
+            change={`${completionRate}% completion rate`}
+            trend="up"
+            icon={CheckCircle}
+            color="green"
+            onClick={() => navigate('/reports')}
+            subtitle="Great progress!"
+          />
+          <StatCard
+            title="Team Members"
+            value={stats.teamMembers}
+            change="All active"
+            icon={Users}
+            color="purple"
+            onClick={() => navigate('/team')}
+            subtitle="Productive team"
+          />
         </div>
 
-        {/* Recent Tasks Section */}
-        <div className="lg:col-span-1">
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Recent Tasks</h2>
-              <button 
-                onClick={() => navigate('/mytasks')}
-                className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
-              >
-                View All <ExternalLink className="w-3 h-3" />
-              </button>
-            </div>
-            <div className="p-3">
-              <div className="space-y-2">
-                {filteredTasks.length > 0 ? (
-                  filteredTasks.slice(0, 5).map((task: any) => (
-                    <TaskItem key={task.id} task={task} />
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                    <Clock className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                    <p>No tasks found</p>
+        {/* Dynamic Content Based on Active Tab */}
+        <AnimatePresence mode="wait">
+          {activeTab === "overview" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+            >
+              {/* Recent Projects */}
+              <div className="lg:col-span-2">
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                  <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Active Projects</h2>
                     <button 
-                      onClick={() => setShowNewTaskModal(true)}
-                      className="text-blue-600 hover:text-blue-700 text-sm font-medium mt-2"
+                      onClick={() => navigate('/projects')}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
                     >
-                      Create your first task
+                      View All <ExternalLink className="w-3 h-3" />
                     </button>
                   </div>
-                )}
+                  <div className="p-6 space-y-4">
+                    {projects.slice(0, 3).map((project: any) => (
+                      <ProjectCard key={project.id} project={project} />
+                    ))}
+                    {projects.length === 0 && (
+                      <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <Briefcase className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                        <p className="font-medium mb-1">No projects yet</p>
+                        <p className="text-sm mb-4">Create your first project to get started</p>
+                        <button 
+                          onClick={() => setShowNewProjectModal(true)}
+                          className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        >
+                          Create Project
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
+
+              {/* Recent Tasks & Team */}
+              <div className="space-y-6">
+                {/* Recent Tasks */}
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                  <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Recent Tasks</h2>
+                    <button 
+                      onClick={() => navigate('/mytasks')}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
+                    >
+                      View All <ExternalLink className="w-3 h-3" />
+                    </button>
+                  </div>
+                  <div className="p-3">
+                    <div className="space-y-1">
+                      {filteredTasks.slice(0, 5).map((task: any) => (
+                        <TaskItem key={task.id} task={task} showProject={true} />
+                      ))}
+                      {filteredTasks.length === 0 && (
+                        <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                          <Target className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No tasks found</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Team Overview */}
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                  <div className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">Team</h2>
+                    <button 
+                      onClick={() => navigate('/team')}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium flex items-center gap-1"
+                    >
+                      View All <ExternalLink className="w-3 h-3" />
+                    </button>
+                  </div>
+                  <div className="p-6">
+                    <div className="grid grid-cols-1 gap-4">
+                      {employees.slice(0, 3).map((member: any) => (
+                        <TeamMemberCard key={member.id} member={member} />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === "projects" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+            >
+              {projects.map((project: any) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
+            </motion.div>
+          )}
+
+          {activeTab === "tasks" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
+            >
+              <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">All Tasks</h2>
+              </div>
+              <div className="p-3">
+                <div className="space-y-1">
+                  {filteredTasks.map((task: any) => (
+                    <TaskItem key={task.id} task={task} showProject={true} />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {activeTab === "team" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            >
+              {employees.map((member: any) => (
+                <TeamMemberCard key={member.id} member={member} />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Modals */}
@@ -577,11 +954,11 @@ const Dashboard = () => {
         onApplyFilter={handleApplyFilter}
       />
 
-      {/* Click outside to close dropdown */}
-      {showNewDropdown && (
+      {/* Click outside handlers */}
+      {showQuickActions && (
         <div 
-          className="fixed inset-0 z-5" 
-          onClick={() => setShowNewDropdown(false)}
+          className="fixed inset-0 z-10" 
+          onClick={() => setShowQuickActions(false)}
         />
       )}
     </div>
