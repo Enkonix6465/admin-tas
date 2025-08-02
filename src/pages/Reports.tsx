@@ -893,7 +893,7 @@ const Reports = () => {
                               dataKey="value"
                               label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
                             >
-                              {reportData.chartData.statusDistribution.map((entry, index) => (
+                              {reportData.chartData && reportData.chartData.statusDistribution && Array.isArray(reportData.chartData.statusDistribution) && reportData.chartData.statusDistribution.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} />
                               ))}
                             </Pie>
