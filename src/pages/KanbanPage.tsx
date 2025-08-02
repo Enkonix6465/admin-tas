@@ -894,6 +894,363 @@ const KanbanPage = () => {
           </div>
         )}
 
+        {/* List View */}
+        {viewMode === "list" && (
+          <div className="flex-1 w-full">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                  <Eye className="w-6 h-6 text-blue-600" />
+                  Task List View
+                </h2>
+                <span className="text-sm text-gray-500">{filteredTasks.length} tasks</span>
+              </div>
+
+              <div className="space-y-3">
+                {filteredTasks.map((task, index) => (
+                  <motion.div
+                    key={task.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-750 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all cursor-pointer group"
+                    onClick={() => {
+                      setSelectedTask(task);
+                      setShowTaskDetailModal(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 flex-1">
+                        <div className={`w-3 h-3 rounded-full ${
+                          task.priority === "high" ? "bg-red-500" :
+                          task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+                        }`} />
+
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition-colors">
+                            {task.title}
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            {task.description || "No description"}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={getEmployeeAvatar(task.assigned_to)}
+                            alt="avatar"
+                            className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                          />
+                          <span className={`px-3 py-1 text-xs rounded-full font-medium ${
+                            task.status === "completed" ? "bg-green-100 text-green-700" :
+                            task.status === "in_progress" ? "bg-blue-100 text-blue-700" :
+                            task.status === "review" ? "bg-yellow-100 text-yellow-700" :
+                            "bg-gray-100 text-gray-700"
+                          }`}>
+                            {task.status?.replace('_', ' ').toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 ml-4">
+                        {task.due_date && (
+                          <span className="text-xs text-gray-500 flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            {new Date(task.due_date).toLocaleDateString()}
+                          </span>
+                        )}
+                        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                      </div>
+                    </div>
+
+                    {task.progress > 0 && (
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                          <span>Progress</span>
+                          <span>{task.progress}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5">
+                          <div
+                            className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1.5 rounded-full transition-all duration-300"
+                            style={{ width: `${task.progress}%` }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+
+                {filteredTasks.length === 0 && (
+                  <div className="text-center py-12">
+                    <Eye className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">No tasks found</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Timeline View */}
+        {viewMode === "timeline" && (
+          <div className="flex-1 w-full">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                  <TrendingUp className="w-6 h-6 text-purple-600" />
+                  Timeline View
+                </h2>
+                <span className="text-sm text-gray-500">{filteredTasks.length} tasks</span>
+              </div>
+
+              <div className="relative">
+                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 to-blue-500"></div>
+
+                <div className="space-y-6">
+                  {filteredTasks
+                    .sort((a, b) => new Date(a.due_date || a.created_at?.seconds * 1000).getTime() - new Date(b.due_date || b.created_at?.seconds * 1000).getTime())
+                    .map((task, index) => (
+                    <motion.div
+                      key={task.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="relative flex items-start gap-6"
+                    >
+                      <div className={`relative z-10 w-4 h-4 rounded-full border-4 border-white shadow-lg ${
+                        task.status === "completed" ? "bg-green-500" :
+                        task.status === "in_progress" ? "bg-blue-500" :
+                        task.status === "review" ? "bg-yellow-500" :
+                        "bg-gray-400"
+                      }`}>
+                        {task.status === "in_progress" && (
+                          <div className="absolute inset-0 rounded-full animate-ping bg-blue-400" />
+                        )}
+                      </div>
+
+                      <motion.div
+                        whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                        className="flex-1 bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-750 rounded-xl p-4 border border-gray-200 dark:border-gray-600 cursor-pointer group"
+                        onClick={() => {
+                          setSelectedTask(task);
+                          setShowTaskDetailModal(true);
+                        }}
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 transition-colors">
+                              {task.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              {task.description || "No description"}
+                            </p>
+
+                            <div className="flex items-center gap-4 mt-3">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={getEmployeeAvatar(task.assigned_to)}
+                                  alt="avatar"
+                                  className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                                />
+                                <span className="text-sm text-gray-600 dark:text-gray-400">
+                                  {getEmployeeName(task.assigned_to)}
+                                </span>
+                              </div>
+
+                              {task.due_date && (
+                                <div className="flex items-center gap-1 text-sm text-gray-500">
+                                  <Calendar className="w-4 h-4" />
+                                  {new Date(task.due_date).toLocaleDateString()}
+                                </div>
+                              )}
+
+                              <span className={`px-2 py-1 text-xs rounded-full font-medium ${getPriorityBadge(task.priority)}`}>
+                                {task.priority?.toUpperCase()}
+                              </span>
+                            </div>
+                          </div>
+
+                          <Timer className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                        </div>
+
+                        {task.progress > 0 && (
+                          <div className="mt-4">
+                            <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                              <span>Progress</span>
+                              <span>{task.progress}%</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div
+                                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${task.progress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </motion.div>
+                    </motion.div>
+                  ))}
+
+                  {filteredTasks.length === 0 && (
+                    <div className="text-center py-12 ml-16">
+                      <TrendingUp className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-500">No tasks in timeline</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Table View */}
+        {viewMode === "table" && (
+          <div className="flex-1 w-full">
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+                  <Activity className="w-6 h-6 text-green-600" />
+                  Table View
+                </h2>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Task</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Assignee</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Priority</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Progress</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Due Date</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                    {filteredTasks.map((task, index) => (
+                      <motion.tr
+                        key={task.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.02 }}
+                        className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors cursor-pointer"
+                        onClick={() => {
+                          setSelectedTask(task);
+                          setShowTaskDetailModal(true);
+                        }}
+                      >
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-2 h-2 rounded-full ${
+                              task.priority === "high" ? "bg-red-500" :
+                              task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+                            }`} />
+                            <div>
+                              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{task.title}</div>
+                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs">
+                                {task.description || "No description"}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <img
+                              src={getEmployeeAvatar(task.assigned_to)}
+                              alt="avatar"
+                              className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                            />
+                            <span className="text-sm text-gray-900 dark:text-gray-100">
+                              {getEmployeeName(task.assigned_to)}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`px-3 py-1 text-xs rounded-full font-medium ${
+                            task.status === "completed" ? "bg-green-100 text-green-700 border border-green-200" :
+                            task.status === "in_progress" ? "bg-blue-100 text-blue-700 border border-blue-200" :
+                            task.status === "review" ? "bg-yellow-100 text-yellow-700 border border-yellow-200" :
+                            "bg-gray-100 text-gray-700 border border-gray-200"
+                          }`}>
+                            {task.status?.replace('_', ' ').toUpperCase()}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            {getPriorityIcon(task.priority)}
+                            <span className={`px-2 py-1 text-xs rounded-full border ${getPriorityBadge(task.priority)}`}>
+                              {task.priority?.toUpperCase()}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          {task.progress > 0 ? (
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${task.progress}%` }}
+                                />
+                              </div>
+                              <span className="text-xs text-gray-600">{task.progress}%</span>
+                            </div>
+                          ) : (
+                            <span className="text-xs text-gray-400">Not started</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {task.due_date ? (
+                            <div className={`flex items-center gap-1 text-sm ${
+                              new Date(task.due_date) < new Date() && task.status !== "completed" ? 'text-red-600' : 'text-gray-600 dark:text-gray-400'
+                            }`}>
+                              <Calendar className="w-4 h-4" />
+                              {new Date(task.due_date).toLocaleDateString()}
+                            </div>
+                          ) : (
+                            <span className="text-xs text-gray-400">No due date</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedTask(task);
+                                setShowTaskDetailModal(true);
+                              }}
+                              className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                              title="View Details"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                              }}
+                              className="p-1 text-gray-400 hover:text-green-600 transition-colors"
+                              title="Edit Task"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                {filteredTasks.length === 0 && (
+                  <div className="text-center py-12">
+                    <Activity className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                    <p className="text-gray-500">No tasks found</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* High Priority Tasks Sidebar */}
         <div className="w-80 flex-shrink-0">
           <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl border-2 border-red-200 dark:border-red-800 h-full flex flex-col">
