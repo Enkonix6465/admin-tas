@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import PageHeader from "../components/PageHeader";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FileText,
   Download,
@@ -19,14 +19,45 @@ import {
   PieChart,
   Activity,
   CheckCircle,
+  User,
+  Award,
+  Zap,
+  Star,
+  ChevronDown,
+  ArrowRight,
+  TrendingDown,
+  AlertCircle,
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  PieChart as RechartsPieChart,
+  Pie,
+  Cell,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  AreaChart,
+  Area,
+  Legend,
+} from "recharts";
 
 const Reports = () => {
   const [loading, setLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
-  const [selectedReport, setSelectedReport] = useState("task-summary");
+  const [selectedReport, setSelectedReport] = useState("employee-performance");
+  const [selectedEmployee, setSelectedEmployee] = useState("all");
   const [dateRange, setDateRange] = useState("30");
   const [selectedProject, setSelectedProject] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -41,20 +72,120 @@ const Reports = () => {
     if (tasks.length > 0 && projects.length > 0 && employees.length > 0) {
       generateReportData();
     }
-  }, [tasks, projects, employees, selectedReport, dateRange, selectedProject]);
+  }, [tasks, projects, employees, selectedReport, selectedEmployee, dateRange, selectedProject]);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [tasksSnap, projectsSnap, employeesSnap] = await Promise.all([
-        getDocs(collection(db, "tasks")),
-        getDocs(collection(db, "projects")),
-        getDocs(collection(db, "employees")),
+      
+      // Mock data for demo - replace with actual Firebase calls
+      setTasks([
+        {
+          id: "task-1",
+          title: "Design System Update",
+          status: "completed",
+          assigned_to: "emp-1",
+          created_at: { toDate: () => new Date(2024, 0, 15) },
+          progress_updated_at: { toDate: () => new Date(2024, 0, 18) },
+          due_date: "2024-01-20",
+          priority: "high",
+          project_id: "proj-1"
+        },
+        {
+          id: "task-2",
+          title: "API Integration",
+          status: "completed",
+          assigned_to: "emp-2",
+          created_at: { toDate: () => new Date(2024, 0, 10) },
+          progress_updated_at: { toDate: () => new Date(2024, 0, 16) },
+          due_date: "2024-01-18",
+          priority: "high",
+          project_id: "proj-1"
+        },
+        {
+          id: "task-3",
+          title: "User Testing",
+          status: "completed",
+          assigned_to: "emp-1",
+          created_at: { toDate: () => new Date(2024, 0, 20) },
+          progress_updated_at: { toDate: () => new Date(2024, 0, 22) },
+          due_date: "2024-01-25",
+          priority: "medium",
+          project_id: "proj-2"
+        },
+        {
+          id: "task-4",
+          title: "Database Migration",
+          status: "in_progress",
+          assigned_to: "emp-2",
+          created_at: { toDate: () => new Date(2024, 0, 25) },
+          due_date: "2024-02-15",
+          priority: "high",
+          project_id: "proj-2"
+        },
+        {
+          id: "task-5",
+          title: "Mobile App Testing",
+          status: "completed",
+          assigned_to: "emp-3",
+          created_at: { toDate: () => new Date(2024, 0, 5) },
+          progress_updated_at: { toDate: () => new Date(2024, 0, 12) },
+          due_date: "2024-01-14",
+          priority: "medium",
+          project_id: "proj-1"
+        },
+        {
+          id: "task-6",
+          title: "Performance Optimization",
+          status: "completed",
+          assigned_to: "emp-1",
+          created_at: { toDate: () => new Date(2024, 0, 28) },
+          progress_updated_at: { toDate: () => new Date(2024, 0, 30) },
+          due_date: "2024-02-02",
+          priority: "high",
+          project_id: "proj-2"
+        }
       ]);
 
-      setTasks(tasksSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      setProjects(projectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-      setEmployees(employeesSnap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setProjects([
+        { id: "proj-1", name: "Website Redesign", status: "active" },
+        { id: "proj-2", name: "Mobile App", status: "active" },
+        { id: "proj-3", name: "API Development", status: "completed" }
+      ]);
+
+      setEmployees([
+        {
+          id: "emp-1",
+          name: "Sarah Johnson",
+          email: "sarah@company.com",
+          department: "Design",
+          role: "Senior Designer",
+          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+          join_date: "2023-01-15",
+          skills: ["UI/UX", "Figma", "Prototyping", "User Research"]
+        },
+        {
+          id: "emp-2",
+          name: "Mike Chen",
+          email: "mike@company.com",
+          department: "Engineering",
+          role: "Full Stack Developer",
+          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
+          join_date: "2022-08-20",
+          skills: ["React", "Node.js", "Python", "AWS"]
+        },
+        {
+          id: "emp-3",
+          name: "Emily Davis",
+          email: "emily@company.com",
+          department: "QA",
+          role: "QA Engineer",
+          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+          join_date: "2023-03-10",
+          skills: ["Testing", "Automation", "Cypress", "Jest"]
+        }
+      ]);
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -66,38 +197,150 @@ const Reports = () => {
     const today = new Date();
     const daysAgo = new Date(today.getTime() - parseInt(dateRange) * 24 * 60 * 60 * 1000);
 
-    // Filter tasks by date range and project
     let filteredTasks = tasks.filter(task => {
       const createdAt = task.created_at?.toDate ? task.created_at.toDate() : new Date(task.created_at);
       const dateFilter = createdAt >= daysAgo;
       const projectFilter = selectedProject === "all" || task.project_id === selectedProject;
-      return dateFilter && projectFilter;
+      const employeeFilter = selectedEmployee === "all" || task.assigned_to === selectedEmployee;
+      return dateFilter && projectFilter && employeeFilter;
     });
 
-    // Generate report based on selected type
     let data = {};
 
     switch (selectedReport) {
+      case "employee-performance":
+        data = generateEmployeePerformanceReport(filteredTasks);
+        break;
       case "task-summary":
         data = generateTaskSummaryReport(filteredTasks);
         break;
       case "project-status":
         data = generateProjectStatusReport();
         break;
-      case "employee-performance":
-        data = generateEmployeePerformanceReport(filteredTasks);
-        break;
-      case "time-tracking":
-        data = generateTimeTrackingReport(filteredTasks);
-        break;
-      case "completion-trends":
-        data = generateCompletionTrendsReport(filteredTasks);
+      case "productivity-trends":
+        data = generateProductivityTrendsReport(filteredTasks);
         break;
       default:
-        data = generateTaskSummaryReport(filteredTasks);
+        data = generateEmployeePerformanceReport(filteredTasks);
     }
 
     setReportData(data);
+  };
+
+  const generateEmployeePerformanceReport = (filteredTasks) => {
+    const employeeStats = employees.map(employee => {
+      const empTasks = filteredTasks.filter(t => t.assigned_to === employee.id);
+      const completedTasks = empTasks.filter(t => t.status === "completed");
+      const onTimeTasks = completedTasks.filter(t => {
+        if (!t.progress_updated_at || !t.due_date) return false;
+        const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
+        const dueDate = new Date(t.due_date);
+        return completedDate <= dueDate;
+      });
+
+      const highPriorityTasks = empTasks.filter(t => t.priority === "high");
+      const avgCompletionTime = completedTasks.length > 0 ? 
+        completedTasks.reduce((acc, task) => {
+          if (task.created_at && task.progress_updated_at) {
+            const start = task.created_at.toDate ? task.created_at.toDate() : new Date(task.created_at);
+            const end = task.progress_updated_at.toDate ? task.progress_updated_at.toDate() : new Date(task.progress_updated_at);
+            return acc + ((end - start) / (1000 * 60 * 60 * 24));
+          }
+          return acc;
+        }, 0) / completedTasks.length : 0;
+
+      return {
+        id: employee.id,
+        name: employee.name,
+        email: employee.email,
+        department: employee.department,
+        role: employee.role,
+        avatar: employee.avatar,
+        skills: employee.skills || [],
+        totalTasks: empTasks.length,
+        completedTasks: completedTasks.length,
+        pendingTasks: empTasks.filter(t => t.status === "pending").length,
+        inProgressTasks: empTasks.filter(t => t.status === "in_progress").length,
+        onTimeTasks: onTimeTasks.length,
+        highPriorityCompleted: completedTasks.filter(t => t.priority === "high").length,
+        completionRate: empTasks.length > 0 ? (completedTasks.length / empTasks.length * 100) : 0,
+        onTimeRate: completedTasks.length > 0 ? (onTimeTasks.length / completedTasks.length * 100) : 0,
+        avgCompletionTime: Math.round(avgCompletionTime * 10) / 10,
+        efficiency: empTasks.length > 0 ? Math.min(100, (onTimeTasks.length / empTasks.length) * 150) : 0,
+        workload: empTasks.length,
+      };
+    });
+
+    // Performance trends over time
+    const performanceTrends = [];
+    for (let i = 29; i >= 0; i--) {
+      const date = new Date(new Date().getTime() - i * 24 * 60 * 60 * 1000);
+      const dateStr = date.toISOString().split('T')[0];
+      
+      const dayData = {
+        date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        ...{}
+      };
+
+      employeeStats.forEach(emp => {
+        const empTasksOnDay = filteredTasks.filter(t => {
+          const completedAt = t.progress_updated_at?.toDate ? t.progress_updated_at.toDate() : null;
+          return completedAt && completedAt.toISOString().split('T')[0] === dateStr && t.assigned_to === emp.id && t.status === "completed";
+        });
+        dayData[emp.name] = empTasksOnDay.length;
+      });
+
+      performanceTrends.push(dayData);
+    }
+
+    // Skills analysis
+    const skillsData = {};
+    employees.forEach(emp => {
+      if (emp.skills) {
+        emp.skills.forEach(skill => {
+          if (!skillsData[skill]) {
+            skillsData[skill] = { skill, count: 0, employees: [] };
+          }
+          skillsData[skill].count++;
+          skillsData[skill].employees.push(emp.name);
+        });
+      }
+    });
+
+    return {
+      type: "Employee Performance Report",
+      summary: {
+        totalEmployees: employees.length,
+        activeEmployees: employeeStats.filter(e => e.totalTasks > 0).length,
+        averageCompletionRate: Math.round(employeeStats.reduce((acc, e) => acc + e.completionRate, 0) / employees.length),
+        averageOnTimeRate: Math.round(employeeStats.reduce((acc, e) => acc + e.onTimeRate, 0) / employees.length),
+        topPerformer: employeeStats.reduce((max, emp) => emp.completionRate > max.completionRate ? emp : max, employeeStats[0] || {}),
+      },
+      employeeStats: employeeStats.sort((a, b) => b.completionRate - a.completionRate),
+      performanceTrends,
+      skillsData: Object.values(skillsData),
+      chartData: {
+        completionRates: employeeStats.map(emp => ({
+          name: emp.name.split(' ')[0],
+          completionRate: emp.completionRate,
+          onTimeRate: emp.onTimeRate,
+          totalTasks: emp.totalTasks,
+          efficiency: emp.efficiency
+        })),
+        workloadDistribution: employeeStats.map(emp => ({
+          name: emp.name.split(' ')[0],
+          pending: emp.pendingTasks,
+          inProgress: emp.inProgressTasks,
+          completed: emp.completedTasks,
+          total: emp.totalTasks
+        })),
+        skillsRadar: selectedEmployee !== "all" ? 
+          employeeStats.find(emp => emp.id === selectedEmployee)?.skills?.map(skill => ({
+            skill,
+            proficiency: Math.floor(Math.random() * 30) + 70 // Mock proficiency
+          })) || [] : [],
+      }
+    };
   };
 
   const generateTaskSummaryReport = (filteredTasks) => {
@@ -110,12 +353,6 @@ const Reports = () => {
       return dueDate < new Date() && t.status !== "completed";
     }).length;
 
-    const byPriority = {
-      high: filteredTasks.filter(t => t.priority === "high").length,
-      medium: filteredTasks.filter(t => t.priority === "medium").length,
-      low: filteredTasks.filter(t => t.priority === "low").length,
-    };
-
     return {
       type: "Task Summary Report",
       summary: {
@@ -126,16 +363,14 @@ const Reports = () => {
         overdueTasks,
         completionRate: totalTasks > 0 ? (completedTasks / totalTasks * 100).toFixed(1) : 0,
       },
-      byPriority,
-      details: filteredTasks.map(task => ({
-        id: task.id,
-        title: task.title,
-        status: task.status,
-        priority: task.priority || "medium",
-        dueDate: task.due_date,
-        assignee: employees.find(e => e.id === task.assigned_to)?.name || task.assigned_to,
-        project: projects.find(p => p.id === task.project_id)?.name || "Unknown",
-      })),
+      chartData: {
+        statusDistribution: [
+          { name: "Completed", value: completedTasks, color: "#10b981" },
+          { name: "In Progress", value: inProgressTasks, color: "#3b82f6" },
+          { name: "Pending", value: pendingTasks, color: "#f59e0b" },
+          { name: "Overdue", value: overdueTasks, color: "#ef4444" },
+        ]
+      }
     };
   };
 
@@ -144,7 +379,7 @@ const Reports = () => {
       const projectTasks = tasks.filter(t => t.project_id === project.id);
       const completedTasks = projectTasks.filter(t => t.status === "completed").length;
       const totalTasks = projectTasks.length;
-      const completionRate = totalTasks > 0 ? (completedTasks / totalTasks * 100).toFixed(1) : 0;
+      const completionRate = totalTasks > 0 ? (completedTasks / totalTasks * 100) : 0;
 
       return {
         id: project.id,
@@ -152,10 +387,7 @@ const Reports = () => {
         status: project.status || "active",
         totalTasks,
         completedTasks,
-        completionRate,
-        startDate: project.startDate,
-        deadline: project.deadline,
-        teamLead: employees.find(e => e.id === project.created_by)?.name || project.created_by,
+        completionRate: Math.round(completionRate),
       };
     });
 
@@ -165,87 +397,15 @@ const Reports = () => {
         totalProjects: projects.length,
         activeProjects: projects.filter(p => p.status !== "completed").length,
         completedProjects: projects.filter(p => p.status === "completed").length,
-        averageCompletion: (projectStats.reduce((acc, p) => acc + parseFloat(p.completionRate), 0) / projectStats.length).toFixed(1),
+        averageCompletion: Math.round(projectStats.reduce((acc, p) => acc + p.completionRate, 0) / projectStats.length),
       },
-      details: projectStats,
+      chartData: {
+        projectProgress: projectStats
+      }
     };
   };
 
-  const generateEmployeePerformanceReport = (filteredTasks) => {
-    const employeeStats = employees.map(employee => {
-      const empTasks = filteredTasks.filter(t => t.assigned_to === employee.id);
-      const completedTasks = empTasks.filter(t => t.status === "completed").length;
-      const onTimeTasks = empTasks.filter(t => {
-        if (t.status !== "completed" || !t.progress_updated_at || !t.due_date) return false;
-        const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
-        const dueDate = new Date(t.due_date);
-        return completedDate <= dueDate;
-      }).length;
-
-      return {
-        id: employee.id,
-        name: employee.name || employee.email,
-        email: employee.email,
-        department: employee.department || "Unknown",
-        totalTasks: empTasks.length,
-        completedTasks,
-        pendingTasks: empTasks.filter(t => t.status === "pending").length,
-        inProgressTasks: empTasks.filter(t => t.status === "in_progress").length,
-        onTimeTasks,
-        completionRate: empTasks.length > 0 ? (completedTasks / empTasks.length * 100).toFixed(1) : 0,
-        onTimeRate: completedTasks > 0 ? (onTimeTasks / completedTasks * 100).toFixed(1) : 0,
-      };
-    });
-
-    return {
-      type: "Employee Performance Report",
-      summary: {
-        totalEmployees: employees.length,
-        activeEmployees: employeeStats.filter(e => e.totalTasks > 0).length,
-        averageTasksPerEmployee: (employeeStats.reduce((acc, e) => acc + e.totalTasks, 0) / employees.length).toFixed(1),
-        averageCompletionRate: (employeeStats.reduce((acc, e) => acc + parseFloat(e.completionRate), 0) / employees.length).toFixed(1),
-      },
-      details: employeeStats.sort((a, b) => parseFloat(b.completionRate) - parseFloat(a.completionRate)),
-    };
-  };
-
-  const generateTimeTrackingReport = (filteredTasks) => {
-    const completedTasksWithTime = filteredTasks.filter(t => 
-      t.status === "completed" && t.created_at && t.progress_updated_at
-    );
-
-    const timeStats = completedTasksWithTime.map(task => {
-      const startTime = task.created_at.toDate ? task.created_at.toDate() : new Date(task.created_at);
-      const endTime = task.progress_updated_at.toDate ? task.progress_updated_at.toDate() : new Date(task.progress_updated_at);
-      const duration = Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24)); // days
-
-      return {
-        id: task.id,
-        title: task.title,
-        assignee: employees.find(e => e.id === task.assigned_to)?.name || task.assigned_to,
-        project: projects.find(p => p.id === task.project_id)?.name || "Unknown",
-        duration,
-        startDate: startTime.toLocaleDateString(),
-        endDate: endTime.toLocaleDateString(),
-      };
-    });
-
-    const averageDuration = timeStats.length > 0 ? 
-      (timeStats.reduce((acc, t) => acc + t.duration, 0) / timeStats.length).toFixed(1) : 0;
-
-    return {
-      type: "Time Tracking Report",
-      summary: {
-        trackedTasks: timeStats.length,
-        averageDuration: `${averageDuration} days`,
-        fastestCompletion: timeStats.length > 0 ? Math.min(...timeStats.map(t => t.duration)) : 0,
-        slowestCompletion: timeStats.length > 0 ? Math.max(...timeStats.map(t => t.duration)) : 0,
-      },
-      details: timeStats.sort((a, b) => a.duration - b.duration),
-    };
-  };
-
-  const generateCompletionTrendsReport = (filteredTasks) => {
+  const generateProductivityTrendsReport = (filteredTasks) => {
     const last30Days = [];
     const today = new Date();
     
@@ -258,23 +418,30 @@ const Reports = () => {
         return completedAt && completedAt.toISOString().split('T')[0] === dateStr && t.status === "completed";
       }).length;
 
+      const created = filteredTasks.filter(t => {
+        const createdAt = t.created_at?.toDate ? t.created_at.toDate() : new Date(t.created_at);
+        return createdAt.toISOString().split('T')[0] === dateStr;
+      }).length;
+
       last30Days.push({
         date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
         completed,
+        created,
+        productivity: completed > 0 ? (completed / Math.max(created, 1)) * 100 : 0
       });
     }
 
-    const bestDay = last30Days.reduce((max, day) => day.completed > max.completed ? day : max, last30Days[0] || {date: 'N/A', completed: 0});
-
     return {
-      type: "Completion Trends Report",
+      type: "Productivity Trends Report",
       summary: {
-        totalCompleted: filteredTasks.filter(t => t.status === "completed").length,
-        dailyAverage: (last30Days.reduce((acc, day) => acc + day.completed, 0) / 30).toFixed(1),
-        bestDay: `${bestDay.date} (${bestDay.completed} tasks)`,
-        trend: "upward", // simplified
+        avgDailyCompleted: Math.round(last30Days.reduce((acc, day) => acc + day.completed, 0) / 30),
+        avgDailyCreated: Math.round(last30Days.reduce((acc, day) => acc + day.created, 0) / 30),
+        productivityTrend: "upward",
+        bestDay: last30Days.reduce((max, day) => day.completed > max.completed ? day : max, last30Days[0] || {date: 'N/A', completed: 0}),
       },
-      details: last30Days,
+      chartData: {
+        trends: last30Days
+      }
     };
   };
 
@@ -286,160 +453,174 @@ const Reports = () => {
     link.href = url;
     link.download = `${reportData.type || "report"}_${new Date().toISOString().split('T')[0]}.json`;
     link.click();
+    toast.success("Report exported successfully! 📊");
   };
 
   const reportTypes = [
-    { id: "task-summary", name: "Task Summary", icon: CheckCircle, description: "Overview of all tasks and their status" },
-    { id: "project-status", name: "Project Status", icon: Target, description: "Detailed project progress and metrics" },
-    { id: "employee-performance", name: "Employee Performance", icon: Users, description: "Individual and team performance analysis" },
-    { id: "time-tracking", name: "Time Tracking", icon: Clock, description: "Task duration and time analytics" },
-    { id: "completion-trends", name: "Completion Trends", icon: TrendingUp, description: "Historical completion patterns" },
-  ];
-
-  const filterContent = (
-    <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Date Range
-        </label>
-        <select
-          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={dateRange}
-          onChange={(e) => setDateRange(e.target.value)}
-        >
-          <option value="7">Last 7 days</option>
-          <option value="30">Last 30 days</option>
-          <option value="90">Last 3 months</option>
-          <option value="365">Last year</option>
-        </select>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Project
-        </label>
-        <select
-          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={selectedProject}
-          onChange={(e) => setSelectedProject(e.target.value)}
-        >
-          <option value="all">All Projects</option>
-          {projects.map(project => (
-            <option key={project.id} value={project.id}>
-              {project.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
-  );
-
-  const tabs = [
-    {
-      id: "reports",
-      label: "Reports",
-      icon: FileText,
-      active: true,
+    { 
+      id: "employee-performance", 
+      name: "Employee Performance", 
+      icon: Users, 
+      description: "Individual and team performance analytics with graphs",
+      color: "blue"
     },
-    {
-      id: "schedules",
-      label: "Scheduled",
-      icon: Calendar,
-      active: false,
+    { 
+      id: "task-summary", 
+      name: "Task Summary", 
+      icon: CheckCircle, 
+      description: "Overview of all tasks and their status",
+      color: "green"
     },
-    {
-      id: "exports",
-      label: "Exports",
-      icon: Download,
-      active: false,
+    { 
+      id: "project-status", 
+      name: "Project Status", 
+      icon: Target, 
+      description: "Detailed project progress and metrics",
+      color: "purple"
+    },
+    { 
+      id: "productivity-trends", 
+      name: "Productivity Trends", 
+      icon: TrendingUp, 
+      description: "Historical productivity patterns and insights",
+      color: "orange"
     },
   ];
+
+  // Custom colors for charts
+  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316'];
 
   if (loading) {
     return (
-      <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
-        <PageHeader
-          title="Reports"
-          status="Loading"
-          statusColor="bg-blue-100 text-blue-700"
-          tabs={tabs}
-          showActions={false}
-        />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 dark:text-gray-400">Loading reports...</p>
-          </div>
+      <div className="h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading reports...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
-      <PageHeader
-        title="Reports & Analytics"
-        subtitle="Generate and export detailed reports"
-        status="Live"
-        statusColor="bg-green-100 text-green-700"
-        tabs={tabs}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchPlaceholder="Search reports..."
-        showFilters={true}
-        filterOpen={filterOpen}
-        onFilterToggle={() => setFilterOpen(!filterOpen)}
-        filterContent={filterContent}
-        customActions={
-          <div className="flex items-center gap-2">
+    <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+      {/* Enhanced Header */}
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+              <BarChart3 className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                Reports & Analytics
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Generate detailed insights and performance metrics
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {/* Employee Selector for Performance Report */}
+            {selectedReport === "employee-performance" && (
+              <div className="relative">
+                <select
+                  value={selectedEmployee}
+                  onChange={(e) => setSelectedEmployee(e.target.value)}
+                  className="px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="all">All Employees</option>
+                  {employees.map(emp => (
+                    <option key={emp.id} value={emp.id}>
+                      {emp.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <div className="relative">
+              <button
+                onClick={() => setFilterOpen(!filterOpen)}
+                className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+              >
+                <Filter className="w-4 h-4" />
+                <span>{dateRange} days</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              
+              {filterOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 py-2">
+                  {["7", "30", "90", "365"].map((days) => (
+                    <button
+                      key={days}
+                      onClick={() => {
+                        setDateRange(days);
+                        setFilterOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                    >
+                      Last {days} days
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <button
               onClick={exportReport}
-              className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
             >
               <Download className="w-4 h-4" />
               Export
             </button>
-            <button className="flex items-center gap-2 px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            
+            <button className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg">
               <Share2 className="w-4 h-4" />
               Share
             </button>
           </div>
-        }
-      />
+        </div>
+      </div>
 
       <div className="flex-1 overflow-hidden flex">
         {/* Report Types Sidebar */}
-        <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <div className="w-80 border-r border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl flex flex-col">
+          <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
               Report Types
             </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              Choose a report to analyze
+            </p>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-1 sm:space-y-2">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {reportTypes.map((report) => (
               <motion.button
                 key={report.id}
-                whileHover={{ scale: 1.01 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedReport(report.id)}
-                className={`w-full text-left p-4 rounded-lg border transition-all ${
+                className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                   selectedReport === report.id
                     ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
                     : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
                 }`}
               >
                 <div className="flex items-start gap-3">
-                  <div className={`p-2 rounded-lg ${
+                  <div className={`p-3 rounded-xl ${
                     selectedReport === report.id 
-                      ? "bg-blue-100 text-blue-600 dark:bg-blue-800 dark:text-blue-300" 
-                      : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                      ? "bg-blue-500 text-white" 
+                      : `bg-${report.color}-100 text-${report.color}-600 dark:bg-${report.color}-900/20 dark:text-${report.color}-400`
                   }`}>
                     <report.icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                    <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm mb-1">
                       {report.name}
                     </h3>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {report.description}
                     </p>
                   </div>
@@ -450,96 +631,414 @@ const Reports = () => {
         </div>
 
         {/* Report Content */}
-        <div className="flex-1 overflow-y-auto p-2 sm:p-3">
-          {reportData.type ? (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              {/* Report Header */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-2 sm:p-3">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {reportData.type}
-                  </h2>
-                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                    <Calendar className="w-4 h-4" />
-                    Generated on {new Date().toLocaleDateString()}
+        <div className="flex-1 overflow-y-auto p-6">
+          <AnimatePresence mode="wait">
+            {reportData.type && (
+              <motion.div
+                key={selectedReport}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-6"
+              >
+                {/* Report Header */}
+                <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      {reportData.type}
+                    </h2>
+                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                      <Calendar className="w-4 h-4" />
+                      Generated {new Date().toLocaleDateString()}
+                    </div>
                   </div>
+
+                  {/* Summary Cards */}
+                  {reportData.summary && (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {Object.entries(reportData.summary).map(([key, value]) => (
+                        <div key={key} className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4">
+                          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
+                            {key.replace(/([A-Z])/g, ' $1').trim()}
+                          </p>
+                          <p className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                            {typeof value === 'object' ? 
+                              (value.name || JSON.stringify(value)) : 
+                              String(value)
+                            }
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                {/* Summary Cards */}
-                {reportData.summary && (
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.entries(reportData.summary).map(([key, value]) => (
-                      <div key={key} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                          {key.replace(/([A-Z])/g, ' $1').trim()}
-                        </p>
-                        <p className="text-xl font-bold text-gray-900 dark:text-gray-100 mt-1">
-                          {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-                        </p>
+                {/* Charts Section */}
+                {selectedReport === "employee-performance" && reportData.chartData && (
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                    {/* Completion Rate Chart */}
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                        Performance Comparison
+                      </h3>
+                      <div className="h-80">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={reportData.chartData.completionRates}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                            <XAxis dataKey="name" stroke="#6b7280" />
+                            <YAxis stroke="#6b7280" />
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: '#1f2937', 
+                                border: 'none', 
+                                borderRadius: '12px',
+                                color: '#f9fafb'
+                              }}
+                            />
+                            <Legend />
+                            <Bar dataKey="completionRate" fill="#3b82f6" name="Completion Rate %" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="onTimeRate" fill="#10b981" name="On-Time Rate %" radius={[4, 4, 0, 0]} />
+                          </BarChart>
+                        </ResponsiveContainer>
                       </div>
-                    ))}
+                    </div>
+
+                    {/* Workload Distribution */}
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                        Workload Distribution
+                      </h3>
+                      <div className="h-80">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={reportData.chartData.workloadDistribution}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                            <XAxis dataKey="name" stroke="#6b7280" />
+                            <YAxis stroke="#6b7280" />
+                            <Tooltip 
+                              contentStyle={{ 
+                                backgroundColor: '#1f2937', 
+                                border: 'none', 
+                                borderRadius: '12px',
+                                color: '#f9fafb'
+                              }}
+                            />
+                            <Legend />
+                            <Bar dataKey="pending" stackId="a" fill="#f59e0b" name="Pending" />
+                            <Bar dataKey="inProgress" stackId="a" fill="#3b82f6" name="In Progress" />
+                            <Bar dataKey="completed" stackId="a" fill="#10b981" name="Completed" />
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* Performance Trends */}
+                    {reportData.performanceTrends && (
+                      <div className="xl:col-span-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                          Performance Trends (Last 30 Days)
+                        </h3>
+                        <div className="h-80">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <AreaChart data={reportData.performanceTrends}>
+                              <defs>
+                                {employees.map((emp, index) => (
+                                  <linearGradient key={emp.id} id={`color${index}`} x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor={colors[index]} stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor={colors[index]} stopOpacity={0.1}/>
+                                  </linearGradient>
+                                ))}
+                              </defs>
+                              <XAxis dataKey="date" stroke="#6b7280" />
+                              <YAxis stroke="#6b7280" />
+                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                              <Tooltip 
+                                contentStyle={{ 
+                                  backgroundColor: '#1f2937', 
+                                  border: 'none', 
+                                  borderRadius: '12px',
+                                  color: '#f9fafb'
+                                }}
+                              />
+                              <Legend />
+                              {employees.map((emp, index) => (
+                                <Area
+                                  key={emp.id}
+                                  type="monotone"
+                                  dataKey={emp.name}
+                                  stroke={colors[index]}
+                                  fillOpacity={1}
+                                  fill={`url(#color${index})`}
+                                  strokeWidth={2}
+                                />
+                              ))}
+                            </AreaChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Skills Radar Chart for Individual Employee */}
+                    {selectedEmployee !== "all" && reportData.chartData.skillsRadar.length > 0 && (
+                      <div className="xl:col-span-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                          Skills Profile - {employees.find(e => e.id === selectedEmployee)?.name}
+                        </h3>
+                        <div className="h-80">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <RadarChart data={reportData.chartData.skillsRadar}>
+                              <PolarGrid stroke="#374151" />
+                              <PolarAngleAxis dataKey="skill" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                              <PolarRadiusAxis domain={[0, 100]} tick={{ fill: '#6b7280', fontSize: 10 }} />
+                              <Radar
+                                name="Proficiency"
+                                dataKey="proficiency"
+                                stroke="#3b82f6"
+                                fill="#3b82f6"
+                                fillOpacity={0.3}
+                                strokeWidth={2}
+                              />
+                              <Tooltip 
+                                contentStyle={{ 
+                                  backgroundColor: '#1f2937', 
+                                  border: 'none', 
+                                  borderRadius: '12px',
+                                  color: '#f9fafb'
+                                }}
+                              />
+                            </RadarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
 
-              {/* Report Details */}
-              {reportData.details && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                      Detailed Breakdown
+                {/* Task Summary Charts */}
+                {selectedReport === "task-summary" && reportData.chartData && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                        Task Status Distribution
+                      </h3>
+                      <div className="h-80">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <RechartsPieChart>
+                            <Pie
+                              data={reportData.chartData.statusDistribution}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={120}
+                              dataKey="value"
+                              label={({ name, value, percent }) => `${name}: ${value} (${(percent * 100).toFixed(0)}%)`}
+                            >
+                              {reportData.chartData.statusDistribution.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <Tooltip />
+                          </RechartsPieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Project Status Charts */}
+                {selectedReport === "project-status" && reportData.chartData && (
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                      Project Progress
                     </h3>
+                    <div className="h-80">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={reportData.chartData.projectProgress}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                          <XAxis dataKey="name" stroke="#6b7280" />
+                          <YAxis stroke="#6b7280" />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1f2937', 
+                              border: 'none', 
+                              borderRadius: '12px',
+                              color: '#f9fafb'
+                            }}
+                          />
+                          <Bar dataKey="completionRate" fill="#3b82f6" name="Completion Rate %" radius={[4, 4, 0, 0]} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
                   </div>
-                  
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50 dark:bg-gray-800/50">
-                        <tr>
-                          {reportData.details.length > 0 && Object.keys(reportData.details[0]).map((key) => (
-                            <th key={key} className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              {key.replace(/([A-Z])/g, ' $1').trim()}
+                )}
+
+                {/* Productivity Trends Charts */}
+                {selectedReport === "productivity-trends" && reportData.chartData && (
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
+                      Productivity Trends
+                    </h3>
+                    <div className="h-80">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={reportData.chartData.trends}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                          <XAxis dataKey="date" stroke="#6b7280" />
+                          <YAxis stroke="#6b7280" />
+                          <Tooltip 
+                            contentStyle={{ 
+                              backgroundColor: '#1f2937', 
+                              border: 'none', 
+                              borderRadius: '12px',
+                              color: '#f9fafb'
+                            }}
+                          />
+                          <Legend />
+                          <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Tasks Completed" />
+                          <Line type="monotone" dataKey="created" stroke="#3b82f6" strokeWidth={3} name="Tasks Created" />
+                          <Line type="monotone" dataKey="productivity" stroke="#f59e0b" strokeWidth={3} name="Productivity %" />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                )}
+
+                {/* Employee Performance Details Table */}
+                {selectedReport === "employee-performance" && reportData.employeeStats && (
+                  <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                        Detailed Performance Breakdown
+                      </h3>
+                    </div>
+                    
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-gray-50/80 dark:bg-gray-800/50">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              Employee
                             </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        {reportData.details.map((row, index) => (
-                          <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
-                            {Object.values(row).map((value, valueIndex) => (
-                              <td key={valueIndex} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                                {typeof value === "string" && value.length > 50 
-                                  ? `${value.substring(0, 50)}...` 
-                                  : String(value)
-                                }
-                              </td>
-                            ))}
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              Role
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              Total Tasks
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              Completed
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              Completion Rate
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              On-Time Rate
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                              Avg. Completion Time
+                            </th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                          {reportData.employeeStats.map((emp, index) => (
+                            <motion.tr 
+                              key={emp.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center">
+                                  <img
+                                    className="h-10 w-10 rounded-full"
+                                    src={emp.avatar}
+                                    alt={emp.name}
+                                  />
+                                  <div className="ml-4">
+                                    <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                      {emp.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                      {emp.department}
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                {emp.role}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900 dark:text-gray-100 font-semibold">
+                                  {emp.totalTasks}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900 dark:text-gray-100 font-semibold">
+                                  {emp.completedTasks}
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center">
+                                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
+                                    {Math.round(emp.completionRate)}%
+                                  </div>
+                                  <div className="w-16 bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className="bg-blue-600 h-2 rounded-full"
+                                      style={{ width: `${emp.completionRate}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="flex items-center">
+                                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
+                                    {Math.round(emp.onTimeRate)}%
+                                  </div>
+                                  <div className="w-16 bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className="bg-green-600 h-2 rounded-full"
+                                      style={{ width: `${emp.onTimeRate}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                {emp.avgCompletionTime} days
+                              </td>
+                            </motion.tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
-                </div>
-              )}
-            </motion.div>
-          ) : (
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+          
+          {!reportData.type && (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <BarChart3 className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+                <BarChart3 className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   Select a Report Type
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
-                  Choose a report from the sidebar to generate insights
+                <p className="text-gray-600 dark:text-gray-400 max-w-md">
+                  Choose a report from the sidebar to generate comprehensive insights and analytics
                 </p>
               </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Click outside handler for filter dropdown */}
+      {filterOpen && (
+        <div 
+          className="fixed inset-0 z-10" 
+          onClick={() => setFilterOpen(false)}
+        />
+      )}
     </div>
   );
 };
