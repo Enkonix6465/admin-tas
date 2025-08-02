@@ -26,7 +26,7 @@ import {
   X,
   Download,
   Bell,
-  Sync,
+  RefreshCw,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
