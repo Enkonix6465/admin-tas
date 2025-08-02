@@ -537,69 +537,187 @@ const Calendar = () => {
         {/* Calendar Grid */}
         <div className="flex-1 overflow-auto">
           {activeView === "timeline" ? (
-            // Timeline View
+            // Enhanced Timeline View with Completion Tracking
             <div className="h-full bg-stone-50 dark:bg-gray-800 m-4 rounded-lg border border-stone-200 dark:border-gray-700 overflow-hidden shadow-sm">
               <div className="p-4 border-b border-stone-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Timeline View</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Events organized chronologically</p>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Project Timeline Chart</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Task completion schedule with time tracking</p>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4">
-                <div className="space-y-4">
-                  {getAllFilteredEvents()
-                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                    .map((event, index) => (
-                      <motion.div
-                        key={event.id}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className="flex items-start gap-4 p-4 bg-white dark:bg-gray-700 rounded-lg border border-stone-200 dark:border-gray-600 hover:shadow-md transition-all"
-                      >
-                        <div className="flex flex-col items-center">
-                          <div
-                            className="w-4 h-4 rounded-full"
-                            style={{ backgroundColor: getEventColor(event) }}
-                          />
-                          {index < getAllFilteredEvents().length - 1 && (
-                            <div className="w-0.5 h-8 bg-stone-300 dark:bg-gray-600 mt-2" />
-                          )}
-                        </div>
+              <div className="flex-1 overflow-y-auto p-6">
+                {/* Timeline Chart Visualization */}
+                <div className="relative">
+                  {/* Timeline Axis */}
+                  <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-purple-500"></div>
 
-                        <div className="flex-1">
-                          <div className="flex items-center justify-between mb-2">
-                            <h3 className="font-semibold text-gray-900 dark:text-gray-100">{event.title}</h3>
-                            <span className="text-sm text-gray-500">{format(event.date, "MMM d, yyyy")}</span>
-                          </div>
+                  <div className="space-y-6">
+                    {getAllFilteredEvents()
+                      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                      .map((event, index) => {
+                        const isCompleted = event.status === 'completed';
+                        const isOverdue = new Date(event.date) < new Date() && !isCompleted;
+                        const daysTillCompletion = Math.ceil((new Date(event.date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                        const completionProgress = isCompleted ? 100 : (daysTillCompletion < 0 ? 0 : Math.max(0, 100 - (daysTillCompletion * 10)));
 
-                          <div className="flex items-center gap-3 text-sm">
-                            <span className={`px-2 py-1 rounded-full text-xs ${getStatusColor(event.status)}`}>
-                              {event.status.replace("_", " ")}
-                            </span>
-                            {event.priority && (
-                              <span className={`px-2 py-1 rounded-full text-xs ${
-                                event.priority === "high" ? "bg-red-100 text-red-700" :
-                                event.priority === "medium" ? "bg-yellow-100 text-yellow-700" :
-                                "bg-green-100 text-green-700"
-                              }`}>
-                                {event.priority} priority
-                              </span>
-                            )}
-                            {event.project_id && (
-                              <span className="text-gray-600 dark:text-gray-400">
-                                {projects.find(p => p.id === event.project_id)?.name}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
+                        return (
+                          <motion.div
+                            key={event.id}
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className="relative flex items-start gap-6"
+                          >
+                            {/* Timeline Node */}
+                            <div className="relative flex flex-col items-center z-10">
+                              <motion.div
+                                className={`w-6 h-6 rounded-full border-4 border-white shadow-lg ${
+                                  isCompleted ? 'bg-green-500' :
+                                  isOverdue ? 'bg-red-500' :
+                                  'bg-blue-500'
+                                }`}
+                                whileHover={{ scale: 1.2 }}
+                                style={{ backgroundColor: getEventColor(event) }}
+                              />
+                              {/* Completion Progress Ring */}
+                              <div className="absolute -inset-1">
+                                <svg className="w-8 h-8 transform -rotate-90" viewBox="0 0 32 32">
+                                  <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="12"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    className="text-gray-200"
+                                  />
+                                  <circle
+                                    cx="16"
+                                    cy="16"
+                                    r="12"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeDasharray={`${completionProgress * 0.75} 75`}
+                                    className={`${
+                                      isCompleted ? 'text-green-500' :
+                                      isOverdue ? 'text-red-500' :
+                                      'text-blue-500'
+                                    }`}
+                                  />
+                                </svg>
+                              </div>
+                            </div>
+
+                            {/* Event Card */}
+                            <motion.div
+                              whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+                              className="flex-1 bg-white dark:bg-gray-700 rounded-xl border border-stone-200 dark:border-gray-600 p-4 shadow-sm"
+                            >
+                              {/* Card Header */}
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex-1">
+                                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg mb-1">
+                                    {event.title}
+                                  </h3>
+                                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                    <Clock className="w-4 h-4" />
+                                    <span>{format(event.date, "MMM d, yyyy 'at' h:mm a")}</span>
+                                    {daysTillCompletion > 0 && (
+                                      <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                                        {daysTillCompletion} days left
+                                      </span>
+                                    )}
+                                    {isOverdue && (
+                                      <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">
+                                        {Math.abs(daysTillCompletion)} days overdue
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="text-right">
+                                  <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                    {completionProgress.toFixed(0)}%
+                                  </div>
+                                  <div className="text-xs text-gray-500">completion</div>
+                                </div>
+                              </div>
+
+                              {/* Progress Bar */}
+                              <div className="mb-3">
+                                <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                                  <span>Progress</span>
+                                  <span>{completionProgress.toFixed(0)}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                  <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${completionProgress}%` }}
+                                    transition={{ duration: 1, ease: "easeOut" }}
+                                    className={`h-2 rounded-full transition-all ${
+                                      isCompleted ? 'bg-green-500' :
+                                      isOverdue ? 'bg-red-500' :
+                                      'bg-blue-500'
+                                    }`}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Status and Project Info */}
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)}`}>
+                                    {event.status.replace("_", " ")}
+                                  </span>
+                                  {event.priority && (
+                                    <span className={`px-2 py-1 rounded-full text-xs ${
+                                      event.priority === "high" ? "bg-red-100 text-red-700" :
+                                      event.priority === "medium" ? "bg-yellow-100 text-yellow-700" :
+                                      "bg-green-100 text-green-700"
+                                    }`}>
+                                      {event.priority} priority
+                                    </span>
+                                  )}
+                                </div>
+
+                                {event.project_id && (
+                                  <div className="flex items-center gap-2">
+                                    <div
+                                      className="w-3 h-3 rounded-sm"
+                                      style={{ backgroundColor: getEventColor(event) }}
+                                    />
+                                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                                      {projects.find(p => p.id === event.project_id)?.name}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* Time Estimate */}
+                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                                <div className="flex items-center justify-between text-sm">
+                                  <span className="text-gray-600 dark:text-gray-400">
+                                    Estimated completion time:
+                                  </span>
+                                  <span className="font-medium text-gray-900 dark:text-gray-100">
+                                    {isCompleted ? 'Completed' :
+                                     isOverdue ? 'Overdue' :
+                                     daysTillCompletion <= 1 ? 'Due today' :
+                                     `${daysTillCompletion} days remaining`}
+                                  </span>
+                                </div>
+                              </div>
+                            </motion.div>
+                          </motion.div>
+                        );
+                      })}
+                  </div>
 
                   {getAllFilteredEvents().length === 0 && (
-                    <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                      <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                      <p className="text-lg">No events found</p>
-                      <p className="text-sm">Try adjusting your filters</p>
+                    <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+                      <CalendarIcon className="w-20 h-20 mx-auto mb-4 opacity-50" />
+                      <p className="text-xl font-medium mb-2">No events in timeline</p>
+                      <p className="text-sm">Add some tasks to see the timeline visualization</p>
                     </div>
                   )}
                 </div>
