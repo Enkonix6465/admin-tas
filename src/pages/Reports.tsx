@@ -65,7 +65,160 @@ const Reports = () => {
   const [reportData, setReportData] = useState({});
 
   useEffect(() => {
-    fetchData();
+    const unsubscribers = [];
+    let mounted = true;
+
+    const setupRealtimeListeners = async () => {
+      try {
+        setLoading(true);
+
+        // Real-time listener for tasks
+        const tasksUnsub = onSnapshot(
+          collection(db, "tasks"),
+          (snapshot) => {
+            if (mounted) {
+              const tasksData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+              }));
+              setTasks(tasksData);
+              console.log("Real-time tasks data loaded:", tasksData.length, "tasks");
+            }
+          },
+          (error) => {
+            console.warn("Tasks listener error:", error);
+            if (mounted) {
+              // Fallback to mock data if Firebase fails
+              setTasks([
+                {
+                  id: "task-1",
+                  title: "Design System Update",
+                  status: "completed",
+                  assigned_to: "emp-1",
+                  created_at: { toDate: () => new Date(2024, 0, 15) },
+                  progress_updated_at: { toDate: () => new Date(2024, 0, 18) },
+                  due_date: "2024-01-20",
+                  priority: "high",
+                  project_id: "proj-1"
+                },
+                {
+                  id: "task-2",
+                  title: "API Integration",
+                  status: "completed",
+                  assigned_to: "emp-2",
+                  created_at: { toDate: () => new Date(2024, 0, 10) },
+                  progress_updated_at: { toDate: () => new Date(2024, 0, 16) },
+                  due_date: "2024-01-18",
+                  priority: "high",
+                  project_id: "proj-1"
+                }
+              ]);
+            }
+          }
+        );
+
+        // Real-time listener for projects
+        const projectsUnsub = onSnapshot(
+          collection(db, "projects"),
+          (snapshot) => {
+            if (mounted) {
+              const projectsData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+              }));
+              setProjects(projectsData);
+              console.log("Real-time projects data loaded:", projectsData.length, "projects");
+            }
+          },
+          (error) => {
+            console.warn("Projects listener error:", error);
+            if (mounted) {
+              setProjects([
+                { id: "proj-1", name: "Website Redesign", status: "active" },
+                { id: "proj-2", name: "Mobile App", status: "active" },
+                { id: "proj-3", name: "API Development", status: "completed" }
+              ]);
+            }
+          }
+        );
+
+        // Real-time listener for employees
+        const employeesUnsub = onSnapshot(
+          collection(db, "employees"),
+          (snapshot) => {
+            if (mounted) {
+              const employeesData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+              }));
+              setEmployees(employeesData);
+              console.log("Real-time employees data loaded:", employeesData.length, "employees");
+              setLoading(false);
+            }
+          },
+          (error) => {
+            console.warn("Employees listener error:", error);
+            if (mounted) {
+              setEmployees([
+                {
+                  id: "emp-1",
+                  name: "Sarah Johnson",
+                  email: "sarah@company.com",
+                  department: "Design",
+                  role: "Senior Designer",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+                  join_date: "2023-01-15",
+                  skills: ["UI/UX", "Figma", "Prototyping", "User Research"]
+                },
+                {
+                  id: "emp-2",
+                  name: "Mike Chen",
+                  email: "mike@company.com",
+                  department: "Engineering",
+                  role: "Full Stack Developer",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
+                  join_date: "2022-08-20",
+                  skills: ["React", "Node.js", "Python", "AWS"]
+                },
+                {
+                  id: "emp-3",
+                  name: "Emily Davis",
+                  email: "emily@company.com",
+                  department: "QA",
+                  role: "QA Engineer",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+                  join_date: "2023-03-10",
+                  skills: ["Testing", "Automation", "Cypress", "Jest"]
+                }
+              ]);
+              setLoading(false);
+            }
+          }
+        );
+
+        unsubscribers.push(tasksUnsub, projectsUnsub, employeesUnsub);
+
+      } catch (error) {
+        console.error("Failed to setup Firebase listeners:", error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    setupRealtimeListeners();
+
+    // Cleanup function
+    return () => {
+      mounted = false;
+      unsubscribers.forEach(unsub => {
+        try {
+          unsub();
+        } catch (error) {
+          console.warn("Error unsubscribing:", error);
+        }
+      });
+    };
   }, []);
 
   useEffect(() => {
@@ -73,125 +226,6 @@ const Reports = () => {
       generateReportData();
     }
   }, [tasks, projects, employees, selectedReport, selectedEmployee, dateRange, selectedProject]);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      
-      // Mock data for demo - replace with actual Firebase calls
-      setTasks([
-        {
-          id: "task-1",
-          title: "Design System Update",
-          status: "completed",
-          assigned_to: "emp-1",
-          created_at: { toDate: () => new Date(2024, 0, 15) },
-          progress_updated_at: { toDate: () => new Date(2024, 0, 18) },
-          due_date: "2024-01-20",
-          priority: "high",
-          project_id: "proj-1"
-        },
-        {
-          id: "task-2",
-          title: "API Integration",
-          status: "completed",
-          assigned_to: "emp-2",
-          created_at: { toDate: () => new Date(2024, 0, 10) },
-          progress_updated_at: { toDate: () => new Date(2024, 0, 16) },
-          due_date: "2024-01-18",
-          priority: "high",
-          project_id: "proj-1"
-        },
-        {
-          id: "task-3",
-          title: "User Testing",
-          status: "completed",
-          assigned_to: "emp-1",
-          created_at: { toDate: () => new Date(2024, 0, 20) },
-          progress_updated_at: { toDate: () => new Date(2024, 0, 22) },
-          due_date: "2024-01-25",
-          priority: "medium",
-          project_id: "proj-2"
-        },
-        {
-          id: "task-4",
-          title: "Database Migration",
-          status: "in_progress",
-          assigned_to: "emp-2",
-          created_at: { toDate: () => new Date(2024, 0, 25) },
-          due_date: "2024-02-15",
-          priority: "high",
-          project_id: "proj-2"
-        },
-        {
-          id: "task-5",
-          title: "Mobile App Testing",
-          status: "completed",
-          assigned_to: "emp-3",
-          created_at: { toDate: () => new Date(2024, 0, 5) },
-          progress_updated_at: { toDate: () => new Date(2024, 0, 12) },
-          due_date: "2024-01-14",
-          priority: "medium",
-          project_id: "proj-1"
-        },
-        {
-          id: "task-6",
-          title: "Performance Optimization",
-          status: "completed",
-          assigned_to: "emp-1",
-          created_at: { toDate: () => new Date(2024, 0, 28) },
-          progress_updated_at: { toDate: () => new Date(2024, 0, 30) },
-          due_date: "2024-02-02",
-          priority: "high",
-          project_id: "proj-2"
-        }
-      ]);
-
-      setProjects([
-        { id: "proj-1", name: "Website Redesign", status: "active" },
-        { id: "proj-2", name: "Mobile App", status: "active" },
-        { id: "proj-3", name: "API Development", status: "completed" }
-      ]);
-
-      setEmployees([
-        {
-          id: "emp-1",
-          name: "Sarah Johnson",
-          email: "sarah@company.com",
-          department: "Design",
-          role: "Senior Designer",
-          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
-          join_date: "2023-01-15",
-          skills: ["UI/UX", "Figma", "Prototyping", "User Research"]
-        },
-        {
-          id: "emp-2",
-          name: "Mike Chen",
-          email: "mike@company.com",
-          department: "Engineering",
-          role: "Full Stack Developer",
-          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
-          join_date: "2022-08-20",
-          skills: ["React", "Node.js", "Python", "AWS"]
-        },
-        {
-          id: "emp-3",
-          name: "Emily Davis",
-          email: "emily@company.com",
-          department: "QA",
-          role: "QA Engineer",
-          avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
-          join_date: "2023-03-10",
-          skills: ["Testing", "Automation", "Cypress", "Jest"]
-        }
-      ]);
-
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const generateReportData = () => {
     const today = new Date();
