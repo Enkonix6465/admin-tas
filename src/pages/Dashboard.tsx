@@ -354,33 +354,54 @@ const Dashboard = () => {
 
   const fallbackCopyTextToClipboard = (text: string) => {
     try {
+      // Create a temporary textarea element
       const textArea = document.createElement("textarea");
       textArea.value = text;
+      textArea.setAttribute('readonly', '');
 
-      // Avoid scrolling to bottom
-      textArea.style.top = "0";
-      textArea.style.left = "0";
-      textArea.style.position = "fixed";
+      // Position it off-screen
+      textArea.style.position = "absolute";
+      textArea.style.left = "-9999px";
+      textArea.style.top = "-9999px";
       textArea.style.opacity = "0";
       textArea.style.pointerEvents = "none";
+      textArea.style.fontSize = "12pt"; // Prevent iOS zoom
 
       document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
 
-      const successful = document.execCommand('copy');
+      // Select the text
+      textArea.select();
+      textArea.setSelectionRange(0, 99999); // For mobile devices
+
+      // Try to copy
+      let successful = false;
+      try {
+        successful = document.execCommand('copy');
+      } catch (copyErr) {
+        console.warn('execCommand copy failed:', copyErr);
+      }
+
       document.body.removeChild(textArea);
 
       if (successful) {
         toast.success("Dashboard link copied! 📋");
       } else {
-        // If all copy methods fail, show the URL to user
-        toast.error("Copy not supported. URL: " + text.substring(0, 50) + "...");
+        // Show user the URL they can manually copy
+        const shortUrl = text.length > 60 ? text.substring(0, 60) + "..." : text;
+        toast.error(`Cannot copy automatically. URL: ${shortUrl}`, {
+          duration: 6000,
+          style: {
+            maxWidth: '500px',
+            wordBreak: 'break-all'
+          }
+        });
       }
     } catch (err) {
       console.error('Fallback copy failed:', err);
-      // Last resort - show a modal or alert with the URL
-      toast.error("Copy not supported. Please manually copy the URL from your browser.");
+      // Last resort - show user they need to copy manually
+      toast.error("Please copy the URL manually from your browser address bar.", {
+        duration: 5000
+      });
     }
   };
 
