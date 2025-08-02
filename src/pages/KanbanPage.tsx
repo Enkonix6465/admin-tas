@@ -437,7 +437,7 @@ const KanbanPage = () => {
           setShowTaskDetailModal(true);
         }}
         className={`bg-white dark:bg-gray-800 rounded-xl border-2 ${
-          isOverdue ? 'border-red-200 bg-red-50' : 'border-gray-100 dark:border-gray-700'
+          isOverdue ? 'border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/20' : 'border-gray-100 dark:border-gray-600'
         } p-4 mb-3 hover:shadow-lg transition-all cursor-pointer group relative overflow-hidden`}
       >
         {/* Priority stripe */}
