@@ -478,7 +478,7 @@ const KanbanPage = () => {
         
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
             {task.description}
           </p>
         )}
@@ -620,7 +620,7 @@ const KanbanPage = () => {
                     if (mode.id === 'list') {
                       toast.success('Switched to List view! 📋');
                     } else if (mode.id === 'timeline') {
-                      toast.success('Timeline view coming soon! ���');
+                      toast.success('Timeline view coming soon! ⏰');
                     }
                   }}
                   className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
