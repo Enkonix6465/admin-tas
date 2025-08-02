@@ -693,13 +693,13 @@ const Dashboard = () => {
                 <Grid className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                  Dashboard Overview
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Welcome back! Here's what's happening with your projects
-                </p>
-              </div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+                **Dashboard Overview**
+              </h1>
+              <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
+                **Welcome back! Here's what's happening with your projects**
+              </p>
+            </div>
             </div>
           </div>
 
