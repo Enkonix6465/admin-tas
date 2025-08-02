@@ -53,15 +53,9 @@ function Layout() {
   });
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const enabledDark = storedTheme === "dark" || (!storedTheme && prefersDark);
-
-    setIsDarkMode(enabledDark);
-    document.documentElement.classList.toggle("dark", enabledDark);
-  }, []);
+    // Apply theme from store
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
