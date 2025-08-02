@@ -165,7 +165,7 @@ function Layout() {
         </div>
 
         {/* Search - Minimal */}
-        <div className="px-4 py-3">
+        <div className="px-4 py-2">
           <div className="relative">
             <Search className="w-3 h-3 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <input
