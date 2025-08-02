@@ -17,7 +17,7 @@ import {
   FileText,
   Filter,
   ChevronDown,
-  Share,
+
   Star,
   Eye,
   Copy,
@@ -64,6 +64,8 @@ const Dashboard = () => {
   const [showNewProjectModal, setShowNewProjectModal] = useState(false);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [expandedTeamLeads, setExpandedTeamLeads] = useState(new Set());
 
   useEffect(() => {
     const unsubscribers = [];
@@ -206,34 +208,100 @@ const Dashboard = () => {
                   id: "mock-user-1",
                   name: "Sarah Johnson",
                   email: "sarah@company.com",
-                  role: "Senior Designer",
+                  role: "Design Team Lead",
                   department: "Design",
                   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
                   status: "online",
                   tasks_completed: 28,
-                  tasks_pending: 5
+                  tasks_pending: 5,
+                  isTeamLead: true,
+                  teamMembers: ["mock-user-4", "mock-user-5"]
                 },
                 {
                   id: "mock-user-2",
                   name: "Mike Chen",
                   email: "mike@company.com",
-                  role: "Full Stack Developer",
+                  role: "Engineering Team Lead",
                   department: "Engineering",
                   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike",
                   status: "busy",
                   tasks_completed: 42,
-                  tasks_pending: 8
+                  tasks_pending: 8,
+                  isTeamLead: true,
+                  teamMembers: ["mock-user-6", "mock-user-7"]
                 },
                 {
                   id: "mock-user-3",
                   name: "Emily Davis",
                   email: "emily@company.com",
-                  role: "Product Manager",
+                  role: "Product Team Lead",
                   department: "Product",
                   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
                   status: "away",
                   tasks_completed: 35,
-                  tasks_pending: 3
+                  tasks_pending: 3,
+                  isTeamLead: true,
+                  teamMembers: ["mock-user-8"]
+                },
+                {
+                  id: "mock-user-4",
+                  name: "Alice Cooper",
+                  email: "alice@company.com",
+                  role: "UI Designer",
+                  department: "Design",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+                  status: "online",
+                  tasks_completed: 15,
+                  tasks_pending: 3,
+                  teamLead: "mock-user-1"
+                },
+                {
+                  id: "mock-user-5",
+                  name: "Bob Wilson",
+                  email: "bob@company.com",
+                  role: "UX Designer",
+                  department: "Design",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+                  status: "busy",
+                  tasks_completed: 22,
+                  tasks_pending: 4,
+                  teamLead: "mock-user-1"
+                },
+                {
+                  id: "mock-user-6",
+                  name: "Carol Smith",
+                  email: "carol@company.com",
+                  role: "Frontend Developer",
+                  department: "Engineering",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol",
+                  status: "online",
+                  tasks_completed: 38,
+                  tasks_pending: 6,
+                  teamLead: "mock-user-2"
+                },
+                {
+                  id: "mock-user-7",
+                  name: "David Lee",
+                  email: "david@company.com",
+                  role: "Backend Developer",
+                  department: "Engineering",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+                  status: "away",
+                  tasks_completed: 31,
+                  tasks_pending: 7,
+                  teamLead: "mock-user-2"
+                },
+                {
+                  id: "mock-user-8",
+                  name: "Grace Kim",
+                  email: "grace@company.com",
+                  role: "Product Analyst",
+                  department: "Product",
+                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Grace",
+                  status: "online",
+                  tasks_completed: 19,
+                  tasks_pending: 2,
+                  teamLead: "mock-user-3"
                 }
               ]);
               setLoading(false);
@@ -269,6 +337,22 @@ const Dashboard = () => {
       });
     };
   }, []);
+
+  // Handle click outside for dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showQuickActions || showNotifications) {
+        const target = event.target as Element;
+        if (!target.closest('.dropdown-container')) {
+          setShowQuickActions(false);
+          setShowNotifications(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showQuickActions, showNotifications]);
 
   const getEmployeeName = (empId: string) =>
     employees.find((emp: any) => emp.id === empId)?.name || "Unassigned";
@@ -329,58 +413,104 @@ const Dashboard = () => {
     return tasks.filter((t: any) => t.project_id === projectId).length;
   };
 
-  const handleShare = async () => {
-    try {
-      // Check if Clipboard API is available
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(window.location.href);
-        toast.success("Dashboard link copied! 📋");
-      } else {
-        // Fallback for when Clipboard API is not available
-        fallbackCopyTextToClipboard(window.location.href);
-      }
-    } catch (error) {
-      console.error("Failed to copy:", error);
-      // Try fallback method
-      fallbackCopyTextToClipboard(window.location.href);
-    }
-  };
 
-  const fallbackCopyTextToClipboard = (text: string) => {
-    try {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-
-      // Avoid scrolling to bottom
-      textArea.style.top = "0";
-      textArea.style.left = "0";
-      textArea.style.position = "fixed";
-      textArea.style.opacity = "0";
-      textArea.style.pointerEvents = "none";
-
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-
-      const successful = document.execCommand('copy');
-      document.body.removeChild(textArea);
-
-      if (successful) {
-        toast.success("Dashboard link copied! 📋");
-      } else {
-        // If all copy methods fail, show the URL to user
-        toast.error("Copy not supported. URL: " + text.substring(0, 50) + "...");
-      }
-    } catch (err) {
-      console.error('Fallback copy failed:', err);
-      // Last resort - show a modal or alert with the URL
-      toast.error("Copy not supported. Please manually copy the URL from your browser.");
-    }
-  };
 
   const handleApplyFilter = (newFilters: any) => {
     setFilters(newFilters);
     toast.success("Filters applied! 🔍");
+  };
+
+  // Notification functions
+  const getNotifications = () => {
+    const today = new Date();
+    const notifications = [];
+
+    // Overdue tasks
+    const overdueTasks = tasks.filter(task => {
+      if (!task.due_date || task.status === 'completed') return false;
+      return new Date(task.due_date) < today;
+    });
+
+    overdueTasks.forEach(task => {
+      notifications.push({
+        id: `overdue-${task.id}`,
+        title: "Overdue Task",
+        message: `Task "${task.title}" is overdue`,
+        type: "warning",
+        time: task.due_date,
+        action: () => navigate('/kanbanpage')
+      });
+    });
+
+    // Tasks due today
+    const dueTodayTasks = tasks.filter(task => {
+      if (!task.due_date || task.status === 'completed') return false;
+      const dueDate = new Date(task.due_date);
+      return dueDate.toDateString() === today.toDateString();
+    });
+
+    dueTodayTasks.forEach(task => {
+      notifications.push({
+        id: `due-today-${task.id}`,
+        title: "Due Today",
+        message: `Task "${task.title}" is due today`,
+        type: "info",
+        time: task.due_date,
+        action: () => navigate('/kanbanpage')
+      });
+    });
+
+    // High priority tasks
+    const highPriorityTasks = tasks.filter(task =>
+      task.priority === 'high' && task.status !== 'completed'
+    ).slice(0, 3);
+
+    highPriorityTasks.forEach(task => {
+      notifications.push({
+        id: `high-priority-${task.id}`,
+        title: "High Priority Task",
+        message: `Task "${task.title}" needs attention`,
+        type: "urgent",
+        time: task.created_at?.seconds ? new Date(task.created_at.seconds * 1000).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+        action: () => navigate('/kanbanpage')
+      });
+    });
+
+    return notifications.slice(0, 10); // Limit to 10 notifications
+  };
+
+  const notifications = getNotifications();
+  const unreadNotifications = notifications.length;
+
+  // Filter tasks based on current filters
+  const getFilteredTasks = () => {
+    let filtered = [...tasks];
+
+    if (filters.project) {
+      filtered = filtered.filter(task => task.project_id === filters.project);
+    }
+
+    if (filters.status) {
+      filtered = filtered.filter(task => task.status === filters.status || task.progress_status === filters.status);
+    }
+
+    if (filters.priority) {
+      filtered = filtered.filter(task => task.priority === filters.priority);
+    }
+
+    if (filters.assigned) {
+      filtered = filtered.filter(task => task.assigned_to === filters.assigned);
+    }
+
+    if (filters.overdue) {
+      const today = new Date();
+      filtered = filtered.filter(task => {
+        if (!task.due_date || task.status === 'completed') return false;
+        return new Date(task.due_date) < today;
+      });
+    }
+
+    return filtered;
   };
 
   // Navigate to specific task
@@ -395,12 +525,12 @@ const Dashboard = () => {
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ y: -4, scale: 1.02 }}
       className={`bg-gradient-to-br ${
-        color === 'blue' ? 'from-blue-500 to-indigo-600' :
-        color === 'green' ? 'from-emerald-500 to-green-600' :
-        color === 'yellow' ? 'from-amber-500 to-orange-600' :
-        color === 'red' ? 'from-red-500 to-pink-600' :
-        color === 'purple' ? 'from-purple-500 to-indigo-600' :
-        'from-gray-500 to-slate-600'
+        color === 'blue' ? 'from-sky-400 to-blue-500' :
+        color === 'green' ? 'from-emerald-400 to-teal-500' :
+        color === 'yellow' ? 'from-yellow-400 to-amber-500' :
+        color === 'red' ? 'from-rose-400 to-pink-500' :
+        color === 'purple' ? 'from-violet-400 to-purple-500' :
+        'from-slate-400 to-gray-500'
       } rounded-2xl p-6 text-white ${
         onClick ? 'cursor-pointer hover:shadow-2xl' : 'hover:shadow-lg'
       } transition-all duration-300 relative overflow-hidden group shadow-lg`}
@@ -612,48 +742,138 @@ const Dashboard = () => {
     );
   };
 
-  // Team Member Card
-  const TeamMemberCard = ({ member }) => (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ scale: 1.05 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl p-4 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all cursor-pointer"
-      onClick={() => navigate('/team', { state: { selectedMember: member.id } })}
-    >
-      <div className="text-center">
-        <div className="relative inline-block mb-3">
-          <img
-            src={member.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
-            alt={member.name}
-            className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
-          />
-          <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-            member.status === 'online' ? 'bg-green-500' :
-            member.status === 'busy' ? 'bg-red-500' :
-            member.status === 'away' ? 'bg-yellow-500' :
-            'bg-gray-400'
-          }`} />
-        </div>
-        <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">
-          {member.name}
-        </h4>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
-          {member.role}
-        </p>
-        <div className="flex justify-center gap-3 text-xs text-gray-500">
-          <span className="flex items-center gap-1">
-            <CheckCircle className="w-3 h-3" />
-            {member.tasks_completed || 0}
-          </span>
-          <span className="flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {member.tasks_pending || 0}
-          </span>
-        </div>
+  // Enhanced Team Member Card with Lead Functionality
+  const TeamMemberCard = ({ member, isExpanded = false, onToggleExpand = null }) => {
+    const isTeamLead = member.isTeamLead;
+    const teamMembers = isTeamLead ? employees.filter(emp => member.teamMembers?.includes(emp.id)) : [];
+
+    return (
+      <div className="space-y-3">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.02 }}
+          className={`bg-white dark:bg-gray-800 rounded-2xl p-4 border-2 transition-all cursor-pointer ${
+            isTeamLead
+              ? 'border-blue-200 dark:border-blue-700 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-gray-800'
+              : 'border-gray-100 dark:border-gray-700 hover:shadow-lg'
+          }`}
+          onClick={() => {
+            if (isTeamLead && onToggleExpand) {
+              onToggleExpand();
+            } else {
+              navigate('/team', { state: { selectedMember: member.id } });
+            }
+          }}
+        >
+          <div className="text-center">
+            <div className="relative inline-block mb-3">
+              <img
+                src={member.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
+                alt={member.name}
+                className={`w-12 h-12 rounded-full border-2 shadow-lg ${
+                  isTeamLead ? 'border-blue-500' : 'border-white'
+                }`}
+              />
+              <div className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                member.status === 'online' ? 'bg-green-500' :
+                member.status === 'busy' ? 'bg-red-500' :
+                member.status === 'away' ? 'bg-yellow-500' : 'bg-gray-400'
+              }`} />
+              {isTeamLead && (
+                <div className="absolute -top-1 -left-1 w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center">
+                  <Star className="w-3 h-3 text-white" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm">
+                {member.name}
+              </h4>
+              {isTeamLead && (
+                <motion.div
+                  animate={{ rotate: isExpanded ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown className="w-4 h-4 text-blue-600" />
+                </motion.div>
+              )}
+            </div>
+
+            <p className={`text-xs mb-2 ${
+              isTeamLead ? 'text-blue-600 font-medium' : 'text-gray-500 dark:text-gray-400'
+            }`}>
+              {member.role}
+            </p>
+
+            {isTeamLead && (
+              <p className="text-xs text-blue-500 mb-2">
+                Team: {teamMembers.length} members
+              </p>
+            )}
+
+            <div className="flex justify-center gap-3 text-xs text-gray-500">
+              <span className="flex items-center gap-1">
+                <CheckCircle className="w-3 h-3" />
+                {member.tasks_completed || 0}
+              </span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {member.tasks_pending || 0}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Team Members (shown when expanded) */}
+        <AnimatePresence>
+          {isTeamLead && isExpanded && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="ml-4 space-y-2"
+            >
+              {teamMembers.map((teamMember) => (
+                <motion.div
+                  key={teamMember.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 border border-gray-200 dark:border-gray-600 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => navigate('/team', { state: { selectedMember: teamMember.id } })}
+                >
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={teamMember.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${teamMember.name}`}
+                      alt={teamMember.name}
+                      className="w-8 h-8 rounded-full border border-gray-300"
+                    />
+                    <div className="flex-1">
+                      <h5 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                        {teamMember.name}
+                      </h5>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {teamMember.role}
+                      </p>
+                    </div>
+                    <div className="flex gap-2 text-xs">
+                      <span className="text-emerald-600">
+                        {teamMember.tasks_completed || 0}
+                      </span>
+                      <span className="text-blue-600">
+                        {teamMember.tasks_pending || 0}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-    </motion.div>
-  );
+    );
+  };
 
   if (loading) {
     return (
@@ -675,13 +895,13 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="flex flex-col h-full bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900">
       {/* Enhanced Header */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+              <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl flex items-center justify-center">
                 <Grid className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -697,7 +917,7 @@ const Dashboard = () => {
 
           <div className="flex items-center gap-3">
             {/* Quick Actions */}
-            <div className="relative">
+            <div className="relative dropdown-container">
               <button
                 onClick={() => setShowQuickActions(!showQuickActions)}
                 className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
@@ -753,17 +973,82 @@ const Dashboard = () => {
               )}
             </div>
 
-            <button 
-              onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
-            >
-              <Share className="w-4 h-4" />
-              <span className="hidden sm:inline">Share</span>
-            </button>
+
             
-            <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
-              <Bell className="w-5 h-5" />
-            </button>
+            <div className="relative dropdown-container">
+              <button
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative p-2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <Bell className="w-5 h-5" />
+                {unreadNotifications > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {unreadNotifications > 9 ? '9+' : unreadNotifications}
+                  </span>
+                )}
+              </button>
+
+              {showNotifications && (
+                <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 max-h-96 overflow-y-auto">
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      Notifications
+                    </h3>
+                    <p className="text-sm text-gray-500">{notifications.length} notifications</p>
+                  </div>
+
+                  <div className="max-h-80 overflow-y-auto">
+                    {notifications.length > 0 ? (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          onClick={() => {
+                            notification.action();
+                            setShowNotifications(false);
+                          }}
+                          className="p-4 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`w-2 h-2 rounded-full mt-2 ${
+                              notification.type === 'urgent' ? 'bg-red-500' :
+                              notification.type === 'warning' ? 'bg-yellow-500' :
+                              'bg-blue-500'
+                            }`} />
+                            <div className="flex-1">
+                              <h4 className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                {notification.title}
+                              </h4>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                {notification.message}
+                              </p>
+                              <p className="text-xs text-gray-500 mt-2">
+                                {new Date(notification.time).toLocaleDateString()}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-8 text-center">
+                        <Bell className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                        <p className="text-gray-500">No notifications</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {notifications.length > 0 && (
+                    <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                      <button
+                        onClick={() => setShowNotifications(false)}
+                        className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium"
+                      >
+                        Mark all as read
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -919,8 +1204,21 @@ const Dashboard = () => {
                   </div>
                   <div className="p-6">
                     <div className="grid grid-cols-1 gap-4">
-                      {employees.slice(0, 3).map((member: any) => (
-                        <TeamMemberCard key={member.id} member={member} />
+                      {employees.filter(emp => emp.isTeamLead).slice(0, 3).map((member: any) => (
+                        <TeamMemberCard
+                          key={member.id}
+                          member={member}
+                          isExpanded={expandedTeamLeads.has(member.id)}
+                          onToggleExpand={() => {
+                            const newExpanded = new Set(expandedTeamLeads);
+                            if (newExpanded.has(member.id)) {
+                              newExpanded.delete(member.id);
+                            } else {
+                              newExpanded.add(member.id);
+                            }
+                            setExpandedTeamLeads(newExpanded);
+                          }}
+                        />
                       ))}
                     </div>
                   </div>
@@ -950,13 +1248,100 @@ const Dashboard = () => {
               className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden"
             >
               <div className="p-6 border-b border-gray-200/50 dark:border-gray-700/50">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">All Tasks</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">All Tasks</h2>
+
+                  {/* Task Filters */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    {/* Project Filter */}
+                    <select
+                      value={filters.project || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, project: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Projects</option>
+                      {projects.map((project: any) => (
+                        <option key={project.id} value={project.id}>
+                          {project.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Status Filter */}
+                    <select
+                      value={filters.status || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Status</option>
+                      <option value="pending">Pending</option>
+                      <option value="in_progress">In Progress</option>
+                      <option value="review">Review</option>
+                      <option value="completed">Completed</option>
+                    </select>
+
+                    {/* Priority Filter */}
+                    <select
+                      value={filters.priority || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Priority</option>
+                      <option value="high">High</option>
+                      <option value="medium">Medium</option>
+                      <option value="low">Low</option>
+                    </select>
+
+                    {/* Assigned Filter */}
+                    <select
+                      value={filters.assigned || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, assigned: e.target.value }))}
+                      className="text-sm border border-gray-200 dark:border-gray-600 rounded-lg px-3 py-1.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                    >
+                      <option value="">All Assignees</option>
+                      {employees.map((employee: any) => (
+                        <option key={employee.id} value={employee.id}>
+                          {employee.name || employee.email}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Special Filters */}
+                    <div className="flex items-center gap-2">
+                      <label className="flex items-center gap-1 text-sm">
+                        <input
+                          type="checkbox"
+                          checked={filters.overdue || false}
+                          onChange={(e) => setFilters(prev => ({ ...prev, overdue: e.target.checked }))}
+                          className="rounded border-gray-300"
+                        />
+                        <span className="text-gray-700 dark:text-gray-300">Overdue</span>
+                      </label>
+                    </div>
+
+                    {/* Clear Filters */}
+                    {Object.keys(filters).length > 0 && (
+                      <button
+                        onClick={() => setFilters({})}
+                        className="text-sm text-red-600 hover:text-red-700 font-medium"
+                      >
+                        Clear
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="p-3">
                 <div className="space-y-1">
-                  {filteredTasks.map((task: any) => (
+                  {getFilteredTasks().map((task: any) => (
                     <TaskItem key={task.id} task={task} showProject={true} />
                   ))}
+                  {getFilteredTasks().length === 0 && (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      <Target className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">No tasks match the current filters</p>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -967,10 +1352,23 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {employees.map((member: any) => (
-                <TeamMemberCard key={member.id} member={member} />
+              {employees.filter(emp => emp.isTeamLead).map((member: any) => (
+                <TeamMemberCard
+                  key={member.id}
+                  member={member}
+                  isExpanded={expandedTeamLeads.has(member.id)}
+                  onToggleExpand={() => {
+                    const newExpanded = new Set(expandedTeamLeads);
+                    if (newExpanded.has(member.id)) {
+                      newExpanded.delete(member.id);
+                    } else {
+                      newExpanded.add(member.id);
+                    }
+                    setExpandedTeamLeads(newExpanded);
+                  }}
+                />
               ))}
             </motion.div>
           )}

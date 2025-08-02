@@ -287,7 +287,8 @@ const Reports = () => {
       const pendingTasks = empTasks.filter(t => t.status === "pending");
       const reviewTasks = empTasks.filter(t => t.status === "review");
 
-      // Enhanced metrics for individual analysis
+      // Enhanced timing-based performance metrics
+      const today = new Date();
       const onTimeTasks = completedTasks.filter(t => {
         if (!t.progress_updated_at || !t.due_date) return false;
         const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
@@ -295,10 +296,31 @@ const Reports = () => {
         return completedDate <= dueDate;
       });
 
+      const lateTasks = completedTasks.filter(t => {
+        if (!t.progress_updated_at || !t.due_date) return false;
+        const completedDate = t.progress_updated_at.toDate ? t.progress_updated_at.toDate() : new Date(t.progress_updated_at);
+        const dueDate = new Date(t.due_date);
+        return completedDate > dueDate;
+      });
+
       const overdueTasks = empTasks.filter(t => {
         if (!t.due_date || t.status === "completed") return false;
-        return new Date(t.due_date) < new Date();
+        return new Date(t.due_date) < today;
       });
+
+      const pendingOverdueTasks = pendingTasks.filter(t => {
+        if (!t.due_date) return false;
+        return new Date(t.due_date) < today;
+      });
+
+      // Calculate delay days for late completed tasks
+      const avgDelayDays = lateTasks.length > 0 ?
+        lateTasks.reduce((acc, task) => {
+          const completedDate = task.progress_updated_at.toDate ? task.progress_updated_at.toDate() : new Date(task.progress_updated_at);
+          const dueDate = new Date(task.due_date);
+          const delayDays = Math.ceil((completedDate - dueDate) / (1000 * 60 * 60 * 24));
+          return acc + delayDays;
+        }, 0) / lateTasks.length : 0;
 
       // Task reassignment analysis
       const reassignedTasks = empTasks.filter(t => t.reassigned_from || t.reassignment_history);
@@ -320,8 +342,13 @@ const Reports = () => {
           return acc;
         }, 0) / completedTasks.length : 0;
 
-      // Quality metrics
+      // Enhanced performance scoring based on timing
+      const timingScore = calculateTimingScore(empTasks, onTimeTasks, lateTasks, overdueTasks, pendingOverdueTasks);
       const qualityScore = calculateQualityScore(empTasks, onTimeTasks, reassignedTasks);
+
+      // Performance classification
+      const overallPerformanceScore = (timingScore * 0.5) + (qualityScore * 0.3) + ((empTasks.length > 0 ? (completedTasks.length / empTasks.length * 100) : 0) * 0.2);
+      const performanceLevel = getPerformanceLevel(overallPerformanceScore, timingScore, overdueTasks.length, lateTasks.length);
 
       // Productivity trends (last 7 days vs previous 7 days)
       const now = new Date();
@@ -357,12 +384,21 @@ const Reports = () => {
         inProgressTasks: inProgressTasks.length,
         reviewTasks: reviewTasks.length,
         overdueTasks: overdueTasks.length,
+        lateTasks: lateTasks.length,
+        onTimeTasks: onTimeTasks.length,
+        pendingOverdueTasks: pendingOverdueTasks.length,
 
         // Performance metrics
         completionRate: empTasks.length > 0 ? (completedTasks.length / empTasks.length * 100) : 0,
         onTimeRate: completedTasks.length > 0 ? (onTimeTasks.length / completedTasks.length * 100) : 0,
+        lateRate: completedTasks.length > 0 ? (lateTasks.length / completedTasks.length * 100) : 0,
+        overdueRate: empTasks.length > 0 ? (overdueTasks.length / empTasks.length * 100) : 0,
         avgCompletionTime: Math.round(avgCompletionTime * 10) / 10,
+        avgDelayDays: Math.round(avgDelayDays * 10) / 10,
+        timingScore,
         qualityScore,
+        overallPerformanceScore: Math.round(overallPerformanceScore),
+        performanceLevel,
 
         // Priority analysis
         highPriorityTasks: highPriorityTasks.length,
@@ -384,6 +420,28 @@ const Reports = () => {
       };
     });
 
+    // Helper function to calculate timing-based performance score
+    function calculateTimingScore(tasks, onTimeTasks, lateTasks, overdueTasks, pendingOverdueTasks) {
+      if (tasks.length === 0) return 0;
+
+      const onTimeWeight = 0.4;
+      const lateTasksPenalty = 0.25;
+      const overdueTasksPenalty = 0.25;
+      const pendingOverduePenalty = 0.1;
+
+      const onTimeScore = tasks.length > 0 ? (onTimeTasks.length / tasks.length) * 100 : 0;
+      const lateTasksScore = tasks.length > 0 ? (lateTasks.length / tasks.length) * 100 : 0;
+      const overdueTasksScore = tasks.length > 0 ? (overdueTasks.length / tasks.length) * 100 : 0;
+      const pendingOverdueScore = tasks.length > 0 ? (pendingOverdueTasks.length / tasks.length) * 100 : 0;
+
+      return Math.max(0, Math.min(100,
+        (onTimeScore * onTimeWeight) -
+        (lateTasksScore * lateTasksPenalty) -
+        (overdueTasksScore * overdueTasksPenalty) -
+        (pendingOverdueScore * pendingOverduePenalty)
+      ));
+    }
+
     // Helper function to calculate quality score
     function calculateQualityScore(tasks, onTimeTasks, reassignedTasks) {
       if (tasks.length === 0) return 0;
@@ -401,6 +459,21 @@ const Reports = () => {
         (completionScore * completionWeight) -
         (reassignmentPenaltyScore * reassignmentPenalty)
       ));
+    }
+
+    // Helper function to determine performance level
+    function getPerformanceLevel(overallScore, timingScore, overdueCount, lateCount) {
+      if (overallScore >= 85 && timingScore >= 80 && overdueCount === 0) {
+        return { level: 'excellent', color: 'green', description: 'Excellent Performance' };
+      } else if (overallScore >= 70 && timingScore >= 60) {
+        return { level: 'good', color: 'blue', description: 'Good Performance' };
+      } else if (overallScore >= 50 && timingScore >= 40) {
+        return { level: 'average', color: 'yellow', description: 'Average Performance' };
+      } else if (overallScore >= 30 || overdueCount > 3 || lateCount > 5) {
+        return { level: 'needs_improvement', color: 'orange', description: 'Needs Improvement' };
+      } else {
+        return { level: 'critical', color: 'red', description: 'Critical - Urgent Action Required' };
+      }
     }
 
     // Enhanced performance trends over time (last 30 days)
@@ -556,6 +629,82 @@ const Reports = () => {
       }
     });
 
+    // Identify low performers for targeted improvement
+    const lowPerformers = employeeStats.filter(emp =>
+      emp.performanceLevel.level === 'needs_improvement' ||
+      emp.performanceLevel.level === 'critical' ||
+      emp.overdueRate > 20 ||
+      emp.lateRate > 30 ||
+      emp.timingScore < 50
+    ).sort((a, b) => a.overallPerformanceScore - b.overallPerformanceScore);
+
+    // Generate performance improvement recommendations
+    const getPerformanceRecommendations = (emp) => {
+      const recommendations = [];
+
+      if (emp.overdueRate > 20) {
+        recommendations.push({
+          priority: 'high',
+          category: 'Time Management',
+          issue: `${emp.overdueRate.toFixed(1)}% of tasks are overdue`,
+          suggestion: 'Implement daily task prioritization and deadline tracking system',
+          action: 'Schedule weekly check-ins with supervisor for workload management'
+        });
+      }
+
+      if (emp.lateRate > 30) {
+        recommendations.push({
+          priority: 'high',
+          category: 'Deadline Adherence',
+          issue: `${emp.lateRate.toFixed(1)}% of completed tasks were delivered late`,
+          suggestion: 'Break down large tasks into smaller milestones with buffer time',
+          action: 'Attend time management training workshop'
+        });
+      }
+
+      if (emp.avgDelayDays > 3) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'Planning',
+          issue: `Average delay of ${emp.avgDelayDays} days on completed tasks`,
+          suggestion: 'Improve task estimation and add 20% buffer time to deadlines',
+          action: 'Use project management tools for better timeline planning'
+        });
+      }
+
+      if (emp.reassignmentRate > 15) {
+        recommendations.push({
+          priority: 'medium',
+          category: 'Task Stability',
+          issue: `${emp.reassignmentRate.toFixed(1)}% of tasks require reassignment`,
+          suggestion: 'Improve initial task understanding and requirements gathering',
+          action: 'Request detailed briefings before accepting new tasks'
+        });
+      }
+
+      if (emp.completionRate < 70) {
+        recommendations.push({
+          priority: 'high',
+          category: 'Productivity',
+          issue: `Only ${emp.completionRate.toFixed(1)}% task completion rate`,
+          suggestion: 'Focus on completing existing tasks before taking on new ones',
+          action: 'Reduce current workload and implement daily progress tracking'
+        });
+      }
+
+      if (emp.trendDirection === 'down') {
+        recommendations.push({
+          priority: 'medium',
+          category: 'Performance Trend',
+          issue: 'Declining performance trend over recent weeks',
+          suggestion: 'Identify and address root causes of performance decline',
+          action: 'Schedule performance review meeting to discuss challenges'
+        });
+      }
+
+      return recommendations;
+    };
+
     return {
       type: "Employee Performance Report",
       summary: {
@@ -563,9 +712,19 @@ const Reports = () => {
         activeEmployees: employeeStats.filter(e => e.totalTasks > 0).length,
         averageCompletionRate: Math.round(employeeStats.reduce((acc, e) => acc + e.completionRate, 0) / employees.length),
         averageOnTimeRate: Math.round(employeeStats.reduce((acc, e) => acc + e.onTimeRate, 0) / employees.length),
-        topPerformer: employeeStats.reduce((max, emp) => emp.completionRate > max.completionRate ? emp : max, employeeStats[0] || {}),
+        averageTimingScore: Math.round(employeeStats.reduce((acc, e) => acc + e.timingScore, 0) / employees.length),
+        lowPerformersCount: lowPerformers.length,
+        criticalPerformersCount: employeeStats.filter(e => e.performanceLevel.level === 'critical').length,
+        needsImprovementCount: employeeStats.filter(e => e.performanceLevel.level === 'needs_improvement').length,
+        topPerformer: employeeStats.reduce((max, emp) => emp.overallPerformanceScore > max.overallPerformanceScore ? emp : max, employeeStats[0] || {}),
+        lowestPerformer: lowPerformers.length > 0 ? lowPerformers[0] : null,
       },
-      employeeStats: employeeStats.sort((a, b) => b.completionRate - a.completionRate),
+      employeeStats: employeeStats.sort((a, b) => a.overallPerformanceScore - b.overallPerformanceScore),
+      lowPerformers: lowPerformers.map(emp => ({
+        ...emp,
+        recommendations: getPerformanceRecommendations(emp)
+      })),
+      performanceRecommendations: getPerformanceRecommendations,
       performanceTrends,
       skillsData: Object.values(skillsData),
       chartData: {
@@ -1140,6 +1299,141 @@ const Reports = () => {
                       </div>
                     )}
 
+                    {/* Low Performers Analysis Section */}
+                    {selectedEmployee === "all" && reportData.lowPerformers && reportData.lowPerformers.length > 0 && (
+                      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-red-200/50 dark:border-red-700/50 p-6 mb-6">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
+                            <TrendingDown className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                              **Low Performers Analysis & Recommendations**
+                            </h3>
+                            <p className="text-sm text-red-600 dark:text-red-400">
+                              **{reportData.lowPerformers.length} team members require immediate attention**
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {reportData.lowPerformers.slice(0, 4).map((emp, index) => (
+                            <motion.div
+                              key={emp.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/10 dark:to-orange-900/10 rounded-xl p-5 border border-red-200 dark:border-red-800"
+                            >
+                              {/* Employee Header */}
+                              <div className="flex items-center gap-3 mb-4">
+                                <img
+                                  src={emp.avatar}
+                                  alt={emp.name}
+                                  className="w-12 h-12 rounded-full border-2 border-red-200"
+                                />
+                                <div className="flex-1">
+                                  <h4 className="font-bold text-gray-900 dark:text-gray-100">{emp.name}</h4>
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">{emp.role} • {emp.department}</p>
+                                  <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-semibold ${
+                                    emp.performanceLevel.level === 'critical' ? 'bg-red-100 text-red-800' :
+                                    'bg-orange-100 text-orange-800'
+                                  }`}>
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      emp.performanceLevel.level === 'critical' ? 'bg-red-500' : 'bg-orange-500'
+                                    }`}></div>
+                                    {emp.performanceLevel.description}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Performance Metrics */}
+                              <div className="grid grid-cols-2 gap-3 mb-4">
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-red-600">{Math.round(emp.overallPerformanceScore)}%</div>
+                                  <div className="text-xs text-gray-600">Overall Score</div>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-orange-600">{Math.round(emp.timingScore)}%</div>
+                                  <div className="text-xs text-gray-600">Timing Score</div>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-red-500">{emp.overdueTasks}</div>
+                                  <div className="text-xs text-gray-600">Overdue Tasks</div>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                                  <div className="text-lg font-bold text-yellow-600">{emp.lateTasks}</div>
+                                  <div className="text-xs text-gray-600">Late Completions</div>
+                                </div>
+                              </div>
+
+                              {/* Key Issues */}
+                              <div className="mb-4">
+                                <h5 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">**Key Issues:**</h5>
+                                <div className="space-y-1">
+                                  {emp.overdueRate > 20 && (
+                                    <div className="text-xs text-red-600 flex items-center gap-1">
+                                      <AlertCircle className="w-3 h-3" />
+                                      {emp.overdueRate.toFixed(1)}% overdue rate
+                                    </div>
+                                  )}
+                                  {emp.lateRate > 30 && (
+                                    <div className="text-xs text-orange-600 flex items-center gap-1">
+                                      <Clock className="w-3 h-3" />
+                                      {emp.lateRate.toFixed(1)}% late completion rate
+                                    </div>
+                                  )}
+                                  {emp.avgDelayDays > 3 && (
+                                    <div className="text-xs text-yellow-600 flex items-center gap-1">
+                                      <Activity className="w-3 h-3" />
+                                      Avg {emp.avgDelayDays} days delay
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              {/* Top Recommendations */}
+                              <div>
+                                <h5 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">**Immediate Actions:**</h5>
+                                <div className="space-y-2">
+                                  {emp.recommendations.slice(0, 2).map((rec, i) => (
+                                    <div key={i} className="p-2 bg-white/80 dark:bg-gray-700/80 rounded-lg">
+                                      <div className="flex items-center gap-2 mb-1">
+                                        <div className={`w-2 h-2 rounded-full ${
+                                          rec.priority === 'high' ? 'bg-red-500' : 'bg-yellow-500'
+                                        }`}></div>
+                                        <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">{rec.category}</span>
+                                      </div>
+                                      <p className="text-xs text-gray-600 dark:text-gray-400">{rec.suggestion}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Action Button */}
+                              <div className="mt-4 pt-3 border-t border-red-200 dark:border-red-800">
+                                <button
+                                  onClick={() => setSelectedEmployee(emp.id)}
+                                  className="w-full px-3 py-2 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-lg transition-colors flex items-center justify-center gap-1"
+                                >
+                                  <User className="w-3 h-3" />
+                                  View Detailed Analysis
+                                </button>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        {reportData.lowPerformers.length > 4 && (
+                          <div className="mt-4 text-center">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
+                              **+{reportData.lowPerformers.length - 4} more team members need attention**
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
                     {/* Team Overview Charts (when "All Employees" selected) */}
                     {selectedEmployee === "all" && (
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -1152,24 +1446,41 @@ const Reports = () => {
                             **Comprehensive team metrics analysis**
                           </p>
 
-                          {/* Top Performer Badge */}
-                          {reportData.summary.topPerformer && (
-                            <div className="mb-4 p-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl border border-yellow-200 dark:border-yellow-800">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                                  <Star className="w-4 h-4 text-white" />
+                          {/* Low Performers Alert */}
+                          {reportData.summary.lowPerformersCount > 0 && (
+                            <div className="mb-4 p-4 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-xl border border-red-200 dark:border-red-800">
+                              <div className="flex items-start gap-3">
+                                <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                  <AlertCircle className="w-4 h-4 text-white" />
                                 </div>
-                                <div>
-                                  <p className="text-sm font-bold text-yellow-800 dark:text-yellow-200">
-                                    **Top Performer: {reportData.summary.topPerformer.name}**
+                                <div className="flex-1">
+                                  <p className="text-sm font-bold text-red-800 dark:text-red-200 mb-1">
+                                    **Performance Alert: {reportData.summary.lowPerformersCount} Team Member{reportData.summary.lowPerformersCount > 1 ? 's' : ''} Need{reportData.summary.lowPerformersCount === 1 ? 's' : ''} Attention**
                                   </p>
-                                  <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                                    **{Math.round(reportData.summary.topPerformer.completionRate)}% completion rate**
+                                  <p className="text-xs text-red-700 dark:text-red-300 mb-2">
+                                    **{reportData.summary.criticalPerformersCount} critical, {reportData.summary.needsImprovementCount} need improvement**
                                   </p>
+                                  {reportData.summary.lowestPerformer && (
+                                    <p className="text-xs text-red-600 dark:text-red-400">
+                                      **Priority: {reportData.summary.lowestPerformer.name} - {reportData.summary.lowestPerformer.performanceLevel.description}**
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                             </div>
                           )}
+
+                          {/* Performance Summary Stats */}
+                          <div className="mb-4 grid grid-cols-2 gap-3">
+                            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                              <div className="text-sm font-semibold text-blue-800 dark:text-blue-200">Avg Timing Score</div>
+                              <div className="text-lg font-bold text-blue-900 dark:text-blue-100">{reportData.summary.averageTimingScore}%</div>
+                            </div>
+                            <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                              <div className="text-sm font-semibold text-green-800 dark:text-green-200">On-Time Rate</div>
+                              <div className="text-lg font-bold text-green-900 dark:text-green-100">{reportData.summary.averageOnTimeRate}%</div>
+                            </div>
+                          </div>
 
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
@@ -1600,9 +1911,24 @@ const Reports = () => {
                 {selectedReport === "employee-performance" && reportData.employeeStats && (
                   <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-                        Detailed Performance Breakdown
-                      </h3>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                            **Individual Performance Matrix - Timing & Completion Analysis**
+                          </h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            **Focus on low performers requiring immediate improvement**
+                          </p>
+                        </div>
+                        {reportData.summary.lowPerformersCount > 0 && (
+                          <div className="flex items-center gap-2 px-3 py-2 bg-red-100 dark:bg-red-900/20 rounded-lg">
+                            <AlertCircle className="w-4 h-4 text-red-600" />
+                            <span className="text-sm font-semibold text-red-800 dark:text-red-200">
+                              **{reportData.summary.lowPerformersCount} Need Attention**
+                            </span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     
                     <div className="overflow-x-auto">
@@ -1616,16 +1942,16 @@ const Reports = () => {
                               Role & Department
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Task Metrics
+                              **Timing Analysis**
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Performance
+                              **Overall Performance**
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Quality Score
+                              **Performance Level**
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                              Trend & Status
+                              **Issues & Recommendations**
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                               Actions
@@ -1678,112 +2004,202 @@ const Reports = () => {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="space-y-2">
-                                  <div className="flex justify-between text-xs">
-                                    <span>Total: {emp.totalTasks}</span>
-                                    <span>✅ {emp.completedTasks}</span>
-                                  </div>
-                                  <div className="flex justify-between text-xs">
-                                    <span>🔄 {emp.inProgressTasks}</span>
-                                    <span>⏳ {emp.pendingTasks}</span>
-                                  </div>
-                                  {emp.overdueTasks > 0 && (
-                                    <div className="text-xs text-red-600">
-                                      ⚠️ {emp.overdueTasks} overdue
+                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="text-center p-2 bg-green-50 dark:bg-green-900/20 rounded">
+                                      <div className="font-bold text-green-700">{emp.onTimeTasks || 0}</div>
+                                      <div className="text-green-600">On-Time</div>
                                     </div>
-                                  )}
-                                  {emp.reassignedTasks > 0 && (
-                                    <div className="text-xs text-orange-600">
-                                      🔄 {emp.reassignedTasks} reassigned
+                                    <div className="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded">
+                                      <div className="font-bold text-red-700">{emp.lateTasks || 0}</div>
+                                      <div className="text-red-600">Late</div>
                                     </div>
-                                  )}
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="text-center p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
+                                      <div className="font-bold text-orange-700">{emp.overdueTasks || 0}</div>
+                                      <div className="text-orange-600">Overdue</div>
+                                    </div>
+                                    <div className="text-center p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                                      <div className="font-bold text-yellow-700">{emp.avgDelayDays || 0}d</div>
+                                      <div className="text-yellow-600">Avg Delay</div>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-center">
+                                    <span className={`px-2 py-1 rounded-full ${
+                                      (emp.timingScore || 0) >= 70 ? 'bg-green-100 text-green-700' :
+                                      (emp.timingScore || 0) >= 50 ? 'bg-yellow-100 text-yellow-700' :
+                                      'bg-red-100 text-red-700'
+                                    }`}>
+                                      **Timing Score: {Math.round(emp.timingScore || 0)}%**
+                                    </span>
+                                  </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="space-y-2">
-                                  <div className="flex items-center">
-                                    <span className="text-xs text-gray-600 dark:text-gray-400 w-16">Completion:</span>
-                                    <div className="flex items-center">
-                                      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
-                                        {Math.round(emp.completionRate)}%
+                                <div className="space-y-3">
+                                  <div className="text-center">
+                                    <div className={`text-2xl font-bold ${
+                                      (emp.overallPerformanceScore || 0) >= 70 ? 'text-green-600' :
+                                      (emp.overallPerformanceScore || 0) >= 50 ? 'text-yellow-600' : 'text-red-600'
+                                    }`}>
+                                      {Math.round(emp.overallPerformanceScore || 0)}%
+                                    </div>
+                                    <div className="text-xs text-gray-500">Overall Score</div>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-1 text-xs">
+                                    <div className="text-center">
+                                      <div className="font-semibold text-blue-600">
+                                        {Math.round(emp.completionRate || 0)}%
                                       </div>
-                                      <div className="w-12 bg-gray-200 rounded-full h-1.5">
-                                        <div
-                                          className="bg-blue-600 h-1.5 rounded-full"
-                                          style={{ width: `${emp.completionRate}%` }}
-                                        ></div>
+                                      <div className="text-gray-500">Completion</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="font-semibold text-green-600">
+                                        {Math.round(emp.onTimeRate || 0)}%
                                       </div>
+                                      <div className="text-gray-500">On-Time</div>
                                     </div>
                                   </div>
-                                  <div className="flex items-center">
-                                    <span className="text-xs text-gray-600 dark:text-gray-400 w-16">On-Time:</span>
-                                    <div className="flex items-center">
-                                      <div className="text-sm font-semibold text-gray-900 dark:text-gray-100 mr-2">
-                                        {Math.round(emp.onTimeRate)}%
-                                      </div>
-                                      <div className="w-12 bg-gray-200 rounded-full h-1.5">
-                                        <div
-                                          className="bg-green-600 h-1.5 rounded-full"
-                                          style={{ width: `${emp.onTimeRate}%` }}
-                                        ></div>
-                                      </div>
-                                    </div>
+                                  <div className={`w-full h-2 rounded-full ${
+                                    (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-100' :
+                                    (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-100' : 'bg-red-100'
+                                  }`}>
+                                    <div
+                                      className={`h-2 rounded-full ${
+                                        (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-500' :
+                                        (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-500' : 'bg-red-500'
+                                      }`}
+                                      style={{ width: `${Math.min(100, emp.overallPerformanceScore || 0)}%` }}
+                                    ></div>
                                   </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-center">
-                                <div className="flex flex-col items-center">
-                                  <div className={`text-2xl font-bold ${
-                                    emp.qualityScore >= 80 ? 'text-green-600' :
-                                    emp.qualityScore >= 60 ? 'text-yellow-600' : 'text-red-600'
+                                <div className="flex flex-col items-center space-y-2">
+                                  <div className={`inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs font-semibold ${
+                                    emp.performanceLevel?.level === 'critical' ? 'bg-red-100 text-red-800 border border-red-200' :
+                                    emp.performanceLevel?.level === 'needs_improvement' ? 'bg-orange-100 text-orange-800 border border-orange-200' :
+                                    emp.performanceLevel?.level === 'average' ? 'bg-yellow-100 text-yellow-800 border border-yellow-200' :
+                                    emp.performanceLevel?.level === 'good' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
+                                    'bg-green-100 text-green-800 border border-green-200'
                                   }`}>
-                                    {Math.round(emp.qualityScore)}
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      emp.performanceLevel?.level === 'critical' ? 'bg-red-500' :
+                                      emp.performanceLevel?.level === 'needs_improvement' ? 'bg-orange-500' :
+                                      emp.performanceLevel?.level === 'average' ? 'bg-yellow-500' :
+                                      emp.performanceLevel?.level === 'good' ? 'bg-blue-500' : 'bg-green-500'
+                                    }`}></div>
+                                    **{emp.performanceLevel?.description || 'Analyzing...'}**
                                   </div>
-                                  <div className="text-xs text-gray-500">Quality Score</div>
-                                  <div className={`w-16 h-2 rounded-full mt-1 ${
-                                    emp.qualityScore >= 80 ? 'bg-green-100' :
-                                    emp.qualityScore >= 60 ? 'bg-yellow-100' : 'bg-red-100'
+
+                                  <div className="grid grid-cols-2 gap-1 text-xs w-full">
+                                    <div className="text-center">
+                                      <div className="font-bold text-gray-800">{Math.round(emp.qualityScore || 0)}</div>
+                                      <div className="text-gray-500">Quality</div>
+                                    </div>
+                                    <div className="text-center">
+                                      <div className="font-bold text-gray-800">{Math.round(emp.timingScore || 0)}</div>
+                                      <div className="text-gray-500">Timing</div>
+                                    </div>
+                                  </div>
+
+                                  {/* Progress indicator */}
+                                  <div className={`w-full h-1.5 rounded-full ${
+                                    (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-100' :
+                                    (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-100' : 'bg-red-100'
                                   }`}>
                                     <div
-                                      className={`h-2 rounded-full ${
-                                        emp.qualityScore >= 80 ? 'bg-green-500' :
-                                        emp.qualityScore >= 60 ? 'bg-yellow-500' : 'bg-red-500'
+                                      className={`h-1.5 rounded-full ${
+                                        (emp.overallPerformanceScore || 0) >= 70 ? 'bg-green-500' :
+                                        (emp.overallPerformanceScore || 0) >= 50 ? 'bg-yellow-500' : 'bg-red-500'
                                       }`}
-                                      style={{ width: `${emp.qualityScore}%` }}
+                                      style={{ width: `${Math.min(100, emp.overallPerformanceScore || 0)}%` }}
                                     ></div>
                                   </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="space-y-2">
-                                  <div className="flex items-center gap-2">
-                                    <div className={`w-3 h-3 rounded-full ${
+                                <div className="space-y-2 max-w-xs">
+                                  {/* Critical Issues */}
+                                  {(emp.overdueTasks > 0 || emp.lateRate > 30 || emp.overdueRate > 20) && (
+                                    <div className="space-y-1">
+                                      <div className="text-xs font-semibold text-red-700 flex items-center gap-1">
+                                        <AlertCircle className="w-3 h-3" />
+                                        **Critical Issues:**
+                                      </div>
+                                      {emp.overdueTasks > 0 && (
+                                        <div className="text-xs text-red-600">• {emp.overdueTasks} tasks overdue</div>
+                                      )}
+                                      {emp.lateRate > 30 && (
+                                        <div className="text-xs text-red-600">• {emp.lateRate.toFixed(1)}% late completion rate</div>
+                                      )}
+                                      {emp.overdueRate > 20 && (
+                                        <div className="text-xs text-red-600">• {emp.overdueRate.toFixed(1)}% overdue rate</div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* Recommendations */}
+                                  {(emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement') && (
+                                    <div className="space-y-1">
+                                      <div className="text-xs font-semibold text-blue-700 flex items-center gap-1">
+                                        <Zap className="w-3 h-3" />
+                                        **Top Recommendations:**
+                                      </div>
+                                      {emp.overdueTasks > 3 && (
+                                        <div className="text-xs text-blue-600">• Daily task prioritization</div>
+                                      )}
+                                      {emp.lateRate > 30 && (
+                                        <div className="text-xs text-blue-600">• Time management training</div>
+                                      )}
+                                      {emp.avgDelayDays > 3 && (
+                                        <div className="text-xs text-blue-600">• Better task estimation</div>
+                                      )}
+                                      {emp.reassignmentRate > 15 && (
+                                        <div className="text-xs text-blue-600">• Clearer requirements gathering</div>
+                                      )}
+                                    </div>
+                                  )}
+
+                                  {/* Performance Trend */}
+                                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+                                    <div className={`w-2 h-2 rounded-full ${
                                       emp.trendDirection === 'up' ? 'bg-green-500' :
                                       emp.trendDirection === 'down' ? 'bg-red-500' : 'bg-gray-400'
                                     }`}></div>
-                                    <span className="text-xs font-semibold">
-                                      {emp.trendDirection === 'up' ? 'Improving' :
+                                    <span className="text-xs text-gray-600">
+                                      **Trend:** {emp.trendDirection === 'up' ? 'Improving' :
                                        emp.trendDirection === 'down' ? 'Declining' : 'Stable'}
                                     </span>
-                                  </div>
-                                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Recent: {emp.recentCompletions} tasks
-                                  </div>
-                                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                                    Previous: {emp.previousCompletions} tasks
                                   </div>
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                <div className="flex gap-2">
+                                <div className="flex flex-col gap-2">
                                   <button
                                     onClick={() => setSelectedEmployee(emp.id)}
-                                    className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                                    className={`px-3 py-2 text-xs font-semibold rounded-lg transition-colors ${
+                                      emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement' ?
+                                      'bg-red-500 hover:bg-red-600 text-white' :
+                                      'bg-blue-100 text-blue-700 hover:bg-blue-200'
+                                    }`}
                                   >
-                                    View Details
+                                    {emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement' ?
+                                      '**🚨 Urgent Review**' : 'View Details'
+                                    }
                                   </button>
-                                  <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
-                                    Export
-                                  </button>
+
+                                  {(emp.performanceLevel?.level === 'critical' || emp.performanceLevel?.level === 'needs_improvement') && (
+                                    <button className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors font-semibold">
+                                      **📋 Action Plan**
+                                    </button>
+                                  )}
+
+                                  {emp.performanceLevel?.level !== 'critical' && emp.performanceLevel?.level !== 'needs_improvement' && (
+                                    <button className="px-3 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors">
+                                      Export Report
+                                    </button>
+                                  )}
                                 </div>
                               </td>
                             </motion.tr>
