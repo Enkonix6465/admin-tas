@@ -282,23 +282,23 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-xs font-medium text-gray-600 dark:text-purple-300">
                   Total Projects
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <p className="text-xl font-bold text-gray-900 dark:text-purple-100">
                   {projects.length}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                <Briefcase className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-blue-100 dark:bg-gradient-to-br dark:from-purple-500/20 dark:to-blue-500/20 rounded-lg shadow-sm">
+                <Briefcase className="w-5 h-5 text-blue-600 dark:text-purple-400" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <TrendingUp className="w-4 h-4 text-green-500 mr-1" />
+            <div className="mt-3 flex items-center text-xs">
+              <TrendingUp className="w-3 h-3 text-green-500 mr-1" />
               <span className="text-green-600 dark:text-green-400 font-medium">
                 +12%
               </span>
-              <span className="text-gray-600 dark:text-gray-400 ml-1">
+              <span className="text-gray-600 dark:text-purple-300/70 ml-1">
                 from last month
               </span>
             </div>
