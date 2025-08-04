@@ -394,16 +394,16 @@ const Dashboard = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Projects List */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(15,17,41,0.8)] dark:to-[rgba(26,27,58,0.6)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-purple-500/20 shadow-lg dark:shadow-purple-500/10">
+              <div className="px-4 py-3 border-b border-gray-200 dark:border-purple-500/30">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  <h2 className="text-base font-semibold text-gray-900 dark:text-purple-100">
                     Projects
                   </h2>
-                  <button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                  <button className="text-sm text-blue-600 dark:text-purple-400 hover:text-blue-800 dark:hover:text-purple-300 font-medium">
                     View All
                   </button>
                 </div>
