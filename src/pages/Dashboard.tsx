@@ -271,14 +271,14 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+            className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(139,92,246,0.1)] dark:to-[rgba(59,130,246,0.05)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-purple-500/20 p-4 shadow-lg dark:shadow-purple-500/10 hover:shadow-xl dark:hover:shadow-purple-500/20 transition-all duration-300"
           >
             <div className="flex items-center justify-between">
               <div>
