@@ -602,7 +602,7 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Activity */}
-          <div className="liquid-glass-card animate-liquid-float group" style={{ animationDelay: '2s' }}>
+          <div className="liquid-glass-card group">
             <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
               <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent relative z-10">
                 Recent Tasks
