@@ -638,9 +638,36 @@ const Dashboard = () => {
                       labels: {
                         color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
                         padding: 20,
+                        font: {
+                          size: 13,
+                          weight: 'bold'
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'circle'
                       },
                     },
+                    tooltip: {
+                      backgroundColor: 'rgba(124, 58, 237, 0.95)',
+                      titleColor: '#ffffff',
+                      bodyColor: '#ffffff',
+                      borderColor: 'rgba(168, 85, 247, 1)',
+                      borderWidth: 2,
+                      cornerRadius: 12,
+                      displayColors: true,
+                      boxPadding: 6
+                    }
                   },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                  },
+                  cutout: '45%',
+                  radius: '90%',
+                  hover: {
+                    animationDuration: 300
+                  }
                 }}
               />
             </div>
