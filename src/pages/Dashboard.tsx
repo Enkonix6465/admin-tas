@@ -610,22 +610,22 @@ const Dashboard = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/10 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-200 cursor-pointer"
+                  className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/10 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex-shrink-0 mt-1">
                     {task.status === "completed" ? (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-green-500" />
                     ) : task.status === "in_progress" ? (
-                      <Circle className="w-4 h-4 text-blue-500" />
+                      <Circle className="w-5 h-5 text-blue-500" />
                     ) : (
-                      <Circle className="w-4 h-4 text-gray-400 dark:text-purple-400" />
+                      <Circle className="w-5 h-5 text-gray-400 dark:text-purple-400" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0 relative z-10">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate mb-1">
+                    <p className="text-base font-medium text-gray-900 dark:text-white truncate mb-2">
                       {task.title}
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-purple-300/80 mb-1">
+                    <p className="text-sm text-gray-600 dark:text-purple-300/80 mb-2">
                       Assigned to {getEmployeeName(task.assigned_to)}
                     </p>
                     <div className="flex items-center gap-2">
