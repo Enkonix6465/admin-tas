@@ -529,35 +529,45 @@ export default function EmployeePerformancePage() {
           {selectedEmployee ? (
             <div className="p-6 space-y-6">
               {/* Employee Header */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="liquid-glass-card group"
+              >
                 <div className="flex items-center gap-4">
-                  <img
-                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                      selectedEmployee.name || selectedEmployee.email
-                    )}`}
-                    alt="avatar"
-                    className="w-16 h-16 rounded-full"
-                  />
+                  <div className="relative">
+                    <img
+                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                        selectedEmployee.name || selectedEmployee.email
+                      )}`}
+                      alt="avatar"
+                      className="w-16 h-16 rounded-full border-2 border-purple-200 dark:border-purple-500/30"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <Award className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-purple-100">
                       {selectedEmployee.name}
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-gray-600 dark:text-purple-300/80">
                       {selectedEmployee.department}
                     </p>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-purple-300/70">
                       <div className="flex items-center gap-1">
                         <User className="w-4 h-4" />
                         Employee ID: {selectedEmployee.id.slice(-6)}
                       </div>
                       <div className="flex items-center gap-1">
-                        <CheckCircle className="w-4 h-4" />
-                        Performance Score: {performanceData.totalPerformanceScore}%
+                        <Trophy className="w-4 h-4 text-purple-500" />
+                        Performance Score: <span className="font-bold text-purple-600 dark:text-purple-400">{performanceData.totalPerformanceScore}%</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
