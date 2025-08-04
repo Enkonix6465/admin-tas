@@ -577,6 +577,22 @@ textarea {
   animation: shimmer 2s infinite;
 }
 
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delay-1 {
+  animation: float-delay-1 8s ease-in-out infinite;
+}
+
+.animate-float-delay-2 {
+  animation: float-delay-2 7s ease-in-out infinite;
+}
+
+.animate-float-delay-3 {
+  animation: float-delay-3 9s ease-in-out infinite;
+}
+
 /* Better scrollbars for webkit browsers */
 .custom-scrollbar::-webkit-scrollbar {
   width: 6px;
