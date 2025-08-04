@@ -307,6 +307,13 @@ const KanbanPage = () => {
 
     return () => {
       mounted = false;
+
+      // Clear connection timeout
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+      }
+
+      // Unsubscribe from Firebase listeners
       unsubscribers.forEach(unsub => {
         try {
           unsub();
