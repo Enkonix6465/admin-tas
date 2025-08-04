@@ -195,16 +195,16 @@ function Projects() {
   };
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="h-full bg-gray-50 dark:bg-transparent p-4 space-y-6">
       {teams.map((team) => {
         const teamProjects = projects.filter((p) => p.teamId === team.id);
 
         return (
-          <div key={team.id} className="border rounded-lg p-4 bg-white shadow">
-            <h2 className="text-xl font-semibold mb-2">
+          <div key={team.id} className="liquid-glass-card">
+            <h2 className="text-xl font-semibold mb-2 text-gray-900 dark:text-purple-100">
               Team: {team.teamName}
             </h2>
-            <p className="text-sm text-gray-500 mb-3">
+            <p className="text-sm text-gray-500 dark:text-purple-300/80 mb-3">
               Members: {team.members.map(getEmployeeName).join(", ")}
             </p>
             {teamProjects.map((project) => {
