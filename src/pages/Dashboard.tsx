@@ -119,32 +119,90 @@ const Dashboard = () => {
         {
           id: "1",
           title: "Design System Update",
-          description: "Update design tokens and components",
+          description: "Update design tokens and components for consistency",
           status: "pending",
           assigned_to: "emp-1",
           due_date: "2024-02-15",
           created_at: { seconds: Date.now() / 1000 },
-          project_id: "1"
+          project_id: "1",
+          priority: "high"
         },
         {
           id: "2",
-          title: "API Documentation", 
-          description: "Complete API documentation for v2",
+          title: "API Documentation",
+          description: "Complete API documentation for v2 with examples",
           status: "in_progress",
           assigned_to: "emp-2",
           due_date: "2024-02-20",
-          created_at: { seconds: Date.now() / 1000 },
-          project_id: "2"
+          created_at: { seconds: (Date.now() / 1000) - 86400 },
+          project_id: "2",
+          priority: "medium"
         },
         {
           id: "3",
           title: "User Testing Session",
-          description: "Conduct usability testing",
+          description: "Conduct comprehensive usability testing",
           status: "completed",
-          assigned_to: "emp-3", 
+          assigned_to: "emp-3",
           due_date: "2024-02-10",
+          created_at: { seconds: (Date.now() / 1000) - 172800 },
+          project_id: "1",
+          priority: "high"
+        },
+        {
+          id: "4",
+          title: "Database Migration",
+          description: "Migrate legacy database to new schema",
+          status: "in_progress",
+          assigned_to: "emp-4",
+          due_date: "2024-02-25",
+          created_at: { seconds: (Date.now() / 1000) - 43200 },
+          project_id: "3",
+          priority: "critical"
+        },
+        {
+          id: "5",
+          title: "Security Audit",
+          description: "Comprehensive security review and testing",
+          status: "pending",
+          assigned_to: "emp-5",
+          due_date: "2024-03-01",
           created_at: { seconds: Date.now() / 1000 },
-          project_id: "1"
+          project_id: "5",
+          priority: "high"
+        },
+        {
+          id: "6",
+          title: "Performance Optimization",
+          description: "Optimize app performance and loading times",
+          status: "in_progress",
+          assigned_to: "emp-2",
+          due_date: "2024-02-18",
+          created_at: { seconds: (Date.now() / 1000) - 259200 },
+          project_id: "2",
+          priority: "medium"
+        },
+        {
+          id: "7",
+          title: "Mobile UI Testing",
+          description: "Test mobile responsiveness across devices",
+          status: "completed",
+          assigned_to: "emp-1",
+          due_date: "2024-02-08",
+          created_at: { seconds: (Date.now() / 1000) - 345600 },
+          project_id: "1",
+          priority: "medium"
+        },
+        {
+          id: "8",
+          title: "Integration Testing",
+          description: "End-to-end integration testing",
+          status: "pending",
+          assigned_to: "emp-6",
+          due_date: "2024-02-22",
+          created_at: { seconds: (Date.now() / 1000) - 21600 },
+          project_id: "4",
+          priority: "high"
         }
       ]);
       
