@@ -244,7 +244,7 @@ export default function ProjectDashboard() {
                 ))}
               </div>
 
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
                 <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline font-medium">New Project</span>
               </button>
