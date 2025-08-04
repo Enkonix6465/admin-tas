@@ -857,14 +857,14 @@ const KanbanPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`bg-gradient-to-r ${column.color} rounded-t-xl p-4 border-2 ${column.borderColor} relative overflow-hidden`}
+                className={`${column.glassEffect} rounded-t-2xl p-5 border-2 ${column.borderColor} relative overflow-hidden shadow-lg backdrop-blur-2xl`}
               >
                 <div className="absolute inset-0 bg-white/5"></div>
                 <div className="relative flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      className={`w-10 h-10 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center ${column.iconColor} shadow-lg`}
+                      whileHover={{ scale: 1.15, rotate: 10 }}
+                      className={`w-12 h-12 rounded-2xl bg-white/90 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-center ${column.iconColor} shadow-xl border border-white/50 dark:border-slate-600/50`}
                     >
                       {column.id === "pending" && <Circle className="w-5 h-5" />}
                       {column.id === "in_progress" && <Clock className="w-5 h-5" />}
@@ -872,14 +872,14 @@ const KanbanPage = () => {
                       {column.id === "completed" && <CheckCircle className="w-5 h-5" />}
                     </motion.div>
                     <div>
-                      <h2 className="text-sm font-bold text-gray-900 dark:text-purple-100">
+                      <h2 className="text-sm font-bold text-gray-900 dark:text-slate-100">
                         {column.title}
                       </h2>
                       <motion.p
                         key={column.tasks.length}
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
-                        className="text-xs text-gray-600 dark:text-purple-300/70 font-medium"
+                        className="text-xs text-gray-600 dark:text-slate-300 font-medium"
                       >
                         {column.tasks.length} tasks
                       </motion.p>
@@ -893,7 +893,7 @@ const KanbanPage = () => {
                       setNewTaskColumn(column.status);
                       setShowNewTaskModal(true);
                     }}
-                    className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-white transition-all shadow-lg"
+                    className="w-9 h-9 bg-white/90 dark:bg-slate-800/80 backdrop-blur-xl rounded-xl flex items-center justify-center text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-white dark:hover:bg-slate-700 transition-all shadow-xl border border-white/50 dark:border-slate-600/50"
                     title={`Add task to ${column.title}`}
                   >
                     <Plus className="w-4 h-4" />
@@ -912,7 +912,7 @@ const KanbanPage = () => {
               </motion.div>
 
               {/* Enhanced Column Content */}
-              <div className={`flex-1 ${column.bgColor} dark:bg-gray-800/50 rounded-b-xl border-2 border-t-0 ${column.borderColor} p-4 overflow-y-auto`}>
+              <div className={`flex-1 ${column.glassEffect} rounded-b-2xl border-2 border-t-0 ${column.borderColor} p-5 overflow-y-auto custom-scrollbar backdrop-blur-2xl`}>
                 <AnimatePresence>
                   {column.tasks.map((task: any, index: number) => (
                     <motion.div
@@ -929,12 +929,12 @@ const KanbanPage = () => {
                 
                 {/* Enhanced Empty State */}
                 {column.tasks.length === 0 && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500"
+                    className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-slate-500"
                   >
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-xl flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 bg-gray-200/60 dark:bg-slate-700/60 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border border-gray-300/30 dark:border-slate-600/30">
                       {column.id === "pending" && <Circle className="w-6 h-6" />}
                       {column.id === "in_progress" && <Zap className="w-6 h-6" />}
                       {column.id === "review" && <Eye className="w-6 h-6" />}
