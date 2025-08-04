@@ -68,13 +68,29 @@ const Dashboard = () => {
     try {
       // Add timeout to prevent hanging requests
       const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 5000)
+        setTimeout(() => reject(new Error('Request timeout')), 8000)
       );
 
-      // Disable Firebase calls to prevent fetch errors
-      throw new Error('Firebase disabled - using mock data');
+      const fetchData = Promise.all([
+        getDocs(collection(db, "projects")),
+        getDocs(collection(db, "tasks")),
+        getDocs(collection(db, "teams")),
+        getDocs(collection(db, "employees")),
+      ]);
 
-      // This code will never run due to the throw above
+      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] = await Promise.race([
+        fetchData,
+        timeout
+      ]);
+
+      setProjects(
+        projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
+      setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setEmployees(
+        employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
       setConnectionStatus('connected');
     } catch (error) {
       console.warn("Firebase connection failed, using mock data:", error);
