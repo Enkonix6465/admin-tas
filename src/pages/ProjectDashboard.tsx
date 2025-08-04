@@ -337,11 +337,11 @@ export default function ProjectDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center">
-                <Target className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+                <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{employees.length}</span>
             </div>
