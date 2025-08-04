@@ -179,7 +179,14 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-size: 0.8125rem; /* 13px for more compact feel */
+  font-size: 0.75rem;
+  background: var(--gradient-bg, #0f1129);
+  overflow-x: hidden;
+}
+
+.dark body {
+  background: var(--gradient-bg);
+  background-attachment: fixed;
 }
 .ql-container {
   min-height: 300px;
