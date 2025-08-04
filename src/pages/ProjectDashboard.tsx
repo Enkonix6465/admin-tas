@@ -403,7 +403,7 @@ export default function ProjectDashboard() {
                               #{index + 1}
                             </span>
                             <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                              daysRemaining > 30 ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' :
+                              daysRemaining > 30 ? 'bg-stone-100/80 text-stone-600 dark:bg-gray-700/80 dark:text-gray-300 backdrop-blur-sm' :
                               daysRemaining > 7 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
                               'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
                             }`}>
