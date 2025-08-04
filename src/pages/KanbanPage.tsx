@@ -611,7 +611,7 @@ const KanbanPage = () => {
 
   if (loading) {
     return (
-      <div className="h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="h-full bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-indigo-900 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
@@ -629,31 +629,32 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gray-50 dark:bg-transparent">
+    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50/50 via-white/30 to-blue-50/50 dark:from-slate-900/80 dark:via-purple-900/40 dark:to-indigo-900/80 backdrop-blur-sm">
       {/* Enhanced Header */}
-      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 p-4 flex-shrink-0 shadow-sm dark:shadow-purple-500/20">
+      <div className="enhanced-glass-header border-b border-gray-200/50 dark:border-purple-400/30 p-4 flex-shrink-0 shadow-lg dark:shadow-cyan-500/20 backdrop-blur-2xl bg-white/80 dark:bg-gradient-to-r dark:from-slate-900/90 dark:via-purple-900/80 dark:to-indigo-900/90">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
-                <Layers className="w-5 h-5 text-white" />
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl dark:shadow-cyan-500/25 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse" />
+                <Layers className="w-6 h-6 text-white relative z-10" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-purple-100">
+                <h1 className="text-xl font-bold text-gray-900 dark:text-slate-100 bg-gradient-to-r from-purple-600 to-cyan-600 dark:from-purple-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   Project Board
                 </h1>
-                <p className="text-sm text-gray-500 dark:text-purple-300/70">
+                <p className="text-sm text-gray-600 dark:text-slate-300">
                   {filteredTasks.length} tasks • {projects.length} projects
                 </p>
               </div>
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 text-xs bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/30 rounded-full flex items-center gap-1">
+              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-emerald-100/80 to-green-100/80 dark:from-emerald-900/40 dark:to-green-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-400/30 rounded-full flex items-center gap-1 backdrop-blur-sm shadow-sm">
                 <Activity className="w-3 h-3" />
                 {navigator.onLine ? 'Live' : 'Offline'}
               </span>
-              <span className="px-3 py-1 text-xs bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 rounded-full">
+              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100/80 to-indigo-100/80 dark:from-purple-900/40 dark:to-indigo-900/40 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-400/30 rounded-full backdrop-blur-sm shadow-sm">
                 {Math.round((columns.find(c => c.id === "completed")?.tasks.length || 0) / Math.max(filteredTasks.length, 1) * 100)}% Complete
               </span>
             </div>
