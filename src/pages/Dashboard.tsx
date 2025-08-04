@@ -332,6 +332,18 @@ const Dashboard = () => {
             </button>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (connectionStatus !== 'connecting') {
+                  fetchAllData();
+                }
+              }}
+              disabled={connectionStatus === 'connecting'}
+              className="px-3 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Refresh data"
+            >
+              <Activity className={`w-4 h-4 ${connectionStatus === 'connecting' ? 'animate-spin' : ''}`} />
+            </button>
             <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
               Share
             </button>
