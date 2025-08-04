@@ -441,26 +441,32 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(251,191,36,0.1)] dark:to-[rgba(245,158,11,0.05)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-yellow-500/20 p-4 shadow-lg dark:shadow-yellow-500/10 hover:shadow-xl dark:hover:shadow-yellow-500/20 transition-all duration-300"
+            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
+            style={{ animationDelay: '1s' }}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-yellow-300">
+                <p className="text-xs font-medium text-gray-600 dark:text-yellow-300/90 mb-1">
                   Pending Tasks
                 </p>
-                <p className="text-xl font-bold text-gray-900 dark:text-yellow-100">
+                <p className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400 bg-clip-text text-transparent">
                   {pendingTasks.length}
                 </p>
               </div>
-              <div className="p-2 bg-yellow-100 dark:bg-gradient-to-br dark:from-yellow-500/20 dark:to-orange-500/20 rounded-lg shadow-sm">
-                <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
+              <div className="relative">
+                <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 dark:from-yellow-500/30 dark:to-orange-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-yellow-500/20 dark:border-yellow-500/40 group-hover:scale-110 transition-transform duration-300">
+                  <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs">
-              <AlertCircle className="w-3 h-3 text-yellow-500 mr-1" />
-              <span className="text-yellow-600 dark:text-yellow-400 font-medium">
-                {overdueTasks.length} overdue
-              </span>
+            <div className="mt-3 flex items-center text-xs relative z-10">
+              <div className="flex items-center px-2 py-1 bg-yellow-500/10 dark:bg-yellow-500/20 rounded-full border border-yellow-500/20 dark:border-yellow-500/30">
+                <AlertCircle className="w-3 h-3 text-yellow-500 mr-1" />
+                <span className="text-yellow-600 dark:text-yellow-400 font-medium">
+                  {overdueTasks.length} overdue
+                </span>
+              </div>
             </div>
           </motion.div>
 
