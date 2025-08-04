@@ -169,18 +169,50 @@ export default function MyTasks() {
     }
 
     try {
-      const taskRef = doc(db, "tasks", taskId);
-      await updateDoc(taskRef, {
-        progress_status: data.progress_status,
-        progress_description: data.progress_description || "",
-        progress_link: data.progress_link || "",
-        progress_updated_at: serverTimestamp(),
+      // Try to update Firebase with timeout
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Update timeout')), 3000)
+      );
+
+      const updateData = Promise.resolve().then(async () => {
+        const taskRef = doc(db, "tasks", taskId);
+        await updateDoc(taskRef, {
+          progress_status: data.progress_status,
+          progress_description: data.progress_description || "",
+          progress_link: data.progress_link || "",
+          progress_updated_at: serverTimestamp(),
+        });
       });
+
+      await Promise.race([updateData, timeout]);
+
+      console.log("Progress updated successfully in Firebase");
       setEditingTask(null);
       setProgressData({});
       fetchTasks();
     } catch (error) {
-      console.error("Error updating progress:", error);
+      // If Firebase fails, update locally only
+      console.log("Firebase update failed, updating locally");
+
+      setTasks(prevTasks =>
+        prevTasks.map(task =>
+          task.id === taskId
+            ? {
+                ...task,
+                progress_status: data.progress_status,
+                progress_description: data.progress_description || "",
+                progress_link: data.progress_link || "",
+                progress_updated_at: { seconds: Date.now() / 1000 }
+              }
+            : task
+        )
+      );
+
+      setEditingTask(null);
+      setProgressData({});
+
+      // Show success message even when offline
+      alert("Progress updated locally (offline mode)");
     }
   };
 
