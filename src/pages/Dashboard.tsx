@@ -408,25 +408,30 @@ const Dashboard = () => {
             className="liquid-glass-stats group cursor-pointer animate-liquid-float"
             style={{ animationDelay: '0s' }}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-purple-300">
+                <p className="text-xs font-medium text-gray-600 dark:text-purple-300/90 mb-1">
                   Total Projects
                 </p>
-                <p className="text-xl font-bold text-gray-900 dark:text-purple-100">
+                <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
                   {projects.length}
                 </p>
               </div>
-              <div className="p-2 bg-blue-100 dark:bg-gradient-to-br dark:from-purple-500/20 dark:to-blue-500/20 rounded-lg shadow-sm">
-                <Briefcase className="w-5 h-5 text-blue-600 dark:text-purple-400" />
+              <div className="relative">
+                <div className="p-3 bg-gradient-to-br from-purple-500/20 to-blue-500/20 dark:from-purple-500/30 dark:to-blue-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-purple-500/20 dark:border-purple-500/40 group-hover:scale-110 transition-transform duration-300">
+                  <Briefcase className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs">
-              <TrendingUp className="w-3 h-3 text-green-500 mr-1" />
-              <span className="text-green-600 dark:text-green-400 font-medium">
-                +12%
-              </span>
-              <span className="text-gray-600 dark:text-purple-300/70 ml-1">
+            <div className="mt-3 flex items-center text-xs relative z-10">
+              <div className="flex items-center px-2 py-1 bg-green-500/10 dark:bg-green-500/20 rounded-full border border-green-500/20 dark:border-green-500/30">
+                <TrendingUp className="w-3 h-3 text-green-500 mr-1" />
+                <span className="text-green-600 dark:text-green-400 font-medium">
+                  +12%
+                </span>
+              </div>
+              <span className="text-gray-600 dark:text-purple-300/70 ml-2">
                 from last month
               </span>
             </div>
