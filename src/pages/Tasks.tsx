@@ -233,7 +233,7 @@ function Projects() {
                           onChange={(e) =>
                             updateTaskForm(project.id, "title", e.target.value)
                           }
-                          className="border p-2 rounded"
+                          className="border border-gray-200 dark:border-purple-500/30 p-3 rounded-lg bg-white dark:bg-purple-500/20 text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20"
                         />
                         <textarea
                           placeholder="Task Description"
