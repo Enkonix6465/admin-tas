@@ -599,10 +599,9 @@ const Dashboard = () => {
           {/* Recent Activity */}
           <div className="liquid-glass-card group">
             <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent relative z-10">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Recent Tasks
               </h2>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 dark:from-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
             <div className="p-6 space-y-4">
               {recentTasks.map((task: any, index: number) => (
