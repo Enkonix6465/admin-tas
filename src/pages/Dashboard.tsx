@@ -535,7 +535,7 @@ const Dashboard = () => {
                     View All
                   </button>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-blue-500/5 dark:from-purple-500/10 dark:to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
               </div>
               <div className="divide-y divide-gray-200 dark:divide-purple-500/20">
                 {projects.slice(0, 5).map((project: any, index: number) => {
