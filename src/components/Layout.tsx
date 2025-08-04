@@ -111,10 +111,10 @@ function Layout() {
           <div className="relative workspace-dropdown">
             <button
               onClick={() => setWorkspaceOpen(!workspaceOpen)}
-              className="flex items-center gap-1 hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded-lg px-2 py-1.5 transition-all duration-200 hover:shadow-md dark:hover:shadow-purple-500/20"
+              className="flex items-center gap-2 hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded-lg px-3 py-2 transition-all duration-200 hover:shadow-md dark:hover:shadow-purple-500/20"
             >
-              <span className="text-sm font-semibold text-gray-900 dark:text-purple-200">Task Board</span>
-              <ChevronDown className="w-3 h-3 text-gray-400 dark:text-purple-300" />
+              <span className="text-base font-semibold text-gray-900 dark:text-purple-200">Task Board</span>
+              <ChevronDown className="w-4 h-4 text-gray-400 dark:text-purple-300" />
             </button>
             {workspaceOpen && (
               <div className="absolute top-full left-0 mt-1 w-44 bg-white dark:bg-gradient-to-b dark:from-[rgba(15,17,41,0.95)] dark:to-[rgba(26,27,58,0.9)] border border-gray-200 dark:border-purple-500/30 rounded-lg shadow-xl dark:shadow-purple-500/30 backdrop-blur-xl z-10 p-2">
