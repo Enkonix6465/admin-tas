@@ -622,7 +622,7 @@ const Dashboard = () => {
                     )}
                   </div>
                   <div className="flex-1 min-w-0 relative z-10">
-                    <p className="text-sm font-medium bg-gradient-to-r from-gray-900 to-purple-700 dark:from-purple-200 dark:to-pink-200 bg-clip-text text-transparent truncate mb-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate mb-1">
                       {task.title}
                     </p>
                     <p className="text-xs text-gray-600 dark:text-purple-300/80 mb-1">
