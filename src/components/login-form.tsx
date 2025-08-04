@@ -225,7 +225,7 @@ export function LoginForm({
         </CardContent>
       </Card>
       
-      <div className="text-gray-500 dark:text-gray-400 text-center text-sm bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-2xl p-4 border border-white/20 dark:border-gray-700/20">
+      <div className="text-gray-500 dark:text-slate-400 text-center text-sm bg-white/30 dark:bg-slate-800/30 backdrop-blur-sm rounded-2xl p-4 border border-white/20 dark:border-slate-600/20">
         By continuing, you agree to our{" "}
         <a href="#" className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 underline underline-offset-4 transition-colors font-medium">
           Terms of Service
