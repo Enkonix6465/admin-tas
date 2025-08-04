@@ -850,6 +850,94 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        {/* Task Completion Trend */}
+        <div className="mt-8">
+          <div className="liquid-glass-card">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+              Task Completion Trend (Last 7 Days)
+            </h3>
+            <div className="h-80">
+              <Line
+                data={{
+                  labels: ['7 days ago', '6 days ago', '5 days ago', '4 days ago', '3 days ago', '2 days ago', 'Yesterday'],
+                  datasets: [
+                    {
+                      label: 'Tasks Completed',
+                      data: [3, 5, 2, 8, 6, 4, 7], // Mock data for demonstration
+                      borderColor: 'rgba(139, 92, 246, 1)',
+                      backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                      borderWidth: 3,
+                      fill: true,
+                      tension: 0.4,
+                      pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                      pointBorderColor: '#ffffff',
+                      pointBorderWidth: 2,
+                      pointRadius: 6,
+                    },
+                    {
+                      label: 'Tasks Created',
+                      data: [5, 3, 6, 4, 8, 7, 5], // Mock data for demonstration
+                      borderColor: 'rgba(59, 130, 246, 1)',
+                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                      borderWidth: 3,
+                      fill: true,
+                      tension: 0.4,
+                      pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                      pointBorderColor: '#ffffff',
+                      pointBorderWidth: 2,
+                      pointRadius: 6,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
+                        padding: 20,
+                        usePointStyle: true,
+                      },
+                    },
+                    tooltip: {
+                      backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#ffffff',
+                      titleColor: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
+                      bodyColor: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#6b7280',
+                      borderColor: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      borderWidth: 1,
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+                      },
+                      grid: {
+                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+                      },
+                      grid: {
+                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      },
+                    },
+                  },
+                  interaction: {
+                    intersect: false,
+                    mode: 'index',
+                  },
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
