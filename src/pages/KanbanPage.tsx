@@ -470,17 +470,29 @@ const KanbanPage = () => {
         throw new Error("Database connection not available");
       }
 
-      await updateDoc(doc(db, "tasks", task.id), {
+      // Add timeout for Firebase operation
+      const updateTaskPromise = updateDoc(doc(db, "tasks", task.id), {
         status: newStatus,
         progress_status: newStatus,
         progress_updated_at: Timestamp.now(),
         progress: newStatus === "completed" ? 100 : task.progress || 0,
       });
 
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Operation timeout')), 5000)
+      );
+
+      await Promise.race([updateTaskPromise, timeoutPromise]);
+
       toast.success(`Task moved to ${newStatus.replace('_', ' ')} 📈`);
     } catch (error: any) {
       console.error("Error updating task:", error);
-      toast.error(`Failed to update task: ${error.message || 'Unknown error'}`);
+
+      if (error.message.includes('timeout') || error.message.includes('Failed to fetch')) {
+        toast.error("Connection timeout - task status not updated. Please try again.");
+      } else {
+        toast.error(`Failed to update task: ${error.message || 'Connection error'}`);
+      }
     }
   };
 
