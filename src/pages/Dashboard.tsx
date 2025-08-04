@@ -610,7 +610,7 @@ const Dashboard = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-white/30 hover:to-purple-500/10 dark:hover:from-purple-500/10 dark:hover:to-pink-500/10 backdrop-blur-sm border border-white/20 dark:border-purple-500/20 hover:border-purple-500/30 dark:hover:border-purple-500/40 transition-all duration-300 cursor-pointer group"
+                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/10 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-200 cursor-pointer"
                 >
                   <div className="flex-shrink-0 mt-1">
                     {task.status === "completed" ? (
