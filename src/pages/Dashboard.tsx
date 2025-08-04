@@ -484,21 +484,21 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-yellow-300/90 mb-1">
+                <p className="text-xs font-medium text-gray-600 dark:text-indigo-300/90 mb-1">
                   Pending Tasks
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {pendingTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-yellow-100 dark:bg-yellow-500/20 rounded-xl border border-yellow-200 dark:border-yellow-500/30">
-                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+              <div className="p-3 bg-indigo-100 dark:bg-indigo-500/20 rounded-xl border border-indigo-200 dark:border-indigo-500/30">
+                <Clock className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
               </div>
             </div>
             <div className="mt-3 flex items-center text-xs relative z-10">
-              <div className="flex items-center px-2 py-1 bg-yellow-500/10 dark:bg-yellow-500/20 rounded-full border border-yellow-500/20 dark:border-yellow-500/30">
-                <AlertCircle className="w-3 h-3 text-yellow-500 mr-1" />
-                <span className="text-yellow-600 dark:text-yellow-400 font-medium">
+              <div className="flex items-center px-2 py-1 bg-indigo-500/10 dark:bg-indigo-500/20 rounded-full border border-indigo-500/20 dark:border-indigo-500/30">
+                <AlertCircle className="w-3 h-3 text-indigo-500 mr-1" />
+                <span className="text-indigo-600 dark:text-indigo-400 font-medium">
                   {overdueTasks.length} overdue
                 </span>
               </div>
