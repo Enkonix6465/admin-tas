@@ -280,40 +280,44 @@ const KanbanPage = () => {
       id: "pending",
       title: "📋 Backlog",
       status: "pending",
-      color: "from-gray-50 to-purple-50",
-      borderColor: "border-purple-200 dark:border-purple-500/30",
-      iconColor: "text-purple-500",
-      bgColor: "bg-purple-50 dark:bg-purple-500/10",
+      color: "from-slate-100/90 via-purple-100/80 to-indigo-100/90",
+      borderColor: "border-purple-300/40 dark:border-purple-400/30",
+      iconColor: "text-purple-600 dark:text-purple-400",
+      bgColor: "bg-gradient-to-br from-purple-50/40 via-slate-50/50 to-purple-100/40 dark:from-purple-900/20 dark:via-slate-800/30 dark:to-purple-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-purple-900/30 dark:via-slate-800/40 dark:to-indigo-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "pending" || t.progress_status === "pending"),
     },
     {
       id: "in_progress",
       title: "🚀 In Progress",
       status: "in_progress",
-      color: "from-purple-50 to-blue-50",
-      borderColor: "border-purple-200 dark:border-purple-500/30",
-      iconColor: "text-purple-600",
-      bgColor: "bg-purple-50 dark:bg-purple-500/10",
+      color: "from-blue-100/90 via-cyan-100/80 to-teal-100/90",
+      borderColor: "border-blue-300/40 dark:border-cyan-400/30",
+      iconColor: "text-blue-600 dark:text-cyan-400",
+      bgColor: "bg-gradient-to-br from-blue-50/40 via-cyan-50/50 to-teal-100/40 dark:from-blue-900/20 dark:via-cyan-800/30 dark:to-teal-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-blue-900/30 dark:via-cyan-800/40 dark:to-teal-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "in_progress" || t.progress_status === "in_progress"),
     },
     {
       id: "review",
       title: "👀 Review",
       status: "review",
-      color: "from-purple-50 to-indigo-50",
-      borderColor: "border-purple-200 dark:border-purple-500/30",
-      iconColor: "text-indigo-500",
-      bgColor: "bg-indigo-50 dark:bg-indigo-500/10",
+      color: "from-amber-100/90 via-yellow-100/80 to-orange-100/90",
+      borderColor: "border-amber-300/40 dark:border-yellow-400/30",
+      iconColor: "text-amber-600 dark:text-yellow-400",
+      bgColor: "bg-gradient-to-br from-amber-50/40 via-yellow-50/50 to-orange-100/40 dark:from-amber-900/20 dark:via-yellow-800/30 dark:to-orange-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-amber-900/30 dark:via-yellow-800/40 dark:to-orange-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "review" || t.status === "testing" || t.progress_status === "review"),
     },
     {
       id: "completed",
       title: "✅ Done",
       status: "completed",
-      color: "from-green-50 to-emerald-50",
-      borderColor: "border-green-200 dark:border-green-500/30",
-      iconColor: "text-green-500",
-      bgColor: "bg-green-50 dark:bg-green-500/10",
+      color: "from-emerald-100/90 via-green-100/80 to-teal-100/90",
+      borderColor: "border-emerald-300/40 dark:border-green-400/30",
+      iconColor: "text-emerald-600 dark:text-green-400",
+      bgColor: "bg-gradient-to-br from-emerald-50/40 via-green-50/50 to-teal-100/40 dark:from-emerald-900/20 dark:via-green-800/30 dark:to-teal-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-emerald-900/30 dark:via-green-800/40 dark:to-teal-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "completed" || t.progress_status === "completed"),
     },
   ];
@@ -426,17 +430,17 @@ const KanbanPage = () => {
     const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "completed";
 
     const getCardBgColor = () => {
-      if (isOverdue) return 'liquid-glass border-red-200 dark:border-red-500/30 bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-500/10 dark:to-pink-500/10';
+      if (isOverdue) return 'enhanced-glass-card border-red-300/40 dark:border-red-400/50 bg-gradient-to-br from-red-50/70 via-pink-50/60 to-rose-50/70 dark:from-red-900/30 dark:via-pink-900/40 dark:to-rose-900/30';
 
       switch (task.status) {
         case 'completed':
-          return 'liquid-glass border-green-200 dark:border-green-500/30 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-500/10 dark:to-emerald-500/10';
+          return 'enhanced-glass-card border-emerald-300/40 dark:border-green-400/50 bg-gradient-to-br from-emerald-50/70 via-green-50/60 to-teal-50/70 dark:from-emerald-900/30 dark:via-green-900/40 dark:to-teal-900/30';
         case 'in_progress':
-          return 'liquid-glass border-purple-200 dark:border-purple-500/30 bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-500/10 dark:to-blue-500/10';
+          return 'enhanced-glass-card border-blue-300/40 dark:border-cyan-400/50 bg-gradient-to-br from-blue-50/70 via-cyan-50/60 to-sky-50/70 dark:from-blue-900/30 dark:via-cyan-900/40 dark:to-sky-900/30';
         case 'review':
-          return 'liquid-glass border-yellow-200 dark:border-yellow-500/30 bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-500/10 dark:to-amber-500/10';
+          return 'enhanced-glass-card border-amber-300/40 dark:border-yellow-400/50 bg-gradient-to-br from-amber-50/70 via-yellow-50/60 to-orange-50/70 dark:from-amber-900/30 dark:via-yellow-900/40 dark:to-orange-900/30';
         default:
-          return 'liquid-glass border-gray-200 dark:border-purple-500/20 bg-gradient-to-br from-gray-50/50 to-purple-50/50 dark:from-gray-500/10 dark:to-purple-500/10';
+          return 'enhanced-glass-card border-purple-300/40 dark:border-indigo-400/50 bg-gradient-to-br from-purple-50/70 via-slate-50/60 to-indigo-50/70 dark:from-purple-900/30 dark:via-slate-900/40 dark:to-indigo-900/30';
       }
     };
 
@@ -457,7 +461,7 @@ const KanbanPage = () => {
           setSelectedTask(task);
           setShowTaskDetailModal(true);
         }}
-        className={`${getCardBgColor()} rounded-xl border p-4 mb-3 hover:shadow-xl dark:hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer group relative overflow-hidden backdrop-blur-sm hover:-translate-y-1`}
+        className={`${getCardBgColor()} rounded-2xl border p-5 mb-4 hover:shadow-2xl dark:hover:shadow-cyan-500/25 transition-all duration-500 cursor-pointer group relative overflow-hidden backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] moving-border-subtle`}
       >
         {/* Priority stripe */}
         <div className={`absolute top-0 left-0 w-full h-1 ${
