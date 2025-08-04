@@ -43,6 +43,8 @@ export default function ProjectDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState("grid");
   const [hoveredCard, setHoveredCard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const { currentUser } = useAuthStore();
 
