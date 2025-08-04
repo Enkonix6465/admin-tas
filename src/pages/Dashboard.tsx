@@ -317,14 +317,19 @@ const Dashboard = () => {
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
               Dashboard Overview
             </h1>
-            <span className={`px-2 py-1 text-xs rounded-full font-medium border ${
+            <span className={`px-3 py-1 text-xs rounded-full font-medium border flex items-center gap-2 ${
               connectionStatus === 'connected'
                 ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
                 : connectionStatus === 'connecting'
                 ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30'
                 : 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-500/30'
             }`}>
-              {connectionStatus === 'connected' ? 'Connected' : connectionStatus === 'connecting' ? 'Connecting...' : 'Demo Mode'}
+              <div className={`w-2 h-2 rounded-full ${
+                connectionStatus === 'connected' ? 'bg-green-500' :
+                connectionStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
+                'bg-orange-500'
+              }`}></div>
+              {connectionStatus === 'connected' ? 'Live Data' : connectionStatus === 'connecting' ? 'Connecting...' : 'Offline'}
             </span>
             <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
               <Star className="w-4 h-4 text-gray-400 dark:text-purple-300" />
