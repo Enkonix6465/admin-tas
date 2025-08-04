@@ -618,17 +618,14 @@ const Dashboard = () => {
                   transition={{ delay: index * 0.1 }}
                   className="flex items-start gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-white/30 hover:to-purple-500/10 dark:hover:from-purple-500/10 dark:hover:to-pink-500/10 backdrop-blur-sm border border-white/20 dark:border-purple-500/20 hover:border-purple-500/30 dark:hover:border-purple-500/40 transition-all duration-300 cursor-pointer group"
                 >
-                  <div className="flex-shrink-0 mt-1 relative">
-                    <div className="relative">
-                      {task.status === "completed" ? (
-                        <CheckCircle className="w-4 h-4 text-green-500 drop-shadow-sm" />
-                      ) : task.status === "in_progress" ? (
-                        <Circle className="w-4 h-4 text-blue-500 drop-shadow-sm animate-liquid-pulse" />
-                      ) : (
-                        <Circle className="w-4 h-4 text-gray-400 dark:text-purple-400 drop-shadow-sm" />
-                      )}
-                      <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-liquid-glow"></div>
-                    </div>
+                  <div className="flex-shrink-0 mt-1">
+                    {task.status === "completed" ? (
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                    ) : task.status === "in_progress" ? (
+                      <Circle className="w-4 h-4 text-blue-500" />
+                    ) : (
+                      <Circle className="w-4 h-4 text-gray-400 dark:text-purple-400" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0 relative z-10">
                     <p className="text-sm font-medium bg-gradient-to-r from-gray-900 to-purple-700 dark:from-purple-200 dark:to-pink-200 bg-clip-text text-transparent truncate mb-1">
