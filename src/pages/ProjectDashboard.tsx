@@ -213,10 +213,10 @@ export default function ProjectDashboard() {
               <Briefcase className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">
                   Project Dashboard
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-medium">
+                <p className="text-stone-600 dark:text-gray-400 font-medium">
                   Manage and track all your projects
                 </p>
               </div>
