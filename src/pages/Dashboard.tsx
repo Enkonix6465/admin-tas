@@ -407,7 +407,7 @@ const Dashboard = () => {
                 <p className="text-xs font-medium text-gray-600 dark:text-purple-300/90 mb-1">
                   Total Projects
                 </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {projects.length}
                 </p>
               </div>
