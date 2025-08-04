@@ -635,11 +635,11 @@ const KanbanPage = () => {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full flex items-center gap-1">
+              <span className="px-3 py-1 text-xs bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/30 rounded-full flex items-center gap-1">
                 <Activity className="w-3 h-3" />
                 {navigator.onLine ? 'Live' : 'Offline'}
               </span>
-              <span className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+              <span className="px-3 py-1 text-xs bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 rounded-full">
                 {Math.round((columns.find(c => c.id === "completed")?.tasks.length || 0) / Math.max(filteredTasks.length, 1) * 100)}% Complete
               </span>
             </div>
