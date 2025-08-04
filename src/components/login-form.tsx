@@ -190,7 +190,7 @@ export function LoginForm({
           </div>
 
           {/* Right Side - Lottie Animation */}
-          <div className="relative hidden md:block bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-800 overflow-hidden rounded-r-3xl">
+          <div className="relative hidden md:block bg-gradient-to-br from-purple-600 via-purple-700 to-indigo-900 dark:from-slate-800 dark:via-purple-800 dark:to-indigo-900 overflow-hidden rounded-r-3xl">
             {/* Enhanced glass morphism background */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600/90 to-indigo-800/90 backdrop-blur-sm"></div>
             
