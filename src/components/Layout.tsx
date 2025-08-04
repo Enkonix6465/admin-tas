@@ -177,13 +177,13 @@ function Layout() {
             <div>
               <button
                 onClick={() => toggleSection('dashboard')}
-                className="flex items-center justify-between w-full px-2 py-1.5 text-xs font-semibold text-gray-700 dark:text-purple-200 hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded-lg transition-all duration-200 hover:shadow-sm dark:hover:shadow-purple-500/20"
+                className="flex items-center justify-between w-full px-3 py-2 text-sm font-semibold text-gray-700 dark:text-purple-200 hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded-lg transition-all duration-200 hover:shadow-sm dark:hover:shadow-purple-500/20"
               >
-                <div className="flex items-center gap-2">
-                  <Grid3X3 className="w-3 h-3" />
+                <div className="flex items-center gap-3">
+                  <Grid3X3 className="w-4 h-4" />
                   Dashboard
                 </div>
-                <ChevronDown className={`w-3 h-3 transition-transform ${expandedSections.dashboard ? 'rotate-0' : '-rotate-90'}`} />
+                <ChevronDown className={`w-4 h-4 transition-transform ${expandedSections.dashboard ? 'rotate-0' : '-rotate-90'}`} />
               </button>
               {expandedSections.dashboard && (
                 <div className="ml-4 mt-1 space-y-0.5">
