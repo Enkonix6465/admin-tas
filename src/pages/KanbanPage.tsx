@@ -858,14 +858,14 @@ const KanbanPage = () => {
                       {column.id === "completed" && <CheckCircle className="w-5 h-5" />}
                     </motion.div>
                     <div>
-                      <h2 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                      <h2 className="text-sm font-bold text-gray-900 dark:text-purple-100">
                         {column.title}
                       </h2>
                       <motion.p
                         key={column.tasks.length}
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
-                        className="text-xs text-gray-600 dark:text-gray-400 font-medium"
+                        className="text-xs text-gray-600 dark:text-purple-300/70 font-medium"
                       >
                         {column.tasks.length} tasks
                       </motion.p>
