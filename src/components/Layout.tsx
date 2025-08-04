@@ -104,7 +104,7 @@ function Layout() {
       {/* Compact Sidebar */}
       <div className={`${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[180px] bg-white/95 dark:bg-gradient-to-b dark:from-[rgba(15,17,41,0.98)] dark:to-[rgba(26,27,58,0.95)] backdrop-blur-xl border-r border-gray-200 dark:border-purple-500/20 shadow-2xl dark:shadow-purple-500/20 transition-all duration-300 ease-in-out flex flex-col`}>
+      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[200px] lg:w-[220px] bg-white/95 dark:bg-gradient-to-b dark:from-[rgba(15,17,41,0.98)] dark:to-[rgba(26,27,58,0.95)] backdrop-blur-xl border-r border-gray-200 dark:border-purple-500/20 shadow-2xl dark:shadow-purple-500/20 transition-all duration-300 ease-in-out flex flex-col`}>
 
         {/* Compact Header */}
         <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-purple-500/30 bg-gradient-to-r from-white to-gray-50 dark:from-[rgba(15,17,41,0.9)] dark:to-[rgba(35,36,71,0.8)]">
