@@ -313,21 +313,94 @@ export default function EmployeePerformancePage() {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
-      <PageHeader
-        title="Performance Matrix"
-        subtitle={selectedEmployee ? `• ${selectedEmployee.name}` : ""}
-        status="Active"
-        statusColor="bg-green-100 text-green-700"
-        tabs={tabs}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchPlaceholder="Search employees..."
-        showFilters={false}
-      />
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+      {/* Header */}
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
+              Performance Matrix
+            </h1>
+            <span className="px-3 py-1 text-xs rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+              Live Analytics
+            </span>
+            {selectedEmployee && (
+              <span className="px-3 py-1 text-xs rounded-full font-medium bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30">
+                {selectedEmployee.name}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (selectedEmployee && performanceData) {
+                  const exportData = {
+                    employee: selectedEmployee,
+                    performance: performanceData,
+                    bestDay: bestDay,
+                    trends: performanceTrends,
+                    qualityProductivity: qualityProductivityData,
+                    exportDate: new Date().toISOString()
+                  };
+
+                  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `performance-${selectedEmployee.name?.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast.success(`Performance report exported for ${selectedEmployee.name}! 📊`);
+                }
+              }}
+              disabled={!selectedEmployee}
+              className="px-4 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Download className="w-4 h-4 mr-2 inline" />
+              Export
+            </button>
+            <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
+              Generate Report
+            </button>
+          </div>
+        </div>
+
+        {/* Search and Best Day Info */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 border-b-2 border-purple-500 pb-2">
+              <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span className="text-base font-medium text-purple-600 dark:text-purple-400">Performance Analytics</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
+              <input
+                type="text"
+                placeholder="Search employees..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-full sm:w-48"
+              />
+            </div>
+            {bestDay && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/30 rounded-lg text-sm">
+                <Star className="w-4 h-4" />
+                <span className="font-medium">Best Day: {bestDay.day}</span>
+                <span className="text-xs">({bestDay.performance?.toFixed(1)}%)</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Actions Bar */}
-      <div className="px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div className="px-6 py-3 liquid-glass border-b border-gray-200 dark:border-purple-500/30 flex justify-between items-center">
         <div className="flex items-center gap-4">
           {bestDay && (
             <div className="flex items-center gap-2 text-sm">
