@@ -634,25 +634,41 @@ const Dashboard = () => {
                   transition={{ delay: index * 0.1 }}
                   className="flex items-start gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-white/30 hover:to-purple-500/10 dark:hover:from-purple-500/10 dark:hover:to-pink-500/10 backdrop-blur-sm border border-white/20 dark:border-purple-500/20 hover:border-purple-500/30 dark:hover:border-purple-500/40 transition-all duration-300 cursor-pointer group"
                 >
-                  <div className="flex-shrink-0 mt-0.5">
-                    {task.status === "completed" ? (
-                      <CheckCircle className="w-3 h-3 text-green-500" />
-                    ) : task.status === "in_progress" ? (
-                      <Circle className="w-3 h-3 text-blue-500" />
-                    ) : (
-                      <Circle className="w-3 h-3 text-gray-400 dark:text-purple-400" />
-                    )}
+                  <div className="flex-shrink-0 mt-1 relative">
+                    <div className="relative">
+                      {task.status === "completed" ? (
+                        <CheckCircle className="w-4 h-4 text-green-500 drop-shadow-sm" />
+                      ) : task.status === "in_progress" ? (
+                        <Circle className="w-4 h-4 text-blue-500 drop-shadow-sm animate-liquid-pulse" />
+                      ) : (
+                        <Circle className="w-4 h-4 text-gray-400 dark:text-purple-400 drop-shadow-sm" />
+                      )}
+                      <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-liquid-glow"></div>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-gray-900 dark:text-purple-100 truncate">
+                  <div className="flex-1 min-w-0 relative z-10">
+                    <p className="text-sm font-medium bg-gradient-to-r from-gray-900 to-purple-700 dark:from-purple-200 dark:to-pink-200 bg-clip-text text-transparent truncate mb-1">
                       {task.title}
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-purple-300/70">
+                    <p className="text-xs text-gray-600 dark:text-purple-300/80 mb-1">
                       Assigned to {getEmployeeName(task.assigned_to)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-purple-300/50">
-                      Due: {task.due_date}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-gray-500 dark:text-purple-300/60">
+                        Due: {task.due_date}
+                      </span>
+                      {task.priority && (
+                        <span className={`px-2 py-0.5 text-xs rounded-full border ${
+                          task.priority === 'critical'
+                            ? 'bg-red-500/10 text-red-600 border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30'
+                            : task.priority === 'high'
+                            ? 'bg-orange-500/10 text-orange-600 border-orange-500/20 dark:bg-orange-500/20 dark:text-orange-400 dark:border-orange-500/30'
+                            : 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30'
+                        }`}>
+                          {task.priority}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               ))}
