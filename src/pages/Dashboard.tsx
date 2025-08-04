@@ -67,69 +67,104 @@ const Dashboard = () => {
   const fetchAllData = async () => {
     setConnectionStatus('connecting');
 
-    // Use mock data directly to avoid Firebase connection issues
+    // Try Firebase first, fall back to enhanced mock data if it fails
     try {
-      // Simulate loading delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timeout')), 3000)
+      );
 
-      console.log("Using local mock data");
+      const fetchData = Promise.all([
+        getDocs(collection(db, "projects")),
+        getDocs(collection(db, "tasks")),
+        getDocs(collection(db, "teams")),
+        getDocs(collection(db, "employees")),
+      ]);
+
+      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] = await Promise.race([
+        fetchData,
+        timeout
+      ]);
+
+      // If we get here, Firebase worked - use real data
+      setProjects(
+        projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
+      setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+      setEmployees(
+        employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+      );
+      setConnectionStatus('connected');
+      console.log("Firebase connection successful - using real data");
+    } catch (error) {
+      // Fall back to enhanced mock data if Firebase fails
+      console.log("Firebase connection failed, using enhanced mock data");
       setConnectionStatus('offline');
 
-      // Set mock data immediately
+      // Set enhanced mock data with more realistic content
       setProjects([
         {
           id: "1",
-          name: "Website Redesign",
-          description: "Complete redesign of company website with new branding and improved UX",
+          name: "E-Commerce Platform Redesign",
+          description: "Complete overhaul of the online shopping experience with modern UI/UX principles and mobile-first approach",
           deadline: "2024-03-15",
           teamId: "team-1",
           status: "active",
-          progress: 75,
+          progress: 78,
         },
         {
           id: "2",
-          name: "Mobile App Development",
-          description: "iOS and Android app for customer engagement with real-time features",
+          name: "AI-Powered Analytics Dashboard",
+          description: "Implementation of machine learning algorithms for predictive analytics and real-time business insights",
           deadline: "2024-04-30",
-          teamId: "team-2",
+          teamId: "team-3",
           status: "active",
-          progress: 45,
+          progress: 62,
         },
         {
           id: "3",
-          name: "API Integration",
-          description: "Third-party payment gateway integration and security enhancements",
+          name: "Blockchain Payment Integration",
+          description: "Secure cryptocurrency payment gateway with multi-wallet support and real-time transaction monitoring",
           deadline: "2024-02-28",
-          teamId: "team-1",
+          teamId: "team-2",
           status: "completed",
           progress: 100,
         },
         {
           id: "4",
-          name: "Dashboard Analytics",
-          description: "Real-time analytics dashboard with data visualization",
+          name: "Mobile App 2.0",
+          description: "Next-generation mobile application with offline capabilities, push notifications, and advanced user personalization",
           deadline: "2024-05-15",
-          teamId: "team-3",
+          teamId: "team-2",
           status: "active",
-          progress: 30,
+          progress: 45,
         },
         {
           id: "5",
-          name: "User Authentication System",
-          description: "Multi-factor authentication and user management system",
+          name: "Cloud Infrastructure Migration",
+          description: "Complete migration to AWS cloud infrastructure with auto-scaling, load balancing, and disaster recovery",
           deadline: "2024-03-30",
-          teamId: "team-2",
+          teamId: "team-4",
           status: "active",
-          progress: 60,
+          progress: 34,
+        },
+        {
+          id: "6",
+          name: "Customer Support Automation",
+          description: "AI chatbot implementation with natural language processing and seamless human handoff capabilities",
+          deadline: "2024-04-15",
+          teamId: "team-1",
+          status: "active",
+          progress: 23,
         }
       ]);
 
       setTasks([
         {
           id: "1",
-          title: "Design System Update",
-          description: "Update design tokens and components for consistency",
-          status: "pending",
+          title: "Design System Architecture",
+          description: "Create comprehensive design tokens, component library, and style guide for consistent UI/UX",
+          status: "in_progress",
           assigned_to: "emp-1",
           due_date: "2024-02-15",
           created_at: { seconds: Date.now() / 1000 },
@@ -138,54 +173,54 @@ const Dashboard = () => {
         },
         {
           id: "2",
-          title: "API Documentation",
-          description: "Complete API documentation for v2 with examples",
+          title: "API Performance Optimization",
+          description: "Optimize database queries, implement caching strategies, and reduce API response times by 40%",
           status: "in_progress",
           assigned_to: "emp-2",
           due_date: "2024-02-20",
           created_at: { seconds: (Date.now() / 1000) - 86400 },
           project_id: "2",
-          priority: "medium"
+          priority: "critical"
         },
         {
           id: "3",
-          title: "User Testing Session",
-          description: "Conduct comprehensive usability testing",
+          title: "Security Penetration Testing",
+          description: "Comprehensive security audit and vulnerability assessment across all system components",
           status: "completed",
-          assigned_to: "emp-3",
+          assigned_to: "emp-5",
           due_date: "2024-02-10",
           created_at: { seconds: (Date.now() / 1000) - 172800 },
-          project_id: "1",
-          priority: "high"
-        },
-        {
-          id: "4",
-          title: "Database Migration",
-          description: "Migrate legacy database to new schema",
-          status: "in_progress",
-          assigned_to: "emp-4",
-          due_date: "2024-02-25",
-          created_at: { seconds: (Date.now() / 1000) - 43200 },
           project_id: "3",
           priority: "critical"
         },
         {
+          id: "4",
+          title: "Machine Learning Model Training",
+          description: "Train and optimize predictive models for user behavior analysis and recommendation engine",
+          status: "in_progress",
+          assigned_to: "emp-4",
+          due_date: "2024-02-25",
+          created_at: { seconds: (Date.now() / 1000) - 43200 },
+          project_id: "2",
+          priority: "high"
+        },
+        {
           id: "5",
-          title: "Security Audit",
-          description: "Comprehensive security review and testing",
+          title: "Cross-Platform Testing Suite",
+          description: "Implement automated testing across iOS, Android, and web platforms with CI/CD integration",
           status: "pending",
-          assigned_to: "emp-5",
+          assigned_to: "emp-3",
           due_date: "2024-03-01",
           created_at: { seconds: Date.now() / 1000 },
-          project_id: "5",
+          project_id: "4",
           priority: "high"
         },
         {
           id: "6",
-          title: "Performance Optimization",
-          description: "Optimize app performance and loading times",
+          title: "Real-time Data Streaming",
+          description: "Implement WebSocket connections for live data updates and real-time collaboration features",
           status: "in_progress",
-          assigned_to: "emp-2",
+          assigned_to: "emp-8",
           due_date: "2024-02-18",
           created_at: { seconds: (Date.now() / 1000) - 259200 },
           project_id: "2",
@@ -193,10 +228,10 @@ const Dashboard = () => {
         },
         {
           id: "7",
-          title: "Mobile UI Testing",
-          description: "Test mobile responsiveness across devices",
+          title: "Accessibility Compliance Audit",
+          description: "Ensure WCAG 2.1 AA compliance across all user interfaces and implement screen reader support",
           status: "completed",
-          assigned_to: "emp-1",
+          assigned_to: "emp-7",
           due_date: "2024-02-08",
           created_at: { seconds: (Date.now() / 1000) - 345600 },
           project_id: "1",
@@ -204,37 +239,56 @@ const Dashboard = () => {
         },
         {
           id: "8",
-          title: "Integration Testing",
-          description: "End-to-end integration testing",
+          title: "DevOps Pipeline Enhancement",
+          description: "Optimize CI/CD pipelines with blue-green deployments and automated rollback mechanisms",
           status: "pending",
           assigned_to: "emp-6",
           due_date: "2024-02-22",
           created_at: { seconds: (Date.now() / 1000) - 21600 },
-          project_id: "4",
+          project_id: "5",
           priority: "high"
+        },
+        {
+          id: "9",
+          title: "User Analytics Implementation",
+          description: "Set up comprehensive user tracking, heatmaps, and conversion funnel analysis",
+          status: "in_progress",
+          assigned_to: "emp-4",
+          due_date: "2024-02-28",
+          created_at: { seconds: (Date.now() / 1000) - 172800 },
+          project_id: "2",
+          priority: "medium"
+        },
+        {
+          id: "10",
+          title: "Microservices Architecture Review",
+          description: "Evaluate current microservices performance and plan optimization strategies",
+          status: "pending",
+          assigned_to: "emp-2",
+          due_date: "2024-03-05",
+          created_at: { seconds: Date.now() / 1000 },
+          project_id: "5",
+          priority: "medium"
         }
       ]);
 
       setTeams([
-        { id: "team-1", teamName: "Design Team", memberCount: 5, lead: "Sarah Johnson" },
-        { id: "team-2", teamName: "Development Team", memberCount: 8, lead: "Mike Chen" },
-        { id: "team-3", teamName: "Analytics Team", memberCount: 4, lead: "Alex Rodriguez" },
-        { id: "team-4", teamName: "QA Team", memberCount: 6, lead: "Emily Davis" }
+        { id: "team-1", teamName: "Design & UX Team", memberCount: 6, lead: "Sarah Johnson" },
+        { id: "team-2", teamName: "Full-Stack Development", memberCount: 10, lead: "Mike Chen" },
+        { id: "team-3", teamName: "Data & Analytics", memberCount: 5, lead: "Alex Rodriguez" },
+        { id: "team-4", teamName: "DevOps & Infrastructure", memberCount: 4, lead: "Emily Davis" }
       ]);
 
       setEmployees([
-        { id: "emp-1", name: "Sarah Johnson", role: "Senior Designer", team: "Design Team" },
-        { id: "emp-2", name: "Mike Chen", role: "Full Stack Developer", team: "Development Team" },
-        { id: "emp-3", name: "Emily Davis", role: "QA Lead", team: "QA Team" },
-        { id: "emp-4", name: "Alex Rodriguez", role: "Data Analyst", team: "Analytics Team" },
-        { id: "emp-5", name: "Jessica Kim", role: "Security Engineer", team: "Development Team" },
-        { id: "emp-6", name: "David Brown", role: "QA Engineer", team: "QA Team" },
-        { id: "emp-7", name: "Lisa Wang", role: "UI/UX Designer", team: "Design Team" },
-        { id: "emp-8", name: "Robert Taylor", role: "Backend Developer", team: "Development Team" }
+        { id: "emp-1", name: "Sarah Johnson", role: "Lead UX Designer", team: "Design & UX Team" },
+        { id: "emp-2", name: "Mike Chen", role: "Senior Full-Stack Engineer", team: "Full-Stack Development" },
+        { id: "emp-3", name: "Emily Davis", role: "DevOps Engineer", team: "DevOps & Infrastructure" },
+        { id: "emp-4", name: "Alex Rodriguez", role: "Data Scientist", team: "Data & Analytics" },
+        { id: "emp-5", name: "Jessica Kim", role: "Security Engineer", team: "Full-Stack Development" },
+        { id: "emp-6", name: "David Brown", role: "Cloud Architect", team: "DevOps & Infrastructure" },
+        { id: "emp-7", name: "Lisa Wang", role: "UI Designer", team: "Design & UX Team" },
+        { id: "emp-8", name: "Robert Taylor", role: "Backend Developer", team: "Full-Stack Development" }
       ]);
-    } catch (error) {
-      console.log("Error loading data, using fallback");
-      setConnectionStatus('offline');
     }
   };
 
