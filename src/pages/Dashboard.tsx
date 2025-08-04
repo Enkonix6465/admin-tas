@@ -39,13 +39,22 @@ const Dashboard = () => {
 
   const fetchAllData = async () => {
     try {
-      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] =
-        await Promise.all([
-          getDocs(collection(db, "projects")),
-          getDocs(collection(db, "tasks")),
-          getDocs(collection(db, "teams")),
-          getDocs(collection(db, "employees")),
-        ]);
+      // Add timeout to prevent hanging requests
+      const timeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      );
+
+      const fetchData = Promise.all([
+        getDocs(collection(db, "projects")),
+        getDocs(collection(db, "tasks")),
+        getDocs(collection(db, "teams")),
+        getDocs(collection(db, "employees")),
+      ]);
+
+      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] = await Promise.race([
+        fetchData,
+        timeout
+      ]);
 
       setProjects(
         projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
@@ -56,8 +65,8 @@ const Dashboard = () => {
         employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
     } catch (error) {
-      console.warn("Failed to fetch data:", error);
-      // Fallback to mock data
+      console.warn("Firebase connection failed, using mock data:", error);
+      // Use comprehensive mock data instead of Firebase
       setProjects([
         {
           id: "1",
