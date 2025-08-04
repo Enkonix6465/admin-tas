@@ -851,12 +851,12 @@ const Dashboard = () => {
                     {
                       label: 'Tasks Completed',
                       data: [3, 5, 2, 8, 6, 4, 7], // Mock data for demonstration
-                      borderColor: 'rgba(255, 149, 0, 1)',
-                      backgroundColor: 'rgba(255, 149, 0, 0.1)',
+                      borderColor: 'rgba(147, 51, 234, 1)',
+                      backgroundColor: 'rgba(147, 51, 234, 0.1)',
                       borderWidth: 3,
                       fill: true,
                       tension: 0.4,
-                      pointBackgroundColor: 'rgba(255, 149, 0, 1)',
+                      pointBackgroundColor: 'rgba(147, 51, 234, 1)',
                       pointBorderColor: '#ffffff',
                       pointBorderWidth: 2,
                       pointRadius: 6,
@@ -864,12 +864,12 @@ const Dashboard = () => {
                     {
                       label: 'Tasks Created',
                       data: [5, 3, 6, 4, 8, 7, 5], // Mock data for demonstration
-                      borderColor: 'rgba(255, 59, 48, 1)',
-                      backgroundColor: 'rgba(255, 59, 48, 0.1)',
+                      borderColor: 'rgba(168, 85, 247, 1)',
+                      backgroundColor: 'rgba(168, 85, 247, 0.1)',
                       borderWidth: 3,
                       fill: true,
                       tension: 0.4,
-                      pointBackgroundColor: 'rgba(255, 59, 48, 1)',
+                      pointBackgroundColor: 'rgba(168, 85, 247, 1)',
                       pointBorderColor: '#ffffff',
                       pointBorderWidth: 2,
                       pointRadius: 6,
