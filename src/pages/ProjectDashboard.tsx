@@ -451,9 +451,9 @@ export default function ProjectDashboard() {
                   <div className="px-6 pb-4">
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <Calendar className="w-4 h-4 text-stone-400" />
                         <div>
-                          <p className="text-gray-500 dark:text-gray-400 text-xs">Start Date</p>
+                          <p className="text-stone-500 dark:text-gray-400 text-xs">Start Date</p>
                           <p className="font-medium text-gray-900 dark:text-gray-100">{project.startDate}</p>
                         </div>
                       </div>
