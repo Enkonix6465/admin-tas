@@ -547,7 +547,7 @@ const Dashboard = () => {
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Task Status Distribution */}
           <div className="liquid-glass-card">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
@@ -629,76 +629,6 @@ const Dashboard = () => {
                     y: {
                       beginAtZero: true,
                       max: 100,
-                      ticks: {
-                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
-                      },
-                      grid: {
-                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
-                      },
-                    },
-                    x: {
-                      ticks: {
-                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
-                      },
-                      grid: {
-                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
-                      },
-                    },
-                  },
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Team Performance */}
-          <div className="liquid-glass-card lg:col-span-2 xl:col-span-1">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Team Performance
-            </h3>
-            <div className="h-64">
-              <Bar
-                data={{
-                  labels: teams.map((team: any) => team.teamName),
-                  datasets: [
-                    {
-                      label: 'Active Tasks',
-                      data: teams.map((team: any) =>
-                        tasks.filter((task: any) => {
-                          const emp = employees.find((e: any) => e.id === task.assigned_to);
-                          return emp?.team === team.teamName && task.status !== 'completed';
-                        }).length
-                      ),
-                      backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                      borderColor: 'rgba(59, 130, 246, 1)',
-                      borderWidth: 1,
-                    },
-                    {
-                      label: 'Completed Tasks',
-                      data: teams.map((team: any) =>
-                        tasks.filter((task: any) => {
-                          const emp = employees.find((e: any) => e.id === task.assigned_to);
-                          return emp?.team === team.teamName && task.status === 'completed';
-                        }).length
-                      ),
-                      backgroundColor: 'rgba(34, 197, 94, 0.8)',
-                      borderColor: 'rgba(34, 197, 94, 1)',
-                      borderWidth: 1,
-                    },
-                  ],
-                }}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      labels: {
-                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
-                      },
-                    },
-                  },
-                  scales: {
-                    y: {
-                      beginAtZero: true,
                       ticks: {
                         color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
                       },
