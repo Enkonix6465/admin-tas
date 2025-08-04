@@ -64,7 +64,7 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-8", className)} {...props}>
-      <Card className="enhanced-moving-border overflow-hidden p-0 shadow-2xl border-0 bg-white/85 dark:bg-gray-900/85 backdrop-blur-2xl relative rounded-3xl">
+      <Card className="enhanced-moving-border overflow-hidden p-0 shadow-2xl border-0 bg-white/85 dark:bg-slate-900/90 backdrop-blur-2xl relative rounded-3xl">
         {/* Enhanced floating glass icons */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-20 left-8 w-12 h-12 bg-gradient-to-br from-white/20 to-white/10 dark:from-white/15 dark:to-white/5 backdrop-blur-xl rounded-2xl flex items-center justify-center shadow-2xl animate-float border border-white/30 dark:border-white/20">
