@@ -277,9 +277,9 @@ const Dashboard = () => {
 
       {/* Header */}
       <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-purple-100">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
               Dashboard Overview
             </h1>
             <span className={`px-2 py-1 text-xs rounded-full font-medium border ${
