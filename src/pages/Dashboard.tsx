@@ -730,12 +730,20 @@ const Dashboard = () => {
           {/* Recent Activity */}
           <div className="liquid-glass-card group">
             <div className="px-8 py-6 border-b border-gray-200/50 dark:border-purple-500/30 relative">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Recent Tasks
-              </h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  Recent Tasks
+                </h2>
+                <button
+                  onClick={() => setShowAllTasks(!showAllTasks)}
+                  className="px-4 py-2 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200"
+                >
+                  {showAllTasks ? 'Show Less' : 'View All'}
+                </button>
+              </div>
             </div>
-            <div className="p-8 space-y-5">
-              {recentTasks.map((task: any, index: number) => (
+            <div className="p-8 space-y-5 max-h-96 overflow-y-auto custom-scrollbar">
+              {(showAllTasks ? recentTasks : recentTasks.slice(0, 3)).map((task: any, index: number) => (
                 <motion.div
                   key={task.id}
                   initial={{ opacity: 0, y: 10 }}
