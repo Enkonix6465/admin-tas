@@ -458,14 +458,12 @@ textarea {
   }
 
   .liquid-glass-card {
-    @apply liquid-glass rounded-2xl p-6 transition-all duration-500;
-    animation: liquidFloat 6s ease-in-out infinite;
+    @apply liquid-glass rounded-2xl p-6 transition-all duration-300;
     transform-style: preserve-3d;
   }
 
   .liquid-glass-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    animation-play-state: paused;
+    transform: translateY(-2px);
   }
 
   .dark .liquid-glass-card:hover {
