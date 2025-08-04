@@ -424,7 +424,7 @@ textarea {
   }
 
   .liquid-glass-stats {
-    @apply liquid-glass rounded-xl p-4 transition-all duration-200;
+    @apply liquid-glass rounded-xl p-6 transition-all duration-200;
   }
 
   .dark .liquid-glass-stats:hover {
