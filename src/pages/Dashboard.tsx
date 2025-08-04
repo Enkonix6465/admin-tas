@@ -614,27 +614,41 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Project Progress */}
+          {/* Weekly Activity */}
           <div className="liquid-glass-card">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Project Progress
+              Weekly Activity
             </h3>
             <div className="h-64">
-              <Bar
+              <Line
                 data={{
-                  labels: projects.slice(0, 5).map((p: any) => p.name.length > 15 ? p.name.substring(0, 15) + '...' : p.name),
+                  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                   datasets: [
                     {
-                      label: 'Progress %',
-                      data: projects.slice(0, 5).map((p: any) => {
-                        const projectTasks = getProjectTasks(p.id);
-                        return projectTasks.length > 0
-                          ? Math.round((projectTasks.filter((t: any) => t.status === "completed").length / projectTasks.length) * 100)
-                          : 0;
-                      }),
-                      backgroundColor: 'rgba(139, 92, 246, 0.8)',
+                      label: 'Tasks Completed',
+                      data: [12, 19, 8, 15, 22, 8, 14],
                       borderColor: 'rgba(139, 92, 246, 1)',
-                      borderWidth: 1,
+                      backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                      borderWidth: 3,
+                      fill: true,
+                      tension: 0.4,
+                      pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                      pointBorderColor: '#ffffff',
+                      pointBorderWidth: 2,
+                      pointRadius: 6,
+                    },
+                    {
+                      label: 'New Tasks',
+                      data: [8, 12, 14, 10, 16, 12, 9],
+                      borderColor: 'rgba(99, 102, 241, 1)',
+                      backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                      borderWidth: 3,
+                      fill: true,
+                      tension: 0.4,
+                      pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+                      pointBorderColor: '#ffffff',
+                      pointBorderWidth: 2,
+                      pointRadius: 6,
                     },
                   ],
                 }}
@@ -643,15 +657,17 @@ const Dashboard = () => {
                   maintainAspectRatio: false,
                   plugins: {
                     legend: {
+                      position: 'top',
                       labels: {
                         color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
+                        padding: 20,
+                        usePointStyle: true,
                       },
                     },
                   },
                   scales: {
                     y: {
                       beginAtZero: true,
-                      max: 100,
                       ticks: {
                         color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
                       },
