@@ -94,58 +94,352 @@ export default function ProjectDashboard() {
   );
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Project Dashboard</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((project, index) => (
-          <div
-            key={project.id}
-            className="border border-gray-300 rounded-xl p-4 shadow-md"
-          >
-            <h2 className="text-lg font-semibold mb-1">
-              {index + 1}. {project.name}
-            </h2>
-            <p className="text-sm text-gray-700 mb-1">
-              <span className="font-medium">Description:</span>{" "}
-              {project.description}
-            </p>
-            <p className="text-sm text-gray-700 mb-1">
-              <span className="font-medium">Start Date:</span>{" "}
-              {project.startDate}
-            </p>
-            <p className="text-sm text-gray-700 mb-1">
-              <span className="font-medium">Deadline:</span> {project.deadline}
-            </p>
-            <p className="text-sm text-gray-700 mb-1">
-              <span className="font-medium">Created By:</span>{" "}
-              {getEmployeeName(project.created_by)}
-            </p>
-            <p className="text-sm text-gray-700 mb-1">
-              <span className="font-medium">Team:</span>{" "}
-              <button
-                onClick={() => handleTeamClick(project.teamId)}
-                className="text-blue-600 underline"
-              >
-                {getTeamName(project.teamId)}
-              </button>
-            </p>
-
-            {/* Team Members */}
-            {selectedTeam === project.teamId && (
-              <div className="mt-2 p-2 bg-gray-100 rounded">
-                <p className="font-medium mb-1">Team Members:</p>
-                <ul className="list-disc ml-5 text-sm">
-                  {teams
-                    .find((t) => t.id === selectedTeam)
-                    ?.members.map((memberId) => (
-                      <li key={memberId}>{getEmployeeName(memberId)}</li>
-                    ))}
-                </ul>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Enhanced Header */}
+      <div className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl flex items-center justify-center shadow-lg">
+                <Briefcase className="w-7 h-7 text-gray-600 dark:text-gray-300" />
               </div>
-            )}
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                  Project Dashboard
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 font-medium">
+                  Manage and track all your projects
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* View Mode Toggle */}
+              <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl p-1 shadow-inner">
+                {[
+                  { id: "grid", icon: Grid, label: "Grid" },
+                  { id: "list", icon: List, label: "List" }
+                ].map((mode) => (
+                  <button
+                    key={mode.id}
+                    onClick={() => setViewMode(mode.id)}
+                    className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
+                      viewMode === mode.id
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm transform scale-105'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-600/50'
+                    }`}
+                  >
+                    <mode.icon className="w-4 h-4" />
+                    <span className="hidden sm:inline font-medium">{mode.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline font-medium">New Project</span>
+              </button>
+            </div>
           </div>
-        ))}
+
+          {/* Enhanced Search */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Search projects, descriptions, or team names..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all shadow-sm"
+              />
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm">
+                <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Section */}
+      <div className="p-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center">
+                <Layers3 className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{projects.length}</span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Total Projects</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Active and completed</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{teams.length}</span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Active Teams</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Working on projects</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center">
+                <Target className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{employees.length}</span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Team Members</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Across all teams</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center">
+                <Activity className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {projects.length > 0 ? Math.round(projects.reduce((acc, p) => acc + getProjectProgress(p), 0) / projects.length) : 0}%
+              </span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Avg Progress</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Across all projects</p>
+          </motion.div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className={`grid gap-6 ${
+          viewMode === "grid" ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"
+        }`}>
+          <AnimatePresence>
+            {filteredProjects.map((project, index) => {
+              const progress = getProjectProgress(project);
+              const daysRemaining = getDaysRemaining(project.deadline);
+              const isExpanded = selectedTeam === project.teamId;
+
+              return (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(project.id)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-2xl transition-all duration-300"
+                >
+                  {/* Card Header */}
+                  <div className="p-6 pb-4">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                          <Building2 className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full border">
+                              #{index + 1}
+                            </span>
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                              daysRemaining > 30 ? 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' :
+                              daysRemaining > 7 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                              'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {daysRemaining > 0 ? `${daysRemaining} days left` : 'Overdue'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        <button className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group-hover:scale-110">
+                          <Eye className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                        </button>
+                        <button className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group-hover:scale-110">
+                          <MoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                      {project.name}
+                    </h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+
+                    {/* Progress Bar */}
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Progress</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-gray-100">{progress}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ duration: 1, delay: index * 0.1 }}
+                          className="h-full bg-gradient-to-r from-gray-400 to-gray-600 dark:from-gray-500 dark:to-gray-300 rounded-full"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Project Details */}
+                  <div className="px-6 pb-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="w-4 h-4 text-gray-400" />
+                        <div>
+                          <p className="text-gray-500 dark:text-gray-400 text-xs">Start Date</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{project.startDate}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Clock className="w-4 h-4 text-gray-400" />
+                        <div>
+                          <p className="text-gray-500 dark:text-gray-400 text-xs">Deadline</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{project.deadline}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm mb-4">
+                      <User className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400 text-xs">Created By</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{getEmployeeName(project.created_by)}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Team Section */}
+                  <div className="px-6 pb-6">
+                    <button
+                      onClick={() => handleTeamClick(project.teamId)}
+                      className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all group-hover:shadow-md"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Users className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                        <div className="text-left">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{getTeamName(project.teamId)}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {teams.find(t => t.id === project.teamId)?.members?.length || 0} members
+                          </p>
+                        </div>
+                      </div>
+                      {isExpanded ?
+                        <ChevronUp className="w-5 h-5 text-gray-400 transform transition-transform" /> :
+                        <ChevronDown className="w-5 h-5 text-gray-400 transform transition-transform" />
+                      }
+                    </button>
+
+                    {/* Team Members Expansion */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 overflow-hidden"
+                        >
+                          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Star className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                              <span className="font-medium text-gray-900 dark:text-gray-100 text-sm">Team Members</span>
+                            </div>
+                            <div className="space-y-3">
+                              {teams
+                                .find((t) => t.id === selectedTeam)
+                                ?.members.map((memberId, memberIndex) => (
+                                  <motion.div
+                                    key={memberId}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: memberIndex * 0.1 }}
+                                    className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg shadow-sm"
+                                  >
+                                    <div className="w-8 h-8 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-500 dark:to-gray-400 rounded-full flex items-center justify-center">
+                                      <User className="w-4 h-4 text-gray-600 dark:text-gray-200" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                                        {getEmployeeName(memberId)}
+                                      </p>
+                                      <p className="text-xs text-gray-500 dark:text-gray-400">Team Member</p>
+                                    </div>
+                                  </motion.div>
+                                ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Hover Effect Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-100/20 dark:to-gray-700/20 rounded-2xl transition-opacity duration-300 pointer-events-none ${
+                    hoveredCard === project.id ? 'opacity-100' : 'opacity-0'
+                  }`} />
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* Empty State */}
+        {filteredProjects.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-16"
+          >
+            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Search className="w-12 h-12 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+              No projects found
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Try adjusting your search terms
+            </p>
+            <button
+              onClick={() => setSearchTerm("")}
+              className="px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg"
+            >
+              Clear Search
+            </button>
+          </motion.div>
+        )}
       </div>
     </div>
   );
