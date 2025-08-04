@@ -394,8 +394,8 @@ export default function ProjectDashboard() {
                   <div className="p-6 pb-4">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                          <Building2 className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+                        <div className="w-12 h-12 bg-gradient-to-br from-stone-100 to-stone-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                          <Building2 className="w-6 h-6 text-stone-600 dark:text-gray-300" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
