@@ -117,31 +117,31 @@ function Layout() {
               <ChevronDown className="w-3 h-3 text-gray-400 dark:text-purple-300" />
             </button>
             {workspaceOpen && (
-              <div className="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-10 p-2">
+              <div className="absolute top-full left-0 mt-1 w-44 bg-white dark:bg-gradient-to-b dark:from-[rgba(15,17,41,0.95)] dark:to-[rgba(26,27,58,0.9)] border border-gray-200 dark:border-purple-500/30 rounded-lg shadow-xl dark:shadow-purple-500/30 backdrop-blur-xl z-10 p-2">
                 <div className="space-y-1">
-                  <div className="px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300">Workspaces</div>
+                  <div className="px-2 py-1 text-xs font-medium text-gray-700 dark:text-purple-200">Workspaces</div>
                   <button
                     onClick={() => setWorkspaceOpen(false)}
-                    className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                    className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                      <span>Enkonix Tas</span>
+                      <div className="w-3 h-3 bg-purple-500 rounded"></div>
+                      <span className="dark:text-purple-100">Task Board</span>
                     </div>
                   </button>
                   <button
                     onClick={() => setWorkspaceOpen(false)}
-                    className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                    className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 bg-green-500 rounded"></div>
-                      <span>Personal</span>
+                      <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                      <span className="dark:text-purple-100">Personal</span>
                     </div>
                   </button>
-                  <hr className="my-1 border-gray-200 dark:border-gray-700" />
+                  <hr className="my-1 border-gray-200 dark:border-purple-500/30" />
                   <button
                     onClick={() => setWorkspaceOpen(false)}
-                    className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded text-blue-600"
+                    className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-500/20 rounded text-blue-600 dark:text-purple-300"
                   >
                     + Create workspace
                   </button>
