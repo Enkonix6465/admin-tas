@@ -282,12 +282,7 @@ export function LoginForm({
                 </div>
               </div>
 
-              {/* Enhanced Lightning Icon */}
-              <div className="bg-gradient-to-br from-yellow-400 via-orange-400 to-orange-500 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 shadow-2xl backdrop-blur-sm border-2 border-white/30 animate-pulse">
-                <svg className="w-8 h-8 text-yellow-900" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M13 2L3 14h7v8l10-12h-7V2z"/>
-                </svg>
-              </div>
+              
 
               {/* Enhanced Quote */}
               <div className="text-center space-y-6 max-w-sm">
