@@ -42,6 +42,7 @@ import {
   Star,
   Zap,
   Trophy,
+  Search,
 } from "lucide-react";
 
 export default function EmployeePerformancePage() {
