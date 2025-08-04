@@ -67,37 +67,11 @@ const Dashboard = () => {
   const fetchAllData = async () => {
     setConnectionStatus('connecting');
 
-    // Try Firebase with very short timeout, immediately fall back to mock data
+    // Use mock data directly to avoid Firebase connection issues
     try {
-      const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 2000)
-      );
+      // Simulate loading delay
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      const fetchData = Promise.all([
-        getDocs(collection(db, "projects")),
-        getDocs(collection(db, "tasks")),
-        getDocs(collection(db, "teams")),
-        getDocs(collection(db, "employees")),
-      ]);
-
-      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] = await Promise.race([
-        fetchData,
-        timeout
-      ]);
-
-      // If we get here, Firebase worked
-      setProjects(
-        projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
-      setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setEmployees(
-        employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
-      setConnectionStatus('connected');
-      console.log("Firebase connection successful");
-    } catch (error) {
-      // Immediately use mock data without logging error details
       console.log("Using local mock data");
       setConnectionStatus('offline');
 
@@ -149,7 +123,7 @@ const Dashboard = () => {
           progress: 60,
         }
       ]);
-      
+
       setTasks([
         {
           id: "1",
@@ -240,7 +214,7 @@ const Dashboard = () => {
           priority: "high"
         }
       ]);
-      
+
       setTeams([
         { id: "team-1", teamName: "Design Team", memberCount: 5, lead: "Sarah Johnson" },
         { id: "team-2", teamName: "Development Team", memberCount: 8, lead: "Mike Chen" },
@@ -258,6 +232,9 @@ const Dashboard = () => {
         { id: "emp-7", name: "Lisa Wang", role: "UI/UX Designer", team: "Design Team" },
         { id: "emp-8", name: "Robert Taylor", role: "Backend Developer", team: "Development Team" }
       ]);
+    } catch (error) {
+      console.log("Error loading data, using fallback");
+      setConnectionStatus('offline');
     }
   };
 
