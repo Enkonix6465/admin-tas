@@ -273,12 +273,7 @@ const Dashboard = () => {
 
   return (
     <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
-      {/* Static Background Effects */}
-      <div className="absolute inset-0 dark:opacity-20 opacity-5 pointer-events-none">
-        <div className="absolute top-10 left-10 w-80 h-80 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mix-blend-multiply filter blur-3xl"></div>
-        <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-2xl"></div>
-        <div className="absolute -bottom-20 left-1/2 w-72 h-72 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full mix-blend-multiply filter blur-2xl"></div>
-      </div>
+
 
       {/* Header */}
       <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-4 py-3 shadow-sm dark:shadow-purple-500/20 relative z-10">
