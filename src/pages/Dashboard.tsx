@@ -295,11 +295,11 @@ const Dashboard = () => {
               <Star className="w-4 h-4 text-gray-400 dark:text-purple-300" />
             </button>
           </div>
-          <div className="flex items-center gap-2">
-            <button className="px-3 py-1.5 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
+          <div className="flex items-center gap-3">
+            <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
               Share
             </button>
-            <button className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
+            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
               <Settings className="w-4 h-4 text-gray-600 dark:text-purple-300" />
             </button>
           </div>
