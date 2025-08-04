@@ -413,8 +413,8 @@ export default function ProjectDashboard() {
                         </div>
                       </div>
                       <div className="flex gap-1">
-                        <button className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group-hover:scale-110">
-                          <Eye className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                        <button className="p-2 bg-stone-50/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-lg hover:bg-stone-100/80 dark:hover:bg-gray-600/80 transition-colors group-hover:scale-110">
+                          <Eye className="w-4 h-4 text-stone-600 dark:text-gray-400" />
                         </button>
                         <button className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors group-hover:scale-110">
                           <MoreHorizontal className="w-4 h-4 text-gray-600 dark:text-gray-400" />
