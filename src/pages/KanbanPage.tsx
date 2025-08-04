@@ -647,7 +647,7 @@ const KanbanPage = () => {
 
           <div className="flex items-center gap-3">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+            <div className="flex items-center bg-gray-100 dark:bg-purple-500/20 rounded-lg p-1">
               {[
               { id: "board", icon: Layers, label: "Board" },
               { id: "list", icon: Eye, label: "List" },
