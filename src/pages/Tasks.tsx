@@ -212,9 +212,9 @@ function Projects() {
               const tasks = projectTasks[project.id] || [];
 
               return (
-                <div key={project.id} className="mb-6 border-t pt-4">
+                <div key={project.id} className="mb-6 border-t border-gray-200 dark:border-purple-500/20 pt-4">
                   <h3
-                    className="text-lg font-semibold cursor-pointer hover:underline"
+                    className="text-lg font-semibold cursor-pointer hover:underline text-gray-900 dark:text-purple-100 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
                     onClick={() =>
                       setExpandedProject((p) =>
                         p === project.id ? null : project.id
@@ -223,7 +223,7 @@ function Projects() {
                   >
                     {project.name}
                   </h3>
-                  <p className="text-sm text-gray-500">{project.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-purple-300/80">{project.description}</p>
                   {expandedProject === project.id && (
                     <>
                       <div className="mt-3 grid gap-2">
