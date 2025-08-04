@@ -265,7 +265,7 @@ export default function ProjectDashboard() {
             </div>
 
             <div className="flex items-center gap-3">
-              <button className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-all shadow-sm">
+              <button className="p-4 border border-stone-200/50 dark:border-gray-700/50 rounded-xl hover:bg-stone-50/50 dark:hover:bg-gray-700/50 transition-all shadow-sm backdrop-blur-sm">
                 <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </button>
             </div>
