@@ -406,13 +406,13 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Demo Mode Banner */}
+      {/* Connection Status Banner */}
       {connectionStatus === 'offline' && (
         <div className="mx-4 mt-2 mb-2 px-3 py-2 bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/30 rounded-lg">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
             <p className="text-xs text-orange-700 dark:text-orange-400">
-              Demo Mode: Using sample data (Firebase connection unavailable)
+              Connection lost: Using cached data
             </p>
           </div>
         </div>
