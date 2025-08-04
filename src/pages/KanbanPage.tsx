@@ -469,7 +469,7 @@ const KanbanPage = () => {
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white leading-tight mb-1">
+            <h4 className="text-sm font-semibold text-gray-900 dark:text-purple-100 leading-tight mb-1">
               {task.title}
             </h4>
             <div className="flex items-center gap-2">
