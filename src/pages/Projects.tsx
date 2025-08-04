@@ -172,26 +172,26 @@ function Projects() {
         {sortedProjects.map((project: any) => {
           const team = teams.find((t) => t.id === project.teamId);
           return (
-            <div key={project.id} className="p-6 bg-white rounded shadow">
-              <h2 className="font-semibold text-lg">{project.name}</h2>
-              <p className="text-sm text-gray-500">{project.description}</p>
-              <p className="text-sm text-gray-500 mt-1">
+            <div key={project.id} className="liquid-glass-card group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <h2 className="font-semibold text-lg text-gray-900 dark:text-purple-100">{project.name}</h2>
+              <p className="text-sm text-gray-500 dark:text-purple-300/80">{project.description}</p>
+              <p className="text-sm text-gray-500 dark:text-purple-300/80 mt-1">
                 Team: {team?.teamName || "N/A"}
               </p>
               {team?.members && (
-                <ul className="text-xs text-gray-500 list-disc ml-4 mt-1 max-h-20 overflow-auto">
+                <ul className="text-xs text-gray-500 dark:text-purple-300/70 list-disc ml-4 mt-1 max-h-20 overflow-auto custom-scrollbar">
                   {team.members.map((member: string, idx: number) => (
                     <li key={idx}>{getEmployeeName(member)}</li>
                   ))}
                 </ul>
               )}
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-purple-300/80">
                 Start: {project.startDate}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-purple-300/80">
                 Deadline: {project.deadline}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 dark:text-purple-300/60 mt-1">
                 Created by: {getEmployeeNameById(project.created_by)}
               </p>
               <div className="mt-3 flex justify-end space-x-2">
@@ -209,13 +209,13 @@ function Projects() {
                         });
                         setShowModal(true);
                       }}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors p-2 rounded hover:bg-purple-100 dark:hover:bg-purple-500/20"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => deleteProject.mutate(project.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors p-2 rounded hover:bg-red-100 dark:hover:bg-red-500/20"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
