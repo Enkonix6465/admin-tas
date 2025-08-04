@@ -170,8 +170,8 @@ function Layout() {
         </div>
 
         {/* Navigation - Compact */}
-        <div className="flex-1 overflow-y-auto px-2 py-1 custom-scrollbar">
-          <nav className="space-y-1">
+        <div className="flex-1 overflow-y-auto px-4 py-3 custom-scrollbar">
+          <nav className="space-y-2">
 
             {/* Dashboard Section */}
             <div>
