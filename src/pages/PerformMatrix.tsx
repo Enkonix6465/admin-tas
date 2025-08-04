@@ -725,8 +725,8 @@ export default function EmployeePerformancePage() {
                 </div>
 
                 {/* Daily Activity Trends */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                <div className="liquid-glass-card">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Daily Activity Trends
                   </h3>
                   <ResponsiveContainer width="100%" height={300}>
