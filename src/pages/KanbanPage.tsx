@@ -426,17 +426,17 @@ const KanbanPage = () => {
     const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "completed";
 
     const getCardBgColor = () => {
-      if (isOverdue) return 'bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-red-200 dark:border-red-700';
+      if (isOverdue) return 'liquid-glass border-red-200 dark:border-red-500/30 bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-500/10 dark:to-pink-500/10';
 
       switch (task.status) {
         case 'completed':
-          return 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-700';
+          return 'liquid-glass border-green-200 dark:border-green-500/30 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-500/10 dark:to-emerald-500/10';
         case 'in_progress':
-          return 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-700';
+          return 'liquid-glass border-purple-200 dark:border-purple-500/30 bg-gradient-to-br from-purple-50/50 to-blue-50/50 dark:from-purple-500/10 dark:to-blue-500/10';
         case 'review':
-          return 'bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-yellow-200 dark:border-yellow-700';
+          return 'liquid-glass border-yellow-200 dark:border-yellow-500/30 bg-gradient-to-br from-yellow-50/50 to-amber-50/50 dark:from-yellow-500/10 dark:to-amber-500/10';
         default:
-          return 'bg-gradient-to-br from-slate-50 to-gray-50 dark:from-gray-800 dark:to-gray-750 border-gray-200 dark:border-gray-600';
+          return 'liquid-glass border-gray-200 dark:border-purple-500/20 bg-gradient-to-br from-gray-50/50 to-purple-50/50 dark:from-gray-500/10 dark:to-purple-500/10';
       }
     };
 
