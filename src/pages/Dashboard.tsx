@@ -420,42 +420,42 @@ const Dashboard = () => {
                       transition={{ delay: index * 0.1 }}
                       className="p-4 hover:bg-gray-50 dark:hover:bg-purple-500/10 transition-all duration-200"
                     >
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                          <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                          <h3 className="font-medium text-gray-900 dark:text-purple-100 text-sm">
                             {project.name}
                           </h3>
-                          <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">
+                          <span className="px-2 py-0.5 text-xs bg-gray-100 dark:bg-purple-500/20 text-gray-600 dark:text-purple-300 rounded-full border dark:border-purple-500/30">
                             {projectTasks.length} tasks
                           </span>
                         </div>
-                        <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                          <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                        <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
+                          <MoreHorizontal className="w-3 h-3 text-gray-400 dark:text-purple-300" />
                         </button>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                      <p className="text-xs text-gray-600 dark:text-purple-300/80 mb-3 line-clamp-2">
                         {project.description}
                       </p>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-purple-300/70">
                             <Calendar className="w-3 h-3" />
                             {project.deadline}
                           </div>
-                          <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-purple-300/70">
                             <Users className="w-3 h-3" />
                             {getTeamName(project.teamId)}
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                          <div className="w-16 bg-gray-200 dark:bg-purple-900/30 rounded-full h-1.5">
                             <div
-                              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                              className="bg-gradient-to-r from-purple-500 to-blue-500 h-1.5 rounded-full transition-all duration-300"
                               style={{ width: `${progress}%` }}
                             ></div>
                           </div>
-                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          <span className="text-xs font-medium text-gray-900 dark:text-purple-200">
                             {progress}%
                           </span>
                         </div>
