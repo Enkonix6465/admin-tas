@@ -437,8 +437,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
-            style={{ animationDelay: '1s' }}
+            className="liquid-glass-stats group cursor-pointer"
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
@@ -449,11 +448,8 @@ const Dashboard = () => {
                   {pendingTasks.length}
                 </p>
               </div>
-              <div className="relative">
-                <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 dark:from-yellow-500/30 dark:to-orange-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-yellow-500/20 dark:border-yellow-500/40 group-hover:scale-110 transition-transform duration-300">
-                  <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
+              <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 dark:from-yellow-500/30 dark:to-orange-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-yellow-500/20 dark:border-yellow-500/30">
+                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
             </div>
             <div className="mt-3 flex items-center text-xs relative z-10">
@@ -470,8 +466,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
-            style={{ animationDelay: '2s' }}
+            className="liquid-glass-stats group cursor-pointer"
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
@@ -482,17 +477,14 @@ const Dashboard = () => {
                   {inProgressTasks.length}
                 </p>
               </div>
-              <div className="relative">
-                <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 dark:from-blue-500/30 dark:to-cyan-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-blue-500/20 dark:border-blue-500/40 group-hover:scale-110 transition-transform duration-300">
-                  <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
+              <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 dark:from-blue-500/30 dark:to-cyan-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-blue-500/20 dark:border-blue-500/30">
+                <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
             <div className="mt-3 relative z-10">
-              <div className="w-full bg-gradient-to-r from-blue-900/20 to-cyan-900/20 dark:bg-blue-900/30 rounded-full h-2 overflow-hidden">
+              <div className="w-full bg-gradient-to-r from-blue-900/20 to-cyan-900/20 dark:bg-blue-900/30 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-500 animate-liquid-shimmer"
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${tasks.length > 0 ? (inProgressTasks.length / tasks.length) * 100 : 0}%`,
                   }}
@@ -505,8 +497,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
-            style={{ animationDelay: '3s' }}
+            className="liquid-glass-stats group cursor-pointer"
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
@@ -517,11 +508,8 @@ const Dashboard = () => {
                   {completedTasks.length}
                 </p>
               </div>
-              <div className="relative">
-                <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 dark:from-green-500/30 dark:to-emerald-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-green-500/20 dark:border-green-500/40 group-hover:scale-110 transition-transform duration-300">
-                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
+              <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 dark:from-green-500/30 dark:to-emerald-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-green-500/20 dark:border-green-500/30">
+                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
             <div className="mt-3 flex items-center text-xs relative z-10">
