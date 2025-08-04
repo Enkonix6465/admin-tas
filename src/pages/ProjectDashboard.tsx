@@ -234,8 +234,8 @@ export default function ProjectDashboard() {
                     onClick={() => setViewMode(mode.id)}
                     className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
                       viewMode === mode.id
-                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm transform scale-105'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-600/50'
+                        ? 'bg-white/90 dark:bg-gray-600 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm transform scale-105'
+                      : 'text-stone-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-600/50'
                     }`}
                   >
                     <mode.icon className="w-4 h-4" />
