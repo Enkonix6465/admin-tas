@@ -662,7 +662,7 @@ const KanbanPage = () => {
 
           <div className="flex items-center gap-3">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 dark:bg-purple-500/20 rounded-lg p-1">
+            <div className="flex items-center bg-gray-100/80 dark:bg-slate-800/60 rounded-xl p-1 backdrop-blur-sm border border-gray-200/50 dark:border-slate-600/30">
               {[
               { id: "board", icon: Layers, label: "Board" },
               { id: "list", icon: Eye, label: "List" },
@@ -683,10 +683,10 @@ const KanbanPage = () => {
                       toast.success('Switched to Board view! 📋');
                     }
                   }}
-                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
+                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all ${
                     viewMode === mode.id
-                      ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 shadow-lg backdrop-blur-sm'
+                      : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/50'
                   }`}
                 >
                   <mode.icon className="w-3 h-3" />
@@ -703,7 +703,7 @@ const KanbanPage = () => {
                 placeholder="Search tasks, tags, or people..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-64"
+                className="pl-10 pr-4 py-2 text-sm border border-gray-200/50 dark:border-slate-600/30 rounded-xl bg-white/80 dark:bg-slate-800/60 text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-cyan-400 focus:border-transparent shadow-lg dark:shadow-cyan-500/20 backdrop-blur-xl w-64"
               />
             </div>
 
@@ -816,7 +816,7 @@ const KanbanPage = () => {
 
             <button
               onClick={() => setShowNewTaskModal(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white rounded-xl hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 backdrop-blur-sm border border-white/20"
             >
               <Plus className="w-4 h-4" />
               New Task
