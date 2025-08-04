@@ -62,7 +62,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     fetchAllData();
-  }, []);
+
+    // Set up real-time data refresh every 30 seconds
+    const interval = setInterval(() => {
+      if (connectionStatus === 'connected') {
+        fetchAllData();
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [connectionStatus]);
 
   const fetchAllData = async () => {
     setConnectionStatus('connecting');
