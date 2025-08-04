@@ -624,7 +624,8 @@ const Dashboard = () => {
                         'rgba(147, 51, 234, 1)', // Rich Purple
                         'rgba(168, 85, 247, 1)', // Bright Violet
                       ],
-                      borderWidth: 2,
+                      borderWidth: 3,
+                      hoverBorderWidth: 4,
                     },
                   ],
                 }}
