@@ -405,8 +405,7 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
-            style={{ animationDelay: '0s' }}
+            className="liquid-glass-stats group cursor-pointer"
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
