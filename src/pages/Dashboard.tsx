@@ -207,14 +207,21 @@ const Dashboard = () => {
       ]);
       
       setTeams([
-        { id: "team-1", teamName: "Design Team" },
-        { id: "team-2", teamName: "Development Team" }
+        { id: "team-1", teamName: "Design Team", memberCount: 5, lead: "Sarah Johnson" },
+        { id: "team-2", teamName: "Development Team", memberCount: 8, lead: "Mike Chen" },
+        { id: "team-3", teamName: "Analytics Team", memberCount: 4, lead: "Alex Rodriguez" },
+        { id: "team-4", teamName: "QA Team", memberCount: 6, lead: "Emily Davis" }
       ]);
-      
+
       setEmployees([
-        { id: "emp-1", name: "Sarah Johnson" },
-        { id: "emp-2", name: "Mike Chen" },
-        { id: "emp-3", name: "Emily Davis" }
+        { id: "emp-1", name: "Sarah Johnson", role: "Senior Designer", team: "Design Team" },
+        { id: "emp-2", name: "Mike Chen", role: "Full Stack Developer", team: "Development Team" },
+        { id: "emp-3", name: "Emily Davis", role: "QA Lead", team: "QA Team" },
+        { id: "emp-4", name: "Alex Rodriguez", role: "Data Analyst", team: "Analytics Team" },
+        { id: "emp-5", name: "Jessica Kim", role: "Security Engineer", team: "Development Team" },
+        { id: "emp-6", name: "David Brown", role: "QA Engineer", team: "QA Team" },
+        { id: "emp-7", name: "Lisa Wang", role: "UI/UX Designer", team: "Design Team" },
+        { id: "emp-8", name: "Robert Taylor", role: "Backend Developer", team: "Development Team" }
       ]);
     }
   };
