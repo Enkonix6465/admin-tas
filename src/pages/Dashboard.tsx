@@ -39,10 +39,11 @@ const Dashboard = () => {
   }, []);
 
   const fetchAllData = async () => {
+    setConnectionStatus('connecting');
     try {
       // Add timeout to prevent hanging requests
       const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 10000)
+        setTimeout(() => reject(new Error('Request timeout')), 5000)
       );
 
       const fetchData = Promise.all([
@@ -65,8 +66,10 @@ const Dashboard = () => {
       setEmployees(
         employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
+      setConnectionStatus('connected');
     } catch (error) {
       console.warn("Firebase connection failed, using mock data:", error);
+      setConnectionStatus('offline');
       // Use comprehensive mock data instead of Firebase
       setProjects([
         {
