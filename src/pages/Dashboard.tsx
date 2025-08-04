@@ -530,7 +530,7 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Projects List */}
           <div className="lg:col-span-2">
-            <div className="liquid-glass-card animate-liquid-float group" style={{ animationDelay: '1s' }}>
+            <div className="liquid-glass-card group">
               <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
                 <div className="flex items-center justify-between relative z-10">
                   <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
