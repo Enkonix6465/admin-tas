@@ -458,9 +458,9 @@ export default function ProjectDashboard() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Clock className="w-4 h-4 text-gray-400" />
+                        <Clock className="w-4 h-4 text-stone-400" />
                         <div>
-                          <p className="text-gray-500 dark:text-gray-400 text-xs">Deadline</p>
+                          <p className="text-stone-500 dark:text-gray-400 text-xs">Deadline</p>
                           <p className="font-medium text-gray-900 dark:text-gray-100">{project.deadline}</p>
                         </div>
                       </div>
