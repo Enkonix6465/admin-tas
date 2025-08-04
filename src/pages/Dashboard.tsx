@@ -170,9 +170,9 @@ const Dashboard = () => {
     .slice(0, 5);
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col">
       {/* Header */}
-      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+      <div className="bg-white/80 dark:bg-gradient-to-r dark:from-[rgba(15,17,41,0.8)] dark:to-[rgba(26,27,58,0.6)] backdrop-blur-xl border-b border-gray-200 dark:border-purple-500/30 px-4 py-3 shadow-sm dark:shadow-purple-500/20">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
