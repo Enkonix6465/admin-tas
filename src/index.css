@@ -47,18 +47,12 @@
     --input: 240 15% 12%;
     --ring: 262 85% 58%;
 
-    /* Custom Dark Theme Variables */
-    --gradient-bg: linear-gradient(135deg, #0f1129 0%, #1a1b3a 25%, #232447 50%, #2d1b69 75%, #8b5cf6 100%);
-    --card-bg: linear-gradient(145deg, rgba(15, 17, 41, 0.95) 0%, rgba(26, 27, 58, 0.9) 50%, rgba(35, 36, 71, 0.85) 100%);
-    --sidebar-bg: linear-gradient(180deg, rgba(15, 17, 41, 0.98) 0%, rgba(26, 27, 58, 0.95) 100%);
-    --header-bg: linear-gradient(90deg, rgba(15, 17, 41, 0.95) 0%, rgba(26, 27, 58, 0.9) 100%);
+    /* Simple Dark Theme Variables */
+    --dark-bg: #0f1129;
+    --dark-card: #1a1b3a;
+    --dark-surface: #232447;
     --accent-purple: #8b5cf6;
-    --accent-blue: #3b82f6;
-    --accent-pink: #ec4899;
-    --accent-cyan: #06b6d4;
-    --glow-purple: rgba(139, 92, 246, 0.3);
-    --glow-blue: rgba(59, 130, 246, 0.3);
-    --text-glow: 0 0 20px rgba(139, 92, 246, 0.5);
+    --purple-hover: #a855f7;
   }
 }
 
