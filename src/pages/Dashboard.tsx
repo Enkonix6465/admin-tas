@@ -526,12 +526,12 @@ const Dashboard = () => {
           {/* Projects List */}
           <div className="xl:col-span-2">
             <div className="liquid-glass-card group">
-              <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
+              <div className="px-8 py-6 border-b border-gray-200/50 dark:border-purple-500/30 relative">
                 <div className="flex items-center justify-between relative z-10">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                     Active Projects
                   </h2>
-                  <button className="px-3 py-1.5 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200">
+                  <button className="px-4 py-2 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200">
                     View All
                   </button>
                 </div>
