@@ -457,7 +457,7 @@ const KanbanPage = () => {
           setSelectedTask(task);
           setShowTaskDetailModal(true);
         }}
-        className={`${getCardBgColor()} rounded-xl border-2 p-4 mb-3 hover:shadow-lg transition-all duration-300 cursor-pointer group relative overflow-hidden backdrop-blur-sm`}
+        className={`${getCardBgColor()} rounded-xl border p-4 mb-3 hover:shadow-xl dark:hover:shadow-purple-500/20 transition-all duration-300 cursor-pointer group relative overflow-hidden backdrop-blur-sm hover:-translate-y-1`}
       >
         {/* Priority stripe */}
         <div className={`absolute top-0 left-0 w-full h-1 ${
