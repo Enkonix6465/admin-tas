@@ -615,14 +615,14 @@ const Dashboard = () => {
                     {
                       data: [completedTasks.length, inProgressTasks.length, pendingTasks.length],
                       backgroundColor: [
-                        'rgba(147, 51, 234, 0.8)', // Purple
-                        'rgba(168, 85, 247, 0.8)', // Violet
-                        'rgba(196, 181, 253, 0.8)', // Lavender
+                        'rgba(124, 58, 237, 0.9)', // Deep Purple
+                        'rgba(147, 51, 234, 0.9)', // Rich Purple
+                        'rgba(168, 85, 247, 0.9)', // Bright Violet
                       ],
                       borderColor: [
-                        'rgba(147, 51, 234, 1)', // Purple
-                        'rgba(168, 85, 247, 1)', // Violet
-                        'rgba(196, 181, 253, 1)', // Lavender
+                        'rgba(124, 58, 237, 1)', // Deep Purple
+                        'rgba(147, 51, 234, 1)', // Rich Purple
+                        'rgba(168, 85, 247, 1)', // Bright Violet
                       ],
                       borderWidth: 2,
                     },
@@ -663,8 +663,8 @@ const Dashboard = () => {
                           ? Math.round((projectTasks.filter((t: any) => t.status === "completed").length / projectTasks.length) * 100)
                           : 0;
                       }),
-                      backgroundColor: 'rgba(139, 92, 246, 0.8)',
-                      borderColor: 'rgba(139, 92, 246, 1)',
+                      backgroundColor: 'rgba(124, 58, 237, 0.9)',
+                      borderColor: 'rgba(124, 58, 237, 1)',
                       borderWidth: 1,
                     },
                   ],
@@ -799,9 +799,10 @@ const Dashboard = () => {
                         );
                         return teamTasks.length;
                       }),
-                      backgroundColor: 'rgba(147, 51, 234, 0.8)',
-                      borderColor: 'rgba(147, 51, 234, 1)',
-                      borderWidth: 1,
+                      backgroundColor: 'rgba(124, 58, 237, 0.9)',
+                      borderColor: 'rgba(124, 58, 237, 1)',
+                      borderWidth: 2,
+                      borderRadius: 6,
                     },
                     {
                       label: 'In Progress Tasks',
@@ -812,9 +813,10 @@ const Dashboard = () => {
                         );
                         return teamTasks.length;
                       }),
-                      backgroundColor: 'rgba(168, 85, 247, 0.8)',
-                      borderColor: 'rgba(168, 85, 247, 1)',
-                      borderWidth: 1,
+                      backgroundColor: 'rgba(147, 51, 234, 0.9)',
+                      borderColor: 'rgba(147, 51, 234, 1)',
+                      borderWidth: 2,
+                      borderRadius: 6,
                     },
                     {
                       label: 'Pending Tasks',
@@ -825,8 +827,8 @@ const Dashboard = () => {
                         );
                         return teamTasks.length;
                       }),
-                      backgroundColor: 'rgba(196, 181, 253, 0.8)',
-                      borderColor: 'rgba(196, 181, 253, 1)',
+                      backgroundColor: 'rgba(168, 85, 247, 0.9)',
+                      borderColor: 'rgba(168, 85, 247, 1)',
                       borderWidth: 1,
                     },
                   ],
@@ -882,28 +884,34 @@ const Dashboard = () => {
                     {
                       label: 'Tasks Completed',
                       data: [3, 5, 2, 8, 6, 4, 7], // Mock data for demonstration
+                      borderColor: 'rgba(124, 58, 237, 1)',
+                      backgroundColor: 'rgba(124, 58, 237, 0.15)',
+                      borderWidth: 4,
+                      fill: true,
+                      tension: 0.4,
+                      pointBackgroundColor: 'rgba(124, 58, 237, 1)',
+                      pointBorderColor: '#ffffff',
+                      pointBorderWidth: 3,
+                      pointRadius: 7,
+                      pointHoverRadius: 9,
+                      shadowColor: 'rgba(124, 58, 237, 0.3)',
+                      shadowBlur: 10,
+                    },
+                    {
+                      label: 'Tasks Created',
+                      data: [6, 4, 7, 5, 9, 8, 6], // Enhanced mock data
                       borderColor: 'rgba(147, 51, 234, 1)',
-                      backgroundColor: 'rgba(147, 51, 234, 0.1)',
-                      borderWidth: 3,
+                      backgroundColor: 'rgba(147, 51, 234, 0.15)',
+                      borderWidth: 4,
                       fill: true,
                       tension: 0.4,
                       pointBackgroundColor: 'rgba(147, 51, 234, 1)',
                       pointBorderColor: '#ffffff',
-                      pointBorderWidth: 2,
-                      pointRadius: 6,
-                    },
-                    {
-                      label: 'Tasks Created',
-                      data: [5, 3, 6, 4, 8, 7, 5], // Mock data for demonstration
-                      borderColor: 'rgba(168, 85, 247, 1)',
-                      backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                      borderWidth: 3,
-                      fill: true,
-                      tension: 0.4,
-                      pointBackgroundColor: 'rgba(168, 85, 247, 1)',
-                      pointBorderColor: '#ffffff',
-                      pointBorderWidth: 2,
-                      pointRadius: 6,
+                      pointBorderWidth: 3,
+                      pointRadius: 7,
+                      pointHoverRadius: 9,
+                      shadowColor: 'rgba(147, 51, 234, 0.3)',
+                      shadowBlur: 10,
                     },
                   ],
                 }}
