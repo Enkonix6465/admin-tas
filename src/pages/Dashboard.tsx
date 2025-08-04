@@ -544,25 +544,25 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-green-300/90 mb-1">
+                <p className="text-xs font-medium text-gray-600 dark:text-emerald-300/90 mb-1">
                   Completed
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {completedTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-500/20 rounded-xl border border-green-200 dark:border-green-500/30">
-                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <div className="p-3 bg-emerald-100 dark:bg-emerald-500/20 rounded-xl border border-emerald-200 dark:border-emerald-500/30">
+                <CheckCircle className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
               </div>
             </div>
             <div className="mt-3 flex items-center text-xs relative z-10">
-              <div className="flex items-center px-2 py-1 bg-green-500/10 dark:bg-green-500/20 rounded-full border border-green-500/20 dark:border-green-500/30">
-                <Target className="w-3 h-3 text-green-500 mr-1" />
-                <span className="text-green-600 dark:text-green-400 font-medium">
+              <div className="flex items-center px-2 py-1 bg-emerald-500/10 dark:bg-emerald-500/20 rounded-full border border-emerald-500/20 dark:border-emerald-500/30">
+                <Target className="w-3 h-3 text-emerald-500 mr-1" />
+                <span className="text-emerald-600 dark:text-emerald-400 font-medium">
                   {tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0}%
                 </span>
               </div>
-              <span className="text-gray-600 dark:text-green-300/70 ml-2">
+              <span className="text-gray-600 dark:text-emerald-300/70 ml-2">
                 completion rate
               </span>
             </div>
