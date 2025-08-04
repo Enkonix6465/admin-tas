@@ -906,6 +906,26 @@ textarea {
   animation: float-delay-3 9s ease-in-out infinite;
 }
 
+.animate-liquid-float {
+  animation: liquidFloat 6s ease-in-out infinite;
+}
+
+.animate-liquid-wave {
+  animation: liquidWave 8s ease-in-out infinite;
+}
+
+.animate-liquid-glow {
+  animation: liquidGlow 4s ease-in-out infinite;
+}
+
+.animate-liquid-pulse {
+  animation: liquidPulse 2s ease-in-out infinite;
+}
+
+.animate-liquid-shimmer {
+  animation: liquidShimmer 3s ease-in-out infinite;
+}
+
 /* Moving border effect */
 .moving-border {
   position: relative;
