@@ -280,8 +280,14 @@ const Dashboard = () => {
             <h1 className="text-xl font-semibold text-gray-900 dark:text-purple-100">
               Dashboard Overview
             </h1>
-            <span className="px-2 py-1 text-xs bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-full font-medium border dark:border-green-500/30">
-              Active
+            <span className={`px-2 py-1 text-xs rounded-full font-medium border ${
+              connectionStatus === 'connected'
+                ? 'bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30'
+                : connectionStatus === 'connecting'
+                ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-500/30'
+                : 'bg-orange-100 dark:bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-500/30'
+            }`}>
+              {connectionStatus === 'connected' ? 'Connected' : connectionStatus === 'connecting' ? 'Connecting...' : 'Demo Mode'}
             </span>
             <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
               <Star className="w-4 h-4 text-gray-400 dark:text-purple-300" />
