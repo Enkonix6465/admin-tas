@@ -16,156 +16,140 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
   Users,
-  Target,
   Clock,
-  TrendingUp,
-  Star,
+  User,
+  Briefcase,
   ChevronDown,
   ChevronUp,
-  Briefcase,
+  Star,
+  Target,
   Activity,
-  CheckCircle,
-  AlertCircle,
-  Plus,
-  Filter,
   Search,
+  Filter,
+  Plus,
   Grid,
   List,
   Eye,
-  Edit,
-  Trash2,
-  Share,
-  ExternalLink,
-  X,
-  Zap,
-  Sparkles,
-  Layers,
-  BarChart3,
-  PieChart,
-  Award,
-  Flag,
-  Globe,
-  Shield,
-  Diamond,
-  Rocket,
-  Heart,
-  Building,
-  MapPin,
-  Phone,
-  Mail,
+  MoreHorizontal,
+  Building2,
+  Layers3,
 } from "lucide-react";
-import toast from "react-hot-toast";
 
 export default function ProjectDashboard() {
   const [projects, setProjects] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
-  const [viewMode, setViewMode] = useState("grid"); // grid, list, stats
   const [searchTerm, setSearchTerm] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [showFilters, setShowFilters] = useState(false);
-  const [expandedTeams, setExpandedTeams] = useState(new Set());
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [viewMode, setViewMode] = useState("grid");
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const { currentUser } = useAuthStore();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
         const projSnap = await getDocs(query(collection(db, "projects")));
         const teamSnap = await getDocs(query(collection(db, "teams")));
         const empSnap = await getDocs(query(collection(db, "employees")));
 
-        const projectsData = projSnap.docs.map((doc) => ({ 
-          id: doc.id, 
-          ...doc.data(),
-          // Add mock data for demonstration
-          progress: Math.floor(Math.random() * 100),
-          status: ['active', 'completed', 'paused', 'planning'][Math.floor(Math.random() * 4)],
-          priority: ['high', 'medium', 'low'][Math.floor(Math.random() * 3)],
-          budget: `$${(Math.random() * 100000 + 10000).toFixed(0)}`,
-          client: ['TechCorp', 'StartupXYZ', 'Enterprise Ltd', 'Innovation Inc'][Math.floor(Math.random() * 4)],
-        }));
-
-        setProjects(projectsData);
+        setProjects(projSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
         setTeams(teamSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
         setEmployees(empSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        // Mock data fallback
+        console.error("Error fetching data from Firebase:", error);
+        setError("Connection failed. Using demo data.");
+
+        // Fallback to mock data
         setProjects([
           {
             id: "1",
-            name: "AI-Powered Analytics Platform",
-            description: "Revolutionary analytics platform using machine learning for real-time insights and predictive analytics.",
+            name: "Website Redesign Project",
+            description: "Complete redesign of company website with modern UI/UX principles and responsive design for all devices.",
             startDate: "2024-01-15",
-            deadline: "2024-06-30",
-            created_by: "admin",
+            deadline: "2024-03-30",
+            created_by: "emp1",
             teamId: "team1",
-            progress: 75,
-            status: "active",
-            priority: "high",
-            budget: "$85,000",
-            client: "TechCorp",
           },
           {
-            id: "2", 
-            name: "Mobile Banking Revolution",
-            description: "Next-generation mobile banking app with biometric security and AI-powered financial advice.",
+            id: "2",
+            name: "Mobile App Development",
+            description: "Development of native mobile application for iOS and Android platforms with real-time features.",
             startDate: "2024-02-01",
-            deadline: "2024-08-15",
-            created_by: "admin",
+            deadline: "2024-05-15",
+            created_by: "emp2",
             teamId: "team2",
-            progress: 45,
-            status: "active",
-            priority: "high",
-            budget: "$120,000",
-            client: "FinanceBank",
           },
           {
             id: "3",
-            name: "E-Commerce Transformation",
-            description: "Complete digital transformation of e-commerce platform with advanced personalization features.",
+            name: "Database Migration",
+            description: "Migration of legacy database systems to modern cloud infrastructure with improved performance.",
             startDate: "2024-01-10",
-            deadline: "2024-05-20",
-            created_by: "admin",
+            deadline: "2024-04-20",
+            created_by: "emp1",
             teamId: "team1",
-            progress: 90,
-            status: "completed",
-            priority: "medium",
-            budget: "$65,000",
-            client: "RetailPro",
+          },
+          {
+            id: "4",
+            name: "AI Integration Platform",
+            description: "Implementation of machine learning algorithms and AI features into existing business processes.",
+            startDate: "2024-02-15",
+            deadline: "2024-06-30",
+            created_by: "emp3",
+            teamId: "team3",
+          },
+          {
+            id: "5",
+            name: "Security Audit & Enhancement",
+            description: "Comprehensive security review and implementation of enhanced security measures across all systems.",
+            startDate: "2024-01-20",
+            deadline: "2024-04-10",
+            created_by: "emp2",
+            teamId: "team2",
           }
         ]);
+
         setTeams([
           {
             id: "team1",
-            teamName: "Innovation Squad",
-            description: "Cutting-edge technology development team",
+            teamName: "Frontend Development Team",
+            description: "Specializes in user interface and user experience development",
             members: ["emp1", "emp2", "emp3"],
-            created_by: "admin",
             teamLead: "emp1"
           },
           {
-            id: "team2", 
-            teamName: "Digital Pioneers",
-            description: "Mobile and web application specialists",
-            members: ["emp4", "emp5", "emp6"],
-            created_by: "admin",
-            teamLead: "emp4"
+            id: "team2",
+            teamName: "Backend Development Team",
+            description: "Focuses on server-side development and database management",
+            members: ["emp2", "emp4", "emp5"],
+            teamLead: "emp2"
+          },
+          {
+            id: "team3",
+            teamName: "DevOps & Infrastructure",
+            description: "Manages deployment, monitoring, and infrastructure",
+            members: ["emp3", "emp5", "emp6"],
+            teamLead: "emp3"
           }
         ]);
+
         setEmployees([
-          { id: "emp1", name: "Sarah Chen", title: "Senior Tech Lead", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" },
-          { id: "emp2", name: "Marcus Johnson", title: "Full Stack Developer", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus" },
-          { id: "emp3", name: "Elena Rodriguez", title: "UI/UX Designer", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Elena" },
-          { id: "emp4", name: "David Kim", title: "Mobile Lead", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David" },
-          { id: "emp5", name: "Ashley Turner", title: "Backend Developer", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ashley" },
-          { id: "emp6", name: "Ryan Foster", title: "DevOps Engineer", avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ryan" }
+          { id: "emp1", name: "Sarah Johnson", title: "Senior Frontend Developer" },
+          { id: "emp2", name: "Michael Chen", title: "Backend Team Lead" },
+          { id: "emp3", name: "Emily Rodriguez", title: "DevOps Engineer" },
+          { id: "emp4", name: "David Kim", title: "Full Stack Developer" },
+          { id: "emp5", name: "Lisa Wang", title: "Database Specialist" },
+          { id: "emp6", name: "James Wilson", title: "Infrastructure Architect" }
         ]);
-        toast.error("Using demo data - database connection failed");
+
+        setLoading(false);
       }
     };
 
@@ -178,519 +162,419 @@ export default function ProjectDashboard() {
   const getTeamName = (id) =>
     teams.find((team) => team.id === id)?.teamName || "Unknown";
 
-  const getTeamData = (id) =>
-    teams.find((team) => team.id === id) || {};
-
   const handleTeamClick = (teamId) => {
-    const newExpanded = new Set(expandedTeams);
-    if (newExpanded.has(teamId)) {
-      newExpanded.delete(teamId);
-    } else {
-      newExpanded.add(teamId);
-    }
-    setExpandedTeams(newExpanded);
+    setSelectedTeam(selectedTeam === teamId ? null : teamId);
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active': return 'from-emerald-500 to-teal-600';
-      case 'completed': return 'from-blue-500 to-indigo-600';
-      case 'paused': return 'from-amber-500 to-orange-600';
-      case 'planning': return 'from-purple-500 to-violet-600';
-      default: return 'from-slate-500 to-gray-600';
-    }
+  const getProjectProgress = (project) => {
+    // Mock progress calculation based on project data
+    const today = new Date();
+    const start = new Date(project.startDate);
+    const end = new Date(project.deadline);
+    const total = end - start;
+    const elapsed = today - start;
+    return Math.min(Math.max(Math.round((elapsed / total) * 100), 0), 100);
   };
 
-  const getStatusInfo = (status) => {
-    switch (status) {
-      case 'active': return {
-        label: 'Active',
-        color: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-        icon: <Zap className="w-3 h-3" />
-      };
-      case 'completed': return {
-        label: 'Completed',
-        color: 'bg-blue-100 text-blue-700 border-blue-200',
-        icon: <CheckCircle className="w-3 h-3" />
-      };
-      case 'paused': return {
-        label: 'Paused',
-        color: 'bg-amber-100 text-amber-700 border-amber-200',
-        icon: <Clock className="w-3 h-3" />
-      };
-      case 'planning': return {
-        label: 'Planning',
-        color: 'bg-purple-100 text-purple-700 border-purple-200',
-        icon: <Target className="w-3 h-3" />
-      };
-      default: return {
-        label: 'Unknown',
-        color: 'bg-gray-100 text-gray-700 border-gray-200',
-        icon: <AlertCircle className="w-3 h-3" />
-      };
-    }
+  const getDaysRemaining = (deadline) => {
+    const today = new Date();
+    const end = new Date(deadline);
+    const diffTime = end - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
 
-  const getPriorityIcon = (priority) => {
-    switch (priority) {
-      case 'high': return <Flag className="w-4 h-4 text-red-500" />;
-      case 'medium': return <Flag className="w-4 h-4 text-yellow-500" />;
-      case 'low': return <Flag className="w-4 h-4 text-green-500" />;
-      default: return <Flag className="w-4 h-4 text-gray-400" />;
-    }
-  };
-
-  const filteredProjects = projects.filter(project => {
-    const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = filterStatus === 'all' || project.status === filterStatus;
-    return matchesSearch && matchesStatus;
-  });
-
-  const ProjectCard = ({ project, index }) => {
-    const team = getTeamData(project.teamId);
-    const isExpanded = expandedTeams.has(project.teamId);
-
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
-        whileHover={{ y: -8, scale: 1.02 }}
-        className="group relative overflow-hidden"
-      >
-        {/* Background Gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-br ${getStatusColor(project.status)} opacity-90 rounded-2xl`} />
-        
-        {/* Animated Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-white rounded-full -ml-12 -mb-12 group-hover:scale-110 transition-transform duration-700" />
-        </div>
-
-        {/* Card Content */}
-        <div className="relative p-6 text-white">
-          {/* Header */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-white/25 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/30">
-                <Briefcase className="w-6 h-6 text-white drop-shadow-sm" />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-xs font-semibold bg-white/25 px-3 py-1 rounded-full border border-white/20">
-                  Project #{index + 1}
-                </span>
-                <div className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${getStatusInfo(project.status).color}`}>
-                  {getStatusInfo(project.status).icon}
-                  <span>{getStatusInfo(project.status).label}</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              {getPriorityIcon(project.priority)}
-              <div className="flex gap-1">
-                <button
-                  onClick={() => setSelectedProject(project)}
-                  className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors"
-                >
-                  <Eye className="w-4 h-4" />
-                </button>
-                <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition-colors">
-                  <Share className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Project Info */}
-          <div className="mb-4">
-            <h2 className="text-xl font-bold mb-2 group-hover:text-yellow-200 transition-colors">
-              {project.name}
-            </h2>
-            <p className="text-white/80 text-sm leading-relaxed mb-3 line-clamp-2">
-              {project.description}
-            </p>
-            
-            <div className="flex items-center gap-4 text-xs text-white/70 mb-3">
-              <div className="flex items-center gap-1">
-                <Calendar className="w-3 h-3" />
-                <span>{project.startDate}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                <span>{project.deadline}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Building className="w-3 h-3" />
-                <span>{project.client}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Progress */}
-          <div className="mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium">Progress</span>
-              <span className="text-sm font-bold">{project.progress}%</span>
-            </div>
-            <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${project.progress}%` }}
-                transition={{ duration: 1, delay: index * 0.1 }}
-                className="h-full bg-gradient-to-r from-white to-white/80 rounded-full shadow-lg"
-              />
-            </div>
-          </div>
-
-          {/* Team Section */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Users className="w-4 h-4" />
-                <span className="font-medium text-sm">Team</span>
-              </div>
-              <button
-                onClick={() => handleTeamClick(project.teamId)}
-                className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-lg hover:bg-white/30 transition-all"
-              >
-                <span className="text-sm font-medium">{team.teamName}</span>
-                {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              </button>
-            </div>
-
-            {/* Team Members */}
-            <AnimatePresence>
-              {isExpanded && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="space-y-2"
-                >
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-medium text-white/80">Team Members</span>
-                      <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
-                        {team.members?.length || 0} members
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {team.members?.map((memberId) => {
-                        const member = employees.find(emp => emp.id === memberId);
-                        return (
-                          <div key={memberId} className="flex items-center gap-2 p-2 bg-white/10 rounded-lg">
-                            <img
-                              src={member?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${memberId}`}
-                              alt={member?.name || 'Member'}
-                              className="w-6 h-6 rounded-full border border-white/30"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium truncate">{member?.name || 'Unknown'}</p>
-                              <p className="text-xs text-white/60 truncate">{member?.title || 'Member'}</p>
-                            </div>
-                            {team.teamLead === memberId && (
-                              <Star className="w-3 h-3 text-yellow-400" />
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Status Footer */}
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-white/20">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
-                <Activity className="w-4 h-4 text-white/70" />
-                <span className="text-sm text-white/80 font-medium">Status:</span>
-              </div>
-            </div>
-            <div className={`flex items-center gap-2 px-3 py-2 rounded-full border ${getStatusInfo(project.status).color}`}>
-              {getStatusInfo(project.status).icon}
-              <span className="text-sm font-semibold">
-                {getStatusInfo(project.status).label}
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
-  const StatsCard = ({ title, value, icon: Icon, color, subtitle }) => (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -5 }}
-      className={`bg-gradient-to-br ${color} rounded-2xl p-6 text-white relative overflow-hidden group`}
-    >
-      <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -mr-10 -mt-10 group-hover:scale-110 transition-transform duration-500" />
-      <div className="relative">
-        <div className="flex items-center justify-between mb-4">
-          <Icon className="w-8 h-8" />
-          <Sparkles className="w-5 h-5 opacity-50" />
-        </div>
-        <h3 className="text-3xl font-bold mb-1">{value}</h3>
-        <p className="text-white/80 font-medium">{title}</p>
-        {subtitle && <p className="text-xs text-white/60 mt-1">{subtitle}</p>}
-      </div>
-    </motion.div>
+  const filteredProjects = projects.filter(project =>
+    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    project.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-200 border-t-gray-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Loading Projects</h2>
+          <p className="text-gray-600 dark:text-gray-400">Fetching your project data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-10">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-stone-200/50 dark:border-gray-700/50 shadow-sm">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <Rocket className="w-8 h-8 text-white" />
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <Briefcase className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  Project Galaxy
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">
+                  Project Dashboard
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-medium">
-                  Innovative project management dashboard
+                <p className="text-stone-600 dark:text-gray-400 font-medium">
+                  Manage and track all your projects
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               {/* View Mode Toggle */}
-              <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
+              <div className="flex items-center bg-stone-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-xl p-1 shadow-inner">
                 {[
                   { id: "grid", icon: Grid, label: "Grid" },
-                  { id: "list", icon: List, label: "List" }, 
-                  { id: "stats", icon: BarChart3, label: "Stats" }
+                  { id: "list", icon: List, label: "List" }
                 ].map((mode) => (
                   <button
                     key={mode.id}
                     onClick={() => setViewMode(mode.id)}
-                    className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
                       viewMode === mode.id
-                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-white/90 dark:bg-gray-600 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm transform scale-105'
+                      : 'text-stone-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-600/50'
                     }`}
                   >
                     <mode.icon className="w-4 h-4" />
-                    <span className="hidden sm:inline">{mode.label}</span>
+                    <span className="hidden sm:inline font-medium">{mode.label}</span>
                   </button>
                 ))}
               </div>
 
-              <button
-                onClick={() => setShowCreateModal(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
-              >
+              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
                 <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline">New Project</span>
+                <span className="hidden sm:inline font-medium">New Project</span>
               </button>
             </div>
           </div>
 
-          {/* Enhanced Search and Filter */}
+          {/* Enhanced Search */}
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search projects, descriptions, or clients..."
+                placeholder="Search projects, descriptions, or team names..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-stone-200/50 dark:border-gray-700/50 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
               />
             </div>
-            
+
             <div className="flex items-center gap-3">
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="completed">Completed</option>
-                <option value="paused">Paused</option>
-                <option value="planning">Planning</option>
-              </select>
-              
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-              >
-                <Filter className="w-5 h-5" />
+              <button className="p-4 border border-stone-200/50 dark:border-gray-700/50 rounded-xl hover:bg-stone-50/50 dark:hover:bg-gray-700/50 transition-all shadow-sm backdrop-blur-sm">
+                <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Error Banner */}
+      {error && (
+        <div className="mx-6 mb-6">
+          <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
+                <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-medium text-yellow-800 dark:text-yellow-200">Connection Issue</h3>
+                <p className="text-sm text-yellow-700 dark:text-yellow-300">{error}</p>
+              </div>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Stats Section */}
       <div className="p-6">
-        {viewMode === "stats" && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+            transition={{ delay: 0.1 }}
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
           >
-            <StatsCard
-              title="Total Projects"
-              value={projects.length}
-              icon={Briefcase}
-              color="from-blue-500 to-indigo-600"
-              subtitle="Across all teams"
-            />
-            <StatsCard
-              title="Active Projects"
-              value={projects.filter(p => p.status === 'active').length}
-              icon={Zap}
-              color="from-emerald-500 to-teal-600"
-              subtitle="Currently running"
-            />
-            <StatsCard
-              title="Completed"
-              value={projects.filter(p => p.status === 'completed').length}
-              icon={CheckCircle}
-              color="from-purple-500 to-violet-600"
-              subtitle="Successfully delivered"
-            />
-            <StatsCard
-              title="Team Performance"
-              value="92%"
-              icon={Award}
-              color="from-amber-500 to-orange-600"
-              subtitle="Average success rate"
-            />
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+                <Layers3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{projects.length}</span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Total Projects</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Active and completed</p>
           </motion.div>
-        )}
 
-        {/* Projects Grid/List */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{teams.length}</span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Active Teams</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Working on projects</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+                <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{employees.length}</span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Team Members</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Across all teams</p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+                <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {projects.length > 0 ? Math.round(projects.reduce((acc, p) => acc + getProjectProgress(p), 0) / projects.length) : 0}%
+              </span>
+            </div>
+            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Avg Progress</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Across all projects</p>
+          </motion.div>
+        </div>
+
+        {/* Projects Grid */}
         <div className={`grid gap-6 ${
-          viewMode === "grid" ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" :
-          viewMode === "list" ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
+          viewMode === "grid" ? "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"
         }`}>
           <AnimatePresence>
-            {filteredProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
-            ))}
+            {filteredProjects.map((project, index) => {
+              const progress = getProjectProgress(project);
+              const daysRemaining = getDaysRemaining(project.deadline);
+              const isExpanded = selectedTeam === project.teamId;
+
+              return (
+                <motion.div
+                  key={project.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -30 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  onHoverStart={() => setHoveredCard(project.id)}
+                  onHoverEnd={() => setHoveredCard(null)}
+                  className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-stone-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl transition-all duration-300"
+                >
+                  {/* Card Header */}
+                  <div className="p-6 pb-4">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gradient-to-br from-stone-100 to-stone-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                          <Building2 className="w-6 h-6 text-stone-600 dark:text-gray-300" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-xs font-bold bg-stone-100/80 dark:bg-gray-700/80 text-stone-600 dark:text-gray-300 px-3 py-1 rounded-full border border-stone-200/50 dark:border-gray-600/50 backdrop-blur-sm">
+                              #{index + 1}
+                            </span>
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
+                              daysRemaining > 30 ? 'bg-stone-100/80 text-stone-600 dark:bg-gray-700/80 dark:text-gray-300 backdrop-blur-sm' :
+                              daysRemaining > 7 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                              'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                            }`}>
+                              {daysRemaining > 0 ? `${daysRemaining} days left` : 'Overdue'}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex gap-1">
+                        <button className="p-2 bg-stone-50/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-lg hover:bg-stone-100/80 dark:hover:bg-gray-600/80 transition-colors group-hover:scale-110">
+                          <Eye className="w-4 h-4 text-stone-600 dark:text-gray-400" />
+                        </button>
+                        <button className="p-2 bg-stone-50/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-lg hover:bg-stone-100/80 dark:hover:bg-gray-600/80 transition-colors group-hover:scale-110">
+                          <MoreHorizontal className="w-4 h-4 text-stone-600 dark:text-gray-400" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                      {project.name}
+                    </h2>
+
+                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+
+                    {/* Progress Bar */}
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Progress</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-gray-100">{progress}%</span>
+                      </div>
+                      <div className="w-full bg-stone-200/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-full h-2 overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${progress}%` }}
+                          transition={{ duration: 1, delay: index * 0.1 }}
+                          className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-sm"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Project Details */}
+                  <div className="px-6 pb-4">
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="w-4 h-4 text-stone-400" />
+                        <div>
+                          <p className="text-stone-500 dark:text-gray-400 text-xs">Start Date</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{project.startDate}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Clock className="w-4 h-4 text-stone-400" />
+                        <div>
+                          <p className="text-stone-500 dark:text-gray-400 text-xs">Deadline</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{project.deadline}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm mb-4">
+                      <User className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <p className="text-gray-500 dark:text-gray-400 text-xs">Created By</p>
+                        <p className="font-medium text-gray-900 dark:text-gray-100">{getEmployeeName(project.created_by)}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Team Section */}
+                  <div className="px-6 pb-6">
+                    <button
+                      onClick={() => handleTeamClick(project.teamId)}
+                      className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all group-hover:shadow-md"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Users className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                        <div className="text-left">
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{getTeamName(project.teamId)}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {teams.find(t => t.id === project.teamId)?.members?.length || 0} members
+                          </p>
+                        </div>
+                      </div>
+                      {isExpanded ?
+                        <ChevronUp className="w-5 h-5 text-gray-400 transform transition-transform" /> :
+                        <ChevronDown className="w-5 h-5 text-gray-400 transform transition-transform" />
+                      }
+                    </button>
+
+                    {/* Team Members Expansion */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 overflow-hidden"
+                        >
+                          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Star className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                              <span className="font-medium text-gray-900 dark:text-gray-100 text-sm">Team Members</span>
+                            </div>
+                            <div className="space-y-3">
+                              {teams
+                                .find((t) => t.id === selectedTeam)
+                                ?.members.map((memberId, memberIndex) => (
+                                  <motion.div
+                                    key={memberId}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: memberIndex * 0.1 }}
+                                    className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg shadow-sm"
+                                  >
+                                    <div className="w-8 h-8 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-500 dark:to-gray-400 rounded-full flex items-center justify-center">
+                                      <User className="w-4 h-4 text-gray-600 dark:text-gray-200" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                                        {getEmployeeName(memberId)}
+                                      </p>
+                                      <p className="text-xs text-gray-500 dark:text-gray-400">Team Member</p>
+                                    </div>
+                                  </motion.div>
+                                ))}
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Hover Effect Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-100/20 dark:to-gray-700/20 rounded-2xl transition-opacity duration-300 pointer-events-none ${
+                    hoveredCard === project.id ? 'opacity-100' : 'opacity-0'
+                  }`} />
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
 
+        {/* Empty State */}
         {filteredProjects.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-16"
           >
-            <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
               <Search className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
               No projects found
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Try adjusting your search terms or filters
+              Try adjusting your search terms
             </p>
             <button
-              onClick={() => {
-                setSearchTerm("");
-                setFilterStatus("all");
-              }}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              onClick={() => setSearchTerm("")}
+              className="px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg"
             >
-              Clear Filters
+              Clear Search
             </button>
           </motion.div>
         )}
       </div>
-
-      {/* Project Detail Modal */}
-      <AnimatePresence>
-        {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto"
-            >
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                    {selectedProject.name}
-                  </h2>
-                  <button
-                    onClick={() => setSelectedProject(null)}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="font-semibold mb-2">Description</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                      {selectedProject.description}
-                    </p>
-                    
-                    <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Start Date:</span>
-                        <span className="font-medium">{selectedProject.startDate}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Deadline:</span>
-                        <span className="font-medium">{selectedProject.deadline}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Budget:</span>
-                        <span className="font-medium">{selectedProject.budget}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-500">Client:</span>
-                        <span className="font-medium">{selectedProject.client}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-semibold mb-4">Team Details</h3>
-                    <div className="space-y-3">
-                      {getTeamData(selectedProject.teamId).members?.map((memberId) => {
-                        const member = employees.find(emp => emp.id === memberId);
-                        return (
-                          <div key={memberId} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                            <img
-                              src={member?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${memberId}`}
-                              alt={member?.name || 'Member'}
-                              className="w-10 h-10 rounded-full"
-                            />
-                            <div className="flex-1">
-                              <p className="font-medium">{member?.name || 'Unknown'}</p>
-                              <p className="text-sm text-gray-500">{member?.title || 'Member'}</p>
-                            </div>
-                            {getTeamData(selectedProject.teamId).teamLead === memberId && (
-                              <Star className="w-4 h-4 text-yellow-500" />
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 }
