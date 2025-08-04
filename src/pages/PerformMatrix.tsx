@@ -445,14 +445,17 @@ export default function EmployeePerformancePage() {
 
       <div className="flex-1 overflow-hidden flex">
         {/* Employee Sidebar */}
-        <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <div className="w-80 border-r border-gray-200 dark:border-purple-500/30 liquid-glass flex flex-col">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-purple-100">
               Team Members
             </h2>
+            <p className="text-sm text-gray-500 dark:text-purple-300/70 mt-1">
+              Select a member to view analytics
+            </p>
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
             {filteredEmployees.map((team) => (
               <div key={team.teamId}>
                 <div className="mb-3">
