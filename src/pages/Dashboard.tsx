@@ -547,15 +547,16 @@ const Dashboard = () => {
           {/* Projects List */}
           <div className="lg:col-span-2">
             <div className="liquid-glass-card animate-liquid-float group" style={{ animationDelay: '1s' }}>
-              <div className="px-4 py-3 border-b border-gray-200 dark:border-purple-500/30">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-base font-semibold text-gray-900 dark:text-purple-100">
-                    Projects
+              <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
+                <div className="flex items-center justify-between relative z-10">
+                  <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                    Active Projects
                   </h2>
-                  <button className="text-sm text-blue-600 dark:text-purple-400 hover:text-blue-800 dark:hover:text-purple-300 font-medium">
+                  <button className="px-3 py-1.5 text-sm bg-gradient-to-r from-purple-500/20 to-blue-500/20 dark:from-purple-500/30 dark:to-blue-500/30 text-purple-700 dark:text-purple-300 hover:from-purple-500/30 hover:to-blue-500/30 dark:hover:from-purple-500/40 dark:hover:to-blue-500/40 font-medium rounded-lg border border-purple-500/20 dark:border-purple-500/30 backdrop-blur-sm transition-all duration-300">
                     View All
                   </button>
                 </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-blue-500/5 dark:from-purple-500/10 dark:to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               <div className="divide-y divide-gray-200 dark:divide-purple-500/20">
                 {projects.slice(0, 5).map((project: any, index: number) => {
