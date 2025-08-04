@@ -528,10 +528,10 @@ const Dashboard = () => {
             <div className="liquid-glass-card group">
               <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
                 <div className="flex items-center justify-between relative z-10">
-                  <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Active Projects
                   </h2>
-                  <button className="px-3 py-1.5 text-sm bg-gradient-to-r from-purple-500/20 to-blue-500/20 dark:from-purple-500/30 dark:to-blue-500/30 text-purple-700 dark:text-purple-300 hover:from-purple-500/30 hover:to-blue-500/30 dark:hover:from-purple-500/40 dark:hover:to-blue-500/40 font-medium rounded-lg border border-purple-500/20 dark:border-purple-500/30 backdrop-blur-sm transition-all duration-300">
+                  <button className="px-3 py-1.5 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200">
                     View All
                   </button>
                 </div>
