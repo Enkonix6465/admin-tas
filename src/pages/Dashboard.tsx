@@ -411,7 +411,7 @@ const Dashboard = () => {
                   {projects.length}
                 </p>
               </div>
-              <div className="p-3 bg-gradient-to-br from-purple-500/20 to-blue-500/20 dark:from-purple-500/30 dark:to-blue-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-purple-500/20 dark:border-purple-500/30">
+              <div className="p-3 bg-purple-100 dark:bg-purple-500/20 rounded-xl border border-purple-200 dark:border-purple-500/30">
                 <Briefcase className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
