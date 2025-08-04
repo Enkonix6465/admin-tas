@@ -40,6 +40,9 @@ export default function ProjectDashboard() {
   const [employees, setEmployees] = useState([]);
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState("grid");
+  const [hoveredCard, setHoveredCard] = useState(null);
 
   const { currentUser } = useAuthStore();
 
