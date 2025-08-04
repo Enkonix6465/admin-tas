@@ -765,65 +765,92 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
+          {/* Team Overview */}
           <div className="liquid-glass-card group">
             <div className="px-8 py-6 border-b border-gray-200/50 dark:border-purple-500/30 relative">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Recent Tasks
-                </h2>
-                <button
-                  onClick={() => setShowAllTasks(!showAllTasks)}
-                  className="px-4 py-2 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200"
-                >
-                  {showAllTasks ? 'Show Less' : 'View All'}
-                </button>
-              </div>
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Team Overview
+              </h2>
             </div>
-            <div className="p-8 space-y-5 max-h-96 overflow-y-auto custom-scrollbar">
-              {(showAllTasks ? recentTasks : recentTasks.slice(0, 3)).map((task: any, index: number) => (
-                <motion.div
-                  key={task.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/10 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-200 cursor-pointer"
-                >
-                  <div className="flex-shrink-0 mt-1">
-                    {task.status === "completed" ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                    ) : task.status === "in_progress" ? (
-                      <Circle className="w-5 h-5 text-blue-500" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-gray-400 dark:text-purple-400" />
-                    )}
+            <div className="p-8 space-y-6">
+              {/* Team Stats */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-4 bg-purple-50 dark:bg-purple-500/10 rounded-lg border border-purple-200 dark:border-purple-500/20">
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                    {teams.length}
                   </div>
-                  <div className="flex-1 min-w-0 relative z-10">
-                    <p className="text-base font-medium text-gray-900 dark:text-white truncate mb-2">
-                      {task.title}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-purple-300/80 mb-2">
-                      Assigned to {getEmployeeName(task.assigned_to)}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-purple-300/60">
-                        Due: {task.due_date}
-                      </span>
-                      {task.priority && (
-                        <span className={`px-2 py-0.5 text-xs rounded-full border ${
-                          task.priority === 'critical'
-                            ? 'bg-red-500/10 text-red-600 border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30'
-                            : task.priority === 'high'
-                            ? 'bg-orange-500/10 text-orange-600 border-orange-500/20 dark:bg-orange-500/20 dark:text-orange-400 dark:border-orange-500/30'
-                            : 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30'
-                        }`}>
-                          {task.priority}
-                        </span>
-                      )}
-                    </div>
+                  <div className="text-sm text-purple-600 dark:text-purple-300">Active Teams</div>
+                </div>
+                <div className="text-center p-4 bg-indigo-50 dark:bg-indigo-500/10 rounded-lg border border-indigo-200 dark:border-indigo-500/20">
+                  <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                    {employees.length}
                   </div>
-                </motion.div>
-              ))}
+                  <div className="text-sm text-indigo-600 dark:text-indigo-300">Team Members</div>
+                </div>
+              </div>
+
+              {/* Team Performance */}
+              <div className="space-y-4">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-white">Team Performance</h4>
+                {teams.slice(0, 3).map((team: any, index: number) => {
+                  const teamTasks = tasks.filter((task: any) => {
+                    const emp = employees.find((e: any) => e.id === task.assigned_to);
+                    return emp?.team === team.teamName;
+                  });
+                  const completedTeamTasks = teamTasks.filter((t: any) => t.status === 'completed').length;
+                  const completion = teamTasks.length > 0 ? (completedTeamTasks / teamTasks.length) * 100 : 0;
+
+                  return (
+                    <motion.div
+                      key={team.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center justify-between p-3 rounded-lg hover:bg-purple-50 dark:hover:bg-purple-500/5 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-xs font-semibold">
+                          {team.teamName.charAt(0)}
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {team.teamName}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-purple-300/70">
+                            {team.memberCount} members
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-semibold text-purple-600 dark:text-purple-400">
+                          {Math.round(completion)}%
+                        </div>
+                        <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-1 mt-1">
+                          <div
+                            className="bg-purple-500 h-1 rounded-full transition-all duration-300"
+                            style={{ width: `${completion}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {/* Quick Actions */}
+              <div className="pt-4 border-t border-gray-200 dark:border-purple-500/20">
+                <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Quick Actions</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <button className="p-3 text-xs bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-500/30 transition-colors">
+                    <Users className="w-4 h-4 mx-auto mb-1" />
+                    Add Member
+                  </button>
+                  <button className="p-3 text-xs bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 rounded-lg hover:bg-indigo-200 dark:hover:bg-indigo-500/30 transition-colors">
+                    <Plus className="w-4 h-4 mx-auto mb-1" />
+                    New Team
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
