@@ -71,12 +71,8 @@ const Dashboard = () => {
         setTimeout(() => reject(new Error('Request timeout')), 5000)
       );
 
-      const fetchData = Promise.all([
-        getDocs(collection(db, "projects")),
-        getDocs(collection(db, "tasks")),
-        getDocs(collection(db, "teams")),
-        getDocs(collection(db, "employees")),
-      ]);
+      // Disable Firebase calls to prevent fetch errors
+      throw new Error('Firebase disabled - using mock data');
 
       const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] = await Promise.race([
         fetchData,
