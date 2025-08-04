@@ -50,13 +50,107 @@ export default function ProjectDashboard() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const projSnap = await getDocs(query(collection(db, "projects")));
-      const teamSnap = await getDocs(query(collection(db, "teams")));
-      const empSnap = await getDocs(query(collection(db, "employees")));
+      try {
+        setLoading(true);
+        setError(null);
 
-      setProjects(projSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setTeams(teamSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setEmployees(empSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        const projSnap = await getDocs(query(collection(db, "projects")));
+        const teamSnap = await getDocs(query(collection(db, "teams")));
+        const empSnap = await getDocs(query(collection(db, "employees")));
+
+        setProjects(projSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        setTeams(teamSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+        setEmployees(empSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data from Firebase:", error);
+        setError("Connection failed. Using demo data.");
+
+        // Fallback to mock data
+        setProjects([
+          {
+            id: "1",
+            name: "Website Redesign Project",
+            description: "Complete redesign of company website with modern UI/UX principles and responsive design for all devices.",
+            startDate: "2024-01-15",
+            deadline: "2024-03-30",
+            created_by: "emp1",
+            teamId: "team1",
+          },
+          {
+            id: "2",
+            name: "Mobile App Development",
+            description: "Development of native mobile application for iOS and Android platforms with real-time features.",
+            startDate: "2024-02-01",
+            deadline: "2024-05-15",
+            created_by: "emp2",
+            teamId: "team2",
+          },
+          {
+            id: "3",
+            name: "Database Migration",
+            description: "Migration of legacy database systems to modern cloud infrastructure with improved performance.",
+            startDate: "2024-01-10",
+            deadline: "2024-04-20",
+            created_by: "emp1",
+            teamId: "team1",
+          },
+          {
+            id: "4",
+            name: "AI Integration Platform",
+            description: "Implementation of machine learning algorithms and AI features into existing business processes.",
+            startDate: "2024-02-15",
+            deadline: "2024-06-30",
+            created_by: "emp3",
+            teamId: "team3",
+          },
+          {
+            id: "5",
+            name: "Security Audit & Enhancement",
+            description: "Comprehensive security review and implementation of enhanced security measures across all systems.",
+            startDate: "2024-01-20",
+            deadline: "2024-04-10",
+            created_by: "emp2",
+            teamId: "team2",
+          }
+        ]);
+
+        setTeams([
+          {
+            id: "team1",
+            teamName: "Frontend Development Team",
+            description: "Specializes in user interface and user experience development",
+            members: ["emp1", "emp2", "emp3"],
+            teamLead: "emp1"
+          },
+          {
+            id: "team2",
+            teamName: "Backend Development Team",
+            description: "Focuses on server-side development and database management",
+            members: ["emp2", "emp4", "emp5"],
+            teamLead: "emp2"
+          },
+          {
+            id: "team3",
+            teamName: "DevOps & Infrastructure",
+            description: "Manages deployment, monitoring, and infrastructure",
+            members: ["emp3", "emp5", "emp6"],
+            teamLead: "emp3"
+          }
+        ]);
+
+        setEmployees([
+          { id: "emp1", name: "Sarah Johnson", title: "Senior Frontend Developer" },
+          { id: "emp2", name: "Michael Chen", title: "Backend Team Lead" },
+          { id: "emp3", name: "Emily Rodriguez", title: "DevOps Engineer" },
+          { id: "emp4", name: "David Kim", title: "Full Stack Developer" },
+          { id: "emp5", name: "Lisa Wang", title: "Database Specialist" },
+          { id: "emp6", name: "James Wilson", title: "Infrastructure Architect" }
+        ]);
+
+        setLoading(false);
+      }
     };
 
     fetchData();
