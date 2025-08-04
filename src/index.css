@@ -657,23 +657,24 @@ textarea {
 .enhanced-moving-border::before {
   content: '';
   position: absolute;
-  top: -3px;
-  left: -3px;
-  right: -3px;
-  bottom: -3px;
-  background: conic-gradient(from 0deg, #8b5cf6, #a855f7, #c084fc, #ddd6fe, #f3e8ff, #ddd6fe, #c084fc, #a855f7, #8b5cf6);
-  animation: border-rotate 4s linear infinite;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  background: conic-gradient(from 0deg, #8b5cf6, #a855f7, #c084fc, #ddd6fe, #f3e8ff, #e879f9, #d946ef, #c026d3, #a21caf, #86198f, #701a75, #581c87, #4c1d95, #3730a3, #312e81, #1e1b4b, #4c1d95, #581c87, #701a75, #86198f, #a21caf, #c026d3, #d946ef, #e879f9, #f3e8ff, #ddd6fe, #c084fc, #a855f7, #8b5cf6);
+  animation: border-rotate 12s linear infinite;
   border-radius: inherit;
   z-index: -1;
+  filter: blur(1px);
 }
 
 .enhanced-moving-border::after {
   content: '';
   position: absolute;
-  top: 3px;
-  left: 3px;
-  right: 3px;
-  bottom: 3px;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
   background: inherit;
   border-radius: inherit;
   z-index: -1;
