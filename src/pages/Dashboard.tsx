@@ -477,9 +477,9 @@ const Dashboard = () => {
               </div>
             </div>
             <div className="mt-3 relative z-10">
-              <div className="w-full bg-gradient-to-r from-blue-900/20 to-cyan-900/20 dark:bg-blue-900/30 rounded-full h-2">
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-300"
+                  className="bg-blue-500 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
                   style={{
                     width: `${tasks.length > 0 ? (inProgressTasks.length / tasks.length) * 100 : 0}%`,
                   }}
