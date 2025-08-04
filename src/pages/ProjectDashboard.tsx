@@ -224,7 +224,7 @@ export default function ProjectDashboard() {
 
             <div className="flex items-center gap-3">
               {/* View Mode Toggle */}
-              <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl p-1 shadow-inner">
+              <div className="flex items-center bg-stone-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-xl p-1 shadow-inner">
                 {[
                   { id: "grid", icon: Grid, label: "Grid" },
                   { id: "list", icon: List, label: "List" }
