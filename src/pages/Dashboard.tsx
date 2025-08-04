@@ -598,12 +598,12 @@ const Dashboard = () => {
 
           {/* Recent Activity */}
           <div className="liquid-glass-card group">
-            <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="px-8 py-6 border-b border-gray-200/50 dark:border-purple-500/30 relative">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Recent Tasks
               </h2>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-8 space-y-5">
               {recentTasks.map((task: any, index: number) => (
                 <motion.div
                   key={task.id}
