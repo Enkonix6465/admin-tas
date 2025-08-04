@@ -139,7 +139,7 @@ export function LoginForm({
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="h-14 px-5 rounded-2xl border-gray-200/60 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:bg-white/90 dark:hover:bg-gray-800/90 shadow-lg focus:shadow-xl"
+                      className="h-14 px-5 rounded-2xl border-gray-200/60 dark:border-slate-600/60 bg-white/80 dark:bg-slate-800/80 text-gray-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-400 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:bg-white/90 dark:hover:bg-slate-700/90 shadow-lg focus:shadow-xl"
                     />
                   </div>
                   
@@ -159,7 +159,7 @@ export function LoginForm({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="h-14 px-5 rounded-2xl border-gray-200/60 dark:border-gray-700/60 bg-white/80 dark:bg-gray-800/80 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:bg-white/90 dark:hover:bg-gray-800/90 shadow-lg focus:shadow-xl"
+                      className="h-14 px-5 rounded-2xl border-gray-200/60 dark:border-slate-600/60 bg-white/80 dark:bg-slate-800/80 text-gray-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-400 focus:border-purple-500 dark:focus:border-purple-400 focus:ring-purple-500/20 backdrop-blur-sm transition-all duration-300 hover:bg-white/90 dark:hover:bg-slate-700/90 shadow-lg focus:shadow-xl"
                     />
                   </div>
                 </div>
