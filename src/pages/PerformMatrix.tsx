@@ -604,7 +604,7 @@ export default function EmployeePerformancePage() {
                 {/* Performance Trends (Last 30 Days) */}
                 <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Performance Trends (Last 30 Days)
                     </h3>
                     <div className="flex items-center gap-1">
