@@ -335,25 +335,25 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+            className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(59,130,246,0.1)] dark:to-[rgba(29,78,216,0.05)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-blue-500/20 p-4 shadow-lg dark:shadow-blue-500/10 hover:shadow-xl dark:hover:shadow-blue-500/20 transition-all duration-300"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-xs font-medium text-gray-600 dark:text-blue-300">
                   In Progress
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <p className="text-xl font-bold text-gray-900 dark:text-blue-100">
                   {inProgressTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                <Activity className="w-6 h-6 text-blue-600" />
+              <div className="p-2 bg-blue-100 dark:bg-gradient-to-br dark:from-blue-500/20 dark:to-cyan-500/20 rounded-lg shadow-sm">
+                <Activity className="w-5 h-5 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+            <div className="mt-3">
+              <div className="w-full bg-gray-200 dark:bg-blue-900/30 rounded-full h-1.5">
                 <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  className="bg-blue-600 dark:bg-blue-400 h-1.5 rounded-full transition-all duration-300"
                   style={{
                     width: `${tasks.length > 0 ? (inProgressTasks.length / tasks.length) * 100 : 0}%`,
                   }}
@@ -366,27 +366,27 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+            className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(16,185,129,0.1)] dark:to-[rgba(5,150,105,0.05)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-green-500/20 p-4 shadow-lg dark:shadow-green-500/10 hover:shadow-xl dark:hover:shadow-green-500/20 transition-all duration-300"
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                <p className="text-xs font-medium text-gray-600 dark:text-green-300">
                   Completed
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                <p className="text-xl font-bold text-gray-900 dark:text-green-100">
                   {completedTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="p-2 bg-green-100 dark:bg-gradient-to-br dark:from-green-500/20 dark:to-emerald-500/20 rounded-lg shadow-sm">
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
             </div>
-            <div className="mt-4 flex items-center text-sm">
-              <Target className="w-4 h-4 text-green-500 mr-1" />
+            <div className="mt-3 flex items-center text-xs">
+              <Target className="w-3 h-3 text-green-500 mr-1" />
               <span className="text-green-600 dark:text-green-400 font-medium">
                 {tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0}%
               </span>
-              <span className="text-gray-600 dark:text-gray-400 ml-1">
+              <span className="text-gray-600 dark:text-green-300/70 ml-1">
                 completion rate
               </span>
             </div>
