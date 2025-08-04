@@ -272,9 +272,16 @@ const Dashboard = () => {
     .slice(0, 5);
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col">
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+      {/* Liquid Background Effects */}
+      <div className="absolute inset-0 dark:opacity-30 opacity-10 pointer-events-none">
+        <div className="absolute top-10 left-10 w-96 h-96 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-liquid-float"></div>
+        <div className="absolute top-20 right-20 w-80 h-80 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full mix-blend-multiply filter blur-3xl animate-liquid-wave"></div>
+        <div className="absolute -bottom-20 left-1/2 w-96 h-96 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-liquid-pulse"></div>
+      </div>
+
       {/* Header */}
-      <div className="bg-white/80 dark:bg-gradient-to-r dark:from-[rgba(15,17,41,0.8)] dark:to-[rgba(26,27,58,0.6)] backdrop-blur-xl border-b border-gray-200 dark:border-purple-500/30 px-4 py-3 shadow-sm dark:shadow-purple-500/20">
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-4 py-3 shadow-sm dark:shadow-purple-500/20 relative z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-gray-900 dark:text-purple-100">
