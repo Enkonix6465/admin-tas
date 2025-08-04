@@ -181,6 +181,31 @@ body {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
+/* Vibrant dark theme colors */
+:root {
+  --dark-bg-primary: #0f1129;
+  --dark-bg-secondary: #1a1b3a;
+  --dark-bg-tertiary: #232447;
+  --dark-accent-purple: #8b5cf6;
+  --dark-accent-blue: #3b82f6;
+  --dark-accent-pink: #ec4899;
+  --dark-accent-yellow: #f59e0b;
+  --dark-accent-green: #10b981;
+  --dark-accent-orange: #f97316;
+  --dark-text-primary: #f8fafc;
+  --dark-text-secondary: #cbd5e1;
+  --dark-border: #334155;
+}
+
+.dark {
+  --vibrant-purple: linear-gradient(135deg, #8b5cf6, #a855f7);
+  --vibrant-blue: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  --vibrant-pink: linear-gradient(135deg, #ec4899, #be185d);
+  --vibrant-yellow: linear-gradient(135deg, #f59e0b, #d97706);
+  --vibrant-green: linear-gradient(135deg, #10b981, #047857);
+  --vibrant-orange: linear-gradient(135deg, #f97316, #ea580c);
+}
+
 /* Form styles */
 input,
 select,
