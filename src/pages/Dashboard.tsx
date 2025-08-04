@@ -173,24 +173,24 @@ const Dashboard = () => {
     <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col">
       {/* Header */}
       <div className="bg-white/80 dark:bg-gradient-to-r dark:from-[rgba(15,17,41,0.8)] dark:to-[rgba(26,27,58,0.6)] backdrop-blur-xl border-b border-gray-200 dark:border-purple-500/30 px-4 py-3 shadow-sm dark:shadow-purple-500/20">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold text-gray-900 dark:text-purple-100">
               Dashboard Overview
             </h1>
-            <span className="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full font-medium">
+            <span className="px-2 py-1 text-xs bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 rounded-full font-medium border dark:border-green-500/30">
               Active
             </span>
-            <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Star className="w-4 h-4 text-gray-400" />
+            <button className="p-1 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
+              <Star className="w-4 h-4 text-gray-400 dark:text-purple-300" />
             </button>
           </div>
           <div className="flex items-center gap-2">
-            <button className="px-3 py-2 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+            <button className="px-3 py-1.5 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
               Share
             </button>
-            <button className="p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-              <Settings className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+            <button className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-purple-500/20">
+              <Settings className="w-4 h-4 text-gray-600 dark:text-purple-300" />
             </button>
           </div>
         </div>
