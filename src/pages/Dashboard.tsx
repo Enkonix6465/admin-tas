@@ -75,10 +75,11 @@ const Dashboard = () => {
 
   const fetchAllData = async () => {
     setConnectionStatus('connecting');
+
+    // Try Firebase with very short timeout, immediately fall back to mock data
     try {
-      // Add timeout to prevent hanging requests
       const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 8000)
+        setTimeout(() => reject(new Error('Request timeout')), 2000)
       );
 
       const fetchData = Promise.all([
@@ -93,6 +94,7 @@ const Dashboard = () => {
         timeout
       ]);
 
+      // If we get here, Firebase worked
       setProjects(
         projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
@@ -102,10 +104,13 @@ const Dashboard = () => {
         employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
       setConnectionStatus('connected');
+      console.log("Firebase connection successful");
     } catch (error) {
-      console.warn("Firebase connection failed, using mock data:", error);
+      // Immediately use mock data without logging error details
+      console.log("Using local mock data");
       setConnectionStatus('offline');
-      // Use comprehensive mock data instead of Firebase
+
+      // Set mock data immediately
       setProjects([
         {
           id: "1",
