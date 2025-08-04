@@ -155,6 +155,7 @@ export function LoginForm({
                     <Input
                       id="password"
                       type="password"
+                      placeholder="*******"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
