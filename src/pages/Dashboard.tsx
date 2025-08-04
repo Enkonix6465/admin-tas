@@ -408,7 +408,7 @@ const Dashboard = () => {
                   </button>
                 </div>
               </div>
-              <div className="divide-y divide-gray-200 dark:divide-gray-700">
+              <div className="divide-y divide-gray-200 dark:divide-purple-500/20">
                 {projects.slice(0, 5).map((project: any, index: number) => {
                   const progress = getProjectProgress(project.id);
                   const projectTasks = getProjectTasks(project.id);
@@ -418,7 +418,7 @@ const Dashboard = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      className="p-4 hover:bg-gray-50 dark:hover:bg-purple-500/10 transition-all duration-200"
                     >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
