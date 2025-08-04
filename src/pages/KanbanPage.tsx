@@ -513,7 +513,7 @@ const KanbanPage = () => {
             <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
               <span className="font-medium">Progress</span>
               <motion.span
-                className="font-bold text-blue-600"
+                className="font-bold text-purple-600 dark:text-purple-400"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
@@ -521,9 +521,9 @@ const KanbanPage = () => {
                 {task.progress}%
               </motion.span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 shadow-inner">
+            <div className="w-full bg-gray-200 dark:bg-purple-900/30 rounded-full h-2 shadow-inner">
               <motion.div
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full shadow-sm"
+                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full shadow-sm"
                 initial={{ width: 0 }}
                 animate={{ width: `${task.progress}%` }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
