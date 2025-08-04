@@ -388,7 +388,7 @@ export default function ProjectDashboard() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   onHoverStart={() => setHoveredCard(project.id)}
                   onHoverEnd={() => setHoveredCard(null)}
-                  className="group relative bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-2xl transition-all duration-300"
+                  className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-stone-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl transition-all duration-300"
                 >
                   {/* Card Header */}
                   <div className="p-6 pb-4">
