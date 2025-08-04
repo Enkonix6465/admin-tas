@@ -12,6 +12,28 @@ import {
 } from "firebase/firestore";
 import { db } from "../lib/firebase";
 import { useAuthStore } from "../store/authStore";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Calendar,
+  Users,
+  Clock,
+  User,
+  Briefcase,
+  ChevronDown,
+  ChevronUp,
+  Star,
+  Target,
+  Activity,
+  Search,
+  Filter,
+  Plus,
+  Grid,
+  List,
+  Eye,
+  MoreHorizontal,
+  Building2,
+  Layers3,
+} from "lucide-react";
 
 export default function ProjectDashboard() {
   const [projects, setProjects] = useState([]);
