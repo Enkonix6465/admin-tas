@@ -602,7 +602,7 @@ export default function EmployeePerformancePage() {
               {/* Enhanced Charts */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Performance Trends (Last 30 Days) */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                       Performance Trends (Last 30 Days)
