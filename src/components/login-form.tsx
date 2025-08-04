@@ -248,11 +248,7 @@ export function LoginForm({
                 <p className="text-white/95 text-xl font-medium leading-relaxed backdrop-blur-sm">
                   "{currentQuote}"
                 </p>
-                <div className="flex justify-center space-x-3">
-                  <div className="w-3 h-3 bg-white/70 rounded-full animate-pulse"></div>
-                  <div className="w-3 h-3 bg-white/50 rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
-                  <div className="w-3 h-3 bg-white/70 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-                </div>
+                
               </div>
             </div>
           </div>
