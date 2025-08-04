@@ -174,13 +174,12 @@ body {
   min-width: 320px;
   min-height: 100vh;
   font-size: 0.75rem;
-  background: var(--gradient-bg, #0f1129);
+  background: #f9fafb;
   overflow-x: hidden;
 }
 
 .dark body {
-  background: var(--gradient-bg);
-  background-attachment: fixed;
+  background: var(--dark-bg);
 }
 .ql-container {
   min-height: 300px;
