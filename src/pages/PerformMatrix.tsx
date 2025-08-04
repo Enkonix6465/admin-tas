@@ -478,10 +478,10 @@ export default function EmployeePerformancePage() {
                         key={emp.id}
                         whileHover={{ scale: 1.02 }}
                         onClick={() => setSelectedEmployee(emp)}
-                        className={`p-3 rounded-lg cursor-pointer border transition-all ${
+                        className={`p-4 rounded-xl cursor-pointer border transition-all duration-300 ${
                           selectedEmployee?.id === emp.id
-                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                            : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-500/20 shadow-lg dark:shadow-purple-500/20"
+                            : "border-gray-200 dark:border-purple-500/20 hover:border-purple-300 dark:hover:border-purple-500/40 hover:bg-gray-50 dark:hover:bg-purple-500/10 hover:shadow-md dark:hover:shadow-purple-500/10"
                         }`}
                       >
                         <div className="flex items-center gap-3 mb-2">
