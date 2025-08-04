@@ -493,10 +493,10 @@ export default function EmployeePerformancePage() {
                             className="w-8 h-8 rounded-full"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
+                            <p className="font-medium text-gray-900 dark:text-purple-100 text-sm truncate">
                               {emp.name}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            <p className="text-xs text-gray-500 dark:text-purple-300/70 truncate">
                               {emp.department}
                             </p>
                           </div>
