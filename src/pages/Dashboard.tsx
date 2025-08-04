@@ -584,14 +584,14 @@ const Dashboard = () => {
                     {
                       data: [completedTasks.length, inProgressTasks.length, pendingTasks.length],
                       backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(251, 191, 36, 0.8)',
+                        'rgba(16, 185, 129, 0.8)',
+                        'rgba(139, 92, 246, 0.8)',
+                        'rgba(99, 102, 241, 0.8)',
                       ],
                       borderColor: [
-                        'rgba(34, 197, 94, 1)',
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(251, 191, 36, 1)',
+                        'rgba(16, 185, 129, 1)',
+                        'rgba(139, 92, 246, 1)',
+                        'rgba(99, 102, 241, 1)',
                       ],
                       borderWidth: 2,
                     },
