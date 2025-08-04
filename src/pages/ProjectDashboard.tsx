@@ -70,6 +70,29 @@ export default function ProjectDashboard() {
     setSelectedTeam(selectedTeam === teamId ? null : teamId);
   };
 
+  const getProjectProgress = (project) => {
+    // Mock progress calculation based on project data
+    const today = new Date();
+    const start = new Date(project.startDate);
+    const end = new Date(project.deadline);
+    const total = end - start;
+    const elapsed = today - start;
+    return Math.min(Math.max(Math.round((elapsed / total) * 100), 0), 100);
+  };
+
+  const getDaysRemaining = (deadline) => {
+    const today = new Date();
+    const end = new Date(deadline);
+    const diffTime = end - today;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
+
+  const filteredProjects = projects.filter(project =>
+    project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    project.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Project Dashboard</h1>
