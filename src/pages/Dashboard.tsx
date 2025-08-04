@@ -416,11 +416,8 @@ const Dashboard = () => {
                   {projects.length}
                 </p>
               </div>
-              <div className="relative">
-                <div className="p-3 bg-gradient-to-br from-purple-500/20 to-blue-500/20 dark:from-purple-500/30 dark:to-blue-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-purple-500/20 dark:border-purple-500/40 group-hover:scale-110 transition-transform duration-300">
-                  <Briefcase className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
+              <div className="p-3 bg-gradient-to-br from-purple-500/20 to-blue-500/20 dark:from-purple-500/30 dark:to-blue-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-purple-500/20 dark:border-purple-500/30">
+                <Briefcase className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
             <div className="mt-3 flex items-center text-xs relative z-10">
