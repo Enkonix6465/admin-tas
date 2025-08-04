@@ -459,10 +459,10 @@ export default function EmployeePerformancePage() {
             {filteredEmployees.map((team) => (
               <div key={team.teamId}>
                 <div className="mb-3">
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-purple-100 mb-1">
                     {team.teamName}
                   </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500 dark:text-purple-300/70">
                     Lead: {team.teamLead}
                   </p>
                 </div>
