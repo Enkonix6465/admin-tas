@@ -74,19 +74,7 @@ const Dashboard = () => {
       // Disable Firebase calls to prevent fetch errors
       throw new Error('Firebase disabled - using mock data');
 
-      const [projectsSnap, tasksSnap, teamsSnap, employeesSnap] = await Promise.race([
-        fetchData,
-        timeout
-      ]);
-
-      setProjects(
-        projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
-      setTasks(tasksSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setTeams(teamsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      setEmployees(
-        employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      );
+      // This code will never run due to the throw above
       setConnectionStatus('connected');
     } catch (error) {
       console.warn("Firebase connection failed, using mock data:", error);
