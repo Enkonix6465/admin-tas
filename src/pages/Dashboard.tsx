@@ -32,6 +32,7 @@ const Dashboard = () => {
   const [selectedProject, setSelectedProject] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'offline'>('connecting');
 
   useEffect(() => {
     fetchAllData();
