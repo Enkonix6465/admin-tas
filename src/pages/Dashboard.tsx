@@ -439,11 +439,11 @@ const Dashboard = () => {
                 <p className="text-xs font-medium text-gray-600 dark:text-yellow-300/90 mb-1">
                   Pending Tasks
                 </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400 bg-clip-text text-transparent">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {pendingTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-gradient-to-br from-yellow-500/20 to-orange-500/20 dark:from-yellow-500/30 dark:to-orange-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-yellow-500/20 dark:border-yellow-500/30">
+              <div className="p-3 bg-yellow-100 dark:bg-yellow-500/20 rounded-xl border border-yellow-200 dark:border-yellow-500/30">
                 <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
             </div>
