@@ -461,8 +461,9 @@ const KanbanPage = () => {
       >
         {/* Priority stripe */}
         <div className={`absolute top-0 left-0 w-full h-1 ${
-          task.priority === "high" ? "bg-red-500" :
-          task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+          task.priority === "high" ? "bg-gradient-to-r from-purple-500 to-red-500" :
+          task.priority === "medium" ? "bg-gradient-to-r from-purple-400 to-blue-400" :
+          "bg-gradient-to-r from-green-400 to-emerald-400"
         }`} />
 
         {/* Header */}
