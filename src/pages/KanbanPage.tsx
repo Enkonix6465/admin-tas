@@ -463,17 +463,21 @@ const KanbanPage = () => {
         }}
         className={`${getCardBgColor()} rounded-2xl border p-5 mb-4 hover:shadow-2xl dark:hover:shadow-cyan-500/25 transition-all duration-500 cursor-pointer group relative overflow-hidden backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] moving-border-subtle`}
       >
-        {/* Priority stripe */}
-        <div className={`absolute top-0 left-0 w-full h-1 ${
-          task.priority === "high" ? "bg-gradient-to-r from-purple-500 to-red-500" :
-          task.priority === "medium" ? "bg-gradient-to-r from-purple-400 to-blue-400" :
-          "bg-gradient-to-r from-green-400 to-emerald-400"
+        {/* Enhanced Priority stripe */}
+        <div className={`absolute top-0 left-0 w-full h-2 rounded-t-2xl ${
+          task.priority === "high" ? "bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 animate-pulse" :
+          task.priority === "medium" ? "bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" :
+          "bg-gradient-to-r from-green-500 via-emerald-500 to-lime-500"
         }`} />
+
+        {/* Floating glass orbs */}
+        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white/30 dark:bg-cyan-400/20 animate-pulse" />
+        <div className="absolute bottom-3 left-3 w-1 h-1 rounded-full bg-white/40 dark:bg-purple-400/30 animate-pulse" style={{animationDelay: '1s'}} />
 
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-purple-100 leading-tight mb-1">
+            <h4 className="text-sm font-bold text-gray-900 dark:text-slate-100 leading-tight mb-1 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors duration-300">
               {task.title}
             </h4>
             <div className="flex items-center gap-2">
@@ -502,7 +506,7 @@ const KanbanPage = () => {
         
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-700 dark:text-slate-300 mb-3 line-clamp-2 leading-relaxed">
             {task.description}
           </p>
         )}
@@ -514,10 +518,10 @@ const KanbanPage = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="mb-3"
           >
-            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
+            <div className="flex items-center justify-between text-xs text-gray-700 dark:text-slate-300 mb-2">
               <span className="font-medium">Progress</span>
               <motion.span
-                className="font-bold text-purple-600 dark:text-purple-400"
+                className="font-bold text-blue-600 dark:text-cyan-400"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
@@ -525,9 +529,14 @@ const KanbanPage = () => {
                 {task.progress}%
               </motion.span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-purple-900/30 rounded-full h-2 shadow-inner">
+            <div className="w-full bg-gray-200/60 dark:bg-slate-700/50 rounded-full h-2.5 shadow-inner backdrop-blur-sm">
               <motion.div
-                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full shadow-sm"
+                className={`h-2.5 rounded-full shadow-lg ${
+                  task.status === 'completed' ? 'bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500' :
+                  task.status === 'in_progress' ? 'bg-gradient-to-r from-blue-500 via-cyan-500 to-sky-500' :
+                  task.status === 'review' ? 'bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500' :
+                  'bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500'
+                }`}
                 initial={{ width: 0 }}
                 animate={{ width: `${task.progress}%` }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -550,7 +559,7 @@ const KanbanPage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-lg border border-blue-200 font-medium shadow-sm"
+                className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100/80 via-cyan-100/70 to-indigo-100/80 dark:from-blue-900/40 dark:via-cyan-900/30 dark:to-indigo-900/40 text-blue-700 dark:text-cyan-300 rounded-lg border border-blue-200/50 dark:border-cyan-400/30 font-medium shadow-sm backdrop-blur-sm"
               >
                 #{tag.trim()}
               </motion.span>
@@ -571,12 +580,12 @@ const KanbanPage = () => {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-slate-300">
           <div className="flex items-center gap-2">
             <img
               src={getEmployeeAvatar(task.assigned_to)}
               alt="avatar"
-              className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+              className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-600 shadow-lg ring-2 ring-white/50 dark:ring-slate-400/30"
             />
             <span className="font-medium">{getEmployeeName(task.assigned_to)}</span>
           </div>
