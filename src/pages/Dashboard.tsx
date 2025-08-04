@@ -749,65 +749,90 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
-          <div className="liquid-glass-card group">
-            <div className="px-8 py-6 border-b border-gray-200/50 dark:border-purple-500/30 relative">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Recent Tasks
-                </h2>
-                <button
-                  onClick={() => setShowAllTasks(!showAllTasks)}
-                  className="px-4 py-2 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200"
-                >
-                  {showAllTasks ? 'Show Less' : 'View All'}
-                </button>
-              </div>
-            </div>
-            <div className="p-8 space-y-5 max-h-96 overflow-y-auto custom-scrollbar">
-              {(showAllTasks ? recentTasks : recentTasks.slice(0, 3)).map((task: any, index: number) => (
-                <motion.div
-                  key={task.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/10 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-200 cursor-pointer"
-                >
-                  <div className="flex-shrink-0 mt-1">
-                    {task.status === "completed" ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                    ) : task.status === "in_progress" ? (
-                      <Circle className="w-5 h-5 text-blue-500" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-gray-400 dark:text-purple-400" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0 relative z-10">
-                    <p className="text-base font-medium text-gray-900 dark:text-white truncate mb-2">
-                      {task.title}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-purple-300/80 mb-2">
-                      Assigned to {getEmployeeName(task.assigned_to)}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-purple-300/60">
-                        Due: {task.due_date}
-                      </span>
-                      {task.priority && (
-                        <span className={`px-2 py-0.5 text-xs rounded-full border ${
-                          task.priority === 'critical'
-                            ? 'bg-red-500/10 text-red-600 border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30'
-                            : task.priority === 'high'
-                            ? 'bg-orange-500/10 text-orange-600 border-orange-500/20 dark:bg-orange-500/20 dark:text-orange-400 dark:border-orange-500/30'
-                            : 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30'
-                        }`}>
-                          {task.priority}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+          {/* Team Performance Chart */}
+          <div className="liquid-glass-card">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Team Performance Overview
+            </h3>
+            <div className="h-64">
+              <Bar
+                data={{
+                  labels: teams.map((team: any) => team.teamName),
+                  datasets: [
+                    {
+                      label: 'Completed Tasks',
+                      data: teams.map((team: any) => {
+                        const teamMembers = employees.filter((emp: any) => emp.team === team.teamName);
+                        const teamTasks = tasks.filter((task: any) =>
+                          teamMembers.some((member: any) => member.id === task.assigned_to) && task.status === 'completed'
+                        );
+                        return teamTasks.length;
+                      }),
+                      backgroundColor: 'rgba(52, 199, 89, 0.8)',
+                      borderColor: 'rgba(52, 199, 89, 1)',
+                      borderWidth: 1,
+                    },
+                    {
+                      label: 'In Progress Tasks',
+                      data: teams.map((team: any) => {
+                        const teamMembers = employees.filter((emp: any) => emp.team === team.teamName);
+                        const teamTasks = tasks.filter((task: any) =>
+                          teamMembers.some((member: any) => member.id === task.assigned_to) && task.status === 'in_progress'
+                        );
+                        return teamTasks.length;
+                      }),
+                      backgroundColor: 'rgba(255, 149, 0, 0.8)',
+                      borderColor: 'rgba(255, 149, 0, 1)',
+                      borderWidth: 1,
+                    },
+                    {
+                      label: 'Pending Tasks',
+                      data: teams.map((team: any) => {
+                        const teamMembers = employees.filter((emp: any) => emp.team === team.teamName);
+                        const teamTasks = tasks.filter((task: any) =>
+                          teamMembers.some((member: any) => member.id === task.assigned_to) && task.status === 'pending'
+                        );
+                        return teamTasks.length;
+                      }),
+                      backgroundColor: 'rgba(255, 59, 48, 0.8)',
+                      borderColor: 'rgba(255, 59, 48, 1)',
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
+                        padding: 15,
+                      },
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+                      },
+                      grid: {
+                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+                      },
+                      grid: {
+                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      },
+                    },
+                  },
+                }}
+              />
             </div>
           </div>
         </div>
