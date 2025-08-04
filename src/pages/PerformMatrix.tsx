@@ -502,16 +502,16 @@ export default function EmployeePerformancePage() {
                           </div>
                         </div>
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600 dark:text-purple-300/70">
                             {empTasks.length} tasks
                           </span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                          <span className="font-medium text-gray-900 dark:text-purple-100">
                             {completionRate.toFixed(0)}%
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                        <div className="w-full bg-gray-200 dark:bg-purple-900/30 rounded-full h-2 mt-2">
                           <div
-                            className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
                             style={{ width: `${completionRate}%` }}
                           ></div>
                         </div>
