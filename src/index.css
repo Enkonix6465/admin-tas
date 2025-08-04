@@ -27,25 +27,38 @@
   }
 
   .dark {
-    --background: 240 25% 8%;
+    --background: 240 25% 6%;
     --foreground: 240 20% 98%;
-    --card: 240 20% 12%;
-    --card-foreground: 240 15% 95%;
-    --popover: 240 20% 10%;
-    --popover-foreground: 240 15% 95%;
-    --primary: 262 80% 60%;
+    --card: 240 20% 8%;
+    --card-foreground: 240 15% 96%;
+    --popover: 240 20% 8%;
+    --popover-foreground: 240 15% 96%;
+    --primary: 262 85% 58%;
     --primary-foreground: 240 20% 98%;
-    --secondary: 240 15% 18%;
-    --secondary-foreground: 240 15% 90%;
-    --muted: 240 15% 16%;
-    --muted-foreground: 240 10% 70%;
-    --accent: 270 70% 65%;
+    --secondary: 240 15% 15%;
+    --secondary-foreground: 240 15% 92%;
+    --muted: 240 15% 12%;
+    --muted-foreground: 240 10% 75%;
+    --accent: 270 75% 62%;
     --accent-foreground: 240 20% 98%;
-    --destructive: 0 75% 55%;
+    --destructive: 0 78% 60%;
     --destructive-foreground: 240 20% 98%;
-    --border: 240 15% 20%;
-    --input: 240 15% 16%;
-    --ring: 262 80% 60%;
+    --border: 240 15% 18%;
+    --input: 240 15% 12%;
+    --ring: 262 85% 58%;
+
+    /* Custom Dark Theme Variables */
+    --gradient-bg: linear-gradient(135deg, #0f1129 0%, #1a1b3a 25%, #232447 50%, #2d1b69 75%, #8b5cf6 100%);
+    --card-bg: linear-gradient(145deg, rgba(15, 17, 41, 0.95) 0%, rgba(26, 27, 58, 0.9) 50%, rgba(35, 36, 71, 0.85) 100%);
+    --sidebar-bg: linear-gradient(180deg, rgba(15, 17, 41, 0.98) 0%, rgba(26, 27, 58, 0.95) 100%);
+    --header-bg: linear-gradient(90deg, rgba(15, 17, 41, 0.95) 0%, rgba(26, 27, 58, 0.9) 100%);
+    --accent-purple: #8b5cf6;
+    --accent-blue: #3b82f6;
+    --accent-pink: #ec4899;
+    --accent-cyan: #06b6d4;
+    --glow-purple: rgba(139, 92, 246, 0.3);
+    --glow-blue: rgba(59, 130, 246, 0.3);
+    --text-glow: 0 0 20px rgba(139, 92, 246, 0.5);
   }
 }
 
