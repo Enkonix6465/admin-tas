@@ -404,18 +404,18 @@ const Dashboard = () => {
           >
             <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-purple-300/90 mb-1">
+                <p className="text-sm font-medium text-gray-600 dark:text-purple-300/90 mb-2">
                   Total Projects
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                <p className="text-3xl font-bold text-gray-900 dark:text-white">
                   {projects.length}
                 </p>
               </div>
-              <div className="p-3 bg-purple-100 dark:bg-purple-500/20 rounded-xl border border-purple-200 dark:border-purple-500/30">
-                <Briefcase className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <div className="p-4 bg-purple-100 dark:bg-purple-500/20 rounded-xl border border-purple-200 dark:border-purple-500/30">
+                <Briefcase className="w-7 h-7 text-purple-600 dark:text-purple-400" />
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs relative z-10">
+            <div className="mt-4 flex items-center text-sm relative z-10">
               <div className="flex items-center px-2 py-1 bg-green-500/10 dark:bg-green-500/20 rounded-full border border-green-500/20 dark:border-green-500/30">
                 <TrendingUp className="w-3 h-3 text-green-500 mr-1" />
                 <span className="text-green-600 dark:text-green-400 font-medium">
