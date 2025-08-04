@@ -399,7 +399,7 @@ export default function ProjectDashboard() {
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-full border">
+                            <span className="text-xs font-bold bg-stone-100/80 dark:bg-gray-700/80 text-stone-600 dark:text-gray-300 px-3 py-1 rounded-full border border-stone-200/50 dark:border-gray-600/50 backdrop-blur-sm">
                               #{index + 1}
                             </span>
                             <span className={`text-xs px-2 py-1 rounded-full font-medium ${
