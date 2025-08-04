@@ -524,7 +524,7 @@ const Dashboard = () => {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Projects List */}
-          <div className="lg:col-span-2">
+          <div className="xl:col-span-2">
             <div className="liquid-glass-card group">
               <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30 relative">
                 <div className="flex items-center justify-between relative z-10">
