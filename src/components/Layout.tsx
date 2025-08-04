@@ -100,11 +100,11 @@ function Layout() {
 
 
   return (
-    <div className="min-h-screen h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex overflow-hidden">
-      {/* Minimal Sidebar */}
+    <div className="min-h-screen h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:bg-gradient-to-br dark:from-[#0f1129] dark:via-[#1a1b3a] dark:to-[#2d1b69] flex overflow-hidden">
+      {/* Compact Sidebar */}
       <div className={`${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[200px] bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-300 ease-in-out flex flex-col`}>
+      } md:translate-x-0 fixed md:static inset-y-0 left-0 z-50 w-[180px] bg-white/95 dark:bg-gradient-to-b dark:from-[rgba(15,17,41,0.98)] dark:to-[rgba(26,27,58,0.95)] backdrop-blur-xl border-r border-gray-200 dark:border-purple-500/20 shadow-2xl dark:shadow-purple-500/20 transition-all duration-300 ease-in-out flex flex-col`}>
 
         {/* Minimal Header */}
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-700">
