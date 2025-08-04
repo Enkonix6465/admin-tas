@@ -96,7 +96,7 @@ export function LoginForm({
 
         <CardContent className="grid p-0 md:grid-cols-2 min-h-[650px]">
           {/* Left Side - Login Form */}
-          <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-white/95 to-white/90 dark:from-gray-900/95 dark:to-gray-800/90 backdrop-blur-2xl relative rounded-l-3xl">
+          <div className="p-8 md:p-12 flex flex-col justify-center bg-gradient-to-br from-white/95 to-white/90 dark:from-slate-900/95 dark:to-slate-800/90 backdrop-blur-2xl relative rounded-l-3xl">
             {/* Enhanced background glass elements */}
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-16 right-8 w-16 h-16 bg-gradient-to-br from-purple-200/30 to-indigo-200/30 dark:from-purple-800/30 dark:to-indigo-800/30 rounded-3xl backdrop-blur-sm animate-pulse shadow-xl"></div>
