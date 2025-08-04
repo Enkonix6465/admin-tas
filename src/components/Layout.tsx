@@ -186,17 +186,17 @@ function Layout() {
                 <ChevronDown className={`w-3 h-3 transition-transform ${expandedSections.dashboard ? 'rotate-0' : '-rotate-90'}`} />
               </button>
               {expandedSections.dashboard && (
-                <div className="ml-5 mt-1 space-y-1">
+                <div className="ml-4 mt-1 space-y-0.5">
                   <Link
                     to="/"
                     onClick={closeSidebar}
-                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                    className={`flex items-center gap-2 px-2 py-1 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
                       isActive("/")
-                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
-                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                        ? "bg-purple-50 dark:bg-purple-500/30 text-purple-700 dark:text-purple-200 font-medium shadow-sm dark:shadow-purple-500/20"
+                        : "text-gray-600 dark:text-purple-300 hover:bg-gray-100 dark:hover:bg-purple-500/15 hover:text-gray-900 dark:hover:text-purple-200"
                     }`}
                   >
-                    <Grid3X3 className="w-4 h-4" />
+                    <Grid3X3 className="w-3 h-3" />
                     Overview
                   </Link>
                   <Link
