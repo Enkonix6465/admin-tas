@@ -880,34 +880,35 @@ export default function EmployeePerformancePage() {
 
 const StatCard = ({ label, value, icon: Icon, color = "blue", subtitle }) => {
   const colorMap = {
-    blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/20",
-    green: "bg-green-100 text-green-600 dark:bg-green-900/20",
-    yellow: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20",
-    red: "bg-red-100 text-red-600 dark:bg-red-900/20",
+    blue: "bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30",
+    green: "bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/30",
+    yellow: "bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/30",
+    red: "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30",
   };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+      transition={{ delay: 0.1 }}
+      className="liquid-glass-stats group cursor-pointer"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between relative z-10">
         <div>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <p className="text-sm font-medium text-gray-600 dark:text-purple-300/90 mb-2">
             {label}
           </p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {value}
           </p>
           {subtitle && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs text-gray-500 dark:text-purple-300/70 mt-1">
               {subtitle}
             </p>
           )}
         </div>
-        <div className={`p-3 rounded-lg ${colorMap[color]}`}>
-          <Icon className="w-6 h-6" />
+        <div className={`p-4 rounded-xl ${colorMap[color]}`}>
+          <Icon className="w-7 h-7" />
         </div>
       </div>
     </motion.div>
