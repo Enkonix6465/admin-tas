@@ -42,6 +42,7 @@ import {
   Star,
   Zap,
   Trophy,
+  Search,
 } from "lucide-react";
 
 export default function EmployeePerformancePage() {
@@ -313,21 +314,94 @@ export default function EmployeePerformancePage() {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
-      <PageHeader
-        title="Performance Matrix"
-        subtitle={selectedEmployee ? `• ${selectedEmployee.name}` : ""}
-        status="Active"
-        statusColor="bg-green-100 text-green-700"
-        tabs={tabs}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchPlaceholder="Search employees..."
-        showFilters={false}
-      />
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+      {/* Header */}
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
+              Performance Matrix
+            </h1>
+            <span className="px-3 py-1 text-xs rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+              Live Analytics
+            </span>
+            {selectedEmployee && (
+              <span className="px-3 py-1 text-xs rounded-full font-medium bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30">
+                {selectedEmployee.name}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                if (selectedEmployee && performanceData) {
+                  const exportData = {
+                    employee: selectedEmployee,
+                    performance: performanceData,
+                    bestDay: bestDay,
+                    trends: performanceTrends,
+                    qualityProductivity: qualityProductivityData,
+                    exportDate: new Date().toISOString()
+                  };
+
+                  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `performance-${selectedEmployee.name?.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                  URL.revokeObjectURL(url);
+                  toast.success(`Performance report exported for ${selectedEmployee.name}! 📊`);
+                }
+              }}
+              disabled={!selectedEmployee}
+              className="px-4 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Download className="w-4 h-4 mr-2 inline" />
+              Export
+            </button>
+            <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
+              Generate Report
+            </button>
+          </div>
+        </div>
+
+        {/* Search and Best Day Info */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 border-b-2 border-purple-500 pb-2">
+              <BarChart3 className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span className="text-base font-medium text-purple-600 dark:text-purple-400">Performance Analytics</span>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
+              <input
+                type="text"
+                placeholder="Search employees..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-full sm:w-48"
+              />
+            </div>
+            {bestDay && (
+              <div className="flex items-center gap-2 px-3 py-2 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/30 rounded-lg text-sm">
+                <Star className="w-4 h-4" />
+                <span className="font-medium">Best Day: {bestDay.day}</span>
+                <span className="text-xs">({bestDay.performance?.toFixed(1)}%)</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Actions Bar */}
-      <div className="px-6 py-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+      <div className="px-6 py-3 liquid-glass border-b border-gray-200 dark:border-purple-500/30 flex justify-between items-center">
         <div className="flex items-center gap-4">
           {bestDay && (
             <div className="flex items-center gap-2 text-sm">
@@ -372,21 +446,24 @@ export default function EmployeePerformancePage() {
 
       <div className="flex-1 overflow-hidden flex">
         {/* Employee Sidebar */}
-        <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <div className="w-80 border-r border-gray-200 dark:border-purple-500/30 liquid-glass flex flex-col">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-purple-100">
               Team Members
             </h2>
+            <p className="text-sm text-gray-500 dark:text-purple-300/70 mt-1">
+              Select a member to view analytics
+            </p>
           </div>
-          
-          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+
+          <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
             {filteredEmployees.map((team) => (
               <div key={team.teamId}>
                 <div className="mb-3">
-                  <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-purple-100 mb-1">
                     {team.teamName}
                   </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500 dark:text-purple-300/70">
                     Lead: {team.teamLead}
                   </p>
                 </div>
@@ -402,10 +479,10 @@ export default function EmployeePerformancePage() {
                         key={emp.id}
                         whileHover={{ scale: 1.02 }}
                         onClick={() => setSelectedEmployee(emp)}
-                        className={`p-3 rounded-lg cursor-pointer border transition-all ${
+                        className={`p-4 rounded-xl cursor-pointer border transition-all duration-300 ${
                           selectedEmployee?.id === emp.id
-                            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                            : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                            ? "border-purple-500 bg-purple-50 dark:bg-purple-500/20 shadow-lg dark:shadow-purple-500/20"
+                            : "border-gray-200 dark:border-purple-500/20 hover:border-purple-300 dark:hover:border-purple-500/40 hover:bg-gray-50 dark:hover:bg-purple-500/10 hover:shadow-md dark:hover:shadow-purple-500/10"
                         }`}
                       >
                         <div className="flex items-center gap-3 mb-2">
@@ -417,25 +494,25 @@ export default function EmployeePerformancePage() {
                             className="w-8 h-8 rounded-full"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
+                            <p className="font-medium text-gray-900 dark:text-purple-100 text-sm truncate">
                               {emp.name}
                             </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            <p className="text-xs text-gray-500 dark:text-purple-300/70 truncate">
                               {emp.department}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-gray-600 dark:text-gray-400">
+                          <span className="text-gray-600 dark:text-purple-300/70">
                             {empTasks.length} tasks
                           </span>
-                          <span className="font-medium text-gray-900 dark:text-gray-100">
+                          <span className="font-medium text-gray-900 dark:text-purple-100">
                             {completionRate.toFixed(0)}%
                           </span>
                         </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 mt-2">
+                        <div className="w-full bg-gray-200 dark:bg-purple-900/30 rounded-full h-2 mt-2">
                           <div
-                            className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-500"
                             style={{ width: `${completionRate}%` }}
                           ></div>
                         </div>
@@ -453,35 +530,45 @@ export default function EmployeePerformancePage() {
           {selectedEmployee ? (
             <div className="p-6 space-y-6">
               {/* Employee Header */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="liquid-glass-card group"
+              >
                 <div className="flex items-center gap-4">
-                  <img
-                    src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                      selectedEmployee.name || selectedEmployee.email
-                    )}`}
-                    alt="avatar"
-                    className="w-16 h-16 rounded-full"
-                  />
+                  <div className="relative">
+                    <img
+                      src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                        selectedEmployee.name || selectedEmployee.email
+                      )}`}
+                      alt="avatar"
+                      className="w-16 h-16 rounded-full border-2 border-purple-200 dark:border-purple-500/30"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <Award className="w-3 h-3 text-white" />
+                    </div>
+                  </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-purple-100">
                       {selectedEmployee.name}
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400">
+                    <p className="text-gray-600 dark:text-purple-300/80">
                       {selectedEmployee.department}
                     </p>
-                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-4 mt-2 text-sm text-gray-500 dark:text-purple-300/70">
                       <div className="flex items-center gap-1">
                         <User className="w-4 h-4" />
                         Employee ID: {selectedEmployee.id.slice(-6)}
                       </div>
                       <div className="flex items-center gap-1">
-                        <CheckCircle className="w-4 h-4" />
-                        Performance Score: {performanceData.totalPerformanceScore}%
+                        <Trophy className="w-4 h-4 text-purple-500" />
+                        Performance Score: <span className="font-bold text-purple-600 dark:text-purple-400">{performanceData.totalPerformanceScore}%</span>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -516,9 +603,9 @@ export default function EmployeePerformancePage() {
               {/* Enhanced Charts */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Performance Trends (Last 30 Days) */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Performance Trends (Last 30 Days)
                     </h3>
                     <div className="flex items-center gap-1">
@@ -553,9 +640,9 @@ export default function EmployeePerformancePage() {
                 </div>
 
                 {/* Quality vs Productivity Matrix */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                       Quality vs Productivity Matrix
                     </h3>
                     <div className="flex items-center gap-1">
@@ -608,8 +695,8 @@ export default function EmployeePerformancePage() {
                 </div>
 
                 {/* Monthly Performance Radar */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                <div className="liquid-glass-card">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Monthly Performance Overview
                   </h3>
                   <ResponsiveContainer width="100%" height={300}>
@@ -639,8 +726,8 @@ export default function EmployeePerformancePage() {
                 </div>
 
                 {/* Daily Activity Trends */}
-                <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+                <div className="liquid-glass-card">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                     Daily Activity Trends
                   </h3>
                   <ResponsiveContainer width="100%" height={300}>
@@ -675,9 +762,9 @@ export default function EmployeePerformancePage() {
               </div>
 
               {/* Task Details Table */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <div className="liquid-glass-card overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Task Details
                   </h3>
                 </div>
@@ -794,34 +881,35 @@ export default function EmployeePerformancePage() {
 
 const StatCard = ({ label, value, icon: Icon, color = "blue", subtitle }) => {
   const colorMap = {
-    blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/20",
-    green: "bg-green-100 text-green-600 dark:bg-green-900/20",
-    yellow: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/20",
-    red: "bg-red-100 text-red-600 dark:bg-red-900/20",
+    blue: "bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30",
+    green: "bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/30",
+    yellow: "bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/30",
+    red: "bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/30",
   };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6"
+      transition={{ delay: 0.1 }}
+      className="liquid-glass-stats group cursor-pointer"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between relative z-10">
         <div>
-          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <p className="text-sm font-medium text-gray-600 dark:text-purple-300/90 mb-2">
             {label}
           </p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <p className="text-3xl font-bold text-gray-900 dark:text-white">
             {value}
           </p>
           {subtitle && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs text-gray-500 dark:text-purple-300/70 mt-1">
               {subtitle}
             </p>
           )}
         </div>
-        <div className={`p-3 rounded-lg ${colorMap[color]}`}>
-          <Icon className="w-6 h-6" />
+        <div className={`p-4 rounded-xl ${colorMap[color]}`}>
+          <Icon className="w-7 h-7" />
         </div>
       </div>
     </motion.div>

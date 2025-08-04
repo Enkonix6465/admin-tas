@@ -128,21 +128,21 @@ function Projects() {
     });
 
   return (
-    <div className="p-6">
+    <div className="h-full bg-gray-50 dark:bg-transparent p-6">
       <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-xl font-bold">Projects</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-purple-100">Projects</h1>
           <input
             type="text"
             placeholder="Search Projects..."
-            className="mt-2 border px-3 py-1 rounded w-full"
+            className="mt-2 border border-gray-200 dark:border-purple-500/30 px-3 py-2 rounded-lg bg-white dark:bg-purple-500/20 text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 w-full"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className="flex gap-4 items-end">
           <select
-            className="border px-2 py-1 rounded"
+            className="border border-gray-200 dark:border-purple-500/30 px-3 py-2 rounded-lg bg-white dark:bg-purple-500/20 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as "deadline" | "status")}
           >
@@ -150,7 +150,7 @@ function Projects() {
             <option value="status">Sort by Name</option>
           </select>
           <button
-            className="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="flex items-center bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105"
             onClick={() => {
               setEditingProject(null);
               setFormData({
@@ -172,26 +172,26 @@ function Projects() {
         {sortedProjects.map((project: any) => {
           const team = teams.find((t) => t.id === project.teamId);
           return (
-            <div key={project.id} className="p-6 bg-white rounded shadow">
-              <h2 className="font-semibold text-lg">{project.name}</h2>
-              <p className="text-sm text-gray-500">{project.description}</p>
-              <p className="text-sm text-gray-500 mt-1">
+            <div key={project.id} className="liquid-glass-card group hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <h2 className="font-semibold text-lg text-gray-900 dark:text-purple-100">{project.name}</h2>
+              <p className="text-sm text-gray-500 dark:text-purple-300/80">{project.description}</p>
+              <p className="text-sm text-gray-500 dark:text-purple-300/80 mt-1">
                 Team: {team?.teamName || "N/A"}
               </p>
               {team?.members && (
-                <ul className="text-xs text-gray-500 list-disc ml-4 mt-1 max-h-20 overflow-auto">
+                <ul className="text-xs text-gray-500 dark:text-purple-300/70 list-disc ml-4 mt-1 max-h-20 overflow-auto custom-scrollbar">
                   {team.members.map((member: string, idx: number) => (
                     <li key={idx}>{getEmployeeName(member)}</li>
                   ))}
                 </ul>
               )}
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-purple-300/80">
                 Start: {project.startDate}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-purple-300/80">
                 Deadline: {project.deadline}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-gray-400 dark:text-purple-300/60 mt-1">
                 Created by: {getEmployeeNameById(project.created_by)}
               </p>
               <div className="mt-3 flex justify-end space-x-2">
@@ -209,13 +209,13 @@ function Projects() {
                         });
                         setShowModal(true);
                       }}
-                      className="text-blue-600 hover:text-blue-800"
+                      className="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors p-2 rounded hover:bg-purple-100 dark:hover:bg-purple-500/20"
                     >
                       <Edit2 className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => deleteProject.mutate(project.id)}
-                      className="text-red-600 hover:text-red-800"
+                      className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 transition-colors p-2 rounded hover:bg-red-100 dark:hover:bg-red-500/20"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>

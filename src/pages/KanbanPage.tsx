@@ -65,79 +65,198 @@ const KanbanPage = () => {
   useEffect(() => {
     const unsubscribers: any[] = [];
     let mounted = true;
+    let connectionTimeout: NodeJS.Timeout;
+    let hasConnected = false;
 
-    const setupRealtimeListeners = async () => {
+    // Enhanced mock data for better testing
+    const getMockTasks = () => [
+      {
+        id: "mock-task-1",
+        title: "Design System Enhancement",
+        description: "Update the design system components with new branding guidelines and color schemes",
+        status: "pending",
+        progress_status: "pending",
+        priority: "high",
+        assigned_to: "mock-user",
+        due_date: "2024-02-15",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "design,urgent,ui",
+        progress: 0,
+        comments: []
+      },
+      {
+        id: "mock-task-2",
+        title: "Payment API Integration",
+        description: "Integrate third-party payment API for checkout flow with enhanced security",
+        status: "in_progress",
+        progress_status: "in_progress",
+        priority: "high",
+        assigned_to: "mock-user-2",
+        due_date: "2024-02-20",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "backend,api,security",
+        progress: 65,
+        comments: [{ id: 1, text: "Working on authentication flow" }]
+      },
+      {
+        id: "mock-task-3",
+        title: "User Experience Testing",
+        description: "Conduct comprehensive user testing for the new dashboard interface",
+        status: "review",
+        progress_status: "review",
+        priority: "medium",
+        assigned_to: "mock-user-3",
+        due_date: "2024-02-18",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "testing,ux,analytics",
+        progress: 90,
+        comments: [{ id: 1, text: "Initial feedback looks positive" }]
+      },
+      {
+        id: "mock-task-4",
+        title: "API Documentation Update",
+        description: "Update comprehensive API documentation with new endpoints and examples",
+        status: "completed",
+        progress_status: "completed",
+        priority: "low",
+        assigned_to: "mock-user",
+        due_date: "2024-02-10",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "docs,api",
+        progress: 100,
+        comments: []
+      },
+      {
+        id: "mock-task-5",
+        title: "Performance Optimization",
+        description: "Optimize application performance and reduce bundle size",
+        status: "in_progress",
+        progress_status: "in_progress",
+        priority: "medium",
+        assigned_to: "mock-user-2",
+        due_date: "2024-02-25",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "performance,optimization",
+        progress: 35,
+        comments: []
+      }
+    ];
+
+    const getMockProjects = () => [
+      {
+        id: "mock-project-1",
+        name: "Website Redesign",
+        description: "Complete website redesign project with modern UI",
+        color: "#3b82f6"
+      },
+      {
+        id: "mock-project-2",
+        name: "Mobile Application",
+        description: "iOS and Android app development",
+        color: "#10b981"
+      },
+      {
+        id: "mock-project-3",
+        name: "Analytics Dashboard",
+        description: "Real-time analytics and reporting dashboard",
+        color: "#f59e0b"
+      }
+    ];
+
+    const getMockEmployees = () => [
+      {
+        id: "mock-user",
+        name: "Alice Johnson",
+        email: "alice@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+        role: "Senior Designer"
+      },
+      {
+        id: "mock-user-2",
+        name: "Bob Smith",
+        email: "bob@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+        role: "Full Stack Developer"
+      },
+      {
+        id: "mock-user-3",
+        name: "Carol Davis",
+        email: "carol@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol",
+        role: "QA Engineer"
+      },
+      {
+        id: "mock-user-4",
+        name: "David Wilson",
+        email: "david@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+        role: "Product Manager"
+      }
+    ];
+
+    const setupFirebaseWithTimeout = async () => {
+      try {
+        // Set a timeout for Firebase connection
+        connectionTimeout = setTimeout(() => {
+          if (!hasConnected && mounted) {
+            console.warn("Firebase connection timeout - switching to offline mode");
+            toast.error("Connection timeout - using offline mode");
+            loadMockData();
+          }
+        }, 3000); // 3 second timeout
+
+        // Test Firebase connection with a simple operation
+        const testConnection = async () => {
+          try {
+            // Try to get a simple document to test connection
+            await collection(db, "tasks");
+            hasConnected = true;
+            clearTimeout(connectionTimeout);
+
+            if (mounted) {
+              setupRealtimeListeners();
+            }
+          } catch (error) {
+            throw error;
+          }
+        };
+
+        await testConnection();
+
+      } catch (error) {
+        console.error("Firebase connection failed:", error);
+        if (mounted) {
+          toast.error("Firebase connection failed - using offline mode");
+          loadMockData();
+        }
+      }
+    };
+
+    const loadMockData = () => {
+      if (mounted) {
+        setTasks(getMockTasks());
+        setProjects(getMockProjects());
+        setEmployees(getMockEmployees());
+        setLoading(false);
+      }
+    };
+
+    const setupRealtimeListeners = () => {
       try {
         const tasksUnsub = onSnapshot(
           collection(db, "tasks"),
           (snapshot) => {
             if (mounted) {
+              hasConnected = true;
               setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
               setLoading(false);
             }
           },
           (error) => {
             console.warn("Tasks listener error:", error);
-            toast.error("Failed to load tasks data");
+            toast.error("Tasks data connection lost - using cached data");
             if (mounted) {
-              setTasks([
-                {
-                  id: "mock-task-1",
-                  title: "Design System Update",
-                  description: "Update the design system components with new branding guidelines",
-                  status: "pending",
-                  progress_status: "pending",
-                  priority: "high",
-                  assigned_to: "mock-user",
-                  due_date: "2024-02-15",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "design,urgent",
-                  progress: 0,
-                  comments: []
-                },
-                {
-                  id: "mock-task-2",
-                  title: "API Integration",
-                  description: "Integrate third-party payment API for checkout flow",
-                  status: "in_progress",
-                  progress_status: "in_progress",
-                  priority: "high",
-                  assigned_to: "mock-user-2",
-                  due_date: "2024-02-20",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "backend,api",
-                  progress: 65,
-                  comments: [{ id: 1, text: "Working on authentication" }]
-                },
-                {
-                  id: "mock-task-3",
-                  title: "User Testing",
-                  description: "Conduct user testing for the new dashboard interface",
-                  status: "review",
-                  progress_status: "review",
-                  priority: "medium",
-                  assigned_to: "mock-user-3",
-                  due_date: "2024-02-18",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "testing,ux",
-                  progress: 90,
-                  comments: []
-                },
-                {
-                  id: "mock-task-4",
-                  title: "Documentation Update",
-                  description: "Update API documentation with new endpoints",
-                  status: "completed",
-                  progress_status: "completed",
-                  priority: "low",
-                  assigned_to: "mock-user",
-                  due_date: "2024-02-10",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "docs",
-                  progress: 100,
-                  comments: []
-                }
-              ]);
+              setTasks(getMockTasks());
               setLoading(false);
             }
           }
@@ -153,20 +272,7 @@ const KanbanPage = () => {
           (error) => {
             console.warn("Projects listener error:", error);
             if (mounted) {
-              setProjects([
-                {
-                  id: "mock-project-1",
-                  name: "Website Redesign",
-                  description: "Complete website redesign project",
-                  color: "#3b82f6"
-                },
-                {
-                  id: "mock-project-2",
-                  name: "Mobile App",
-                  description: "iOS and Android app development",
-                  color: "#10b981"
-                }
-              ]);
+              setProjects(getMockProjects());
             }
           }
         );
@@ -181,29 +287,7 @@ const KanbanPage = () => {
           (error) => {
             console.warn("Employees listener error:", error);
             if (mounted) {
-              setEmployees([
-                {
-                  id: "mock-user",
-                  name: "Alice Johnson",
-                  email: "alice@example.com",
-                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
-                  role: "Designer"
-                },
-                {
-                  id: "mock-user-2",
-                  name: "Bob Smith",
-                  email: "bob@example.com",
-                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
-                  role: "Developer"
-                },
-                {
-                  id: "mock-user-3",
-                  name: "Carol Davis",
-                  email: "carol@example.com",
-                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol",
-                  role: "QA Engineer"
-                }
-              ]);
+              setEmployees(getMockEmployees());
             }
           }
         );
@@ -211,21 +295,25 @@ const KanbanPage = () => {
         unsubscribers.push(tasksUnsub, projectsUnsub, employeesUnsub);
       } catch (error) {
         console.error("Failed to setup Firebase listeners:", error);
-        toast.error("Connection error - using offline mode");
-
         if (mounted) {
-          setTasks([]);
-          setProjects([]);
-          setEmployees([]);
-          setLoading(false);
+          toast.error("Connection error - using offline mode");
+          loadMockData();
         }
       }
     };
 
-    setupRealtimeListeners();
+    // Start the connection process
+    setupFirebaseWithTimeout();
 
     return () => {
       mounted = false;
+
+      // Clear connection timeout
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout);
+      }
+
+      // Unsubscribe from Firebase listeners
       unsubscribers.forEach(unsub => {
         try {
           unsub();
@@ -280,40 +368,44 @@ const KanbanPage = () => {
       id: "pending",
       title: "📋 Backlog",
       status: "pending",
-      color: "from-slate-50 to-slate-100",
-      borderColor: "border-slate-200",
-      iconColor: "text-slate-500",
-      bgColor: "bg-slate-50",
+      color: "from-slate-100/90 via-purple-100/80 to-indigo-100/90",
+      borderColor: "border-purple-300/40 dark:border-purple-400/30",
+      iconColor: "text-purple-600 dark:text-purple-400",
+      bgColor: "bg-gradient-to-br from-purple-50/40 via-slate-50/50 to-purple-100/40 dark:from-purple-900/20 dark:via-slate-800/30 dark:to-purple-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-purple-900/30 dark:via-slate-800/40 dark:to-indigo-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "pending" || t.progress_status === "pending"),
     },
     {
-      id: "in_progress", 
+      id: "in_progress",
       title: "🚀 In Progress",
       status: "in_progress",
-      color: "from-blue-50 to-blue-100",
-      borderColor: "border-blue-200",
-      iconColor: "text-blue-500",
-      bgColor: "bg-blue-50",
+      color: "from-blue-100/90 via-cyan-100/80 to-teal-100/90",
+      borderColor: "border-blue-300/40 dark:border-cyan-400/30",
+      iconColor: "text-blue-600 dark:text-cyan-400",
+      bgColor: "bg-gradient-to-br from-blue-50/40 via-cyan-50/50 to-teal-100/40 dark:from-blue-900/20 dark:via-cyan-800/30 dark:to-teal-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-blue-900/30 dark:via-cyan-800/40 dark:to-teal-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "in_progress" || t.progress_status === "in_progress"),
     },
     {
       id: "review",
       title: "👀 Review",
       status: "review",
-      color: "from-amber-50 to-amber-100",
-      borderColor: "border-amber-200",
-      iconColor: "text-amber-500",
-      bgColor: "bg-amber-50",
+      color: "from-amber-100/90 via-yellow-100/80 to-orange-100/90",
+      borderColor: "border-amber-300/40 dark:border-yellow-400/30",
+      iconColor: "text-amber-600 dark:text-yellow-400",
+      bgColor: "bg-gradient-to-br from-amber-50/40 via-yellow-50/50 to-orange-100/40 dark:from-amber-900/20 dark:via-yellow-800/30 dark:to-orange-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-amber-900/30 dark:via-yellow-800/40 dark:to-orange-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "review" || t.status === "testing" || t.progress_status === "review"),
     },
     {
       id: "completed",
       title: "✅ Done",
       status: "completed",
-      color: "from-emerald-50 to-emerald-100",
-      borderColor: "border-emerald-200",
-      iconColor: "text-emerald-500",
-      bgColor: "bg-emerald-50",
+      color: "from-emerald-100/90 via-green-100/80 to-teal-100/90",
+      borderColor: "border-emerald-300/40 dark:border-green-400/30",
+      iconColor: "text-emerald-600 dark:text-green-400",
+      bgColor: "bg-gradient-to-br from-emerald-50/40 via-green-50/50 to-teal-100/40 dark:from-emerald-900/20 dark:via-green-800/30 dark:to-teal-800/20",
+      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-emerald-900/30 dark:via-green-800/40 dark:to-teal-900/30",
       tasks: filteredTasks.filter((t: any) => t.status === "completed" || t.progress_status === "completed"),
     },
   ];
@@ -329,7 +421,8 @@ const KanbanPage = () => {
         throw new Error("Database connection not available");
       }
 
-      await addDoc(collection(db, "tasks"), {
+      // Add timeout for Firebase operation
+      const addTaskPromise = addDoc(collection(db, "tasks"), {
         ...newTaskForm,
         status: newTaskColumn || "pending",
         progress_status: newTaskColumn || "pending",
@@ -339,6 +432,12 @@ const KanbanPage = () => {
         progress: 0,
         comments: [],
       });
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Operation timeout')), 5000)
+      );
+
+      await Promise.race([addTaskPromise, timeoutPromise]);
 
       toast.success("Task created successfully! 🎉");
       setNewTaskForm({
@@ -354,7 +453,14 @@ const KanbanPage = () => {
       setNewTaskColumn("");
     } catch (error: any) {
       console.error("Error adding task:", error);
-      toast.error(`Failed to add task: ${error.message || 'Unknown error'}`);
+
+      if (error.message.includes('timeout') || error.message.includes('Failed to fetch')) {
+        toast.error("Connection timeout - task not saved. Please try again.");
+      } else {
+        toast.error(`Failed to add task: ${error.message || 'Connection error'}`);
+      }
+
+      // Don't close modal on error so user can retry
     }
   };
 
@@ -364,17 +470,29 @@ const KanbanPage = () => {
         throw new Error("Database connection not available");
       }
 
-      await updateDoc(doc(db, "tasks", task.id), {
+      // Add timeout for Firebase operation
+      const updateTaskPromise = updateDoc(doc(db, "tasks", task.id), {
         status: newStatus,
         progress_status: newStatus,
         progress_updated_at: Timestamp.now(),
         progress: newStatus === "completed" ? 100 : task.progress || 0,
       });
 
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Operation timeout')), 5000)
+      );
+
+      await Promise.race([updateTaskPromise, timeoutPromise]);
+
       toast.success(`Task moved to ${newStatus.replace('_', ' ')} 📈`);
     } catch (error: any) {
       console.error("Error updating task:", error);
-      toast.error(`Failed to update task: ${error.message || 'Unknown error'}`);
+
+      if (error.message.includes('timeout') || error.message.includes('Failed to fetch')) {
+        toast.error("Connection timeout - task status not updated. Please try again.");
+      } else {
+        toast.error(`Failed to update task: ${error.message || 'Connection error'}`);
+      }
     }
   };
 
@@ -426,17 +544,17 @@ const KanbanPage = () => {
     const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "completed";
 
     const getCardBgColor = () => {
-      if (isOverdue) return 'bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-red-200 dark:border-red-700';
+      if (isOverdue) return 'enhanced-glass-card border-red-300/40 dark:border-red-400/50 bg-gradient-to-br from-red-50/70 via-pink-50/60 to-rose-50/70 dark:from-red-900/30 dark:via-pink-900/40 dark:to-rose-900/30';
 
       switch (task.status) {
         case 'completed':
-          return 'bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-700';
+          return 'enhanced-glass-card border-emerald-300/40 dark:border-green-400/50 bg-gradient-to-br from-emerald-50/70 via-green-50/60 to-teal-50/70 dark:from-emerald-900/30 dark:via-green-900/40 dark:to-teal-900/30';
         case 'in_progress':
-          return 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-700';
+          return 'enhanced-glass-card border-blue-300/40 dark:border-cyan-400/50 bg-gradient-to-br from-blue-50/70 via-cyan-50/60 to-sky-50/70 dark:from-blue-900/30 dark:via-cyan-900/40 dark:to-sky-900/30';
         case 'review':
-          return 'bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-yellow-200 dark:border-yellow-700';
+          return 'enhanced-glass-card border-amber-300/40 dark:border-yellow-400/50 bg-gradient-to-br from-amber-50/70 via-yellow-50/60 to-orange-50/70 dark:from-amber-900/30 dark:via-yellow-900/40 dark:to-orange-900/30';
         default:
-          return 'bg-gradient-to-br from-slate-50 to-gray-50 dark:from-gray-800 dark:to-gray-750 border-gray-200 dark:border-gray-600';
+          return 'enhanced-glass-card border-purple-300/40 dark:border-indigo-400/50 bg-gradient-to-br from-purple-50/70 via-slate-50/60 to-indigo-50/70 dark:from-purple-900/30 dark:via-slate-900/40 dark:to-indigo-900/30';
       }
     };
 
@@ -457,18 +575,23 @@ const KanbanPage = () => {
           setSelectedTask(task);
           setShowTaskDetailModal(true);
         }}
-        className={`${getCardBgColor()} rounded-xl border-2 p-4 mb-3 hover:shadow-lg transition-all duration-300 cursor-pointer group relative overflow-hidden backdrop-blur-sm`}
+        className={`${getCardBgColor()} rounded-2xl border p-5 mb-4 hover:shadow-2xl dark:hover:shadow-cyan-500/25 transition-all duration-500 cursor-pointer group relative overflow-hidden backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] moving-border-subtle`}
       >
-        {/* Priority stripe */}
-        <div className={`absolute top-0 left-0 w-full h-1 ${
-          task.priority === "high" ? "bg-red-500" :
-          task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+        {/* Enhanced Priority stripe */}
+        <div className={`absolute top-0 left-0 w-full h-2 rounded-t-2xl ${
+          task.priority === "high" ? "bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 animate-pulse" :
+          task.priority === "medium" ? "bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" :
+          "bg-gradient-to-r from-green-500 via-emerald-500 to-lime-500"
         }`} />
+
+        {/* Floating glass orbs */}
+        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white/30 dark:bg-cyan-400/20 animate-pulse" />
+        <div className="absolute bottom-3 left-3 w-1 h-1 rounded-full bg-white/40 dark:bg-purple-400/30 animate-pulse" style={{animationDelay: '1s'}} />
 
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h4 className="text-sm font-semibold text-gray-900 dark:text-white leading-tight mb-1">
+            <h4 className="text-sm font-bold text-gray-900 dark:text-slate-100 leading-tight mb-1 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors duration-300">
               {task.title}
             </h4>
             <div className="flex items-center gap-2">
@@ -497,7 +620,7 @@ const KanbanPage = () => {
         
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-700 dark:text-slate-300 mb-3 line-clamp-2 leading-relaxed">
             {task.description}
           </p>
         )}
@@ -509,10 +632,10 @@ const KanbanPage = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="mb-3"
           >
-            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
+            <div className="flex items-center justify-between text-xs text-gray-700 dark:text-slate-300 mb-2">
               <span className="font-medium">Progress</span>
               <motion.span
-                className="font-bold text-blue-600"
+                className="font-bold text-blue-600 dark:text-cyan-400"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
@@ -520,9 +643,14 @@ const KanbanPage = () => {
                 {task.progress}%
               </motion.span>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 shadow-inner">
+            <div className="w-full bg-gray-200/60 dark:bg-slate-700/50 rounded-full h-2.5 shadow-inner backdrop-blur-sm">
               <motion.div
-                className="bg-gradient-to-r from-blue-500 to-indigo-500 h-2 rounded-full shadow-sm"
+                className={`h-2.5 rounded-full shadow-lg ${
+                  task.status === 'completed' ? 'bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500' :
+                  task.status === 'in_progress' ? 'bg-gradient-to-r from-blue-500 via-cyan-500 to-sky-500' :
+                  task.status === 'review' ? 'bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500' :
+                  'bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500'
+                }`}
                 initial={{ width: 0 }}
                 animate={{ width: `${task.progress}%` }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -545,7 +673,7 @@ const KanbanPage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-lg border border-blue-200 font-medium shadow-sm"
+                className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100/80 via-cyan-100/70 to-indigo-100/80 dark:from-blue-900/40 dark:via-cyan-900/30 dark:to-indigo-900/40 text-blue-700 dark:text-cyan-300 rounded-lg border border-blue-200/50 dark:border-cyan-400/30 font-medium shadow-sm backdrop-blur-sm"
               >
                 #{tag.trim()}
               </motion.span>
@@ -566,12 +694,12 @@ const KanbanPage = () => {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-slate-300">
           <div className="flex items-center gap-2">
             <img
               src={getEmployeeAvatar(task.assigned_to)}
               alt="avatar"
-              className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+              className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-600 shadow-lg ring-2 ring-white/50 dark:ring-slate-400/30"
             />
             <span className="font-medium">{getEmployeeName(task.assigned_to)}</span>
           </div>
@@ -597,7 +725,7 @@ const KanbanPage = () => {
 
   if (loading) {
     return (
-      <div className="h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+      <div className="h-full bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-indigo-900 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
@@ -615,31 +743,32 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50/50 via-white/30 to-blue-50/50 dark:from-slate-900/80 dark:via-purple-900/40 dark:to-indigo-900/80 backdrop-blur-sm">
       {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 p-4 flex-shrink-0">
+      <div className="enhanced-glass-header border-b border-gray-200/50 dark:border-purple-400/30 p-4 flex-shrink-0 shadow-lg dark:shadow-cyan-500/20 backdrop-blur-2xl bg-white/80 dark:bg-gradient-to-r dark:from-slate-900/90 dark:via-purple-900/80 dark:to-indigo-900/90">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
-                <Layers className="w-5 h-5 text-white" />
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl dark:shadow-cyan-500/25 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse" />
+                <Layers className="w-6 h-6 text-white relative z-10" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                <h1 className="text-xl font-bold text-gray-900 dark:text-slate-100 bg-gradient-to-r from-purple-600 to-cyan-600 dark:from-purple-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   Project Board
                 </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-slate-300">
                   {filteredTasks.length} tasks • {projects.length} projects
                 </p>
               </div>
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded-full flex items-center gap-1">
+              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-emerald-100/80 to-green-100/80 dark:from-emerald-900/40 dark:to-green-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-400/30 rounded-full flex items-center gap-1 backdrop-blur-sm shadow-sm">
                 <Activity className="w-3 h-3" />
                 {navigator.onLine ? 'Live' : 'Offline'}
               </span>
-              <span className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100/80 to-indigo-100/80 dark:from-purple-900/40 dark:to-indigo-900/40 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-400/30 rounded-full backdrop-blur-sm shadow-sm">
                 {Math.round((columns.find(c => c.id === "completed")?.tasks.length || 0) / Math.max(filteredTasks.length, 1) * 100)}% Complete
               </span>
             </div>
@@ -647,7 +776,7 @@ const KanbanPage = () => {
 
           <div className="flex items-center gap-3">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+            <div className="flex items-center bg-gray-100/80 dark:bg-slate-800/60 rounded-xl p-1 backdrop-blur-sm border border-gray-200/50 dark:border-slate-600/30">
               {[
               { id: "board", icon: Layers, label: "Board" },
               { id: "list", icon: Eye, label: "List" },
@@ -668,10 +797,10 @@ const KanbanPage = () => {
                       toast.success('Switched to Board view! 📋');
                     }
                   }}
-                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-md transition-all ${
+                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all ${
                     viewMode === mode.id
-                      ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                      ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 shadow-lg backdrop-blur-sm'
+                      : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/50'
                   }`}
                 >
                   <mode.icon className="w-3 h-3" />
@@ -688,7 +817,7 @@ const KanbanPage = () => {
                 placeholder="Search tasks, tags, or people..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+                className="pl-10 pr-4 py-2 text-sm border border-gray-200/50 dark:border-slate-600/30 rounded-xl bg-white/80 dark:bg-slate-800/60 text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-cyan-400 focus:border-transparent shadow-lg dark:shadow-cyan-500/20 backdrop-blur-xl w-64"
               />
             </div>
 
@@ -799,9 +928,9 @@ const KanbanPage = () => {
               )}
             </div>
 
-            <button 
+            <button
               onClick={() => setShowNewTaskModal(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white rounded-xl hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 backdrop-blur-sm border border-white/20"
             >
               <Plus className="w-4 h-4" />
               New Task
@@ -813,10 +942,10 @@ const KanbanPage = () => {
         <div className="grid grid-cols-4 gap-4">
           {columns.map((column) => (
             <div key={column.id} className="text-center">
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <div className="text-2xl font-bold text-gray-900 dark:text-purple-100">
                 {column.tasks.length}
               </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">
+              <div className="text-xs text-gray-500 dark:text-purple-300/70">
                 {column.title.replace(/[^\w\s]/gi, '')}
               </div>
             </div>
@@ -842,14 +971,14 @@ const KanbanPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`bg-gradient-to-r ${column.color} rounded-t-xl p-4 border-2 ${column.borderColor} relative overflow-hidden`}
+                className={`${column.glassEffect} rounded-t-2xl p-5 border-2 ${column.borderColor} relative overflow-hidden shadow-lg backdrop-blur-2xl`}
               >
                 <div className="absolute inset-0 bg-white/5"></div>
                 <div className="relative flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <motion.div
-                      whileHover={{ scale: 1.1, rotate: 5 }}
-                      className={`w-10 h-10 rounded-xl bg-white/90 backdrop-blur-sm flex items-center justify-center ${column.iconColor} shadow-lg`}
+                      whileHover={{ scale: 1.15, rotate: 10 }}
+                      className={`w-12 h-12 rounded-2xl bg-white/90 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-center ${column.iconColor} shadow-xl border border-white/50 dark:border-slate-600/50`}
                     >
                       {column.id === "pending" && <Circle className="w-5 h-5" />}
                       {column.id === "in_progress" && <Clock className="w-5 h-5" />}
@@ -857,14 +986,14 @@ const KanbanPage = () => {
                       {column.id === "completed" && <CheckCircle className="w-5 h-5" />}
                     </motion.div>
                     <div>
-                      <h2 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                      <h2 className="text-sm font-bold text-gray-900 dark:text-slate-100">
                         {column.title}
                       </h2>
                       <motion.p
                         key={column.tasks.length}
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
-                        className="text-xs text-gray-600 dark:text-gray-400 font-medium"
+                        className="text-xs text-gray-600 dark:text-slate-300 font-medium"
                       >
                         {column.tasks.length} tasks
                       </motion.p>
@@ -878,7 +1007,7 @@ const KanbanPage = () => {
                       setNewTaskColumn(column.status);
                       setShowNewTaskModal(true);
                     }}
-                    className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center text-gray-600 hover:text-gray-900 hover:bg-white transition-all shadow-lg"
+                    className="w-9 h-9 bg-white/90 dark:bg-slate-800/80 backdrop-blur-xl rounded-xl flex items-center justify-center text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-white dark:hover:bg-slate-700 transition-all shadow-xl border border-white/50 dark:border-slate-600/50"
                     title={`Add task to ${column.title}`}
                   >
                     <Plus className="w-4 h-4" />
@@ -897,7 +1026,7 @@ const KanbanPage = () => {
               </motion.div>
 
               {/* Enhanced Column Content */}
-              <div className={`flex-1 ${column.bgColor} dark:bg-gray-800/50 rounded-b-xl border-2 border-t-0 ${column.borderColor} p-4 overflow-y-auto`}>
+              <div className={`flex-1 ${column.glassEffect} rounded-b-2xl border-2 border-t-0 ${column.borderColor} p-5 overflow-y-auto custom-scrollbar backdrop-blur-2xl`}>
                 <AnimatePresence>
                   {column.tasks.map((task: any, index: number) => (
                     <motion.div
@@ -914,12 +1043,12 @@ const KanbanPage = () => {
                 
                 {/* Enhanced Empty State */}
                 {column.tasks.length === 0 && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-500"
+                    className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-slate-500"
                   >
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded-xl flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 bg-gray-200/60 dark:bg-slate-700/60 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border border-gray-300/30 dark:border-slate-600/30">
                       {column.id === "pending" && <Circle className="w-6 h-6" />}
                       {column.id === "in_progress" && <Zap className="w-6 h-6" />}
                       {column.id === "review" && <Eye className="w-6 h-6" />}
@@ -1306,90 +1435,7 @@ const KanbanPage = () => {
           </div>
         )}
 
-        {/* High Priority Tasks Sidebar - Only show in board view */}
-        {viewMode === "board" && (
-          <div className="w-80 flex-shrink-0">
-          <div className="bg-gradient-to-br from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 rounded-2xl border-2 border-red-200 dark:border-red-800 h-full flex flex-col">
-            <div className="p-4 border-b border-red-200 dark:border-red-800">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center">
-                  <Flag className="w-4 h-4 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                    🔥 High Priority Tasks
-                  </h2>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    {filteredTasks.filter(t => t.priority === 'high').length} urgent tasks
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            <div className="flex-1 p-4 overflow-y-auto">
-              <div className="space-y-3">
-                {filteredTasks
-                  .filter((task: any) => task.priority === 'high')
-                  .slice(0, 10)
-                  .map((task: any) => (
-                    <motion.div
-                      key={task.id}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="bg-white dark:bg-gray-800 rounded-lg border-2 border-red-200 dark:border-red-800 p-3 hover:shadow-lg transition-all cursor-pointer group"
-                      onClick={() => {
-                        setSelectedTask(task);
-                        setShowTaskDetailModal(true);
-                      }}
-                    >
-                      <div className="flex items-start gap-2">
-                        <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 mb-1">
-                            {task.title}
-                          </h4>
-                          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                            <img
-                              src={getEmployeeAvatar(task.assigned_to)}
-                              alt="avatar"
-                              className="w-4 h-4 rounded-full"
-                            />
-                            <span>{getEmployeeName(task.assigned_to)}</span>
-                            {task.due_date && (
-                              <>
-                                <span>•</span>
-                                <span className={new Date(task.due_date) < new Date() ? 'text-red-600' : ''}>
-                                  {new Date(task.due_date).toLocaleDateString()}
-                                </span>
-                              </>
-                            )}
-                          </div>
-                          <div className="mt-2">
-                            <span className={`px-2 py-0.5 text-xs rounded-full ${
-                              task.status === 'completed' ? 'bg-green-100 text-green-700' :
-                              task.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                              task.status === 'review' ? 'bg-amber-100 text-amber-700' :
-                              'bg-gray-100 text-gray-700'
-                            }`}>
-                              {task.status?.replace('_', ' ').toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-
-                {filteredTasks.filter(t => t.priority === 'high').length === 0 && (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                    <Flag className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">No high priority tasks</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        )}
       </div>
 
       {/* Enhanced New Task Modal */}

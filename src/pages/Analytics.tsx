@@ -412,19 +412,19 @@ const Analytics = () => {
   }
 
   return (
-    <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-y-auto">
+    <div className="h-full bg-gray-50 dark:bg-transparent overflow-y-auto">
       {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 p-4 sm:p-6">
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 p-4 sm:p-6 shadow-sm dark:shadow-purple-500/20">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center">
               <BarChart3 className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-purple-100">
                 **Advanced Analytics Dashboard**
               </h1>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-purple-300/70">
                 **Real-time performance insights & individual metrics**
               </p>
             </div>
@@ -432,7 +432,7 @@ const Analytics = () => {
 
           <div className="flex flex-wrap items-center gap-3">
             {/* View Selector */}
-            <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
+            <div className="flex bg-gray-100 dark:bg-purple-500/20 rounded-lg p-1">
               {[
                 { id: "overview", label: "Overview", icon: BarChart3 },
                 { id: "individual", label: "Individual", icon: User },
@@ -443,8 +443,8 @@ const Analytics = () => {
                   onClick={() => setSelectedView(view.id)}
                   className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all ${
                     selectedView === view.id
-                      ? "bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm"
-                      : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                      ? "bg-white dark:bg-purple-500/30 text-purple-600 dark:text-purple-300 shadow-sm"
+                      : "text-gray-600 dark:text-purple-400 hover:text-gray-900 dark:hover:text-purple-200"
                   }`}
                 >
                   <view.icon className="w-4 h-4" />
@@ -456,20 +456,20 @@ const Analytics = () => {
             {/* Search & Filters */}
             <div className="flex items-center gap-2">
               <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
                 <input
                   type="text"
                   placeholder="Search employees..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
+                  className="pl-10 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-purple-500/20 text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-48"
                 />
               </div>
 
               <div className="relative">
                 <button
                   onClick={() => setFilterOpen(!filterOpen)}
-                  className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-purple-500/20 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-purple-500/30 transition-colors"
                 >
                   <Filter className="w-4 h-4" />
                   <span>{dateRange} days</span>
@@ -477,7 +477,7 @@ const Analytics = () => {
                 </button>
                 
                 {filterOpen && (
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 py-2">
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-purple-500/20 border border-gray-200 dark:border-purple-500/30 rounded-xl shadow-xl z-20 py-2">
                     {["7", "30", "90", "365"].map((days) => (
                       <button
                         key={days}
@@ -485,7 +485,7 @@ const Analytics = () => {
                           setDateRange(days);
                           setFilterOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-purple-500/30 text-gray-700 dark:text-purple-300"
                       >
                         Last {days} days
                       </button>
@@ -496,7 +496,7 @@ const Analytics = () => {
 
               <button
                 onClick={exportAnalytics}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg"
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105"
               >
                 <Download className="w-4 h-4" />
                 <span className="hidden sm:inline">Export</span>

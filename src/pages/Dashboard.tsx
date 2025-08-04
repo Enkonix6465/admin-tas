@@ -67,10 +67,10 @@ const Dashboard = () => {
   const fetchAllData = async () => {
     setConnectionStatus('connecting');
 
-    // Try Firebase with very short timeout, immediately fall back to mock data
+    // Try Firebase first, fall back to enhanced mock data if it fails
     try {
       const timeout = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Request timeout')), 2000)
+        setTimeout(() => reject(new Error('Request timeout')), 3000)
       );
 
       const fetchData = Promise.all([
@@ -85,7 +85,7 @@ const Dashboard = () => {
         timeout
       ]);
 
-      // If we get here, Firebase worked
+      // If we get here, Firebase worked - use real data
       setProjects(
         projectsSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
@@ -95,67 +95,76 @@ const Dashboard = () => {
         employeesSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       );
       setConnectionStatus('connected');
-      console.log("Firebase connection successful");
+      console.log("Firebase connection successful - using real data");
     } catch (error) {
-      // Immediately use mock data without logging error details
-      console.log("Using local mock data");
+      // Fall back to enhanced mock data if Firebase fails
+      console.log("Firebase connection failed, using enhanced mock data");
       setConnectionStatus('offline');
 
-      // Set mock data immediately
+      // Set enhanced mock data with more realistic content
       setProjects([
         {
           id: "1",
-          name: "Website Redesign",
-          description: "Complete redesign of company website with new branding and improved UX",
+          name: "E-Commerce Platform Redesign",
+          description: "Complete overhaul of the online shopping experience with modern UI/UX principles and mobile-first approach",
           deadline: "2024-03-15",
           teamId: "team-1",
           status: "active",
-          progress: 75,
+          progress: 78,
         },
         {
           id: "2",
-          name: "Mobile App Development",
-          description: "iOS and Android app for customer engagement with real-time features",
+          name: "AI-Powered Analytics Dashboard",
+          description: "Implementation of machine learning algorithms for predictive analytics and real-time business insights",
           deadline: "2024-04-30",
-          teamId: "team-2",
+          teamId: "team-3",
           status: "active",
-          progress: 45,
+          progress: 62,
         },
         {
           id: "3",
-          name: "API Integration",
-          description: "Third-party payment gateway integration and security enhancements",
+          name: "Blockchain Payment Integration",
+          description: "Secure cryptocurrency payment gateway with multi-wallet support and real-time transaction monitoring",
           deadline: "2024-02-28",
-          teamId: "team-1",
+          teamId: "team-2",
           status: "completed",
           progress: 100,
         },
         {
           id: "4",
-          name: "Dashboard Analytics",
-          description: "Real-time analytics dashboard with data visualization",
+          name: "Mobile App 2.0",
+          description: "Next-generation mobile application with offline capabilities, push notifications, and advanced user personalization",
           deadline: "2024-05-15",
-          teamId: "team-3",
+          teamId: "team-2",
           status: "active",
-          progress: 30,
+          progress: 45,
         },
         {
           id: "5",
-          name: "User Authentication System",
-          description: "Multi-factor authentication and user management system",
+          name: "Cloud Infrastructure Migration",
+          description: "Complete migration to AWS cloud infrastructure with auto-scaling, load balancing, and disaster recovery",
           deadline: "2024-03-30",
-          teamId: "team-2",
+          teamId: "team-4",
           status: "active",
-          progress: 60,
+          progress: 34,
+        },
+        {
+          id: "6",
+          name: "Customer Support Automation",
+          description: "AI chatbot implementation with natural language processing and seamless human handoff capabilities",
+          deadline: "2024-04-15",
+          teamId: "team-1",
+          status: "active",
+          progress: 23,
         }
       ]);
-      
+
       setTasks([
         {
           id: "1",
-          title: "Design System Update",
-          description: "Update design tokens and components for consistency",
-          status: "pending",
+          title: "Design System Architecture",
+          description: "Create comprehensive design tokens, component library, and style guide for consistent UI/UX",
+          status: "in_progress",
           assigned_to: "emp-1",
           due_date: "2024-02-15",
           created_at: { seconds: Date.now() / 1000 },
@@ -164,54 +173,54 @@ const Dashboard = () => {
         },
         {
           id: "2",
-          title: "API Documentation",
-          description: "Complete API documentation for v2 with examples",
+          title: "API Performance Optimization",
+          description: "Optimize database queries, implement caching strategies, and reduce API response times by 40%",
           status: "in_progress",
           assigned_to: "emp-2",
           due_date: "2024-02-20",
           created_at: { seconds: (Date.now() / 1000) - 86400 },
           project_id: "2",
-          priority: "medium"
+          priority: "critical"
         },
         {
           id: "3",
-          title: "User Testing Session",
-          description: "Conduct comprehensive usability testing",
+          title: "Security Penetration Testing",
+          description: "Comprehensive security audit and vulnerability assessment across all system components",
           status: "completed",
-          assigned_to: "emp-3",
+          assigned_to: "emp-5",
           due_date: "2024-02-10",
           created_at: { seconds: (Date.now() / 1000) - 172800 },
-          project_id: "1",
-          priority: "high"
-        },
-        {
-          id: "4",
-          title: "Database Migration",
-          description: "Migrate legacy database to new schema",
-          status: "in_progress",
-          assigned_to: "emp-4",
-          due_date: "2024-02-25",
-          created_at: { seconds: (Date.now() / 1000) - 43200 },
           project_id: "3",
           priority: "critical"
         },
         {
+          id: "4",
+          title: "Machine Learning Model Training",
+          description: "Train and optimize predictive models for user behavior analysis and recommendation engine",
+          status: "in_progress",
+          assigned_to: "emp-4",
+          due_date: "2024-02-25",
+          created_at: { seconds: (Date.now() / 1000) - 43200 },
+          project_id: "2",
+          priority: "high"
+        },
+        {
           id: "5",
-          title: "Security Audit",
-          description: "Comprehensive security review and testing",
+          title: "Cross-Platform Testing Suite",
+          description: "Implement automated testing across iOS, Android, and web platforms with CI/CD integration",
           status: "pending",
-          assigned_to: "emp-5",
+          assigned_to: "emp-3",
           due_date: "2024-03-01",
           created_at: { seconds: Date.now() / 1000 },
-          project_id: "5",
+          project_id: "4",
           priority: "high"
         },
         {
           id: "6",
-          title: "Performance Optimization",
-          description: "Optimize app performance and loading times",
+          title: "Real-time Data Streaming",
+          description: "Implement WebSocket connections for live data updates and real-time collaboration features",
           status: "in_progress",
-          assigned_to: "emp-2",
+          assigned_to: "emp-8",
           due_date: "2024-02-18",
           created_at: { seconds: (Date.now() / 1000) - 259200 },
           project_id: "2",
@@ -219,10 +228,10 @@ const Dashboard = () => {
         },
         {
           id: "7",
-          title: "Mobile UI Testing",
-          description: "Test mobile responsiveness across devices",
+          title: "Accessibility Compliance Audit",
+          description: "Ensure WCAG 2.1 AA compliance across all user interfaces and implement screen reader support",
           status: "completed",
-          assigned_to: "emp-1",
+          assigned_to: "emp-7",
           due_date: "2024-02-08",
           created_at: { seconds: (Date.now() / 1000) - 345600 },
           project_id: "1",
@@ -230,33 +239,55 @@ const Dashboard = () => {
         },
         {
           id: "8",
-          title: "Integration Testing",
-          description: "End-to-end integration testing",
+          title: "DevOps Pipeline Enhancement",
+          description: "Optimize CI/CD pipelines with blue-green deployments and automated rollback mechanisms",
           status: "pending",
           assigned_to: "emp-6",
           due_date: "2024-02-22",
           created_at: { seconds: (Date.now() / 1000) - 21600 },
-          project_id: "4",
+          project_id: "5",
           priority: "high"
+        },
+        {
+          id: "9",
+          title: "User Analytics Implementation",
+          description: "Set up comprehensive user tracking, heatmaps, and conversion funnel analysis",
+          status: "in_progress",
+          assigned_to: "emp-4",
+          due_date: "2024-02-28",
+          created_at: { seconds: (Date.now() / 1000) - 172800 },
+          project_id: "2",
+          priority: "medium"
+        },
+        {
+          id: "10",
+          title: "Microservices Architecture Review",
+          description: "Evaluate current microservices performance and plan optimization strategies",
+          status: "pending",
+          assigned_to: "emp-2",
+          due_date: "2024-03-05",
+          created_at: { seconds: Date.now() / 1000 },
+          project_id: "5",
+          priority: "medium"
         }
       ]);
-      
+
       setTeams([
-        { id: "team-1", teamName: "Design Team", memberCount: 5, lead: "Sarah Johnson" },
-        { id: "team-2", teamName: "Development Team", memberCount: 8, lead: "Mike Chen" },
-        { id: "team-3", teamName: "Analytics Team", memberCount: 4, lead: "Alex Rodriguez" },
-        { id: "team-4", teamName: "QA Team", memberCount: 6, lead: "Emily Davis" }
+        { id: "team-1", teamName: "Design & UX Team", memberCount: 6, lead: "Sarah Johnson" },
+        { id: "team-2", teamName: "Full-Stack Development", memberCount: 10, lead: "Mike Chen" },
+        { id: "team-3", teamName: "Data & Analytics", memberCount: 5, lead: "Alex Rodriguez" },
+        { id: "team-4", teamName: "DevOps & Infrastructure", memberCount: 4, lead: "Emily Davis" }
       ]);
 
       setEmployees([
-        { id: "emp-1", name: "Sarah Johnson", role: "Senior Designer", team: "Design Team" },
-        { id: "emp-2", name: "Mike Chen", role: "Full Stack Developer", team: "Development Team" },
-        { id: "emp-3", name: "Emily Davis", role: "QA Lead", team: "QA Team" },
-        { id: "emp-4", name: "Alex Rodriguez", role: "Data Analyst", team: "Analytics Team" },
-        { id: "emp-5", name: "Jessica Kim", role: "Security Engineer", team: "Development Team" },
-        { id: "emp-6", name: "David Brown", role: "QA Engineer", team: "QA Team" },
-        { id: "emp-7", name: "Lisa Wang", role: "UI/UX Designer", team: "Design Team" },
-        { id: "emp-8", name: "Robert Taylor", role: "Backend Developer", team: "Development Team" }
+        { id: "emp-1", name: "Sarah Johnson", role: "Lead UX Designer", team: "Design & UX Team" },
+        { id: "emp-2", name: "Mike Chen", role: "Senior Full-Stack Engineer", team: "Full-Stack Development" },
+        { id: "emp-3", name: "Emily Davis", role: "DevOps Engineer", team: "DevOps & Infrastructure" },
+        { id: "emp-4", name: "Alex Rodriguez", role: "Data Scientist", team: "Data & Analytics" },
+        { id: "emp-5", name: "Jessica Kim", role: "Security Engineer", team: "Full-Stack Development" },
+        { id: "emp-6", name: "David Brown", role: "Cloud Architect", team: "DevOps & Infrastructure" },
+        { id: "emp-7", name: "Lisa Wang", role: "UI Designer", team: "Design & UX Team" },
+        { id: "emp-8", name: "Robert Taylor", role: "Backend Developer", team: "Full-Stack Development" }
       ]);
     }
   };
@@ -584,16 +615,17 @@ const Dashboard = () => {
                     {
                       data: [completedTasks.length, inProgressTasks.length, pendingTasks.length],
                       backgroundColor: [
-                        'rgba(34, 197, 94, 0.8)',
-                        'rgba(59, 130, 246, 0.8)',
-                        'rgba(251, 191, 36, 0.8)',
+                        'rgba(124, 58, 237, 0.9)', // Deep Purple
+                        'rgba(147, 51, 234, 0.9)', // Rich Purple
+                        'rgba(168, 85, 247, 0.9)', // Bright Violet
                       ],
                       borderColor: [
-                        'rgba(34, 197, 94, 1)',
-                        'rgba(59, 130, 246, 1)',
-                        'rgba(251, 191, 36, 1)',
+                        'rgba(124, 58, 237, 1)', // Deep Purple
+                        'rgba(147, 51, 234, 1)', // Rich Purple
+                        'rgba(168, 85, 247, 1)', // Bright Violet
                       ],
-                      borderWidth: 2,
+                      borderWidth: 3,
+                      hoverBorderWidth: 4,
                     },
                   ],
                 }}
@@ -606,9 +638,36 @@ const Dashboard = () => {
                       labels: {
                         color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
                         padding: 20,
+                        font: {
+                          size: 13,
+                          weight: 'bold'
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'circle'
                       },
                     },
+                    tooltip: {
+                      backgroundColor: 'rgba(124, 58, 237, 0.95)',
+                      titleColor: '#ffffff',
+                      bodyColor: '#ffffff',
+                      borderColor: 'rgba(168, 85, 247, 1)',
+                      borderWidth: 2,
+                      cornerRadius: 12,
+                      displayColors: true,
+                      boxPadding: 6
+                    }
                   },
+                  animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 1500,
+                    easing: 'easeInOutQuart'
+                  },
+                  cutout: '45%',
+                  radius: '90%',
+                  hover: {
+                    animationDuration: 300
+                  }
                 }}
               />
             </div>
@@ -632,8 +691,8 @@ const Dashboard = () => {
                           ? Math.round((projectTasks.filter((t: any) => t.status === "completed").length / projectTasks.length) * 100)
                           : 0;
                       }),
-                      backgroundColor: 'rgba(139, 92, 246, 0.8)',
-                      borderColor: 'rgba(139, 92, 246, 1)',
+                      backgroundColor: 'rgba(124, 58, 237, 0.9)',
+                      borderColor: 'rgba(124, 58, 237, 1)',
                       borderWidth: 1,
                     },
                   ],
@@ -749,65 +808,92 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* Recent Activity */}
-          <div className="liquid-glass-card group">
-            <div className="px-8 py-6 border-b border-gray-200/50 dark:border-purple-500/30 relative">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                  Recent Tasks
-                </h2>
-                <button
-                  onClick={() => setShowAllTasks(!showAllTasks)}
-                  className="px-4 py-2 text-sm bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-500/30 font-medium rounded-lg border border-purple-200 dark:border-purple-500/30 transition-all duration-200"
-                >
-                  {showAllTasks ? 'Show Less' : 'View All'}
-                </button>
-              </div>
-            </div>
-            <div className="p-8 space-y-5 max-h-96 overflow-y-auto custom-scrollbar">
-              {(showAllTasks ? recentTasks : recentTasks.slice(0, 3)).map((task: any, index: number) => (
-                <motion.div
-                  key={task.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/10 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-500/40 transition-all duration-200 cursor-pointer"
-                >
-                  <div className="flex-shrink-0 mt-1">
-                    {task.status === "completed" ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
-                    ) : task.status === "in_progress" ? (
-                      <Circle className="w-5 h-5 text-blue-500" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-gray-400 dark:text-purple-400" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0 relative z-10">
-                    <p className="text-base font-medium text-gray-900 dark:text-white truncate mb-2">
-                      {task.title}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-purple-300/80 mb-2">
-                      Assigned to {getEmployeeName(task.assigned_to)}
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-500 dark:text-purple-300/60">
-                        Due: {task.due_date}
-                      </span>
-                      {task.priority && (
-                        <span className={`px-2 py-0.5 text-xs rounded-full border ${
-                          task.priority === 'critical'
-                            ? 'bg-red-500/10 text-red-600 border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30'
-                            : task.priority === 'high'
-                            ? 'bg-orange-500/10 text-orange-600 border-orange-500/20 dark:bg-orange-500/20 dark:text-orange-400 dark:border-orange-500/30'
-                            : 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30'
-                        }`}>
-                          {task.priority}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+          {/* Team Performance Chart */}
+          <div className="liquid-glass-card">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Team Performance Overview
+            </h3>
+            <div className="h-64">
+              <Bar
+                data={{
+                  labels: teams.map((team: any) => team.teamName),
+                  datasets: [
+                    {
+                      label: 'Completed Tasks',
+                      data: teams.map((team: any) => {
+                        const teamMembers = employees.filter((emp: any) => emp.team === team.teamName);
+                        const teamTasks = tasks.filter((task: any) =>
+                          teamMembers.some((member: any) => member.id === task.assigned_to) && task.status === 'completed'
+                        );
+                        return teamTasks.length;
+                      }),
+                      backgroundColor: 'rgba(124, 58, 237, 0.9)',
+                      borderColor: 'rgba(124, 58, 237, 1)',
+                      borderWidth: 2,
+                      borderRadius: 6,
+                    },
+                    {
+                      label: 'In Progress Tasks',
+                      data: teams.map((team: any) => {
+                        const teamMembers = employees.filter((emp: any) => emp.team === team.teamName);
+                        const teamTasks = tasks.filter((task: any) =>
+                          teamMembers.some((member: any) => member.id === task.assigned_to) && task.status === 'in_progress'
+                        );
+                        return teamTasks.length;
+                      }),
+                      backgroundColor: 'rgba(147, 51, 234, 0.9)',
+                      borderColor: 'rgba(147, 51, 234, 1)',
+                      borderWidth: 2,
+                      borderRadius: 6,
+                    },
+                    {
+                      label: 'Pending Tasks',
+                      data: teams.map((team: any) => {
+                        const teamMembers = employees.filter((emp: any) => emp.team === team.teamName);
+                        const teamTasks = tasks.filter((task: any) =>
+                          teamMembers.some((member: any) => member.id === task.assigned_to) && task.status === 'pending'
+                        );
+                        return teamTasks.length;
+                      }),
+                      backgroundColor: 'rgba(168, 85, 247, 0.9)',
+                      borderColor: 'rgba(168, 85, 247, 1)',
+                      borderWidth: 1,
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'top',
+                      labels: {
+                        color: document.documentElement.classList.contains('dark') ? '#e5e7eb' : '#374151',
+                        padding: 15,
+                      },
+                    },
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+                      },
+                      grid: {
+                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+                      },
+                      grid: {
+                        color: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb',
+                      },
+                    },
+                  },
+                }}
+              />
             </div>
           </div>
         </div>
@@ -826,28 +912,34 @@ const Dashboard = () => {
                     {
                       label: 'Tasks Completed',
                       data: [3, 5, 2, 8, 6, 4, 7], // Mock data for demonstration
-                      borderColor: 'rgba(139, 92, 246, 1)',
-                      backgroundColor: 'rgba(139, 92, 246, 0.1)',
-                      borderWidth: 3,
+                      borderColor: 'rgba(124, 58, 237, 1)',
+                      backgroundColor: 'rgba(124, 58, 237, 0.15)',
+                      borderWidth: 4,
                       fill: true,
                       tension: 0.4,
-                      pointBackgroundColor: 'rgba(139, 92, 246, 1)',
+                      pointBackgroundColor: 'rgba(124, 58, 237, 1)',
                       pointBorderColor: '#ffffff',
-                      pointBorderWidth: 2,
-                      pointRadius: 6,
+                      pointBorderWidth: 3,
+                      pointRadius: 7,
+                      pointHoverRadius: 9,
+                      shadowColor: 'rgba(124, 58, 237, 0.3)',
+                      shadowBlur: 10,
                     },
                     {
                       label: 'Tasks Created',
-                      data: [5, 3, 6, 4, 8, 7, 5], // Mock data for demonstration
-                      borderColor: 'rgba(59, 130, 246, 1)',
-                      backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                      borderWidth: 3,
+                      data: [6, 4, 7, 5, 9, 8, 6], // Enhanced mock data
+                      borderColor: 'rgba(147, 51, 234, 1)',
+                      backgroundColor: 'rgba(147, 51, 234, 0.15)',
+                      borderWidth: 4,
                       fill: true,
                       tension: 0.4,
-                      pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                      pointBackgroundColor: 'rgba(147, 51, 234, 1)',
                       pointBorderColor: '#ffffff',
-                      pointBorderWidth: 2,
-                      pointRadius: 6,
+                      pointBorderWidth: 3,
+                      pointRadius: 7,
+                      pointHoverRadius: 9,
+                      shadowColor: 'rgba(147, 51, 234, 0.3)',
+                      shadowBlur: 10,
                     },
                   ],
                 }}
