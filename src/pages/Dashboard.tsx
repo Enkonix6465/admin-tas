@@ -625,14 +625,14 @@ const Dashboard = () => {
               </h2>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 dark:from-purple-500/10 dark:to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </div>
-            <div className="p-4 space-y-3">
+            <div className="p-6 space-y-4">
               {recentTasks.map((task: any, index: number) => (
                 <motion.div
                   key={task.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-2 p-2 rounded-lg hover:bg-white/50 dark:hover:bg-purple-500/10 transition-all duration-200"
+                  className="flex items-start gap-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-white/30 hover:to-purple-500/10 dark:hover:from-purple-500/10 dark:hover:to-pink-500/10 backdrop-blur-sm border border-white/20 dark:border-purple-500/20 hover:border-purple-500/30 dark:hover:border-purple-500/40 transition-all duration-300 cursor-pointer group"
                 >
                   <div className="flex-shrink-0 mt-0.5">
                     {task.status === "completed" ? (
