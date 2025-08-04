@@ -499,11 +499,11 @@ const Dashboard = () => {
                 <p className="text-xs font-medium text-gray-600 dark:text-green-300/90 mb-1">
                   Completed
                 </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
                   {completedTasks.length}
                 </p>
               </div>
-              <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 dark:from-green-500/30 dark:to-emerald-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-green-500/20 dark:border-green-500/30">
+              <div className="p-3 bg-green-100 dark:bg-green-500/20 rounded-xl border border-green-200 dark:border-green-500/30">
                 <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
             </div>
