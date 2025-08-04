@@ -761,9 +761,9 @@ export default function EmployeePerformancePage() {
               </div>
 
               {/* Task Details Table */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <div className="liquid-glass-card overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                     Task Details
                   </h3>
                 </div>
