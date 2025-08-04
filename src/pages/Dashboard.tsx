@@ -468,38 +468,38 @@ const Dashboard = () => {
           </div>
 
           {/* Recent Activity */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          <div className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(15,17,41,0.8)] dark:to-[rgba(26,27,58,0.6)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-purple-500/20 shadow-lg dark:shadow-purple-500/10">
+            <div className="px-4 py-3 border-b border-gray-200 dark:border-purple-500/30">
+              <h2 className="text-base font-semibold text-gray-900 dark:text-purple-100">
                 Recent Tasks
               </h2>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-4 space-y-3">
               {recentTasks.map((task: any, index: number) => (
                 <motion.div
                   key={task.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
-                  className="flex items-start gap-3"
+                  className="flex items-start gap-2 p-2 rounded-lg hover:bg-white/50 dark:hover:bg-purple-500/10 transition-all duration-200"
                 >
-                  <div className="flex-shrink-0 mt-1">
+                  <div className="flex-shrink-0 mt-0.5">
                     {task.status === "completed" ? (
-                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <CheckCircle className="w-3 h-3 text-green-500" />
                     ) : task.status === "in_progress" ? (
-                      <Circle className="w-4 h-4 text-blue-500" />
+                      <Circle className="w-3 h-3 text-blue-500" />
                     ) : (
-                      <Circle className="w-4 h-4 text-gray-400" />
+                      <Circle className="w-3 h-3 text-gray-400 dark:text-purple-400" />
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                    <p className="text-xs font-medium text-gray-900 dark:text-purple-100 truncate">
                       {task.title}
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <p className="text-xs text-gray-600 dark:text-purple-300/70">
                       Assigned to {getEmployeeName(task.assigned_to)}
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-500">
+                    <p className="text-xs text-gray-500 dark:text-purple-300/50">
                       Due: {task.due_date}
                     </p>
                   </div>
