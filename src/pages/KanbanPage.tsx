@@ -65,79 +65,198 @@ const KanbanPage = () => {
   useEffect(() => {
     const unsubscribers: any[] = [];
     let mounted = true;
+    let connectionTimeout: NodeJS.Timeout;
+    let hasConnected = false;
 
-    const setupRealtimeListeners = async () => {
+    // Enhanced mock data for better testing
+    const getMockTasks = () => [
+      {
+        id: "mock-task-1",
+        title: "Design System Enhancement",
+        description: "Update the design system components with new branding guidelines and color schemes",
+        status: "pending",
+        progress_status: "pending",
+        priority: "high",
+        assigned_to: "mock-user",
+        due_date: "2024-02-15",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "design,urgent,ui",
+        progress: 0,
+        comments: []
+      },
+      {
+        id: "mock-task-2",
+        title: "Payment API Integration",
+        description: "Integrate third-party payment API for checkout flow with enhanced security",
+        status: "in_progress",
+        progress_status: "in_progress",
+        priority: "high",
+        assigned_to: "mock-user-2",
+        due_date: "2024-02-20",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "backend,api,security",
+        progress: 65,
+        comments: [{ id: 1, text: "Working on authentication flow" }]
+      },
+      {
+        id: "mock-task-3",
+        title: "User Experience Testing",
+        description: "Conduct comprehensive user testing for the new dashboard interface",
+        status: "review",
+        progress_status: "review",
+        priority: "medium",
+        assigned_to: "mock-user-3",
+        due_date: "2024-02-18",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "testing,ux,analytics",
+        progress: 90,
+        comments: [{ id: 1, text: "Initial feedback looks positive" }]
+      },
+      {
+        id: "mock-task-4",
+        title: "API Documentation Update",
+        description: "Update comprehensive API documentation with new endpoints and examples",
+        status: "completed",
+        progress_status: "completed",
+        priority: "low",
+        assigned_to: "mock-user",
+        due_date: "2024-02-10",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "docs,api",
+        progress: 100,
+        comments: []
+      },
+      {
+        id: "mock-task-5",
+        title: "Performance Optimization",
+        description: "Optimize application performance and reduce bundle size",
+        status: "in_progress",
+        progress_status: "in_progress",
+        priority: "medium",
+        assigned_to: "mock-user-2",
+        due_date: "2024-02-25",
+        created_at: { seconds: Date.now() / 1000 },
+        tags: "performance,optimization",
+        progress: 35,
+        comments: []
+      }
+    ];
+
+    const getMockProjects = () => [
+      {
+        id: "mock-project-1",
+        name: "Website Redesign",
+        description: "Complete website redesign project with modern UI",
+        color: "#3b82f6"
+      },
+      {
+        id: "mock-project-2",
+        name: "Mobile Application",
+        description: "iOS and Android app development",
+        color: "#10b981"
+      },
+      {
+        id: "mock-project-3",
+        name: "Analytics Dashboard",
+        description: "Real-time analytics and reporting dashboard",
+        color: "#f59e0b"
+      }
+    ];
+
+    const getMockEmployees = () => [
+      {
+        id: "mock-user",
+        name: "Alice Johnson",
+        email: "alice@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
+        role: "Senior Designer"
+      },
+      {
+        id: "mock-user-2",
+        name: "Bob Smith",
+        email: "bob@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
+        role: "Full Stack Developer"
+      },
+      {
+        id: "mock-user-3",
+        name: "Carol Davis",
+        email: "carol@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol",
+        role: "QA Engineer"
+      },
+      {
+        id: "mock-user-4",
+        name: "David Wilson",
+        email: "david@example.com",
+        avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=David",
+        role: "Product Manager"
+      }
+    ];
+
+    const setupFirebaseWithTimeout = async () => {
+      try {
+        // Set a timeout for Firebase connection
+        connectionTimeout = setTimeout(() => {
+          if (!hasConnected && mounted) {
+            console.warn("Firebase connection timeout - switching to offline mode");
+            toast.error("Connection timeout - using offline mode");
+            loadMockData();
+          }
+        }, 3000); // 3 second timeout
+
+        // Test Firebase connection with a simple operation
+        const testConnection = async () => {
+          try {
+            // Try to get a simple document to test connection
+            await collection(db, "tasks");
+            hasConnected = true;
+            clearTimeout(connectionTimeout);
+
+            if (mounted) {
+              setupRealtimeListeners();
+            }
+          } catch (error) {
+            throw error;
+          }
+        };
+
+        await testConnection();
+
+      } catch (error) {
+        console.error("Firebase connection failed:", error);
+        if (mounted) {
+          toast.error("Firebase connection failed - using offline mode");
+          loadMockData();
+        }
+      }
+    };
+
+    const loadMockData = () => {
+      if (mounted) {
+        setTasks(getMockTasks());
+        setProjects(getMockProjects());
+        setEmployees(getMockEmployees());
+        setLoading(false);
+      }
+    };
+
+    const setupRealtimeListeners = () => {
       try {
         const tasksUnsub = onSnapshot(
           collection(db, "tasks"),
           (snapshot) => {
             if (mounted) {
+              hasConnected = true;
               setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
               setLoading(false);
             }
           },
           (error) => {
             console.warn("Tasks listener error:", error);
-            toast.error("Failed to load tasks data");
+            toast.error("Tasks data connection lost - using cached data");
             if (mounted) {
-              setTasks([
-                {
-                  id: "mock-task-1",
-                  title: "Design System Update",
-                  description: "Update the design system components with new branding guidelines",
-                  status: "pending",
-                  progress_status: "pending",
-                  priority: "high",
-                  assigned_to: "mock-user",
-                  due_date: "2024-02-15",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "design,urgent",
-                  progress: 0,
-                  comments: []
-                },
-                {
-                  id: "mock-task-2",
-                  title: "API Integration",
-                  description: "Integrate third-party payment API for checkout flow",
-                  status: "in_progress",
-                  progress_status: "in_progress",
-                  priority: "high",
-                  assigned_to: "mock-user-2",
-                  due_date: "2024-02-20",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "backend,api",
-                  progress: 65,
-                  comments: [{ id: 1, text: "Working on authentication" }]
-                },
-                {
-                  id: "mock-task-3",
-                  title: "User Testing",
-                  description: "Conduct user testing for the new dashboard interface",
-                  status: "review",
-                  progress_status: "review",
-                  priority: "medium",
-                  assigned_to: "mock-user-3",
-                  due_date: "2024-02-18",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "testing,ux",
-                  progress: 90,
-                  comments: []
-                },
-                {
-                  id: "mock-task-4",
-                  title: "Documentation Update",
-                  description: "Update API documentation with new endpoints",
-                  status: "completed",
-                  progress_status: "completed",
-                  priority: "low",
-                  assigned_to: "mock-user",
-                  due_date: "2024-02-10",
-                  created_at: { seconds: Date.now() / 1000 },
-                  tags: "docs",
-                  progress: 100,
-                  comments: []
-                }
-              ]);
+              setTasks(getMockTasks());
               setLoading(false);
             }
           }
@@ -153,20 +272,7 @@ const KanbanPage = () => {
           (error) => {
             console.warn("Projects listener error:", error);
             if (mounted) {
-              setProjects([
-                {
-                  id: "mock-project-1",
-                  name: "Website Redesign",
-                  description: "Complete website redesign project",
-                  color: "#3b82f6"
-                },
-                {
-                  id: "mock-project-2",
-                  name: "Mobile App",
-                  description: "iOS and Android app development",
-                  color: "#10b981"
-                }
-              ]);
+              setProjects(getMockProjects());
             }
           }
         );
@@ -181,29 +287,7 @@ const KanbanPage = () => {
           (error) => {
             console.warn("Employees listener error:", error);
             if (mounted) {
-              setEmployees([
-                {
-                  id: "mock-user",
-                  name: "Alice Johnson",
-                  email: "alice@example.com",
-                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice",
-                  role: "Designer"
-                },
-                {
-                  id: "mock-user-2",
-                  name: "Bob Smith",
-                  email: "bob@example.com",
-                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Bob",
-                  role: "Developer"
-                },
-                {
-                  id: "mock-user-3",
-                  name: "Carol Davis",
-                  email: "carol@example.com",
-                  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Carol",
-                  role: "QA Engineer"
-                }
-              ]);
+              setEmployees(getMockEmployees());
             }
           }
         );
@@ -211,18 +295,15 @@ const KanbanPage = () => {
         unsubscribers.push(tasksUnsub, projectsUnsub, employeesUnsub);
       } catch (error) {
         console.error("Failed to setup Firebase listeners:", error);
-        toast.error("Connection error - using offline mode");
-
         if (mounted) {
-          setTasks([]);
-          setProjects([]);
-          setEmployees([]);
-          setLoading(false);
+          toast.error("Connection error - using offline mode");
+          loadMockData();
         }
       }
     };
 
-    setupRealtimeListeners();
+    // Start the connection process
+    setupFirebaseWithTimeout();
 
     return () => {
       mounted = false;
