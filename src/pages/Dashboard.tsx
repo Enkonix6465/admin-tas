@@ -474,25 +474,29 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(59,130,246,0.1)] dark:to-[rgba(29,78,216,0.05)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-blue-500/20 p-4 shadow-lg dark:shadow-blue-500/10 hover:shadow-xl dark:hover:shadow-blue-500/20 transition-all duration-300"
+            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
+            style={{ animationDelay: '2s' }}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-blue-300">
+                <p className="text-xs font-medium text-gray-600 dark:text-blue-300/90 mb-1">
                   In Progress
                 </p>
-                <p className="text-xl font-bold text-gray-900 dark:text-blue-100">
+                <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   {inProgressTasks.length}
                 </p>
               </div>
-              <div className="p-2 bg-blue-100 dark:bg-gradient-to-br dark:from-blue-500/20 dark:to-cyan-500/20 rounded-lg shadow-sm">
-                <Activity className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <div className="relative">
+                <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 dark:from-blue-500/30 dark:to-cyan-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-blue-500/20 dark:border-blue-500/40 group-hover:scale-110 transition-transform duration-300">
+                  <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
               </div>
             </div>
-            <div className="mt-3">
-              <div className="w-full bg-gray-200 dark:bg-blue-900/30 rounded-full h-1.5">
+            <div className="mt-3 relative z-10">
+              <div className="w-full bg-gradient-to-r from-blue-900/20 to-cyan-900/20 dark:bg-blue-900/30 rounded-full h-2 overflow-hidden">
                 <div
-                  className="bg-blue-600 dark:bg-blue-400 h-1.5 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-500 animate-liquid-shimmer"
                   style={{
                     width: `${tasks.length > 0 ? (inProgressTasks.length / tasks.length) * 100 : 0}%`,
                   }}
@@ -505,27 +509,33 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/90 dark:bg-gradient-to-br dark:from-[rgba(16,185,129,0.1)] dark:to-[rgba(5,150,105,0.05)] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-green-500/20 p-4 shadow-lg dark:shadow-green-500/10 hover:shadow-xl dark:hover:shadow-green-500/20 transition-all duration-300"
+            className="liquid-glass-stats group cursor-pointer animate-liquid-float"
+            style={{ animationDelay: '3s' }}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between relative z-10">
               <div>
-                <p className="text-xs font-medium text-gray-600 dark:text-green-300">
+                <p className="text-xs font-medium text-gray-600 dark:text-green-300/90 mb-1">
                   Completed
                 </p>
-                <p className="text-xl font-bold text-gray-900 dark:text-green-100">
+                <p className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
                   {completedTasks.length}
                 </p>
               </div>
-              <div className="p-2 bg-green-100 dark:bg-gradient-to-br dark:from-green-500/20 dark:to-emerald-500/20 rounded-lg shadow-sm">
-                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <div className="relative">
+                <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 dark:from-green-500/30 dark:to-emerald-500/30 rounded-xl shadow-lg backdrop-blur-sm border border-green-500/20 dark:border-green-500/40 group-hover:scale-110 transition-transform duration-300">
+                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-liquid-pulse"></div>
               </div>
             </div>
-            <div className="mt-3 flex items-center text-xs">
-              <Target className="w-3 h-3 text-green-500 mr-1" />
-              <span className="text-green-600 dark:text-green-400 font-medium">
-                {tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0}%
-              </span>
-              <span className="text-gray-600 dark:text-green-300/70 ml-1">
+            <div className="mt-3 flex items-center text-xs relative z-10">
+              <div className="flex items-center px-2 py-1 bg-green-500/10 dark:bg-green-500/20 rounded-full border border-green-500/20 dark:border-green-500/30">
+                <Target className="w-3 h-3 text-green-500 mr-1" />
+                <span className="text-green-600 dark:text-green-400 font-medium">
+                  {tasks.length > 0 ? Math.round((completedTasks.length / tasks.length) * 100) : 0}%
+                </span>
+              </div>
+              <span className="text-gray-600 dark:text-green-300/70 ml-2">
                 completion rate
               </span>
             </div>
