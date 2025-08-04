@@ -768,8 +768,8 @@ const Dashboard = () => {
                         );
                         return teamTasks.length;
                       }),
-                      backgroundColor: 'rgba(52, 199, 89, 0.8)',
-                      borderColor: 'rgba(52, 199, 89, 1)',
+                      backgroundColor: 'rgba(147, 51, 234, 0.8)',
+                      borderColor: 'rgba(147, 51, 234, 1)',
                       borderWidth: 1,
                     },
                     {
@@ -781,8 +781,8 @@ const Dashboard = () => {
                         );
                         return teamTasks.length;
                       }),
-                      backgroundColor: 'rgba(255, 149, 0, 0.8)',
-                      borderColor: 'rgba(255, 149, 0, 1)',
+                      backgroundColor: 'rgba(168, 85, 247, 0.8)',
+                      borderColor: 'rgba(168, 85, 247, 1)',
                       borderWidth: 1,
                     },
                     {
@@ -794,8 +794,8 @@ const Dashboard = () => {
                         );
                         return teamTasks.length;
                       }),
-                      backgroundColor: 'rgba(255, 59, 48, 0.8)',
-                      borderColor: 'rgba(255, 59, 48, 1)',
+                      backgroundColor: 'rgba(196, 181, 253, 0.8)',
+                      borderColor: 'rgba(196, 181, 253, 1)',
                       borderWidth: 1,
                     },
                   ],
