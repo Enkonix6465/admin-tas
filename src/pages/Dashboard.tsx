@@ -276,7 +276,7 @@ const Dashboard = () => {
 
 
       {/* Header */}
-      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-4 py-3 shadow-sm dark:shadow-purple-500/20 relative z-10">
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-gray-900 dark:text-purple-100">
