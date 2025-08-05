@@ -85,7 +85,7 @@ const Reports = () => {
               setTasks(tasksData);
               console.log("Real-time tasks data loaded:", tasksData.length, "tasks");
               if (tasksData.length > 0) {
-                toast.success(`📊 Loaded ${tasksData.length} tasks from database`);
+                toast.success(`�� Loaded ${tasksData.length} tasks from database`);
               }
             }
           },
@@ -888,7 +888,16 @@ const Reports = () => {
         avgDailyCompleted: Math.round(last30Days.reduce((acc, day) => acc + day.completed, 0) / 30),
         avgDailyCreated: Math.round(last30Days.reduce((acc, day) => acc + day.created, 0) / 30),
         productivityTrend: "upward",
-        bestDay: last30Days.reduce((max, day) => day.completed > max.completed ? day : max, last30Days[0] || {date: 'N/A', completed: 0}),
+        bestDay: last30Days.reduce((max, day) => {
+          const dayProductivity = day.completed > 0 ? (day.completed / Math.max(day.created, 1)) * 100 : 0;
+          const maxProductivity = max.completed > 0 ? (max.completed / Math.max(max.created, 1)) * 100 : 0;
+          return dayProductivity > maxProductivity ? {
+            date: day.date,
+            completed: day.completed,
+            created: day.created,
+            productivity: dayProductivity
+          } : max;
+        }, last30Days[0] || {date: 'N/A', completed: 0, created: 0, productivity: 0}),
       },
       chartData: {
         trends: last30Days
