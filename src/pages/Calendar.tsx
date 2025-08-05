@@ -465,7 +465,7 @@ const Calendar = () => {
 
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-purple-700 mb-2">
+                        <label className="block text-sm font-medium text-purple-700 dark:text-purple-300 mb-2">
                           Status
                         </label>
                         <div className="grid grid-cols-2 gap-2">
@@ -473,11 +473,11 @@ const Calendar = () => {
                             <label key={status} className="flex items-center gap-2 text-sm">
                               <input
                                 type="checkbox"
-                                className="rounded border-purple-300 text-purple-600 focus:ring-purple-500/20"
+                                className="rounded border-purple-300 dark:border-purple-600 text-purple-600 focus:ring-purple-500/20"
                                 checked={tempFilters.status.includes(status)}
                                 onChange={() => handleFilterChange("status", status)}
                               />
-                              <span className="capitalize text-purple-700">{status.replace("_", " ")}</span>
+                              <span className="capitalize text-purple-700 dark:text-purple-300">{status.replace("_", " ")}</span>
                             </label>
                           ))}
                         </div>
