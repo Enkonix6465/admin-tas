@@ -532,7 +532,7 @@ export default function ProjectTasksViewer() {
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                      <tbody className="bg-white/80 dark:bg-black/80 divide-y divide-gray-200 dark:divide-purple-500/30">
                         {searchedTasks.map((task: any, index: number) => (
                           <motion.tr
                             key={task.id}
