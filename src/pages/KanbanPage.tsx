@@ -611,7 +611,7 @@ const KanbanPage = () => {
         
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-purple-700 dark:text-purple-300 mb-3 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 leading-relaxed">
             {task.description}
           </p>
         )}
