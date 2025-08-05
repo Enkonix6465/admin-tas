@@ -342,7 +342,7 @@ const Calendar = () => {
               className={`w-full text-left px-3 py-3 rounded-xl text-sm transition-all ${
                 selectedProject === "all"
                   ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25"
-                  : "text-purple-700 hover:bg-purple-100/60 backdrop-blur-sm"
+                  : "text-purple-700 dark:text-purple-300 hover:bg-purple-100/60 dark:hover:bg-purple-900/60 backdrop-blur-sm"
               }`}
             >
               <div className="flex items-center gap-3">
