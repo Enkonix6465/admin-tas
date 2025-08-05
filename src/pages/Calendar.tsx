@@ -738,7 +738,7 @@ const Calendar = () => {
                   </div>
 
                   {getAllFilteredEvents().length === 0 && (
-                    <div className="text-center py-16 text-purple-600">
+                    <div className="text-center py-16 text-purple-600 dark:text-purple-400">
                       <CalendarIcon className="w-20 h-20 mx-auto mb-4 opacity-50" />
                       <p className="text-xl font-medium mb-2">No events in timeline</p>
                       <p className="text-sm">Add some tasks to see the timeline visualization</p>
