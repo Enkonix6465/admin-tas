@@ -28,51 +28,65 @@ const AdminTicketsPage = () => {
 
   useEffect(() => {
     const fetchTickets = async () => {
-      const ticketSnapshot = await getDocs(collection(db, "raiseTickets"));
-      const fetchedTickets: any[] = [];
-      const projectIds = new Set<string>();
-      const teamLeadIds = new Set<string>();
+      if (!isFirebaseConnected()) {
+        console.warn("Firebase not connected - skipping ticket fetch");
+        return;
+      }
 
-      ticketSnapshot.forEach((doc) => {
-        const data = doc.data();
-        fetchedTickets.push({ id: doc.id, ...data });
-        if (data.projectId) projectIds.add(data.projectId);
-        if (data.teamLeadId) teamLeadIds.add(data.teamLeadId);
-      });
+      try {
+        const ticketSnapshot = await getDocs(collection(db, "raiseTickets"));
+        const fetchedTickets: any[] = [];
+        const projectIds = new Set<string>();
+        const teamLeadIds = new Set<string>();
 
-      const projectMap: any = {};
-      await Promise.all(
-        Array.from(projectIds).map(async (id) => {
-          const projRef = doc(db, "projects", id);
-          const projSnap = await getDoc(projRef);
-          projectMap[id] = projSnap.exists()
-            ? projSnap.data().name || id
-            : "Unknown Project";
-        })
-      );
+        ticketSnapshot.forEach((doc) => {
+          const data = doc.data();
+          fetchedTickets.push({ id: doc.id, ...data });
+          if (data.projectId) projectIds.add(data.projectId);
+          if (data.teamLeadId) teamLeadIds.add(data.teamLeadId);
+        });
 
-      const leadMap: any = {};
-      await Promise.all(
-        Array.from(teamLeadIds).map(async (id) => {
-          const leadRef = doc(db, "employees", id);
-          const leadSnap = await getDoc(leadRef);
-          const data = leadSnap.data();
-          leadMap[id] = leadSnap.exists() ? data?.name || id : "Unknown";
-        })
-      );
+        const projectMap: any = {};
+        await Promise.all(
+          Array.from(projectIds).map(async (id) => {
+            const projRef = doc(db, "projects", id);
+            const projSnap = await getDoc(projRef);
+            projectMap[id] = projSnap.exists()
+              ? projSnap.data().name || id
+              : "Unknown Project";
+          })
+        );
 
-      // Fetch users for filtering
-      const userMap: any = {};
-      const userSnapshot = await getDocs(collection(db, "employees"));
-      userSnapshot.forEach((doc) => {
-        const data = doc.data();
-        userMap[doc.id] = data.name || data.email || doc.id;
-      });
+        const leadMap: any = {};
+        await Promise.all(
+          Array.from(teamLeadIds).map(async (id) => {
+            const leadRef = doc(db, "employees", id);
+            const leadSnap = await getDoc(leadRef);
+            const data = leadSnap.data();
+            leadMap[id] = leadSnap.exists() ? data?.name || id : "Unknown";
+          })
+        );
 
-      setProjectsMap(projectMap);
-      setTeamLeadMap(leadMap);
-      setUsersMap(userMap);
-      setTickets(fetchedTickets);
+        // Fetch users for filtering
+        const userMap: any = {};
+        const userSnapshot = await getDocs(collection(db, "employees"));
+        userSnapshot.forEach((doc) => {
+          const data = doc.data();
+          userMap[doc.id] = data.name || data.email || doc.id;
+        });
+
+        setProjectsMap(projectMap);
+        setTeamLeadMap(leadMap);
+        setUsersMap(userMap);
+        setTickets(fetchedTickets);
+      } catch (error) {
+        console.error("Error fetching tickets:", error);
+        // Set empty fallback data
+        setProjectsMap({});
+        setTeamLeadMap({});
+        setUsersMap({});
+        setTickets([]);
+      }
     };
 
     fetchTickets();
