@@ -1215,7 +1215,6 @@ const Reports = () => {
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
                               <LineChart data={reportData.chartData.individualData.weeklyPerformance}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
                                 <XAxis dataKey="week" stroke="#6b7280" />
                                 <YAxis stroke="#6b7280" />
                                 <Tooltip
