@@ -273,8 +273,8 @@ const Calendar = () => {
   };
 
   return (
-    <div className="h-full bg-gradient-to-br from-purple-50 via-white to-purple-100 flex overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/5 via-transparent to-purple-900/5 pointer-events-none" />
+    <div className="h-full bg-gradient-to-br from-purple-50 via-white to-purple-100 dark:bg-gradient-to-br dark:from-[#0f1129] dark:via-[#1a1b3a] dark:to-[#2d1b69] flex overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/5 via-transparent to-purple-900/5 dark:from-purple-400/10 dark:via-transparent dark:to-purple-600/10 pointer-events-none" />
       
       {/* Project Sidebar */}
       <motion.div
