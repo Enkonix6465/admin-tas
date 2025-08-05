@@ -408,7 +408,7 @@ const Calendar = () => {
           <div className="relative flex items-center gap-3">
             {/* View Mode Toggle */}
             {activeView === "calendar" && (
-              <div className="flex items-center bg-purple-100/60 backdrop-blur-sm rounded-xl p-1 shadow-sm">
+              <div className="flex items-center bg-purple-100/60 dark:bg-purple-900/60 backdrop-blur-sm rounded-xl p-1 shadow-sm">
                 {[
                   { id: "day", icon: Eye, label: "Day" },
                   { id: "week", icon: List, label: "Week" },
