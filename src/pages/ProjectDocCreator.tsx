@@ -781,7 +781,7 @@ const ProjectDocCreator = () => {
           {selectedProject ? (
             <>
               {/* Enhanced Editor Header */}
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30 bg-white/80 dark:bg-black/95 backdrop-blur-xl">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex-1 min-w-0">
                     <input
