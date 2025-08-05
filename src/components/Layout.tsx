@@ -145,26 +145,6 @@ function Layout() {
           </button>
         </div>
 
-        {/* Search - Compact */}
-        <div className="px-4 py-3">
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' && searchQuery.trim()) {
-                  // Global search functionality
-                  console.log('Searching for:', searchQuery);
-                  // You can implement global search logic here
-                }
-              }}
-              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-purple-500 focus:border-transparent transition-all duration-200"
-            />
-          </div>
-        </div>
 
         {/* Navigation - Compact */}
         <div className="flex-1 overflow-y-auto px-4 py-3 custom-scrollbar">
