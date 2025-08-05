@@ -685,10 +685,6 @@ export default function EmployeePerformancePage() {
                         fullMark: 100
                       }
                     ]}>
-                      <PolarGrid
-                        stroke={document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'}
-                        strokeOpacity={0.6}
-                      />
                       <PolarAngleAxis
                         dataKey="dimension"
                         tick={{
