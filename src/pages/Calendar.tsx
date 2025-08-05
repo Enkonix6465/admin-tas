@@ -851,7 +851,7 @@ const Calendar = () => {
                         <div className={`text-sm font-medium mb-2 ${
                           isToday_
                             ? "w-6 h-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full flex items-center justify-center text-xs shadow-lg"
-                            : "text-purple-700"
+                            : "text-purple-700 dark:text-purple-300"
                         }`}>
                           {format(day, "d")}
                         </div>
