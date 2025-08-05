@@ -657,7 +657,7 @@ const KanbanPage = () => {
                 key={index}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: (typeof index === 'number' ? index : 0) * 0.1 }}
                 whileHover={{ scale: 1.05 }}
                 className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md font-medium"
               >
