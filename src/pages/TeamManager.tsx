@@ -561,7 +561,7 @@ export default function TeamManager() {
       <div className="p-6">
         {teams.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <div className="w-24 h-24 bg-gradient-to-br from-cyan-100 to-orange-100 dark:from-purple-800/50 dark:to-purple-700/50 rounded-2xl flex items-center justify-center mx-auto mb-6">
               <Users className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
