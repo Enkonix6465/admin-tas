@@ -503,7 +503,7 @@ const Calendar = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-purple-700 mb-2">
+                        <label className="block text-sm font-medium text-purple-700 dark:text-purple-300 mb-2">
                           Projects
                         </label>
                         <div className="max-h-32 overflow-y-auto space-y-2">
@@ -511,7 +511,7 @@ const Calendar = () => {
                             <label key={project.id} className="flex items-center gap-2 text-sm">
                               <input
                                 type="checkbox"
-                                className="rounded border-purple-300 text-purple-600 focus:ring-purple-500/20"
+                                className="rounded border-purple-300 dark:border-purple-600 text-purple-600 focus:ring-purple-500/20"
                                 checked={tempFilters.projects.includes(project.id)}
                                 onChange={() => handleFilterChange("projects", project.id)}
                               />
@@ -519,7 +519,7 @@ const Calendar = () => {
                                 className="w-3 h-3 rounded-sm"
                                 style={{ backgroundColor: project.color }}
                               />
-                              <span className="truncate text-purple-700">{project.name}</span>
+                              <span className="truncate text-purple-700 dark:text-purple-300">{project.name}</span>
                             </label>
                           ))}
                         </div>
