@@ -149,20 +149,17 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
       </div>
 
       {/* Performance Summary */}
-      <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl border border-purple-200 dark:border-purple-500/30">
+      <div className="mt-6 liquid-glass-card">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-purple-100 dark:bg-purple-800 rounded-lg flex items-center justify-center">
-            <TrendingUp className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-          </div>
           <div>
             <p className="text-sm font-medium text-gray-900 dark:text-white">
               Performance Summary
             </p>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              {overallPerformance >= 80 
-                ? 'Excellent performance! Keep up the great work.' 
-                : overallPerformance >= 60 
-                ? 'Good progress, but there\'s room for improvement.' 
+            <p className="text-xs text-gray-600 dark:text-purple-300/70">
+              {overallPerformance >= 80
+                ? 'Excellent performance! Keep up the great work.'
+                : overallPerformance >= 60
+                ? 'Good progress, but there\'s room for improvement.'
                 : 'Performance needs attention. Consider reviewing processes.'
               }
             </p>
