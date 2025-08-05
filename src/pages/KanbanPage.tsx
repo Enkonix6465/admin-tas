@@ -147,7 +147,7 @@ const KanbanPage = () => {
         id: "mock-project-1",
         name: "Website Redesign",
         description: "Complete website redesign project with modern UI",
-        color: "#3b82f6"
+        color: "#00D4FF"
       },
       {
         id: "mock-project-2",
