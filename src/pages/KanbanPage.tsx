@@ -383,7 +383,7 @@ const KanbanPage = () => {
     },
     {
       id: "review",
-      title: "��� Review",
+      title: "👀 Review",
       status: "review",
       color: "from-orange-100/90 via-orange-50/80 to-orange-100/90",
       borderColor: "border-orange-300/40 dark:border-purple-400/30",
@@ -733,8 +733,8 @@ const KanbanPage = () => {
       <div className="absolute inset-0 bg-gradient-to-tr from-gray-100/5 via-transparent to-gray-200/5 dark:from-purple-400/10 dark:via-transparent dark:to-purple-600/10 pointer-events-none" />
       
       {/* Enhanced Header */}
-      <div className="relative backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border-b border-purple-200/30 dark:border-purple-600/30 p-4 flex-shrink-0 shadow-lg">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-white/10 to-purple-600/5 dark:from-purple-400/10 dark:via-gray-900/10 dark:to-purple-600/10" />
+      <div className="relative bg-white dark:bg-gray-900/90 border-b border-gray-200 dark:border-purple-600/30 p-4 flex-shrink-0 shadow-sm">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-50/10 via-white/10 to-gray-100/10 dark:from-purple-400/10 dark:via-gray-900/10 dark:to-purple-600/10" />
         
         <div className="relative flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
@@ -778,7 +778,7 @@ const KanbanPage = () => {
                   onClick={() => {
                     setViewMode(mode.id);
                     if (mode.id === 'list') {
-                      toast.success('Switched to List view! 📋');
+                      toast.success('Switched to List view! ����');
                     } else if (mode.id === 'timeline') {
                       toast.success('Switched to Timeline view! ⏰');
                     } else if (mode.id === 'table') {
