@@ -1256,16 +1256,16 @@ const KanbanPage = () => {
                           <Timer className="w-5 h-5 text-purple-400 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors" />
                         </div>
 
-                        {task.progress > 0 && (
+                        {task.progress && Number.isFinite(task.progress) && task.progress > 0 && (
                           <div className="mt-4">
-                            <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-400 mb-2">
+                            <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
                               <span>Progress</span>
-                              <span>{task.progress}%</span>
+                              <span>{Math.round(task.progress || 0)}%</span>
                             </div>
-                            <div className="w-full bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-2">
+                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                               <div
-                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${task.progress}%` }}
+                                className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${Math.min(Math.max(task.progress || 0, 0), 100)}%` }}
                               />
                             </div>
                           </div>
