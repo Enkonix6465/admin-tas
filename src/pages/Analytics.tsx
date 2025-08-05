@@ -715,11 +715,10 @@ const Analytics = () => {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6"
+                  className="liquid-glass-card"
                 >
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-purple-600" />
-                    **Department Performance**
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                    Department Performance
                   </h3>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
