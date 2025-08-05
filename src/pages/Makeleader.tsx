@@ -96,7 +96,7 @@ export default function TeamLeadAssignmentPage() {
   });
 
   return (
-    <div className="p-6 min-h-screen bg-gray-50 dark:bg-purple-900/80">
+    <div className="p-6 min-h-screen bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90">
       <h1 className="text-xl font-bold text-gray-800 dark:text-white mb-4">
         Assign Team Leads
       </h1>
