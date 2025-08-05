@@ -271,7 +271,7 @@ const AdminTicketsPage = () => {
           </thead>
           <tbody>
             {filteredTickets.map((ticket) => (
-              <tr key={ticket.id} className="hover:bg-gray-50 dark:hover:bg-purple-700/50">
+              <tr key={ticket.id} className="hover:bg-cyan-50 dark:hover:bg-orange-900/20">
                 <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.projectTicketId}</td>
                 <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.title}</td>
                 <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.description}</td>
