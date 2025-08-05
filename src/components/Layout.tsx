@@ -514,7 +514,7 @@ function Layout() {
                         <label className="block text-xs font-medium text-gray-700 dark:text-purple-300 mb-1">
                           Assignee
                         </label>
-                        <select className="w-full px-2 py-1 text-xs border border-gray-200 dark:border-purple-500/30 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-1 focus:ring-purple-500">
+                        <select className="w-full px-2 py-1 text-xs border border-gray-200 dark:border-purple-500/30 rounded bg-white dark:bg-black/90 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-1 focus:ring-purple-500">
                           <option>All Members</option>
                           <option>Me</option>
                           <option>Team Lead</option>
