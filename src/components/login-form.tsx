@@ -11,6 +11,7 @@ import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import { Moon, Sun } from "lucide-react";
 import { useThemeStore } from "../store/themeStore";
 
+
 const taskQuotations = [
   "Success is not final, failure is not fatal: it is the courage to continue that counts.",
   "The way to get started is to quit talking and begin doing.",
@@ -109,18 +110,7 @@ export function LoginForm({
 
             <div className="max-w-sm mx-auto w-full space-y-8 relative z-10">
               {/* Theme Toggle */}
-              <div className="absolute top-4 right-4">
-                <button
-                  onClick={toggleTheme}
-                  className="p-2 rounded-xl bg-white/20 dark:bg-purple-800/20 backdrop-blur-sm border border-white/30 dark:border-purple-500/30 hover:bg-white/30 dark:hover:bg-purple-700/30 transition-all duration-300"
-                >
-                  {theme === 'dark' ? (
-                    <Sun className="w-5 h-5 text-yellow-500" />
-                  ) : (
-                    <Moon className="w-5 h-5 text-purple-600" />
-                  )}
-                </button>
-              </div>
+              
               
               {/* Header */}
               <div className="text-center space-y-6">
