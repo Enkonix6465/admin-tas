@@ -772,14 +772,14 @@ const Dashboard = () => {
                     {
                       data: [completedTasks.length, inProgressTasks.length, pendingTasks.length],
                       backgroundColor: [
-                        'rgba(124, 58, 237, 0.9)', // Deep Purple
-                        'rgba(147, 51, 234, 0.9)', // Rich Purple
-                        'rgba(168, 85, 247, 0.9)', // Bright Violet
+                        'rgba(0, 212, 255, 0.9)', // Neon Blue
+                        'rgba(255, 102, 0, 0.9)', // Neon Orange
+                        'rgba(0, 212, 255, 0.6)', // Light Neon Blue
                       ],
                       borderColor: [
-                        'rgba(124, 58, 237, 1)', // Deep Purple
-                        'rgba(147, 51, 234, 1)', // Rich Purple
-                        'rgba(168, 85, 247, 1)', // Bright Violet
+                        'rgba(0, 212, 255, 1)', // Neon Blue
+                        'rgba(255, 102, 0, 1)', // Neon Orange
+                        'rgba(0, 212, 255, 1)', // Neon Blue
                       ],
                       borderWidth: 3,
                       hoverBorderWidth: 4,
