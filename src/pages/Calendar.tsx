@@ -960,7 +960,7 @@ const Calendar = () => {
                 ))}
                 
                 {getEventsForDate(selectedDate).length === 0 && (
-                  <div className="text-center py-8 text-purple-600">
+                  <div className="text-center py-8 text-purple-600 dark:text-purple-400">
                     <CalendarIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p>No events for this date</p>
                   </div>
