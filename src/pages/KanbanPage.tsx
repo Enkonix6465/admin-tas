@@ -659,7 +659,7 @@ const KanbanPage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className="px-2 py-1 text-xs bg-purple-100/80 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg border border-purple-200/50 dark:border-purple-600/30 font-medium shadow-sm backdrop-blur-sm"
+                className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md font-medium"
               >
                 #{tag.trim()}
               </motion.span>
