@@ -117,7 +117,7 @@ function Layout() {
               <ChevronDown className="w-4 h-4 text-gray-400 dark:text-purple-300" />
             </button>
             {workspaceOpen && (
-              <div className="absolute top-full left-0 mt-1 w-44 bg-white dark:bg-purple-800/90 border border-gray-200 dark:border-purple-500/30 rounded-lg backdrop-blur-xl z-[9999] p-2">
+              <div className="absolute top-full left-0 mt-1 w-44 bg-white dark:bg-black/95 border border-gray-200 dark:border-purple-500/30 rounded-lg backdrop-blur-xl z-[9999] p-2">
                 <div className="space-y-1">
                   <div className="px-2 py-1 text-xs font-medium text-gray-700 dark:text-purple-200">Workspaces</div>
                   <button
