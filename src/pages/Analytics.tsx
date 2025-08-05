@@ -910,7 +910,7 @@ const Analytics = () => {
                 <div className="h-96">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={performanceTrends}>
-                      <XAxis dataKey="date" stroke="#6b7280" tick={{ fontSize: 12 }} />
+                      <XAxis dataKey="date" stroke="#6b7280" tick={false} />
                       <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} />
                       <Tooltip
                         contentStyle={{
