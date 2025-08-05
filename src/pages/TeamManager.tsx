@@ -773,13 +773,13 @@ export default function TeamManager() {
                 )}
               </div>
 
-              <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-3">
+              <div className="p-6 border-t border-cyan-300/50 dark:border-purple-500/40 flex justify-end gap-3">
                 <button
                   onClick={() => {
                     setShowCreateModal(false);
                     resetForm();
                   }}
-                  className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  className="px-6 py-3 border border-cyan-300 dark:border-purple-500/40 text-gray-700 dark:text-purple-300 rounded-xl hover:bg-cyan-50 dark:hover:bg-purple-700/50 transition-colors"
                 >
                   Cancel
                 </button>
