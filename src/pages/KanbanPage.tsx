@@ -811,7 +811,7 @@ const KanbanPage = () => {
                     } else if (mode.id === 'table') {
                       toast.success('Switched to Table view! 📊');
                     } else if (mode.id === 'board') {
-                      toast.success('Switched to Board view! 📋');
+                      toast.success('Switched to Board view! ��');
                     }
                   }}
                   className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all ${
@@ -1464,7 +1464,7 @@ const KanbanPage = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-2xl"
+              className="relative w-full max-w-lg bg-white dark:bg-black/95 rounded-2xl shadow-2xl"
             >
               <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center gap-3">
