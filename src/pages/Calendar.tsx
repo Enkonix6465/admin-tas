@@ -515,7 +515,7 @@ const Calendar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-700 rounded-lg shadow-xl z-[9999] p-4"
+                  className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-black/95 border border-gray-200 dark:border-purple-500/30 rounded-lg shadow-xl z-[99999] p-4"
                 >
                   <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Filter Events</h3>
 
