@@ -776,10 +776,10 @@ const Calendar = () => {
                   // Day view - single day layout
                   <div className="space-y-4">
                     <div className="text-center mb-6">
-                      <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                      <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">
                         {format(currentDate, "EEEE")}
                       </h2>
-                      <p className="text-lg text-purple-600 mt-1">
+                      <p className="text-lg text-purple-600 dark:text-purple-400 mt-1">
                         {format(currentDate, "MMMM d, yyyy")}
                       </p>
                     </div>
