@@ -610,11 +610,10 @@ const Analytics = () => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6"
+                  className="liquid-glass-card"
                 >
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                    <Target className="w-5 h-5 text-blue-600" />
-                    **Task Status Distribution**
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+                    Task Status Distribution
                   </h3>
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
