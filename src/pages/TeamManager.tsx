@@ -57,13 +57,13 @@ export default function TeamManager() {
   const [expandedTeams, setExpandedTeams] = useState(new Set());
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [filterDepartment, setFilterDepartment] = useState("all");
-  const [teamColor, setTeamColor] = useState("#3B82F6");
-  
+  const [teamColor, setTeamColor] = useState("#00D4FF");
+
   const { user } = useAuthStore();
 
   // Color options for teams
   const colorOptions = [
-    "#3B82F6", "#10B981", "#8B5CF6", "#F59E0B", "#EF4444", 
+    "#00D4FF", "#FF6600", "#00D4FF", "#F59E0B", "#EF4444",
     "#06B6D4", "#84CC16", "#F97316", "#EC4899", "#6366F1"
   ];
 
