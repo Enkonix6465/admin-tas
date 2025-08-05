@@ -942,7 +942,7 @@ const Reports = () => {
             date: day.date,
             completed: day.completed,
             created: day.created,
-            productivity: dayProductivity
+            productivity: Number(dayProductivity.toFixed(14)) // Keep high precision like the expected format
           } : max;
         }, last30Days[0] || {date: 'N/A', completed: 0, created: 0, productivity: 0}),
       },
