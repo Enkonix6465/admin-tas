@@ -640,10 +640,10 @@ const Calendar = () => {
                               {/* Card Header */}
                               <div className="relative flex items-start justify-between mb-3">
                                 <div className="flex-1">
-                                  <h3 className="font-semibold text-purple-900 text-lg mb-1">
+                                  <h3 className="font-semibold text-purple-900 dark:text-purple-100 text-lg mb-1">
                                     {event.title}
                                   </h3>
-                                  <div className="flex items-center gap-2 text-sm text-purple-600">
+                                  <div className="flex items-center gap-2 text-sm text-purple-600 dark:text-purple-400">
                                     <Clock className="w-4 h-4" />
                                     <span>{format(event.date, "MMM d, yyyy 'at' h:mm a")}</span>
                                     {daysTillCompletion > 0 && (
