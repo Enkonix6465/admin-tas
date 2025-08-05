@@ -435,7 +435,7 @@ export default function TeamManager() {
                 </h4>
                 <div className="grid grid-cols-1 gap-3">
                   {teamMembers.map((member) => (
-                    <div key={member.id} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div key={member.id} className="flex items-center gap-3 p-3 bg-cyan-50 dark:bg-purple-800/30 rounded-lg">
                       <img
                         src={member.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member.name}`}
                         alt={member.name}
