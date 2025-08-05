@@ -692,15 +692,15 @@ const KanbanPage = () => {
           
           <div className="flex items-center gap-3">
             {task.due_date && (
-              <div className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 dark:text-red-400' : ''}`}>
+              <div className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}>
                 <Calendar className="w-3 h-3" />
-                <span>{new Date(task.due_date).toLocaleDateString()}</span>
+                <span className="text-xs">{new Date(task.due_date).toLocaleDateString()}</span>
               </div>
             )}
             {task.comments?.length > 0 && (
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                 <MessageCircle className="w-3 h-3" />
-                <span>{task.comments.length}</span>
+                <span className="text-xs">{task.comments.length}</span>
               </div>
             )}
           </div>
