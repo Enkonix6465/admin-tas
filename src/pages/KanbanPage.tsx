@@ -842,7 +842,7 @@ const KanbanPage = () => {
             <div className="relative filter-dropdown">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-purple-800 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-purple-700 transition-colors z-30 relative"
+                className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-black/80 transition-colors z-30 relative"
               >
                 <Filter className="w-4 h-4" />
                 Filters
