@@ -35,6 +35,7 @@ import {
   Activity,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
+import FirebaseConnectionStatus from "./FirebaseConnectionStatus";
 
 function Layout() {
   const { signOut, user } = useAuthStore();
