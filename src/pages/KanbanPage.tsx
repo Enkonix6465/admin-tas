@@ -383,7 +383,7 @@ const KanbanPage = () => {
     },
     {
       id: "review",
-      title: "👀 Review",
+      title: "��� Review",
       status: "review",
       color: "from-orange-100/90 via-orange-50/80 to-orange-100/90",
       borderColor: "border-orange-300/40 dark:border-purple-400/30",
@@ -729,8 +729,8 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-purple-50 via-white to-purple-100 dark:bg-gradient-to-br dark:from-[#0f1129] dark:via-[#1a1b3a] dark:to-[#2d1b69]">
-      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/5 via-transparent to-purple-900/5 dark:from-purple-400/10 dark:via-transparent dark:to-purple-600/10 pointer-events-none" />
+    <div className="flex flex-col h-full bg-gray-50 dark:bg-gradient-to-br dark:from-[#0f1129] dark:via-[#1a1b3a] dark:to-[#2d1b69]">
+      <div className="absolute inset-0 bg-gradient-to-tr from-gray-100/5 via-transparent to-gray-200/5 dark:from-purple-400/10 dark:via-transparent dark:to-purple-600/10 pointer-events-none" />
       
       {/* Enhanced Header */}
       <div className="relative backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border-b border-purple-200/30 dark:border-purple-600/30 p-4 flex-shrink-0 shadow-lg">
