@@ -669,11 +669,11 @@ const Calendar = () => {
 
                               {/* Progress Bar */}
                               <div className="relative mb-3">
-                                <div className="flex items-center justify-between text-xs text-purple-600 mb-1">
+                                <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-400 mb-1">
                                   <span>Progress</span>
                                   <span>{completionProgress.toFixed(0)}%</span>
                                 </div>
-                                <div className="w-full bg-purple-100/60 rounded-full h-2">
+                                <div className="w-full bg-purple-100/60 dark:bg-purple-900/60 rounded-full h-2">
                                   <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${completionProgress}%` }}
