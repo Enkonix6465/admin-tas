@@ -367,9 +367,9 @@ const Calendar = () => {
         <div className="p-6 border-b border-gray-200 dark:border-purple-500/30 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                Project Board [{new Date().getFullYear()}]
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white bg-gradient-to-r from-cyan-600 to-orange-600 dark:from-purple-400 dark:to-purple-500 bg-clip-text text-transparent">
+              Project Board [{new Date().getFullYear()}]
+            </h2>
 
             </div>
             <div className="flex items-center gap-2">
