@@ -749,8 +749,8 @@ const Calendar = () => {
             </div>
           ) : (
             // Calendar View
-            <div className="h-full bg-white/60 backdrop-blur-sm m-4 rounded-2xl border border-purple-200/30 overflow-hidden flex flex-col shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 rounded-2xl" />
+            <div className="h-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm m-4 rounded-2xl border border-purple-200/30 dark:border-purple-600/30 overflow-hidden flex flex-col shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 dark:from-purple-900/50 dark:to-gray-900/30 rounded-2xl" />
               
               {/* Week Headers - Only show for month and week view */}
               {viewMode !== "day" && (
