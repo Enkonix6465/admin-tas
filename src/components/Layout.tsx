@@ -389,7 +389,7 @@ function Layout() {
 
         {/* User Profile */}
         <div className="border-t border-gray-200 dark:border-purple-500/30 px-4 py-3 bg-gradient-to-r from-gray-50 to-white dark:from-black/95 dark:to-black/90">
-          <div className="flex items-center gap-3 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-[rgba(139,92,246,0.1)] dark:to-[rgba(59,130,246,0.1)] rounded-lg px-3 py-2 shadow-sm dark:shadow-purple-500/20 border dark:border-purple-500/20">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-black/90 dark:to-black/80 rounded-lg px-3 py-2 shadow-sm dark:shadow-purple-500/20 border dark:border-purple-500/20">
             <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center text-white text-sm font-semibold shadow-md">
               A
             </div>
