@@ -418,7 +418,7 @@ export default function ProjectTasksViewer() {
   console.log('Current activeTab:', activeTab);
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-gray-900 flex flex-col">
+    <div className="h-full bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90 flex flex-col">
       <PageHeader
         title="Project Tasks"
         subtitle={selectedProject ? `• ${selectedProject.name}` : ""}
