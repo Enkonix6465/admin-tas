@@ -680,14 +680,14 @@ const KanbanPage = () => {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-300">
+        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
           <div className="flex items-center gap-2">
             <img
               src={getEmployeeAvatar(task.assigned_to)}
               alt="avatar"
-              className="w-6 h-6 rounded-full border-2 border-white dark:border-purple-600 shadow-lg ring-2 ring-purple-100/50 dark:ring-purple-400/30"
+              className="w-6 h-6 rounded-full border-2 border-white dark:border-gray-600 shadow-sm"
             />
-            <span className="font-medium">{getEmployeeName(task.assigned_to)}</span>
+            <span className="font-medium text-gray-700 dark:text-gray-300">{getEmployeeName(task.assigned_to)}</span>
           </div>
           
           <div className="flex items-center gap-3">
