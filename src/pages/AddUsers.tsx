@@ -189,7 +189,7 @@ export default function EmployeeManagement() {
         </div>
       )}
 
-      <div className="bg-white dark:bg-purple-800/60 shadow-lg p-4 rounded mb-8 animate-slide-up border border-gray-200 dark:border-purple-500/30">
+      <div className="liquid-glass-card p-4 mb-8 animate-slide-up">
         <h3 className="font-semibold mb-4 text-lg text-gray-900 dark:text-white">➕ Add / Edit Employee</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
