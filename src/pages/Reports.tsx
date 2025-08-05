@@ -953,7 +953,7 @@ const Reports = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-purple-900 dark:via-purple-800 dark:to-purple-900">
+    <div className="flex flex-col h-full bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90">
       {/* Enhanced Header */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 p-6">
         <div className="flex items-center justify-between mb-4">
