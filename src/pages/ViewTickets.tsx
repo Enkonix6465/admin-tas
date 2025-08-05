@@ -173,7 +173,7 @@ const AdminTicketsPage = () => {
         </select>
       </div>
 
-      <div className="overflow-auto rounded border border-gray-200 dark:border-purple-500/30">
+      <div className="liquid-glass-card overflow-auto">
         <table className="min-w-[1200px] w-full border-collapse text-sm text-left">
           <thead className="bg-gray-200 dark:bg-purple-800">
             <tr>
