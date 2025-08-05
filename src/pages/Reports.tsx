@@ -599,7 +599,7 @@ const Reports = () => {
       // Task status distribution for pie chart
       const statusDistribution = [
         { name: 'Completed', value: emp.completedTasks, color: '#10b981' },
-        { name: 'In Progress', value: emp.inProgressTasks, color: '#3b82f6' },
+        { name: 'In Progress', value: emp.inProgressTasks, color: '#00D4FF' },
         { name: 'Pending', value: emp.pendingTasks, color: '#f59e0b' },
         { name: 'Review', value: emp.reviewTasks, color: '#8b5cf6' },
         { name: 'Overdue', value: emp.overdueTasks, color: '#ef4444' }
@@ -813,7 +813,7 @@ const Reports = () => {
       chartData: {
         statusDistribution: [
           { name: "Completed", value: completedTasks, color: "#10b981" },
-          { name: "In Progress", value: inProgressTasks, color: "#3b82f6" },
+          { name: "In Progress", value: inProgressTasks, color: "#00D4FF" },
           { name: "Pending", value: pendingTasks, color: "#f59e0b" },
           { name: "Overdue", value: overdueTasks, color: "#ef4444" },
         ]
@@ -1228,7 +1228,7 @@ const Reports = () => {
                                 <Legend />
                                 <Line type="monotone" dataKey="assigned" stroke="#f59e0b" strokeWidth={3} name="Tasks Assigned" />
                                 <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Tasks Completed" />
-                                <Line type="monotone" dataKey="onTime" stroke="#3b82f6" strokeWidth={3} name="On-Time Completions" />
+                                <Line type="monotone" dataKey="onTime" stroke="#00D4FF" strokeWidth={3} name="On-Time Completions" />
                               </LineChart>
                             </ResponsiveContainer>
                           </div>
@@ -1276,8 +1276,8 @@ const Reports = () => {
                                   <Radar
                                     name="Proficiency"
                                     dataKey="proficiency"
-                                    stroke="#3b82f6"
-                                    fill="#3b82f6"
+                                    stroke="#00D4FF"
+                                    fill="#00D4FF"
                                     fillOpacity={0.3}
                                     strokeWidth={2}
                                   />
@@ -1492,8 +1492,8 @@ const Reports = () => {
                                 <Radar
                                   name="**Completion Rate**"
                                   dataKey="completionRate"
-                                  stroke="#3b82f6"
-                                  fill="#3b82f6"
+                                  stroke="#00D4FF"
+                                  fill="#00D4FF"
                                   fillOpacity={0.3}
                                   strokeWidth={3}
                                 />
@@ -1575,10 +1575,10 @@ const Reports = () => {
                                 <Line
                                   type="monotone"
                                   dataKey="inProgress"
-                                  stroke="#3b82f6"
+                                  stroke="#00D4FF"
                                   strokeWidth={4}
                                   name="**In Progress**"
-                                  dot={{ fill: '#3b82f6', strokeWidth: 2, r: 6 }}
+                                  dot={{ fill: '#00D4FF', strokeWidth: 2, r: 6 }}
                                 />
                                 <Line
                                   type="monotone"
@@ -1796,8 +1796,8 @@ const Reports = () => {
                               <Radar
                                 name="Proficiency"
                                 dataKey="proficiency"
-                                stroke="#3b82f6"
-                                fill="#3b82f6"
+                                stroke="#00D4FF"
+                                fill="#00D4FF"
                                 fillOpacity={0.3}
                                 strokeWidth={2}
                               />
@@ -1868,7 +1868,7 @@ const Reports = () => {
                               color: '#f9fafb'
                             }}
                           />
-                          <Bar dataKey="completionRate" fill="#3b82f6" name="Completion Rate %" radius={[4, 4, 0, 0]} />
+                          <Bar dataKey="completionRate" fill="#00D4FF" name="Completion Rate %" radius={[4, 4, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     </div>
@@ -1897,7 +1897,7 @@ const Reports = () => {
                           />
                           <Legend />
                           <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Tasks Completed" />
-                          <Line type="monotone" dataKey="created" stroke="#3b82f6" strokeWidth={3} name="Tasks Created" />
+                          <Line type="monotone" dataKey="created" stroke="#00D4FF" strokeWidth={3} name="Tasks Created" />
                           <Line type="monotone" dataKey="productivity" stroke="#f59e0b" strokeWidth={3} name="Productivity %" />
                         </LineChart>
                       </ResponsiveContainer>
