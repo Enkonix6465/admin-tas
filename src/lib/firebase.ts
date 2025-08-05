@@ -295,48 +295,49 @@ export const getProjectStats = async (): Promise<ProjectStats> => {
 };
 
 export const getTaskStats = async (): Promise<TaskStats> => {
-  try {
-    const tasksRef = collection(db, "tasks");
-    const now = new Date();
+  return safeFirebaseOperation(
+    async () => {
+      const tasksRef = collection(db, "tasks");
+      const now = new Date();
 
-    const allTasksSnapshot = await getDocs(tasksRef);
-    const allTasks = allTasksSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+      const allTasksSnapshot = await getDocs(tasksRef);
+      const allTasks = allTasksSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-    const stats = {
-      total: allTasks.length,
-      pending: 0,
-      inProgress: 0,
-      completed: 0,
-      overdue: 0,
-    };
+      const stats = {
+        total: allTasks.length,
+        pending: 0,
+        inProgress: 0,
+        completed: 0,
+        overdue: 0,
+      };
 
-    allTasks.forEach((task) => {
-      switch (task.status) {
-        case "pending":
-          stats.pending++;
-          break;
-        case "in_progress":
-          stats.inProgress++;
-          break;
-        case "completed":
-          stats.completed++;
-          break;
-      }
+      allTasks.forEach((task) => {
+        switch (task.status) {
+          case "pending":
+            stats.pending++;
+            break;
+          case "in_progress":
+            stats.inProgress++;
+            break;
+          case "completed":
+            stats.completed++;
+            break;
+        }
 
-      const dueDate = getDateFromFirestore(task.due_date);
-      if (dueDate && dueDate < now && task.status !== "completed") {
-        stats.overdue++;
-      }
-    });
+        const dueDate = getDateFromFirestore(task.due_date);
+        if (dueDate && dueDate < now && task.status !== "completed") {
+          stats.overdue++;
+        }
+      });
 
-    return stats;
-  } catch (error) {
-    console.error("Error fetching task stats:", error);
-    throw error;
-  }
+      return stats;
+    },
+    { total: 0, pending: 0, inProgress: 0, completed: 0, overdue: 0 }, // Fallback stats
+    "getTaskStats"
+  );
 };
 
 export const getTeamStats = async (): Promise<TeamStats> => {
