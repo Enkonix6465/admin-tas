@@ -175,7 +175,7 @@ const AdminTicketsPage = () => {
 
       <div className="liquid-glass-card overflow-auto">
         <table className="min-w-[1200px] w-full border-collapse text-sm text-left">
-          <thead className="bg-gray-200 dark:bg-purple-800">
+          <thead className="bg-white/50 dark:bg-black/50">
             <tr>
               <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Ticket ID</th>
               <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Title</th>
