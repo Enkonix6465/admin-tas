@@ -697,7 +697,7 @@ export default function TeamManager() {
                     className="w-full px-4 py-3 border border-cyan-300 dark:border-purple-500/40 rounded-xl focus:ring-2 focus:ring-cyan-500 dark:focus:ring-purple-500 focus:border-transparent dark:bg-black/90 dark:text-white mb-3"
                   />
 
-                  <div className="border border-gray-300 dark:border-gray-600 rounded-xl max-h-60 overflow-y-auto">
+                  <div className="border border-cyan-300 dark:border-purple-500/40 rounded-xl max-h-60 overflow-y-auto">
                     {filteredEmployees.map((emp) => {
                       const isSelected = selectedMembers.includes(emp.id);
                       return (
