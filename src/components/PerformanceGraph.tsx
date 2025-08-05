@@ -128,22 +128,23 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
         {/* Average Delay */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className="bg-orange-50 dark:bg-orange-900/20 rounded-xl p-4 border border-gray-200 dark:border-purple-500/30"
+          className="liquid-glass-stats group cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-between mb-2 relative z-10">
+            <span className="text-sm font-medium text-gray-600 dark:text-purple-300/90">
               Avg Delay
             </span>
-            <Clock className="w-4 h-4 text-orange-600 dark:text-orange-400" />
           </div>
-          <div className="flex items-baseline gap-1">
-            <span className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+          <div className="flex items-baseline gap-1 relative z-10">
+            <span className="text-3xl font-bold text-gray-900 dark:text-white">
               {avgDelay}
             </span>
           </div>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            Per task
-          </p>
+          <div className="mt-3 relative z-10">
+            <span className="text-xs text-gray-600 dark:text-purple-300/70">
+              Per task
+            </span>
+          </div>
         </motion.div>
       </div>
 
