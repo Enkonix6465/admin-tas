@@ -590,7 +590,7 @@ const KanbanPage = () => {
             </div>
             <div className="flex items-center gap-2">
               <span className={`px-2 py-1 text-xs rounded-md font-medium ${getPriorityBadge(task.priority)}`}>
-                {task.priority?.charAt(0).toUpperCase() + task.priority?.slice(1)}
+                {task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'Normal'}
               </span>
               {isOverdue && (
                 <span className="px-2 py-1 text-xs bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md font-medium">
