@@ -426,7 +426,7 @@ export default function TeamManager() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="border-t border-gray-200 dark:border-gray-700"
+              className="border-t border-cyan-300/50 dark:border-purple-500/40"
             >
               <div className="p-4">
                 <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
