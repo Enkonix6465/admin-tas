@@ -754,7 +754,7 @@ export default function TeamManager() {
                         return (
                           <div
                             key={memberId}
-                            className="flex items-center gap-2 bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-full text-sm"
+                            className="flex items-center gap-2 bg-cyan-100 dark:bg-purple-900/30 text-cyan-700 dark:text-purple-300 px-3 py-1 rounded-full text-sm"
                           >
                             <img
                               src={member?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${member?.name}`}
