@@ -330,7 +330,7 @@ export default function EmployeeManagement() {
               { name: "manager", placeholder: "Manager", icon: User },
               { name: "location", placeholder: "Location", icon: MapPin },
             ].map(({ name, placeholder, icon: Icon }) => (
-              <div key={name} className="relative">
+              <div key={`input-${name}`} className="relative">
                 <Icon className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300/70" />
                 <input
                   name={name}
