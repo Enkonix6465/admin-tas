@@ -285,7 +285,7 @@ export default function ProjectTasksViewer() {
     }, {} as Record<string, any[]>);
 
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 overflow-y-auto max-h-full">
         {Object.entries(groupedTasks).map(([monthYear, tasks]) => (
           <div key={monthYear} className="relative">
             <div className="sticky top-0 bg-white/80 dark:bg-black/95 backdrop-blur-sm py-2 z-10">
