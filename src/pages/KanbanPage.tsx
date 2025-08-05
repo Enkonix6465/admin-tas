@@ -760,7 +760,7 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-cyan-50/50 via-orange-50/30 to-cyan-100/50 dark:from-purple-900/80 dark:via-purple-800/40 dark:to-purple-900/80 backdrop-blur-sm">
+    <div className="flex flex-col h-full bg-gradient-to-br from-cyan-50 via-orange-50 to-cyan-100 dark:bg-gradient-to-br dark:from-purple-900/20 dark:via-purple-800/30 dark:to-purple-900/20 backdrop-blur-sm">
       {/* Enhanced Header */}
       <div className="enhanced-glass-header border-b border-cyan-300/50 dark:border-purple-500/40 p-4 flex-shrink-0 backdrop-blur-2xl bg-gradient-to-r from-cyan-50/80 via-orange-50/80 to-cyan-100/80 dark:bg-gradient-to-r dark:from-purple-900/90 dark:via-purple-800/80 dark:to-purple-900/90">
         <div className="flex items-center justify-between mb-4">
