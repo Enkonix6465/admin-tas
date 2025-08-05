@@ -545,7 +545,7 @@ export default function TeamManager() {
             <select
               value={filterDepartment}
               onChange={(e) => setFilterDepartment(e.target.value)}
-              className="px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="px-4 py-3 bg-white dark:bg-black/90 border border-cyan-300 dark:border-purple-500/40 rounded-xl focus:ring-2 focus:ring-cyan-500 dark:focus:ring-purple-500 focus:border-transparent"
             >
               <option value="all">All Departments</option>
               <option value="Engineering">Engineering</option>
