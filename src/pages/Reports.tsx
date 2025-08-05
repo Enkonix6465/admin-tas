@@ -1731,10 +1731,10 @@ const Reports = () => {
                         {/* Reassignment Analysis with Donut Chart */}
                         <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-                            **Task Reassignment Analysis**
+                            Task Reassignment Analysis
                           </h3>
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                            **Team member task stability indicators**
+                            Team member task stability indicators
                           </p>
                           <div className="h-80">
                             <ResponsiveContainer width="100%" height="100%">
