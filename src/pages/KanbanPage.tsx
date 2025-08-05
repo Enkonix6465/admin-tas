@@ -862,7 +862,7 @@ const KanbanPage = () => {
                         <select
                           value={selectedPriority}
                           onChange={(e) => setSelectedPriority(e.target.value)}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
                         >
                           <option value="">All Priorities</option>
                           <option value="high">High</option>
