@@ -40,12 +40,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
           Performance Overview
         </h3>
         <div className="flex items-center gap-2">
-          {overallPerformance >= 80 ? (
-            <TrendingUp className="w-5 h-5 text-green-600 dark:text-green-400" />
-          ) : (
-            <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
-          )}
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="px-3 py-1 text-xs rounded-full font-medium bg-green-100 dark:bg-green-500/20 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-500/30">
             {overallPerformance >= 80 ? 'Improving' : 'Needs Attention'}
           </span>
         </div>
