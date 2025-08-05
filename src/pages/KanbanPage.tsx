@@ -1017,7 +1017,7 @@ const KanbanPage = () => {
                 <div className="relative w-full bg-white/30 dark:bg-purple-900/30 rounded-full h-2 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
-                    animate={{ width: `${Math.min((column.tasks.length / Math.max(filteredTasks.length, 1)) * 100, 100)}%` }}
+                    animate={{ width: `${Math.min(Math.max(((column.tasks.length || 0) / Math.max(filteredTasks.length || 1, 1)) * 100, 0), 100)}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="bg-gradient-to-r from-purple-600 to-purple-700 h-2 rounded-full shadow-sm"
                   />
