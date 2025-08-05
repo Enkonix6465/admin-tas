@@ -292,7 +292,7 @@ const AdminTicketsPage = () => {
                   </span>
                 </td>
                 <td
-                  className={`p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white ${
+                  className={`p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white ${
                     isPastDue(ticket.dueDate)
                       ? "text-red-600 dark:text-red-400 font-semibold"
                       : ""
@@ -300,11 +300,11 @@ const AdminTicketsPage = () => {
                 >
                   {ticket.dueDate || "N/A"}
                 </td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">
                   {projectsMap[ticket.projectId] || ticket.projectId}
                 </td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.createdByName}</td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">{ticket.createdByName}</td>
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">
                   {ticket.createdAt?.seconds
                     ? format(
                         new Date(ticket.createdAt.seconds * 1000),
