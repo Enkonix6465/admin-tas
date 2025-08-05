@@ -538,7 +538,7 @@ export default function TeamManager() {
                 placeholder="Search teams or members..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-white dark:bg-black/90 border border-cyan-300 dark:border-purple-500/40 rounded-xl focus:ring-2 focus:ring-cyan-500 dark:focus:ring-purple-500 focus:border-transparent transition-all"
               />
             </div>
             
