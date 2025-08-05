@@ -535,17 +535,17 @@ const KanbanPage = () => {
     const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "completed";
 
     const getCardBgColor = () => {
-      if (isOverdue) return 'backdrop-blur-xl bg-red-50/80 dark:bg-red-900/40 border border-red-200/50 dark:border-red-600/30';
+      if (isOverdue) return 'bg-white/95 dark:bg-gray-800/95 border-l-4 border-l-red-500 border border-red-100 dark:border-red-900/30 shadow-sm';
 
       switch (task.status) {
         case 'completed':
-          return 'backdrop-blur-xl bg-green-50/80 dark:bg-green-900/40 border border-green-200/50 dark:border-green-600/30';
+          return 'bg-white/95 dark:bg-gray-800/95 border-l-4 border-l-green-500 border border-gray-200/60 dark:border-gray-700/60 shadow-sm';
         case 'in_progress':
-          return 'backdrop-blur-xl bg-purple-50/80 dark:bg-purple-900/40 border border-purple-200/50 dark:border-purple-600/30';
+          return 'bg-white/95 dark:bg-gray-800/95 border-l-4 border-l-blue-500 border border-gray-200/60 dark:border-gray-700/60 shadow-sm';
         case 'review':
-          return 'backdrop-blur-xl bg-purple-100/80 dark:bg-purple-800/40 border border-purple-300/50 dark:border-purple-500/30';
+          return 'bg-white/95 dark:bg-gray-800/95 border-l-4 border-l-amber-500 border border-gray-200/60 dark:border-gray-700/60 shadow-sm';
         default:
-          return 'backdrop-blur-xl bg-white/80 dark:bg-gray-900/60 border border-purple-200/30 dark:border-purple-600/30';
+          return 'bg-white/95 dark:bg-gray-800/95 border-l-4 border-l-gray-400 border border-gray-200/60 dark:border-gray-700/60 shadow-sm';
       }
     };
 
