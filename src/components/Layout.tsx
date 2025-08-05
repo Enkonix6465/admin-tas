@@ -476,24 +476,6 @@ function Layout() {
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Minimal Search */}
-              <div className="hidden sm:block relative search-input">
-                <Search className="w-3 h-3 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
-                <input
-                  type="text"
-                  placeholder="Search"
-                  value={headerSearchQuery}
-                  onChange={(e) => setHeaderSearchQuery(e.target.value)}
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter' && headerSearchQuery.trim()) {
-                      // Global search functionality
-                      console.log('Header searching for:', headerSearchQuery);
-                      // You can implement global search logic here
-                    }
-                  }}
-                  className="pl-6 pr-2 py-1.5 text-xs border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-36 shadow-sm dark:shadow-purple-500/20 transition-all duration-200"
-                />
-              </div>
 
               <div className="relative filter-dropdown">
                 <button
