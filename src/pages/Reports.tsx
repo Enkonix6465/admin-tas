@@ -1093,7 +1093,7 @@ const Reports = () => {
                 className="space-y-6"
               >
                 {/* Report Header */}
-                <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
@@ -1142,7 +1142,7 @@ const Reports = () => {
                     {selectedEmployee !== "all" && reportData.chartData.individualData && (
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                         {/* Individual Performance Overview */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <div className="flex items-center gap-4 mb-4">
                             <img
                               src={reportData.chartData.individualData.employee.avatar}
@@ -1181,7 +1181,7 @@ const Reports = () => {
                         </div>
 
                         {/* Individual Task Status Distribution */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                             Task Status Distribution
                           </h3>
@@ -1208,7 +1208,7 @@ const Reports = () => {
                         </div>
 
                         {/* Weekly Performance Trend */}
-                        <div className="xl:col-span-2 liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="xl:col-span-2 liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                             Weekly Performance Trend (Last 12 Weeks)
                           </h3>
@@ -1236,7 +1236,7 @@ const Reports = () => {
                         </div>
 
                         {/* Priority Performance Analysis */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                             Priority Performance
                           </h3>
@@ -1265,7 +1265,7 @@ const Reports = () => {
 
                         {/* Skills Radar Chart */}
                         {reportData.chartData.skillsRadar.length > 0 && (
-                          <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                          <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                               Skills Assessment
                             </h3>
@@ -1438,7 +1438,7 @@ const Reports = () => {
                     {selectedEmployee === "all" && (
                       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                         {/* Enhanced Team Performance Radar Chart */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                             **Team Performance Overview**
                           </h3>
@@ -1531,7 +1531,7 @@ const Reports = () => {
                         </div>
 
                         {/* Enhanced Workload Bubble Chart */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                             **Team Workload Analysis**
                           </h3>
@@ -1607,7 +1607,7 @@ const Reports = () => {
                         </div>
 
                         {/* Quality vs Productivity Scatter Plot */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                             **Quality vs Productivity Matrix**
                           </h3>
@@ -1675,7 +1675,7 @@ const Reports = () => {
                         </div>
 
                         {/* Reassignment Analysis with Donut Chart */}
-                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                        <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                             **Task Reassignment Analysis**
                           </h3>
@@ -1739,7 +1739,7 @@ const Reports = () => {
 
                     {/* Performance Trends */}
                     {reportData.performanceTrends && (
-                      <div className="xl:col-span-2 liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                      <div className="xl:col-span-2 liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                         <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                           Performance Trends (Last 30 Days)
                         </h3>
@@ -1785,7 +1785,7 @@ const Reports = () => {
 
                     {/* Skills Radar Chart for Individual Employee */}
                     {selectedEmployee !== "all" && reportData.chartData.skillsRadar.length > 0 && (
-                      <div className="xl:col-span-2 liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                      <div className="xl:col-span-2 liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                         <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                           Skills Profile - {employees.find(e => e.id === selectedEmployee)?.name}
                         </h3>
@@ -1822,7 +1822,7 @@ const Reports = () => {
                 {/* Task Summary Charts */}
                 {selectedReport === "task-summary" && reportData.chartData && (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                    <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                       <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                         Task Status Distribution
                       </h3>
@@ -1852,7 +1852,7 @@ const Reports = () => {
 
                 {/* Project Status Charts */}
                 {selectedReport === "project-status" && reportData.chartData && (
-                  <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                  <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                       Project Progress
                     </h3>
@@ -1879,7 +1879,7 @@ const Reports = () => {
 
                 {/* Productivity Trends Charts */}
                 {selectedReport === "productivity-trends" && reportData.chartData && (
-                  <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+                  <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">
                       Productivity Trends
                     </h3>
@@ -1909,8 +1909,8 @@ const Reports = () => {
 
                 {/* Employee Performance Details Table */}
                 {selectedReport === "employee-performance" && reportData.employeeStats && (
-                  <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
+                  <div className="liquid-glass-card backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30">
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
