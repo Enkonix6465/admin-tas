@@ -1543,7 +1543,7 @@ const Reports = () => {
                                 fullName: employees.find(e => e.name.includes(emp.name))?.name || emp.name,
                                 efficiency: Math.round((emp.completed / Math.max(emp.total, 1)) * 100)
                               }))}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+
                                 <XAxis
                                   dataKey="fullName"
                                   stroke="#6b7280"
@@ -1628,7 +1628,7 @@ const Reports = () => {
                                     <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1}/>
                                   </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+
                                 <XAxis
                                   dataKey="fullName"
                                   stroke="#6b7280"
