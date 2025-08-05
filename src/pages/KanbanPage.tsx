@@ -759,7 +759,7 @@ const KanbanPage = () => {
                 {navigator.onLine ? 'Live' : 'Offline'}
               </span>
               <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100/80 to-purple-200/80 dark:from-purple-900/40 dark:to-purple-800/40 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-600/30 rounded-full backdrop-blur-sm shadow-sm">
-                {Math.round((columns.find(c => c.id === "completed")?.tasks.length || 0) / Math.max(filteredTasks.length, 1) * 100)}% Complete
+                {Math.round(Math.max(((columns.find(c => c.id === "completed")?.tasks.length || 0) / Math.max(filteredTasks.length || 1, 1)) * 100, 0))}% Complete
               </span>
             </div>
           </div>
