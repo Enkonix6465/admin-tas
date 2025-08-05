@@ -63,7 +63,7 @@ export default function TeamManager() {
 
   // Color options for teams
   const colorOptions = [
-    "#00D4FF", "#FF6600", "#00D4FF", "#F59E0B", "#EF4444",
+    "#00D4FF", "#FF6600", "#10B981", "#F59E0B", "#EF4444",
     "#06B6D4", "#84CC16", "#F97316", "#EC4899", "#6366F1"
   ];
 
