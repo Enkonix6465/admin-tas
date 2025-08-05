@@ -288,24 +288,24 @@ const Calendar = () => {
         <div className="absolute inset-0 bg-white/60 dark:bg-gray-900/60" />
         
         {/* Sidebar Header */}
-        <div className="relative p-6 border-b border-purple-200/30 flex-shrink-0">
+        <div className="relative p-6 border-b border-purple-200/30 dark:border-purple-600/30 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+              <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">
                 Project Board [{new Date().getFullYear()}]
               </h2>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-1.5 hover:bg-purple-100/60 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-purple-100/60 dark:hover:bg-purple-900/60 rounded-lg transition-colors"
               >
-                <Menu className="w-4 h-4 text-purple-600" />
+                <Menu className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               </motion.button>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-purple-600 font-medium">ON TRACK</span>
+              <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">ON TRACK</span>
             </div>
           </div>
 
