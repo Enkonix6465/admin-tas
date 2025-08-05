@@ -312,7 +312,7 @@ export default function ProjectTasksViewer() {
                       task.status === "in_progress" ? "bg-blue-500" : "bg-gray-400"
                     }`} />
 
-                    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 ml-2">
+                    <div className="liquid-glass-card p-4 ml-2">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-1">
