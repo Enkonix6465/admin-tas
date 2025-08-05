@@ -1095,7 +1095,7 @@ const KanbanPage = () => {
                     key={task.id}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
+                    transition={{ delay: (typeof index === 'number' ? index : 0) * 0.05 }}
                     className="backdrop-blur-sm bg-gradient-to-r from-white/80 to-purple-50/60 dark:from-gray-800/80 dark:to-purple-900/40 rounded-xl p-4 border border-purple-200/50 dark:border-purple-600/30 hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => {
                       setSelectedTask(task);
