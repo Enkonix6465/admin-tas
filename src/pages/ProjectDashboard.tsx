@@ -33,7 +33,13 @@ import {
   MoreHorizontal,
   Building2,
   Layers3,
+  Download,
+  TrendingUp,
+  CheckCircle,
+  AlertCircle,
+  BarChart3
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function ProjectDashboard() {
   const [projects, setProjects] = useState([]);
@@ -192,82 +198,106 @@ export default function ProjectDashboard() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+      <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-gray-200 border-t-gray-600 rounded-full animate-spin mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">Loading Projects</h2>
-          <p className="text-gray-600 dark:text-gray-400">Fetching your project data...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading projects...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-stone-200/50 dark:border-gray-700/50 shadow-sm">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <Briefcase className="w-7 h-7 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tight">
-                  Project Dashboard
-                </h1>
-                <p className="text-stone-600 dark:text-gray-400 font-medium">
-                  Manage and track all your projects
-                </p>
-              </div>
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+      {/* Header */}
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
+              Project Dashboard
+            </h1>
+            <span className="px-3 py-1 text-xs rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+              Project Hub
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center bg-purple-100 dark:bg-purple-500/20 rounded-lg p-1 border border-purple-200 dark:border-purple-500/30">
+              {[
+                { id: "grid", icon: Grid, label: "Grid" },
+                { id: "list", icon: List, label: "List" }
+              ].map((mode) => (
+                <button
+                  key={mode.id}
+                  onClick={() => setViewMode(mode.id)}
+                  className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-all duration-200 ${
+                    viewMode === mode.id
+                      ? 'bg-white dark:bg-purple-500/30 text-purple-700 dark:text-purple-200 shadow-lg'
+                      : 'text-purple-600 dark:text-purple-300 hover:bg-white/50 dark:hover:bg-purple-500/15'
+                  }`}
+                >
+                  <mode.icon className="w-4 h-4" />
+                  <span className="hidden sm:inline font-medium">{mode.label}</span>
+                </button>
+              ))}
             </div>
 
-            <div className="flex items-center gap-3">
-              {/* View Mode Toggle */}
-              <div className="flex items-center bg-stone-100/50 dark:bg-gray-700/50 backdrop-blur-sm rounded-xl p-1 shadow-inner">
-                {[
-                  { id: "grid", icon: Grid, label: "Grid" },
-                  { id: "list", icon: List, label: "List" }
-                ].map((mode) => (
-                  <button
-                    key={mode.id}
-                    onClick={() => setViewMode(mode.id)}
-                    className={`flex items-center gap-2 px-4 py-2 text-sm rounded-lg transition-all duration-200 ${
-                      viewMode === mode.id
-                        ? 'bg-white/90 dark:bg-gray-600 text-gray-900 dark:text-white shadow-lg backdrop-blur-sm transform scale-105'
-                      : 'text-stone-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-gray-600/50'
-                    }`}
-                  >
-                    <mode.icon className="w-4 h-4" />
-                    <span className="hidden sm:inline font-medium">{mode.label}</span>
-                  </button>
-                ))}
-              </div>
+            <button
+              onClick={() => {
+                const exportData = {
+                  projects: projects,
+                  teams: teams,
+                  totalProjects: projects.length,
+                  exportDate: new Date().toISOString()
+                };
 
-              <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105">
-                <Plus className="w-4 h-4" />
-                <span className="hidden sm:inline font-medium">New Project</span>
-              </button>
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `projects-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                toast.success("Projects data exported! 📊");
+              }}
+              className="px-4 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200"
+            >
+              <Download className="w-4 h-4 mr-2 inline" />
+              Export
+            </button>
+
+            <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl">
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline font-medium">New Project</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Search and Stats */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 border-b-2 border-purple-500 pb-2">
+              <Briefcase className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span className="text-base font-medium text-purple-600 dark:text-purple-400">Project Management</span>
             </div>
           </div>
 
-          {/* Enhanced Search */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
               <input
                 type="text"
-                placeholder="Search projects, descriptions, or team names..."
+                placeholder="Search projects..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-stone-200/50 dark:border-gray-700/50 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm"
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-64"
               />
             </div>
-
-            <div className="flex items-center gap-3">
-              <button className="p-4 border border-stone-200/50 dark:border-gray-700/50 rounded-xl hover:bg-stone-50/50 dark:hover:bg-gray-700/50 transition-all shadow-sm backdrop-blur-sm">
-                <Filter className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              </button>
+            <div className="flex items-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30 rounded-lg text-sm">
+              <Activity className="w-4 h-4" />
+              <span className="font-medium">Projects: {filteredProjects.length}</span>
             </div>
           </div>
         </div>
@@ -279,9 +309,7 @@ export default function ProjectDashboard() {
           <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-800 rounded-full flex items-center justify-center">
-                <svg className="w-5 h-5 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
+                <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div className="flex-1">
                 <h3 className="font-medium text-yellow-800 dark:text-yellow-200">Connection Issue</h3>
@@ -298,73 +326,73 @@ export default function ProjectDashboard() {
         </div>
       )}
 
-      {/* Stats Section */}
-      <div className="p-6">
+      <div className="flex-1 overflow-y-auto p-6">
+        {/* Stats Section */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+            className="liquid-glass-card"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
-                <Layers3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-500/30">
+                <Layers3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{projects.length}</span>
+              <span className="text-3xl font-bold text-gray-900 dark:text-purple-100">{projects.length}</span>
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Total Projects</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Active and completed</p>
+            <h3 className="font-semibold text-gray-900 dark:text-purple-100 mb-1">Total Projects</h3>
+            <p className="text-sm text-gray-600 dark:text-purple-300/70">Active and completed</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+            className="liquid-glass-card"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
+              <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30">
                 <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{teams.length}</span>
+              <span className="text-3xl font-bold text-gray-900 dark:text-purple-100">{teams.length}</span>
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Active Teams</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Working on projects</p>
+            <h3 className="font-semibold text-gray-900 dark:text-purple-100 mb-1">Active Teams</h3>
+            <p className="text-sm text-gray-600 dark:text-purple-300/70">Working on projects</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+            className="liquid-glass-card"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
-                <Target className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 rounded-xl bg-green-100 dark:bg-green-500/20 border border-green-200 dark:border-green-500/30">
+                <Target className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{employees.length}</span>
+              <span className="text-3xl font-bold text-gray-900 dark:text-purple-100">{employees.length}</span>
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Team Members</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Across all teams</p>
+            <h3 className="font-semibold text-gray-900 dark:text-purple-100 mb-1">Team Members</h3>
+            <p className="text-sm text-gray-600 dark:text-purple-300/70">Across all teams</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+            className="liquid-glass-card"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
-                <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-500/20 border border-yellow-200 dark:border-yellow-500/30">
+                <TrendingUp className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+              <span className="text-3xl font-bold text-gray-900 dark:text-purple-100">
                 {projects.length > 0 ? Math.round(projects.reduce((acc, p) => acc + getProjectProgress(p), 0) / projects.length) : 0}%
               </span>
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Avg Progress</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Across all projects</p>
+            <h3 className="font-semibold text-gray-900 dark:text-purple-100 mb-1">Avg Progress</h3>
+            <p className="text-sm text-gray-600 dark:text-purple-300/70">Across all projects</p>
           </motion.div>
         </div>
 
@@ -388,24 +416,24 @@ export default function ProjectDashboard() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   onHoverStart={() => setHoveredCard(project.id)}
                   onHoverEnd={() => setHoveredCard(null)}
-                  className="group relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl shadow-lg border border-stone-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-2xl transition-all duration-300"
+                  className="group relative liquid-glass-card overflow-hidden hover:shadow-2xl dark:hover:shadow-purple-500/20 transition-all duration-300"
                 >
                   {/* Card Header */}
                   <div className="p-6 pb-4">
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-stone-100 to-stone-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-                          <Building2 className="w-6 h-6 text-stone-600 dark:text-gray-300" />
+                        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                          <Building2 className="w-6 h-6 text-white" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-xs font-bold bg-stone-100/80 dark:bg-gray-700/80 text-stone-600 dark:text-gray-300 px-3 py-1 rounded-full border border-stone-200/50 dark:border-gray-600/50 backdrop-blur-sm">
+                            <span className="text-xs font-bold bg-purple-100 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-500/30">
                               #{index + 1}
                             </span>
-                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                              daysRemaining > 30 ? 'bg-stone-100/80 text-stone-600 dark:bg-gray-700/80 dark:text-gray-300 backdrop-blur-sm' :
-                              daysRemaining > 7 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                              'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium border ${
+                              daysRemaining > 30 ? 'bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-400 border-green-200 dark:border-green-500/30' :
+                              daysRemaining > 7 ? 'bg-yellow-100 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/30' :
+                              'bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400 border-red-200 dark:border-red-500/30'
                             }`}>
                               {daysRemaining > 0 ? `${daysRemaining} days left` : 'Overdue'}
                             </span>
@@ -413,35 +441,35 @@ export default function ProjectDashboard() {
                         </div>
                       </div>
                       <div className="flex gap-1">
-                        <button className="p-2 bg-stone-50/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-lg hover:bg-stone-100/80 dark:hover:bg-gray-600/80 transition-colors group-hover:scale-110">
-                          <Eye className="w-4 h-4 text-stone-600 dark:text-gray-400" />
+                        <button className="p-2 bg-purple-50 dark:bg-purple-500/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-500/30 transition-colors group-hover:scale-110">
+                          <Eye className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                         </button>
-                        <button className="p-2 bg-stone-50/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-lg hover:bg-stone-100/80 dark:hover:bg-gray-600/80 transition-colors group-hover:scale-110">
-                          <MoreHorizontal className="w-4 h-4 text-stone-600 dark:text-gray-400" />
+                        <button className="p-2 bg-purple-50 dark:bg-purple-500/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-500/30 transition-colors group-hover:scale-110">
+                          <MoreHorizontal className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                         </button>
                       </div>
                     </div>
 
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-3 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-colors">
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-purple-100 mb-3 group-hover:text-purple-700 dark:group-hover:text-purple-200 transition-colors">
                       {project.name}
                     </h2>
 
-                    <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 line-clamp-2">
+                    <p className="text-gray-600 dark:text-purple-300/80 text-sm leading-relaxed mb-4 line-clamp-2">
                       {project.description}
                     </p>
 
                     {/* Progress Bar */}
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Progress</span>
-                        <span className="text-xs font-bold text-gray-900 dark:text-gray-100">{progress}%</span>
+                        <span className="text-xs font-medium text-gray-600 dark:text-purple-300/80">Progress</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-purple-100">{progress}%</span>
                       </div>
-                      <div className="w-full bg-stone-200/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-full h-2 overflow-hidden">
+                      <div className="w-full bg-purple-200/50 dark:bg-purple-900/30 rounded-full h-2 overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${progress}%` }}
                           transition={{ duration: 1, delay: index * 0.1 }}
-                          className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-sm"
+                          className="h-full bg-gradient-to-r from-purple-500 to-blue-600 rounded-full shadow-sm"
                         />
                       </div>
                     </div>
@@ -451,26 +479,26 @@ export default function ProjectDashboard() {
                   <div className="px-6 pb-4">
                     <div className="grid grid-cols-2 gap-4 mb-4">
                       <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="w-4 h-4 text-stone-400" />
+                        <Calendar className="w-4 h-4 text-purple-400" />
                         <div>
-                          <p className="text-stone-500 dark:text-gray-400 text-xs">Start Date</p>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">{project.startDate}</p>
+                          <p className="text-purple-500 dark:text-purple-300/70 text-xs">Start Date</p>
+                          <p className="font-medium text-gray-900 dark:text-purple-100">{project.startDate}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Clock className="w-4 h-4 text-stone-400" />
+                        <Clock className="w-4 h-4 text-purple-400" />
                         <div>
-                          <p className="text-stone-500 dark:text-gray-400 text-xs">Deadline</p>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">{project.deadline}</p>
+                          <p className="text-purple-500 dark:text-purple-300/70 text-xs">Deadline</p>
+                          <p className="font-medium text-gray-900 dark:text-purple-100">{project.deadline}</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 text-sm mb-4">
-                      <User className="w-4 h-4 text-gray-400" />
+                      <User className="w-4 h-4 text-purple-400" />
                       <div>
-                        <p className="text-gray-500 dark:text-gray-400 text-xs">Created By</p>
-                        <p className="font-medium text-gray-900 dark:text-gray-100">{getEmployeeName(project.created_by)}</p>
+                        <p className="text-purple-500 dark:text-purple-300/70 text-xs">Created By</p>
+                        <p className="font-medium text-gray-900 dark:text-purple-100">{getEmployeeName(project.created_by)}</p>
                       </div>
                     </div>
                   </div>
@@ -479,20 +507,20 @@ export default function ProjectDashboard() {
                   <div className="px-6 pb-6">
                     <button
                       onClick={() => handleTeamClick(project.teamId)}
-                      className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all group-hover:shadow-md"
+                      className="w-full flex items-center justify-between p-4 bg-purple-50 dark:bg-purple-500/20 rounded-xl hover:bg-purple-100 dark:hover:bg-purple-500/30 transition-all group-hover:shadow-md border border-purple-200 dark:border-purple-500/30"
                     >
                       <div className="flex items-center gap-3">
-                        <Users className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+                        <Users className="w-5 h-5 text-purple-600 dark:text-purple-300" />
                         <div className="text-left">
-                          <p className="font-medium text-gray-900 dark:text-gray-100">{getTeamName(project.teamId)}</p>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                          <p className="font-medium text-gray-900 dark:text-purple-100">{getTeamName(project.teamId)}</p>
+                          <p className="text-xs text-purple-600 dark:text-purple-300/70">
                             {teams.find(t => t.id === project.teamId)?.members?.length || 0} members
                           </p>
                         </div>
                       </div>
                       {isExpanded ?
-                        <ChevronUp className="w-5 h-5 text-gray-400 transform transition-transform" /> :
-                        <ChevronDown className="w-5 h-5 text-gray-400 transform transition-transform" />
+                        <ChevronUp className="w-5 h-5 text-purple-400 transform transition-transform" /> :
+                        <ChevronDown className="w-5 h-5 text-purple-400 transform transition-transform" />
                       }
                     </button>
 
@@ -506,10 +534,10 @@ export default function ProjectDashboard() {
                           transition={{ duration: 0.3 }}
                           className="mt-4 overflow-hidden"
                         >
-                          <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4">
+                          <div className="bg-purple-50 dark:bg-purple-500/20 rounded-xl p-4 border border-purple-200 dark:border-purple-500/30">
                             <div className="flex items-center gap-2 mb-3">
-                              <Star className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-                              <span className="font-medium text-gray-900 dark:text-gray-100 text-sm">Team Members</span>
+                              <Star className="w-4 h-4 text-purple-600 dark:text-purple-300" />
+                              <span className="font-medium text-gray-900 dark:text-purple-100 text-sm">Team Members</span>
                             </div>
                             <div className="space-y-3">
                               {teams
@@ -520,16 +548,16 @@ export default function ProjectDashboard() {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: memberIndex * 0.1 }}
-                                    className="flex items-center gap-3 p-3 bg-white dark:bg-gray-600 rounded-lg shadow-sm"
+                                    className="flex items-center gap-3 p-3 bg-white dark:bg-purple-500/30 rounded-lg shadow-sm border border-purple-200 dark:border-purple-500/30"
                                   >
-                                    <div className="w-8 h-8 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-500 dark:to-gray-400 rounded-full flex items-center justify-center">
-                                      <User className="w-4 h-4 text-gray-600 dark:text-gray-200" />
+                                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center">
+                                      <User className="w-4 h-4 text-white" />
                                     </div>
                                     <div className="flex-1">
-                                      <p className="font-medium text-gray-900 dark:text-gray-100 text-sm">
+                                      <p className="font-medium text-gray-900 dark:text-purple-100 text-sm">
                                         {getEmployeeName(memberId)}
                                       </p>
-                                      <p className="text-xs text-gray-500 dark:text-gray-400">Team Member</p>
+                                      <p className="text-xs text-purple-600 dark:text-purple-300/70">Team Member</p>
                                     </div>
                                   </motion.div>
                                 ))}
@@ -541,7 +569,7 @@ export default function ProjectDashboard() {
                   </div>
 
                   {/* Hover Effect Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-gray-100/20 dark:to-gray-700/20 rounded-2xl transition-opacity duration-300 pointer-events-none ${
+                  <div className={`absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-purple-100/20 dark:to-purple-700/20 rounded-2xl transition-opacity duration-300 pointer-events-none ${
                     hoveredCard === project.id ? 'opacity-100' : 'opacity-0'
                   }`} />
                 </motion.div>
@@ -557,18 +585,18 @@ export default function ProjectDashboard() {
             animate={{ opacity: 1 }}
             className="text-center py-16"
           >
-            <div className="w-24 h-24 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Search className="w-12 h-12 text-gray-400" />
+            <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Search className="w-12 h-12 text-white" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-purple-100 mb-2">
               No projects found
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <p className="text-gray-600 dark:text-purple-300/70 mb-6">
               Try adjusting your search terms
             </p>
             <button
               onClick={() => setSearchTerm("")}
-              className="px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors shadow-lg"
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors shadow-lg"
             >
               Clear Search
             </button>
