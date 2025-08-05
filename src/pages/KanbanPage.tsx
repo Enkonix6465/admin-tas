@@ -568,9 +568,7 @@ const KanbanPage = () => {
         }}
         className={`${getCardBgColor()} rounded-2xl p-5 mb-4 transition-all duration-500 cursor-pointer group relative overflow-hidden hover:shadow-2xl`}
       >
-        {/* Floating orbs */}
-        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-400/30 dark:bg-purple-300/20 animate-pulse" />
-        <div className="absolute bottom-3 left-3 w-1 h-1 rounded-full bg-purple-300/40 dark:bg-purple-400/30 animate-pulse" style={{animationDelay: '1s'}} />
+
 
         {/* Priority stripe */}
         <div className={`absolute top-0 left-0 w-full h-1 rounded-t-2xl ${
