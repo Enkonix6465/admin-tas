@@ -604,7 +604,7 @@ const ProjectDocCreator = () => {
 
       <div className="flex-1 overflow-hidden flex">
         {/* Enhanced Sidebar */}
-        <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl flex flex-col">
+        <div className="w-80 border-r border-gray-200 dark:border-purple-500/30 bg-white/80 dark:bg-black/95 backdrop-blur-xl flex flex-col">
           {/* Project Selection */}
           <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center gap-3 mb-4">
