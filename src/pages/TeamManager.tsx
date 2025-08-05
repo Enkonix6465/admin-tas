@@ -507,8 +507,8 @@ export default function TeamManager() {
                     onClick={() => setViewMode(mode.id)}
                     className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-all ${
                       viewMode === mode.id
-                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-white dark:bg-purple-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-600 dark:text-purple-300 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   >
                     <mode.icon className="w-4 h-4" />
