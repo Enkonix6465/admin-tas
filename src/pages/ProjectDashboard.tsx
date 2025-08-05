@@ -205,7 +205,7 @@ export default function ProjectDashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90">
       {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-stone-200/50 dark:border-gray-700/50 shadow-sm">
+      <div className="bg-white/80 dark:bg-black/95 backdrop-blur-xl border-b border-gray-200/50 dark:border-purple-500/30 shadow-sm">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
