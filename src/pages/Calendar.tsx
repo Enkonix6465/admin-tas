@@ -118,7 +118,7 @@ const Calendar = () => {
         const projectsData = snapshot.docs.map((doc) => ({
           id: doc.id,
           name: doc.data().name,
-          color: doc.data().color || "#3b82f6",
+          color: doc.data().color || "#00D4FF",
           ...doc.data(),
         }));
         setProjects(projectsData);
@@ -127,7 +127,7 @@ const Calendar = () => {
         console.warn("Calendar projects listener error:", error);
         // Mock data for fallback
         setProjects([
-          { id: "proj-1", name: "Project Alpha", color: "#3b82f6" },
+          { id: "proj-1", name: "Project Alpha", color: "#00D4FF" },
           { id: "proj-2", name: "Project Beta", color: "#10b981" },
           { id: "proj-3", name: "Project Gamma", color: "#f59e0b" },
         ]);
@@ -196,7 +196,7 @@ const Calendar = () => {
       const projectsData = projectsSnap.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().name,
-        color: doc.data().color || '#3b82f6',
+        color: doc.data().color || '#00D4FF',
         ...doc.data(),
       }));
       setProjects(projectsData);
@@ -204,7 +204,7 @@ const Calendar = () => {
       console.warn("Projects data fetch failed:", error);
       // Mock data for fallback
       setProjects([
-        { id: "proj-1", name: "Mobile app design", color: "#3b82f6" },
+        { id: "proj-1", name: "Mobile app design", color: "#00D4FF" },
         { id: "proj-2", name: "Process", color: "#10b981" },
         { id: "proj-3", name: "Creative group", color: "#f59e0b" },
         { id: "proj-4", name: "HR", color: "#ef4444" },
