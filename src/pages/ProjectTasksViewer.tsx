@@ -288,7 +288,7 @@ export default function ProjectTasksViewer() {
       <div className="space-y-6">
         {Object.entries(groupedTasks).map(([monthYear, tasks]) => (
           <div key={monthYear} className="relative">
-            <div className="sticky top-0 bg-gray-50 dark:bg-gray-900 py-2 z-10">
+            <div className="sticky top-0 bg-white/80 dark:bg-black/95 backdrop-blur-sm py-2 z-10">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
                 {monthYear}
