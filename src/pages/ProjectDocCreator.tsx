@@ -606,7 +606,7 @@ const ProjectDocCreator = () => {
         {/* Enhanced Sidebar */}
         <div className="w-80 border-r border-gray-200 dark:border-purple-500/30 bg-white/80 dark:bg-black/95 backdrop-blur-xl flex flex-col">
           {/* Project Selection */}
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
