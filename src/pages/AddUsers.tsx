@@ -265,7 +265,7 @@ export default function EmployeeManagement() {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-black/95/60 shadow-lg p-4 rounded animate-fade-in border border-gray-200 dark:border-purple-500/30">
+      <div className="liquid-glass-card p-4 animate-fade-in">
         <h3 className="font-semibold mb-4 text-lg text-gray-900 dark:text-white">📋 All Employees</h3>
         <div className="overflow-x-auto">
           <table className="w-full table-auto border border-gray-200 dark:border-purple-500/30 text-sm min-w-[800px]">
