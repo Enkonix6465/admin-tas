@@ -226,7 +226,7 @@ body {
 input,
 select,
 textarea {
-  @apply border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white;
+  @apply border-gray-300 focus:border-blue-500 focus:ring-blue-500 dark:bg-black/90 dark:border-purple-500/30 dark:text-white;
 }
 
 /* Calendar styles */
