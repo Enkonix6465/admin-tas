@@ -497,7 +497,7 @@ export default function TeamManager() {
 
             <div className="flex items-center gap-3">
               {/* View Mode Toggle */}
-              <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
+              <div className="flex items-center bg-cyan-100/50 dark:bg-purple-800/50 rounded-xl p-1">
                 {[
                   { id: "cards", icon: Grid, label: "Cards" },
                   { id: "list", icon: List, label: "List" }
