@@ -331,9 +331,9 @@ const AdminTicketsPage = () => {
                     <option value="Done">Done</option>
                   </select>
                 </td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 space-x-2">
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 space-x-2">
                   <button
-                    className="text-blue-600 dark:text-purple-400 underline"
+                    className="text-cyan-600 dark:text-cyan-400 underline"
                     onClick={() => handleEditClick(ticket)}
                   >
                     Edit
