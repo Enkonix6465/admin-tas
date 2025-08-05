@@ -16,6 +16,9 @@ const AdminTicketsPage = () => {
   const [teamLeadMap, setTeamLeadMap] = useState<any>({});
   const [statusFilter, setStatusFilter] = useState("");
   const [projectFilter, setProjectFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [userFilter, setUserFilter] = useState("");
+  const [usersMap, setUsersMap] = useState<any>({});
   const [editingTicket, setEditingTicket] = useState<any>(null);
   const [editValues, setEditValues] = useState({
     title: "",
