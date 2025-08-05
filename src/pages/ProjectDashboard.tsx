@@ -203,6 +203,11 @@ export default function ProjectDashboard() {
   );
 
   const handleCreateProject = async () => {
+    if (!isFirebaseConnected()) {
+      setError("Cannot create project - Firebase connection unavailable");
+      return;
+    }
+
     try {
       const newProjectData = {
         ...newProject,
@@ -222,7 +227,7 @@ export default function ProjectDashboard() {
       });
     } catch (error) {
       console.error("Error creating project:", error);
-      setError("Failed to create project. Please try again.");
+      setError("Failed to create project. Please check your connection and try again.");
     }
   };
 
