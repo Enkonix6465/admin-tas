@@ -601,7 +601,7 @@ const Reports = () => {
         { name: 'Completed', value: emp.completedTasks, color: '#FF6600' },
         { name: 'In Progress', value: emp.inProgressTasks, color: '#00D4FF' },
         { name: 'Pending', value: emp.pendingTasks, color: '#f59e0b' },
-        { name: 'Review', value: emp.reviewTasks, color: '#8b5cf6' },
+        { name: 'Review', value: emp.reviewTasks, color: '#00D4FF' },
         { name: 'Overdue', value: emp.overdueTasks, color: '#ef4444' }
       ].filter(item => item.value > 0);
 
@@ -1500,8 +1500,8 @@ const Reports = () => {
                                 <Radar
                                   name="**Quality Score**"
                                   dataKey="qualityScore"
-                                  stroke="#8b5cf6"
-                                  fill="#8b5cf6"
+                                  stroke="#00D4FF"
+                                  fill="#00D4FF"
                                   fillOpacity={0.2}
                                   strokeWidth={3}
                                 />
@@ -1620,8 +1620,8 @@ const Reports = () => {
                               }))}>
                                 <defs>
                                   <linearGradient id="qualityGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.8}/>
-                                    <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0.1}/>
+                                    <stop offset="5%" stopColor="#00D4FF" stopOpacity={0.8}/>
+                                    <stop offset="95%" stopColor="#00D4FF" stopOpacity={0.1}/>
                                   </linearGradient>
                                   <linearGradient id="productivityGradient" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
@@ -1652,7 +1652,7 @@ const Reports = () => {
                                 <Area
                                   type="monotone"
                                   dataKey="quality"
-                                  stroke="#8b5cf6"
+                                  stroke="#00D4FF"
                                   fillOpacity={1}
                                   fill="url(#qualityGradient)"
                                   strokeWidth={3}
