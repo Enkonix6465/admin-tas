@@ -575,7 +575,7 @@ export default function EmployeePerformancePage() {
                 <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      Performance Trends (Last 30 Days)
+                      Performance & Productivity Trends
                     </h3>
                     <div className="flex items-center gap-1">
                       <TrendingUp className="w-4 h-4 text-green-500" />
@@ -585,26 +585,55 @@ export default function EmployeePerformancePage() {
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={performanceTrends}>
-                      <defs>
-                        <linearGradient id="performanceGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                      <YAxis />
-                      <Tooltip />
-                      <Area
-                        type="monotone"
-                        dataKey="performance"
-                        stroke="#3b82f6"
-                        fillOpacity={1}
-                        fill="url(#performanceGradient)"
-                        strokeWidth={2}
+                    <BarChart data={performanceTrends.slice(-10)}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.3} />
+                      <XAxis
+                        dataKey="date"
+                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        axisLine={false}
+                        tickLine={false}
                       />
-                    </AreaChart>
+                      <YAxis
+                        yAxisId="left"
+                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        yAxisId="right"
+                        orientation="right"
+                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#ffffff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                        }}
+                      />
+                      <Legend />
+                      <Bar
+                        yAxisId="left"
+                        dataKey="performance"
+                        name="Performance %"
+                        fill="#8b5cf6"
+                        radius={[4, 4, 0, 0]}
+                        stroke="#7c3aed"
+                        strokeWidth={1}
+                      />
+                      <Bar
+                        yAxisId="right"
+                        dataKey="productivity"
+                        name="Productivity Score"
+                        fill="#06b6d4"
+                        radius={[4, 4, 0, 0]}
+                        stroke="#0891b2"
+                        strokeWidth={1}
+                      />
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
 
