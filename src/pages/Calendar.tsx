@@ -355,7 +355,7 @@ const Calendar = () => {
   };
 
   return (
-    <div className="h-full bg-stone-100 dark:bg-purple-900 flex overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-cyan-50 via-orange-50 to-cyan-100 dark:bg-gradient-to-br dark:from-purple-900/20 dark:via-purple-800/30 dark:to-purple-900/20 flex overflow-hidden">
       {/* Project Sidebar */}
       <motion.div
         initial={{ x: -300 }}
