@@ -420,7 +420,7 @@ const Calendar = () => {
                     className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
                       viewMode === mode.id
                         ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25'
-                        : 'text-purple-600 hover:bg-purple-200/50'
+                        : 'text-purple-600 dark:text-purple-400 hover:bg-purple-200/50 dark:hover:bg-purple-800/50'
                     }`}
                   >
                     <mode.icon className="w-3 h-3" />
