@@ -269,7 +269,7 @@ export default function EmployeeManagement() {
         <h3 className="font-semibold mb-4 text-lg text-gray-900 dark:text-white">📋 All Employees</h3>
         <div className="overflow-x-auto">
           <table className="w-full table-auto border border-gray-200 dark:border-purple-500/30 text-sm min-w-[800px]">
-            <thead className="bg-gray-100 dark:bg-purple-800/80 text-gray-800 dark:text-white">
+            <thead className="bg-white/50 dark:bg-black/50 text-gray-800 dark:text-purple-100">
               <tr>
                 <th className="border border-gray-200 dark:border-purple-500/30 px-2 py-2">Photo</th>
                 <th className="border border-gray-200 dark:border-purple-500/30 px-2 py-2">Name</th>
