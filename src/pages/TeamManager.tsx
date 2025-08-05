@@ -334,7 +334,7 @@ export default function TeamManager() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -4, scale: 1.02 }}
-        className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-200 dark:border-gray-700"
+        className="bg-white dark:bg-black/95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-cyan-300/50 dark:border-purple-500/40"
       >
         {/* Team Header */}
         <div 
