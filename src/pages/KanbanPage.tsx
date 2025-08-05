@@ -617,7 +617,7 @@ const KanbanPage = () => {
         )}
 
         {/* Progress Bar */}
-        {task.progress > 0 && (
+        {task.progress && Number.isFinite(task.progress) && task.progress > 0 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -626,7 +626,7 @@ const KanbanPage = () => {
             <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400 mb-2">
               <span className="font-medium">Progress</span>
               <span className="font-semibold text-gray-700 dark:text-gray-300">
-                {task.progress}%
+                {Math.round(task.progress || 0)}%
               </span>
             </div>
             <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -638,7 +638,7 @@ const KanbanPage = () => {
                   'bg-gray-400'
                 }`}
                 initial={{ width: 0 }}
-                animate={{ width: `${task.progress}%` }}
+                animate={{ width: `${Math.min(Math.max(task.progress || 0, 0), 100)}%` }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
               />
             </div>
