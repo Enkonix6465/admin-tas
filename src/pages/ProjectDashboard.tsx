@@ -305,16 +305,16 @@ export default function ProjectDashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-stone-200/50 dark:border-gray-700/50 hover:shadow-xl transition-all duration-300"
+            className="liquid-glass-card p-6 hover:shadow-xl transition-all duration-300"
           >
             <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 rounded-xl flex items-center justify-center">
-                <Layers3 className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30 rounded-xl flex items-center justify-center">
+                <Layers3 className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <span className="text-2xl font-bold text-gray-900 dark:text-gray-100">{projects.length}</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-purple-100">{projects.length}</span>
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-gray-100">Total Projects</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Active and completed</p>
+            <h3 className="font-semibold text-gray-900 dark:text-purple-100">Total Projects</h3>
+            <p className="text-sm text-gray-600 dark:text-purple-300/80">Active and completed</p>
           </motion.div>
 
           <motion.div
