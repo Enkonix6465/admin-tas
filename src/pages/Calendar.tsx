@@ -633,9 +633,9 @@ const Calendar = () => {
                             {/* Event Card */}
                             <motion.div
                               whileHover={{ y: -2, boxShadow: "0 20px 40px -10px rgba(139, 92, 246, 0.3)" }}
-                              className="flex-1 backdrop-blur-xl bg-white/80 rounded-xl border border-purple-200/50 p-4 shadow-lg"
+                              className="flex-1 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-xl border border-purple-200/50 dark:border-purple-600/50 p-4 shadow-lg"
                             >
-                              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 to-white/30 rounded-xl" />
+                              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 to-white/30 dark:from-purple-900/30 dark:to-gray-900/30 rounded-xl" />
                               
                               {/* Card Header */}
                               <div className="relative flex items-start justify-between mb-3">
