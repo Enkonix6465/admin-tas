@@ -585,7 +585,6 @@ export default function EmployeePerformancePage() {
                   </div>
                   <ResponsiveContainer width="100%" height={300}>
                     <BarChart data={performanceTrends.slice(-10)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.3} />
                       <XAxis
                         dataKey="date"
                         tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
