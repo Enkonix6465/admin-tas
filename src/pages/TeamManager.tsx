@@ -610,7 +610,7 @@ export default function TeamManager() {
                       setShowCreateModal(false);
                       resetForm();
                     }}
-                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    className="p-2 hover:bg-cyan-100 dark:hover:bg-purple-700/50 rounded-lg transition-colors"
                   >
                     <X className="w-5 h-5" />
                   </button>
