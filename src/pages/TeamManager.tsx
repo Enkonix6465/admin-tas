@@ -269,7 +269,7 @@ export default function TeamManager() {
     setTeamDescription(team.description || "");
     setSelectedMembers(team.members || []);
     setTeamLead(team.teamLead || "");
-    setTeamColor(team.color || "#3B82F6");
+    setTeamColor(team.color || "#7C3AED");
     setEditId(team.id);
     setShowCreateModal(true);
   };
