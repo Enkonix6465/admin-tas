@@ -113,9 +113,9 @@ export default function TeamLeadAssignmentPage() {
         <p className="text-gray-500">Loading employees...</p>
       ) : (
         <>
-          <div className="overflow-x-auto bg-white dark:bg-purple-800/60 rounded shadow border border-gray-200 dark:border-purple-500/30">
+          <div className="overflow-x-auto liquid-glass-card">
             <table className="min-w-full text-sm">
-              <thead className="bg-gray-100 dark:bg-purple-800/80">
+              <thead className="bg-white/50 dark:bg-black/50">
                 <tr>
                   <th className="p-3 text-left text-gray-800 dark:text-purple-100">Select</th>
                   <th className="p-3 text-left text-gray-800 dark:text-purple-100">Name</th>
