@@ -1751,7 +1751,7 @@ const Reports = () => {
                                   innerRadius={80}
                                   outerRadius={120}
                                   dataKey="value"
-                                  label={({ fullName, value }) => `**${fullName}: ${Math.round(value)}%**`}
+                                  label={({ fullName, value }) => `${fullName}: ${Math.round(value)}%`}
                                 >
                                   {reportData.chartData.reassignmentAnalysis.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={
