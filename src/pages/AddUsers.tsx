@@ -9,6 +9,26 @@ import {
   getDocs,
   collection,
 } from "firebase/firestore";
+import { motion } from "framer-motion";
+import { 
+  Users, 
+  UserPlus, 
+  Upload, 
+  Edit3, 
+  Trash2, 
+  Search, 
+  Download,
+  CheckCircle,
+  AlertCircle,
+  User,
+  Mail,
+  Phone,
+  Calendar,
+  Building,
+  MapPin,
+  Activity
+} from "lucide-react";
+import toast from "react-hot-toast";
 
 interface Employee {
   id: string;
@@ -48,6 +68,7 @@ export default function EmployeeManagement() {
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const auth = getAuth();
   const db = getFirestore();
@@ -90,7 +111,10 @@ export default function EmployeeManagement() {
   };
 
   const handleAddOrUpdate = async () => {
-    if (!form.name || !form.email) return alert("Please fill required fields");
+    if (!form.name || !form.email) {
+      toast.error("Please fill required fields");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -102,8 +126,10 @@ export default function EmployeeManagement() {
         updated[editIndex] = updatedForm;
         setEmployees(updated);
         setEditIndex(null);
+        toast.success("Employee updated successfully! 🎉");
       } else {
         setEmployees([...employees, updatedForm]);
+        toast.success("Employee added successfully! 🎉");
       }
 
       setForm({
@@ -125,7 +151,7 @@ export default function EmployeeManagement() {
 
       setMessage("Employee added successfully!");
     } catch (err: any) {
-      alert("Failed to add employee: " + err.message);
+      toast.error("Failed to add employee: " + err.message);
     }
     setLoading(false);
     setTimeout(() => setMessage(""), 3000);
@@ -142,6 +168,7 @@ export default function EmployeeManagement() {
     const updated = [...employees];
     updated.splice(index, 1);
     setEmployees(updated);
+    toast.success("Employee deleted successfully");
   };
 
   const handleBulkUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,159 +195,357 @@ export default function EmployeeManagement() {
 
     setEmployees([...employees, ...uploaded]);
     setLoading(false);
-    setMessage("Bulk upload successful!");
+    toast.success("Bulk upload successful! 📊");
     setTimeout(() => setMessage(""), 3000);
   };
 
+  const filteredEmployees = employees.filter(emp => 
+    searchTerm ? 
+      emp.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.department?.toLowerCase().includes(searchTerm.toLowerCase())
+    : true
+  );
+
+  const tabs = [
+    {
+      id: "management",
+      label: "Employee Management",
+      icon: Users,
+      active: true,
+    },
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading employee data...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 text-gray-800 dark:text-gray-100 bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <h2 className="text-3xl font-bold mb-6 text-center text-blue-700 dark:text-blue-400 animate-fade-in-down">
-        Employee Management
-      </h2>
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+      {/* Header */}
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
+              Employee Management
+            </h1>
+            <span className="px-3 py-1 text-xs rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+              Live Management
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                const exportData = {
+                  employees: employees,
+                  totalCount: employees.length,
+                  exportDate: new Date().toISOString()
+                };
 
-      {loading && (
-        <div className="text-blue-600 dark:text-blue-400 mb-3 animate-fade-in">
-          Loading...
+                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `employees-export-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                toast.success("Employee data exported! 📊");
+              }}
+              className="px-4 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200"
+            >
+              <Download className="w-4 h-4 mr-2 inline" />
+              Export
+            </button>
+          </div>
         </div>
-      )}
-      {message && (
-        <div className="text-green-600 dark:text-green-400 mb-3 animate-fade-in">
-          {message}
-        </div>
-      )}
 
-      <div className="bg-white dark:bg-gray-800 shadow-lg p-4 rounded mb-8 animate-slide-up">
-        <h3 className="font-semibold mb-4 text-lg">➕ Add / Edit Employee</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            ["name", "Full Name"],
-            ["email", "Email"],
-            ["phone", "Phone"],
-            ["photo", "Photo URL"],
-            ["title", "Job Title"],
-            ["department", "Department"],
-            ["manager", "Manager"],
-            ["location", "Location"],
-          ].map(([name, placeholder]) => (
-            <input
-              key={name}
-              name={name}
-              value={form[name as keyof Employee]}
-              onChange={handleChange}
-              placeholder={placeholder}
-              className="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
-          ))}
-          <select
-            name="type"
-            value={form.type}
-            onChange={handleChange}
-            className="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          >
-            <option>Full-time</option>
-            <option>Part-time</option>
-            <option>Intern</option>
-            <option>Contract</option>
-          </select>
-          <select
-            name="status"
-            value={form.status}
-            onChange={handleChange}
-            className="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          >
-            <option>Active</option>
-            <option>Inactive</option>
-            <option>Terminated</option>
-          </select>
-          <input
-            type="date"
-            name="dob"
-            value={form.dob}
-            onChange={handleChange}
-            className="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-          <input
-            type="date"
-            name="joiningDate"
-            value={form.joiningDate}
-            onChange={handleChange}
-            className="border p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
-        <button
-          onClick={handleAddOrUpdate}
-          className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded transition duration-200"
-        >
-          {editIndex !== null ? "Update" : "Add"} Employee
-        </button>
+        {/* Search and Stats */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 border-b-2 border-purple-500 pb-2">
+              <Users className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span className="text-base font-medium text-purple-600 dark:text-purple-400">Team Management</span>
+            </div>
+          </div>
 
-        <div className="mt-6">
-          <label className="block font-medium mb-1">📥 Bulk Upload</label>
-          <input
-            type="file"
-            accept=".csv,.xlsx"
-            onChange={handleBulkUpload}
-            className="border w-full p-2 rounded dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
+              <input
+                type="text"
+                placeholder="Search employees..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-full sm:w-48"
+              />
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30 rounded-lg text-sm">
+              <Activity className="w-4 h-4" />
+              <span className="font-medium">Total: {employees.length}</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 shadow-lg p-4 rounded animate-fade-in">
-        <h3 className="font-semibold mb-4 text-lg">📋 All Employees</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border text-sm min-w-[800px]">
-            <thead className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
-              <tr>
-                <th className="border px-2 py-2">Photo</th>
-                <th className="border px-2 py-2">Name</th>
-                <th className="border px-2 py-2">Email</th>
-                <th className="border px-2 py-2">Phone</th>
-                <th className="border px-2 py-2">Department</th>
-                <th className="border px-2 py-2">Status</th>
-                <th className="border px-2 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {employees.map((emp, idx) => (
-                <tr
-                  key={idx}
-                  className="text-center hover:bg-gray-50 dark:hover:bg-gray-700 transition"
-                >
-                  <td className="border px-2 py-2">
-                    {emp.photo ? (
-                      <img
-                        src={emp.photo}
-                        alt={emp.name}
-                        className="h-10 w-10 rounded-full mx-auto object-cover"
-                      />
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td className="border px-2 py-2">{emp.name}</td>
-                  <td className="border px-2 py-2">{emp.email}</td>
-                  <td className="border px-2 py-2">{emp.phone}</td>
-                  <td className="border px-2 py-2">{emp.department}</td>
-                  <td className="border px-2 py-2">{emp.status}</td>
-                  <td className="border px-2 py-2 space-x-2">
-                    <button
-                      onClick={() => handleEdit(idx)}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(idx)}
-                      className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        {/* Add/Edit Employee Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="liquid-glass-card"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-500/30">
+              <UserPlus className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                {editIndex !== null ? "Edit Employee" : "Add New Employee"}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-purple-300/70">
+                {editIndex !== null ? "Update employee information" : "Create a new employee record"}
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+            {[
+              { name: "name", placeholder: "Full Name", icon: User },
+              { name: "email", placeholder: "Email Address", icon: Mail },
+              { name: "phone", placeholder: "Phone Number", icon: Phone },
+              { name: "photo", placeholder: "Photo URL", icon: User },
+              { name: "title", placeholder: "Job Title", icon: Building },
+              { name: "department", placeholder: "Department", icon: Building },
+              { name: "manager", placeholder: "Manager", icon: User },
+              { name: "location", placeholder: "Location", icon: MapPin },
+            ].map(({ name, placeholder, icon: Icon }) => (
+              <div key={name} className="relative">
+                <Icon className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300/70" />
+                <input
+                  name={name}
+                  value={form[name as keyof Employee]}
+                  onChange={handleChange}
+                  placeholder={placeholder}
+                  className="pl-9 pr-4 py-2.5 w-full border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+                />
+              </div>
+            ))}
+            
+            <select
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+              className="px-4 py-2.5 border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+            >
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Intern">Intern</option>
+              <option value="Contract">Contract</option>
+            </select>
+            
+            <select
+              name="status"
+              value={form.status}
+              onChange={handleChange}
+              className="px-4 py-2.5 border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+            >
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Terminated">Terminated</option>
+            </select>
+            
+            <div className="relative">
+              <Calendar className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300/70" />
+              <input
+                type="date"
+                name="dob"
+                value={form.dob}
+                onChange={handleChange}
+                className="pl-9 pr-4 py-2.5 w-full border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              />
+            </div>
+            
+            <div className="relative">
+              <Calendar className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300/70" />
+              <input
+                type="date"
+                name="joiningDate"
+                value={form.joiningDate}
+                onChange={handleChange}
+                className="pl-9 pr-4 py-2.5 w-full border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={handleAddOrUpdate}
+              disabled={loading}
+              className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+            >
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <UserPlus className="w-4 h-4" />
+              )}
+              {loading ? "Processing..." : editIndex !== null ? "Update Employee" : "Add Employee"}
+            </button>
+
+            {/* Bulk Upload */}
+            <div className="relative">
+              <input
+                type="file"
+                accept=".csv,.xlsx"
+                onChange={handleBulkUpload}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                disabled={loading}
+              />
+              <button
+                disabled={loading}
+                className="flex items-center justify-center gap-2 px-6 py-3 border border-purple-200 dark:border-purple-500/30 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/10 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+              >
+                <Upload className="w-4 h-4" />
+                Bulk Upload
+              </button>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Employee List */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="liquid-glass-card"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-3 rounded-xl bg-blue-100 dark:bg-blue-500/20 border border-blue-200 dark:border-blue-500/30">
+              <Users className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                All Employees
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-purple-300/70">
+                {filteredEmployees.length} employees found
+              </p>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-800/50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Employee
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Contact
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Department
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Status
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                {filteredEmployees.map((emp, idx) => (
+                  <motion.tr
+                    key={emp.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.05 }}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                  >
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-3">
+                        <div className="relative">
+                          {emp.photo ? (
+                            <img
+                              src={emp.photo}
+                              alt={emp.name}
+                              className="h-10 w-10 rounded-full object-cover border-2 border-purple-200 dark:border-purple-500/30"
+                            />
+                          ) : (
+                            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                              <User className="w-5 h-5 text-white" />
+                            </div>
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                            {emp.name}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {emp.title}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm text-gray-900 dark:text-gray-100">
+                        {emp.email}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {emp.phone}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
+                      {emp.department}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          emp.status === "Active"
+                            ? "bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400"
+                            : emp.status === "Inactive"
+                            ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-500/20 dark:text-yellow-400"
+                            : "bg-red-100 text-red-800 dark:bg-red-500/20 dark:text-red-400"
+                        }`}
+                      >
+                        {emp.status === "Active" && <CheckCircle className="w-3 h-3 mr-1" />}
+                        {emp.status !== "Active" && <AlertCircle className="w-3 h-3 mr-1" />}
+                        {emp.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEdit(idx)}
+                          className="p-2 text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-500/10 rounded-lg transition-colors"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(idx)}
+                          className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
