@@ -218,7 +218,7 @@ const AdminTicketsPage = () => {
         </select>
 
         <select
-          className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
+          className="border border-cyan-300 dark:border-orange-500/40 p-2 rounded bg-white dark:bg-black/95 text-gray-900 dark:text-white"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
         >
@@ -229,7 +229,7 @@ const AdminTicketsPage = () => {
         </select>
 
         <select
-          className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
+          className="border border-cyan-300 dark:border-orange-500/40 p-2 rounded bg-white dark:bg-black/95 text-gray-900 dark:text-white"
           value={userFilter}
           onChange={(e) => setUserFilter(e.target.value)}
         >
@@ -240,7 +240,7 @@ const AdminTicketsPage = () => {
         </select>
 
         <select
-          className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
+          className="border border-cyan-300 dark:border-orange-500/40 p-2 rounded bg-white dark:bg-black/95 text-gray-900 dark:text-white"
           value={dateFilter}
           onChange={(e) => setDateFilter(e.target.value)}
         >
