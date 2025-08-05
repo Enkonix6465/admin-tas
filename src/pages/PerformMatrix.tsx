@@ -363,9 +363,7 @@ export default function EmployeePerformancePage() {
               <Download className="w-4 h-4 mr-2 inline" />
               Export
             </button>
-            <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
-              Generate Report
-            </button>
+
           </div>
         </div>
 
