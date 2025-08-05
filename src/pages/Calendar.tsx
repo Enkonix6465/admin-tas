@@ -558,12 +558,12 @@ const Calendar = () => {
         <div className="flex-1 overflow-auto relative">
           {activeView === "timeline" ? (
             // Enhanced Timeline View with Completion Tracking
-            <div className="h-full bg-white/60 backdrop-blur-sm m-4 rounded-2xl border border-purple-200/30 overflow-hidden shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 rounded-2xl" />
-              
-              <div className="relative p-6 border-b border-purple-200/30">
-                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Project Timeline Chart</h2>
-                <p className="text-sm text-purple-600 mt-1">Task completion schedule with time tracking</p>
+            <div className="h-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm m-4 rounded-2xl border border-purple-200/30 dark:border-purple-600/30 overflow-hidden shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 dark:from-purple-900/50 dark:to-gray-900/30 rounded-2xl" />
+
+              <div className="relative p-6 border-b border-purple-200/30 dark:border-purple-600/30">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">Project Timeline Chart</h2>
+                <p className="text-sm text-purple-600 dark:text-purple-400 mt-1">Task completion schedule with time tracking</p>
               </div>
 
               <div className="relative flex-1 overflow-y-auto p-6">
