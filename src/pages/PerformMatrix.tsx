@@ -9,7 +9,6 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-  CartesianGrid,
   BarChart,
   Bar,
   AreaChart,
