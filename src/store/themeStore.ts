@@ -9,9 +9,10 @@ interface ThemeState {
 
 export const useThemeStore = create<ThemeState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       theme: 'dark',
       setTheme: (theme) => set({ theme }),
+      toggleTheme: () => set({ theme: get().theme === 'light' ? 'dark' : 'light' }),
     }),
     {
       name: 'theme-storage',
