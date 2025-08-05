@@ -616,7 +616,7 @@ export default function EmployeePerformancePage() {
                         yAxisId="left"
                         dataKey="performance"
                         name="Performance %"
-                        fill="#8b5cf6"
+                        fill="#00D4FF"
                         radius={[4, 4, 0, 0]}
                         stroke="#7c3aed"
                         strokeWidth={1}
@@ -701,11 +701,11 @@ export default function EmployeePerformancePage() {
                       <Radar
                         name="Performance Score"
                         dataKey="value"
-                        stroke="#8b5cf6"
-                        fill="#8b5cf6"
+                        stroke="#00D4FF"
+                        fill="#00D4FF"
                         fillOpacity={0.3}
                         strokeWidth={3}
-                        dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
+                        dot={{ fill: '#00D4FF', strokeWidth: 2, r: 4 }}
                       />
                       <Tooltip
                         content={({ active, payload, label }) => {
