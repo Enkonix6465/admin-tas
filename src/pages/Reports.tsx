@@ -1752,9 +1752,8 @@ const Reports = () => {
                                   </linearGradient>
                                 ))}
                               </defs>
-                              <XAxis dataKey="date" stroke="#6b7280" />
+                              <XAxis dataKey="date" stroke="#6b7280" tick={false} />
                               <YAxis stroke="#6b7280" />
-                              <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
                               <Tooltip 
                                 contentStyle={{ 
                                   backgroundColor: '#1f2937', 
