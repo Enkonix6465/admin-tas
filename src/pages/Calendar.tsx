@@ -874,7 +874,7 @@ const Calendar = () => {
                               {event.assigned_to && viewMode === "week" && (
                                 <div className="flex items-center gap-1 mt-1 opacity-75">
                                   <User className="w-2 h-2" />
-                                  <span className="truncate text-purple-600">Assigned</span>
+                                  <span className="truncate text-purple-600 dark:text-purple-400">Assigned</span>
                                 </div>
                               )}
                             </motion.div>
