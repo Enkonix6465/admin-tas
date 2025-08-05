@@ -531,8 +531,7 @@ export default function EmployeePerformancePage() {
                         Employee ID: {selectedEmployee.id.slice(-6)}
                       </div>
                       <div className="flex items-center gap-1">
-                        <Trophy className="w-4 h-4 text-purple-500" />
-                        Performance Score: <span className="font-bold text-purple-600 dark:text-purple-400">{performanceData.totalPerformanceScore}%</span>
+                        Performance Matrix: <span className="font-bold text-purple-600 dark:text-purple-400">{performanceData.totalPerformanceScore}%</span>
                       </div>
                     </div>
                   </div>
