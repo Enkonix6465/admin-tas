@@ -754,11 +754,11 @@ const Calendar = () => {
               
               {/* Week Headers - Only show for month and week view */}
               {viewMode !== "day" && (
-                <div className={`relative grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-purple-200/30 flex-shrink-0`}>
+                <div className={`relative grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-purple-200/30 dark:border-purple-600/30 flex-shrink-0`}>
                   {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
                     <div
                       key={day}
-                      className="p-3 text-center text-sm font-medium text-purple-700 bg-purple-50/60 backdrop-blur-sm"
+                      className="p-3 text-center text-sm font-medium text-purple-700 dark:text-purple-300 bg-purple-50/60 dark:bg-purple-900/60 backdrop-blur-sm"
                     >
                       {day}
                     </div>
