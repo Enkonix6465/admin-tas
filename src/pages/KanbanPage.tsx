@@ -31,6 +31,7 @@ import {
   TrendingUp,
   Activity,
   Timer,
+  Sparkles,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -68,7 +69,7 @@ const KanbanPage = () => {
     let connectionTimeout: NodeJS.Timeout;
     let hasConnected = false;
 
-    // Enhanced mock data for better testing
+    // Enhanced mock data with purple theme colors
     const getMockTasks = () => [
       {
         id: "mock-task-1",
@@ -147,19 +148,19 @@ const KanbanPage = () => {
         id: "mock-project-1",
         name: "Website Redesign",
         description: "Complete website redesign project with modern UI",
-        color: "#3b82f6"
+        color: "#8b5cf6"
       },
       {
         id: "mock-project-2",
-        name: "Mobile Application",
+        name: "Mobile Application", 
         description: "iOS and Android app development",
-        color: "#10b981"
+        color: "#a855f7"
       },
       {
         id: "mock-project-3",
         name: "Analytics Dashboard",
         description: "Real-time analytics and reporting dashboard",
-        color: "#f59e0b"
+        color: "#9333ea"
       }
     ];
 
@@ -196,19 +197,16 @@ const KanbanPage = () => {
 
     const setupFirebaseWithTimeout = async () => {
       try {
-        // Set a timeout for Firebase connection
         connectionTimeout = setTimeout(() => {
           if (!hasConnected && mounted) {
             console.warn("Firebase connection timeout - switching to offline mode");
             toast.error("Connection timeout - using offline mode");
             loadMockData();
           }
-        }, 3000); // 3 second timeout
+        }, 3000);
 
-        // Test Firebase connection with a simple operation
         const testConnection = async () => {
           try {
-            // Try to get a simple document to test connection
             await collection(db, "tasks");
             hasConnected = true;
             clearTimeout(connectionTimeout);
@@ -302,18 +300,15 @@ const KanbanPage = () => {
       }
     };
 
-    // Start the connection process
     setupFirebaseWithTimeout();
 
     return () => {
       mounted = false;
 
-      // Clear connection timeout
       if (connectionTimeout) {
         clearTimeout(connectionTimeout);
       }
 
-      // Unsubscribe from Firebase listeners
       unsubscribers.forEach(unsub => {
         try {
           unsub();
@@ -345,7 +340,7 @@ const KanbanPage = () => {
 
   const getProjectColor = (projectId: string) => {
     const project = projects.find((p: any) => p.id === projectId);
-    return project?.color || "#6366f1";
+    return project?.color || "#8b5cf6";
   };
 
   // Enhanced filter logic
@@ -367,45 +362,45 @@ const KanbanPage = () => {
     {
       id: "pending",
       title: "📋 Backlog",
-      status: "pending",
-      color: "from-slate-100/90 via-purple-100/80 to-indigo-100/90",
+      status: "pending", 
+      color: "from-purple-100/90 via-purple-50/80 to-purple-100/90",
       borderColor: "border-purple-300/40 dark:border-purple-400/30",
       iconColor: "text-purple-600 dark:text-purple-400",
-      bgColor: "bg-gradient-to-br from-purple-50/40 via-slate-50/50 to-purple-100/40 dark:from-purple-900/20 dark:via-slate-800/30 dark:to-purple-800/20",
-      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-purple-900/30 dark:via-slate-800/40 dark:to-indigo-900/30",
+      bgColor: "bg-gradient-to-br from-purple-50/60 via-white/80 to-purple-100/60 dark:from-purple-900/40 dark:via-gray-800/60 dark:to-purple-800/40",
+      glassEffect: "backdrop-blur-xl bg-white/80 dark:bg-gradient-to-br dark:from-purple-900/60 dark:via-gray-800/80 dark:to-purple-800/60",
       tasks: filteredTasks.filter((t: any) => t.status === "pending" || t.progress_status === "pending"),
     },
     {
       id: "in_progress",
       title: "🚀 In Progress",
       status: "in_progress",
-      color: "from-blue-100/90 via-cyan-100/80 to-teal-100/90",
-      borderColor: "border-blue-300/40 dark:border-cyan-400/30",
-      iconColor: "text-blue-600 dark:text-cyan-400",
-      bgColor: "bg-gradient-to-br from-blue-50/40 via-cyan-50/50 to-teal-100/40 dark:from-blue-900/20 dark:via-cyan-800/30 dark:to-teal-800/20",
-      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-blue-900/30 dark:via-cyan-800/40 dark:to-teal-900/30",
+      color: "from-purple-200/90 via-purple-100/80 to-purple-200/90",
+      borderColor: "border-purple-400/40 dark:border-purple-500/30",
+      iconColor: "text-purple-700 dark:text-purple-300",
+      bgColor: "bg-gradient-to-br from-purple-100/60 via-white/80 to-purple-200/60 dark:from-purple-800/40 dark:via-gray-800/60 dark:to-purple-700/40",
+      glassEffect: "backdrop-blur-xl bg-white/80 dark:bg-gradient-to-br dark:from-purple-800/60 dark:via-gray-800/80 dark:to-purple-700/60",
       tasks: filteredTasks.filter((t: any) => t.status === "in_progress" || t.progress_status === "in_progress"),
     },
     {
       id: "review",
       title: "👀 Review",
       status: "review",
-      color: "from-amber-100/90 via-yellow-100/80 to-orange-100/90",
-      borderColor: "border-amber-300/40 dark:border-yellow-400/30",
-      iconColor: "text-amber-600 dark:text-yellow-400",
-      bgColor: "bg-gradient-to-br from-amber-50/40 via-yellow-50/50 to-orange-100/40 dark:from-amber-900/20 dark:via-yellow-800/30 dark:to-orange-800/20",
-      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-amber-900/30 dark:via-yellow-800/40 dark:to-orange-900/30",
+      color: "from-purple-300/90 via-purple-200/80 to-purple-300/90",
+      borderColor: "border-purple-500/40 dark:border-purple-400/30",
+      iconColor: "text-purple-800 dark:text-purple-200",
+      bgColor: "bg-gradient-to-br from-purple-200/60 via-white/80 to-purple-300/60 dark:from-purple-700/40 dark:via-gray-800/60 dark:to-purple-600/40",
+      glassEffect: "backdrop-blur-xl bg-white/80 dark:bg-gradient-to-br dark:from-purple-700/60 dark:via-gray-800/80 dark:to-purple-600/60",
       tasks: filteredTasks.filter((t: any) => t.status === "review" || t.status === "testing" || t.progress_status === "review"),
     },
     {
       id: "completed",
       title: "✅ Done",
       status: "completed",
-      color: "from-emerald-100/90 via-green-100/80 to-teal-100/90",
-      borderColor: "border-emerald-300/40 dark:border-green-400/30",
-      iconColor: "text-emerald-600 dark:text-green-400",
-      bgColor: "bg-gradient-to-br from-emerald-50/40 via-green-50/50 to-teal-100/40 dark:from-emerald-900/20 dark:via-green-800/30 dark:to-teal-800/20",
-      glassEffect: "backdrop-blur-xl bg-white/60 dark:bg-gradient-to-br dark:from-emerald-900/30 dark:via-green-800/40 dark:to-teal-900/30",
+      color: "from-green-100/90 via-emerald-100/80 to-green-100/90",
+      borderColor: "border-green-300/40 dark:border-green-400/30",
+      iconColor: "text-green-600 dark:text-green-400",
+      bgColor: "bg-gradient-to-br from-green-50/60 via-white/80 to-emerald-100/60 dark:from-green-900/40 dark:via-gray-800/60 dark:to-emerald-800/40",
+      glassEffect: "backdrop-blur-xl bg-white/80 dark:bg-gradient-to-br dark:from-green-900/60 dark:via-gray-800/80 dark:to-emerald-800/60",
       tasks: filteredTasks.filter((t: any) => t.status === "completed" || t.progress_status === "completed"),
     },
   ];
@@ -421,7 +416,6 @@ const KanbanPage = () => {
         throw new Error("Database connection not available");
       }
 
-      // Add timeout for Firebase operation
       const addTaskPromise = addDoc(collection(db, "tasks"), {
         ...newTaskForm,
         status: newTaskColumn || "pending",
@@ -459,8 +453,6 @@ const KanbanPage = () => {
       } else {
         toast.error(`Failed to add task: ${error.message || 'Connection error'}`);
       }
-
-      // Don't close modal on error so user can retry
     }
   };
 
@@ -470,7 +462,6 @@ const KanbanPage = () => {
         throw new Error("Database connection not available");
       }
 
-      // Add timeout for Firebase operation
       const updateTaskPromise = updateDoc(doc(db, "tasks", task.id), {
         status: newStatus,
         progress_status: newStatus,
@@ -530,13 +521,13 @@ const KanbanPage = () => {
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-700 border-red-200";
+        return "bg-red-100/80 text-red-700 border-red-200/50 dark:bg-red-900/40 dark:text-red-300 dark:border-red-600/30";
       case "medium":
-        return "bg-yellow-100 text-yellow-700 border-yellow-200";
+        return "bg-yellow-100/80 text-yellow-700 border-yellow-200/50 dark:bg-yellow-900/40 dark:text-yellow-300 dark:border-yellow-600/30";
       case "low":
-        return "bg-green-100 text-green-700 border-green-200";
+        return "bg-green-100/80 text-green-700 border-green-200/50 dark:bg-green-900/40 dark:text-green-300 dark:border-green-600/30";
       default:
-        return "bg-gray-100 text-gray-700 border-gray-200";
+        return "bg-gray-100/80 text-gray-700 border-gray-200/50 dark:bg-gray-900/40 dark:text-gray-300 dark:border-gray-600/30";
     }
   };
 
@@ -544,17 +535,17 @@ const KanbanPage = () => {
     const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "completed";
 
     const getCardBgColor = () => {
-      if (isOverdue) return 'enhanced-glass-card border-red-300/40 dark:border-red-400/50 bg-gradient-to-br from-red-50/70 via-pink-50/60 to-rose-50/70 dark:from-red-900/30 dark:via-pink-900/40 dark:to-rose-900/30';
+      if (isOverdue) return 'backdrop-blur-xl bg-red-50/80 dark:bg-red-900/40 border border-red-200/50 dark:border-red-600/30';
 
       switch (task.status) {
         case 'completed':
-          return 'enhanced-glass-card border-emerald-300/40 dark:border-green-400/50 bg-gradient-to-br from-emerald-50/70 via-green-50/60 to-teal-50/70 dark:from-emerald-900/30 dark:via-green-900/40 dark:to-teal-900/30';
+          return 'backdrop-blur-xl bg-green-50/80 dark:bg-green-900/40 border border-green-200/50 dark:border-green-600/30';
         case 'in_progress':
-          return 'enhanced-glass-card border-blue-300/40 dark:border-cyan-400/50 bg-gradient-to-br from-blue-50/70 via-cyan-50/60 to-sky-50/70 dark:from-blue-900/30 dark:via-cyan-900/40 dark:to-sky-900/30';
+          return 'backdrop-blur-xl bg-purple-50/80 dark:bg-purple-900/40 border border-purple-200/50 dark:border-purple-600/30';
         case 'review':
-          return 'enhanced-glass-card border-amber-300/40 dark:border-yellow-400/50 bg-gradient-to-br from-amber-50/70 via-yellow-50/60 to-orange-50/70 dark:from-amber-900/30 dark:via-yellow-900/40 dark:to-orange-900/30';
+          return 'backdrop-blur-xl bg-purple-100/80 dark:bg-purple-800/40 border border-purple-300/50 dark:border-purple-500/30';
         default:
-          return 'enhanced-glass-card border-purple-300/40 dark:border-indigo-400/50 bg-gradient-to-br from-purple-50/70 via-slate-50/60 to-indigo-50/70 dark:from-purple-900/30 dark:via-slate-900/40 dark:to-indigo-900/30';
+          return 'backdrop-blur-xl bg-white/80 dark:bg-gray-900/60 border border-purple-200/30 dark:border-purple-600/30';
       }
     };
 
@@ -565,7 +556,7 @@ const KanbanPage = () => {
         whileHover={{
           y: -4,
           scale: 1.02,
-          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+          boxShadow: "0 20px 25px -5px rgba(139, 92, 246, 0.3)"
         }}
         whileTap={{ scale: 0.98 }}
         layout
@@ -575,32 +566,32 @@ const KanbanPage = () => {
           setSelectedTask(task);
           setShowTaskDetailModal(true);
         }}
-        className={`${getCardBgColor()} rounded-2xl border p-5 mb-4 hover:shadow-2xl dark:hover:shadow-cyan-500/25 transition-all duration-500 cursor-pointer group relative overflow-hidden backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] moving-border-subtle`}
+        className={`${getCardBgColor()} rounded-2xl p-5 mb-4 transition-all duration-500 cursor-pointer group relative overflow-hidden hover:shadow-2xl`}
       >
-        {/* Enhanced Priority stripe */}
-        <div className={`absolute top-0 left-0 w-full h-2 rounded-t-2xl ${
-          task.priority === "high" ? "bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 animate-pulse" :
-          task.priority === "medium" ? "bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" :
-          "bg-gradient-to-r from-green-500 via-emerald-500 to-lime-500"
-        }`} />
+        {/* Floating orbs */}
+        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-400/30 dark:bg-purple-300/20 animate-pulse" />
+        <div className="absolute bottom-3 left-3 w-1 h-1 rounded-full bg-purple-300/40 dark:bg-purple-400/30 animate-pulse" style={{animationDelay: '1s'}} />
 
-        {/* Floating glass orbs */}
-        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-white/30 dark:bg-cyan-400/20 animate-pulse" />
-        <div className="absolute bottom-3 left-3 w-1 h-1 rounded-full bg-white/40 dark:bg-purple-400/30 animate-pulse" style={{animationDelay: '1s'}} />
+        {/* Priority stripe */}
+        <div className={`absolute top-0 left-0 w-full h-1 rounded-t-2xl ${
+          task.priority === "high" ? "bg-gradient-to-r from-red-500 to-pink-500" :
+          task.priority === "medium" ? "bg-gradient-to-r from-purple-500 to-purple-600" :
+          "bg-gradient-to-r from-green-500 to-emerald-500"
+        }`} />
 
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h4 className="text-sm font-bold text-gray-900 dark:text-slate-100 leading-tight mb-1 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors duration-300">
+            <h4 className="text-sm font-bold text-purple-900 dark:text-purple-100 leading-tight mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-300">
               {task.title}
             </h4>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {getPriorityIcon(task.priority)}
-              <span className={`px-2 py-0.5 text-xs rounded-full border ${getPriorityBadge(task.priority)}`}>
+              <span className={`px-2 py-0.5 text-xs rounded-full border font-medium ${getPriorityBadge(task.priority)}`}>
                 {task.priority?.toUpperCase()}
               </span>
               {isOverdue && (
-                <span className="px-2 py-0.5 text-xs bg-red-100 text-red-700 rounded-full border border-red-200 flex items-center gap-1">
+                <span className="px-2 py-0.5 text-xs bg-red-100/80 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-full border border-red-200/50 dark:border-red-600/30 flex items-center gap-1">
                   <AlertCircle className="w-3 h-3" />
                   Overdue
                 </span>
@@ -608,10 +599,9 @@ const KanbanPage = () => {
             </div>
           </div>
           <button 
-            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600 p-1 transition-opacity"
+            className="opacity-0 group-hover:opacity-100 text-purple-400 hover:text-purple-600 dark:text-purple-300 dark:hover:text-purple-200 p-1 transition-opacity rounded-lg hover:bg-purple-100/60 dark:hover:bg-purple-900/60"
             onClick={(e) => {
               e.stopPropagation();
-              // Add menu options
             }}
           >
             <MoreHorizontal className="w-4 h-4" />
@@ -620,7 +610,7 @@ const KanbanPage = () => {
         
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-gray-700 dark:text-slate-300 mb-3 line-clamp-2 leading-relaxed">
+          <p className="text-xs text-purple-700 dark:text-purple-300 mb-3 line-clamp-2 leading-relaxed">
             {task.description}
           </p>
         )}
@@ -632,10 +622,10 @@ const KanbanPage = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="mb-3"
           >
-            <div className="flex items-center justify-between text-xs text-gray-700 dark:text-slate-300 mb-2">
+            <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-300 mb-2">
               <span className="font-medium">Progress</span>
               <motion.span
-                className="font-bold text-blue-600 dark:text-cyan-400"
+                className="font-bold text-purple-700 dark:text-purple-200"
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ delay: 0.2 }}
@@ -643,13 +633,11 @@ const KanbanPage = () => {
                 {task.progress}%
               </motion.span>
             </div>
-            <div className="w-full bg-gray-200/60 dark:bg-slate-700/50 rounded-full h-2.5 shadow-inner backdrop-blur-sm">
+            <div className="w-full bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-2.5 shadow-inner backdrop-blur-sm">
               <motion.div
                 className={`h-2.5 rounded-full shadow-lg ${
-                  task.status === 'completed' ? 'bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500' :
-                  task.status === 'in_progress' ? 'bg-gradient-to-r from-blue-500 via-cyan-500 to-sky-500' :
-                  task.status === 'review' ? 'bg-gradient-to-r from-amber-500 via-yellow-500 to-orange-500' :
-                  'bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500'
+                  task.status === 'completed' ? 'bg-gradient-to-r from-green-500 to-emerald-500' :
+                  'bg-gradient-to-r from-purple-500 to-purple-600'
                 }`}
                 initial={{ width: 0 }}
                 animate={{ width: `${task.progress}%` }}
@@ -666,14 +654,14 @@ const KanbanPage = () => {
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-wrap gap-2 mb-3"
           >
-            {task.tags.split(',').map((tag: string, index: number) => (
+            {task.tags.split(',').slice(0, 3).map((tag: string, index: number) => (
               <motion.span
                 key={index}
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.05 }}
-                className="px-2 py-1 text-xs bg-gradient-to-r from-blue-100/80 via-cyan-100/70 to-indigo-100/80 dark:from-blue-900/40 dark:via-cyan-900/30 dark:to-indigo-900/40 text-blue-700 dark:text-cyan-300 rounded-lg border border-blue-200/50 dark:border-cyan-400/30 font-medium shadow-sm backdrop-blur-sm"
+                className="px-2 py-1 text-xs bg-purple-100/80 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg border border-purple-200/50 dark:border-purple-600/30 font-medium shadow-sm backdrop-blur-sm"
               >
                 #{tag.trim()}
               </motion.span>
@@ -685,7 +673,7 @@ const KanbanPage = () => {
         {task.project_id && (
           <div className="mb-3">
             <span 
-              className="px-2 py-1 text-xs text-white rounded-md"
+              className="px-2 py-1 text-xs text-white rounded-md font-medium shadow-sm"
               style={{ backgroundColor: getProjectColor(task.project_id) }}
             >
               {projects.find(p => p.id === task.project_id)?.name || "Project"}
@@ -694,19 +682,19 @@ const KanbanPage = () => {
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-gray-600 dark:text-slate-300">
+        <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-300">
           <div className="flex items-center gap-2">
             <img
               src={getEmployeeAvatar(task.assigned_to)}
               alt="avatar"
-              className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-600 shadow-lg ring-2 ring-white/50 dark:ring-slate-400/30"
+              className="w-6 h-6 rounded-full border-2 border-white dark:border-purple-600 shadow-lg ring-2 ring-purple-100/50 dark:ring-purple-400/30"
             />
             <span className="font-medium">{getEmployeeName(task.assigned_to)}</span>
           </div>
           
           <div className="flex items-center gap-3">
             {task.due_date && (
-              <div className={`flex items-center gap-1 ${isOverdue ? 'text-red-600' : ''}`}>
+              <div className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 dark:text-red-400' : ''}`}>
                 <Calendar className="w-3 h-3" />
                 <span>{new Date(task.due_date).toLocaleDateString()}</span>
               </div>
@@ -725,16 +713,16 @@ const KanbanPage = () => {
 
   if (loading) {
     return (
-      <div className="h-full bg-gradient-to-br from-slate-50 via-purple-50/30 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-indigo-900 flex items-center justify-center">
+      <div className="h-full bg-gradient-to-br from-purple-50 via-white to-purple-100 dark:bg-gradient-to-br dark:from-[#0f1129] dark:via-[#1a1b3a] dark:to-[#2d1b69] flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
-            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-200 dark:border-purple-600 border-t-purple-600 dark:border-t-purple-400 mx-auto mb-4"></div>
             <div className="absolute inset-0 flex items-center justify-center">
-              <Layers className="w-6 h-6 text-blue-600" />
+              <Layers className="w-6 h-6 text-purple-600 dark:text-purple-400" />
             </div>
           </div>
-          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading your workspace...</p>
-          <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+          <p className="text-purple-700 dark:text-purple-300 font-medium">Loading your workspace...</p>
+          <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">
             Preparing the ultimate kanban experience
           </p>
         </div>
@@ -743,32 +731,36 @@ const KanbanPage = () => {
   }
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-slate-50/50 via-white/30 to-blue-50/50 dark:from-slate-900/80 dark:via-purple-900/40 dark:to-indigo-900/80 backdrop-blur-sm">
+    <div className="flex flex-col h-full bg-gradient-to-br from-purple-50 via-white to-purple-100 dark:bg-gradient-to-br dark:from-[#0f1129] dark:via-[#1a1b3a] dark:to-[#2d1b69]">
+      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/5 via-transparent to-purple-900/5 dark:from-purple-400/10 dark:via-transparent dark:to-purple-600/10 pointer-events-none" />
+      
       {/* Enhanced Header */}
-      <div className="enhanced-glass-header border-b border-gray-200/50 dark:border-purple-400/30 p-4 flex-shrink-0 shadow-lg dark:shadow-cyan-500/20 backdrop-blur-2xl bg-white/80 dark:bg-gradient-to-r dark:from-slate-900/90 dark:via-purple-900/80 dark:to-indigo-900/90">
-        <div className="flex items-center justify-between mb-4">
+      <div className="relative backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border-b border-purple-200/30 dark:border-purple-600/30 p-4 flex-shrink-0 shadow-lg">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-white/10 to-purple-600/5 dark:from-purple-400/10 dark:via-gray-900/10 dark:to-purple-600/10" />
+        
+        <div className="relative flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center shadow-xl dark:shadow-cyan-500/25 relative overflow-hidden">
+              <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center shadow-xl relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse" />
                 <Layers className="w-6 h-6 text-white relative z-10" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-slate-100 bg-gradient-to-r from-purple-600 to-cyan-600 dark:from-purple-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">
                   Project Board
                 </h1>
-                <p className="text-sm text-gray-600 dark:text-slate-300">
+                <p className="text-sm text-purple-600 dark:text-purple-400">
                   {filteredTasks.length} tasks • {projects.length} projects
                 </p>
               </div>
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-emerald-100/80 to-green-100/80 dark:from-emerald-900/40 dark:to-green-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/50 dark:border-emerald-400/30 rounded-full flex items-center gap-1 backdrop-blur-sm shadow-sm">
+              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-green-100/80 to-emerald-100/80 dark:from-green-900/40 dark:to-emerald-900/40 text-green-700 dark:text-green-300 border border-green-200/50 dark:border-green-600/30 rounded-full flex items-center gap-1 backdrop-blur-sm shadow-sm">
                 <Activity className="w-3 h-3" />
                 {navigator.onLine ? 'Live' : 'Offline'}
               </span>
-              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100/80 to-indigo-100/80 dark:from-purple-900/40 dark:to-indigo-900/40 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-400/30 rounded-full backdrop-blur-sm shadow-sm">
+              <span className="px-3 py-1.5 text-xs bg-gradient-to-r from-purple-100/80 to-purple-200/80 dark:from-purple-900/40 dark:to-purple-800/40 text-purple-700 dark:text-purple-300 border border-purple-200/50 dark:border-purple-600/30 rounded-full backdrop-blur-sm shadow-sm">
                 {Math.round((columns.find(c => c.id === "completed")?.tasks.length || 0) / Math.max(filteredTasks.length, 1) * 100)}% Complete
               </span>
             </div>
@@ -776,7 +768,7 @@ const KanbanPage = () => {
 
           <div className="flex items-center gap-3">
             {/* View Mode Toggle */}
-            <div className="flex items-center bg-gray-100/80 dark:bg-slate-800/60 rounded-xl p-1 backdrop-blur-sm border border-gray-200/50 dark:border-slate-600/30">
+            <div className="flex items-center bg-purple-100/60 dark:bg-purple-900/60 rounded-xl p-1 backdrop-blur-sm border border-purple-200/50 dark:border-purple-600/30 shadow-sm">
               {[
               { id: "board", icon: Layers, label: "Board" },
               { id: "list", icon: Eye, label: "List" },
@@ -797,10 +789,10 @@ const KanbanPage = () => {
                       toast.success('Switched to Board view! 📋');
                     }
                   }}
-                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all ${
+                  className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all font-medium ${
                     viewMode === mode.id
-                      ? 'bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-100 shadow-lg backdrop-blur-sm'
-                      : 'text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/50'
+                      ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg'
+                      : 'text-purple-600 dark:text-purple-400 hover:bg-purple-200/50 dark:hover:bg-purple-800/50'
                   }`}
                 >
                   <mode.icon className="w-3 h-3" />
@@ -811,13 +803,13 @@ const KanbanPage = () => {
 
             {/* Enhanced Search */}
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400 dark:text-purple-300" />
               <input
                 type="text"
                 placeholder="Search tasks, tags, or people..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 text-sm border border-gray-200/50 dark:border-slate-600/30 rounded-xl bg-white/80 dark:bg-slate-800/60 text-gray-900 dark:text-slate-100 placeholder:text-gray-400 dark:placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-cyan-400 focus:border-transparent shadow-lg dark:shadow-cyan-500/20 backdrop-blur-xl w-64"
+                className="pl-10 pr-4 py-2 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-900 dark:text-purple-100 placeholder:text-purple-400 dark:placeholder:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-300 dark:focus:border-purple-400 shadow-lg w-64"
               />
             </div>
 
@@ -825,7 +817,7 @@ const KanbanPage = () => {
             <div className="relative filter-dropdown">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors z-30 relative"
+                className="flex items-center gap-2 px-4 py-2 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-700 dark:text-purple-300 hover:bg-purple-50/80 dark:hover:bg-purple-900/80 transition-colors shadow-sm font-medium"
               >
                 <Filter className="w-4 h-4" />
                 Filters
@@ -833,104 +825,113 @@ const KanbanPage = () => {
               </button>
 
               {filterOpen && (
-                <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-50 p-6">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">Filter Tasks</h3>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute right-0 top-full mt-2 w-80 backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 border border-purple-200/50 dark:border-purple-600/50 rounded-xl shadow-2xl z-50 p-6"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/50 dark:from-purple-900/50 dark:to-gray-900/50 rounded-xl" />
                   
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="relative">
+                    <h3 className="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-4">Filter Tasks</h3>
+                    
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-medium text-purple-700 dark:text-purple-300 mb-2">
+                            Priority
+                          </label>
+                          <select
+                            value={selectedPriority}
+                            onChange={(e) => setSelectedPriority(e.target.value)}
+                            className="w-full px-3 py-2 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-lg bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+                          >
+                            <option value="">All Priorities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                          </select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-xs font-medium text-purple-700 dark:text-purple-300 mb-2">
+                            Due Date
+                          </label>
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={(e) => setSelectedDate(e.target.value)}
+                            className="w-full px-3 py-2 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-lg bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+                          />
+                        </div>
+                      </div>
+
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Priority
+                        <label className="block text-xs font-medium text-purple-700 dark:text-purple-300 mb-2">
+                          Assignee
                         </label>
                         <select
-                          value={selectedPriority}
-                          onChange={(e) => setSelectedPriority(e.target.value)}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          value={selectedAssignee}
+                          onChange={(e) => setSelectedAssignee(e.target.value)}
+                          className="w-full px-3 py-2 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-lg bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
                         >
-                          <option value="">All Priorities</option>
-                          <option value="high">High</option>
-                          <option value="medium">Medium</option>
-                          <option value="low">Low</option>
+                          <option value="">All Assignees</option>
+                          {employees.map((emp: any) => (
+                            <option key={emp.id} value={emp.id}>
+                              {emp.name || emp.email}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-medium text-purple-700 dark:text-purple-300 mb-2">
+                          Project
+                        </label>
+                        <select
+                          value={selectedProject}
+                          onChange={(e) => setSelectedProject(e.target.value)}
+                          className="w-full px-3 py-2 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-lg bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500/20"
+                        >
+                          <option value="">All Projects</option>
+                          {projects.map((project: any) => (
+                            <option key={project.id} value={project.id}>
+                              {project.name}
+                            </option>
+                          ))}
                         </select>
                       </div>
                       
-                      <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Due Date
-                        </label>
-                        <input
-                          type="date"
-                          value={selectedDate}
-                          onChange={(e) => setSelectedDate(e.target.value)}
-                          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
+                      <div className="flex justify-between pt-4 border-t border-purple-200/50 dark:border-purple-600/50">
+                        <button
+                          onClick={() => {
+                            setSelectedDate("");
+                            setSelectedProject("");
+                            setSelectedPriority("");
+                            setSelectedAssignee("");
+                            setFilterOpen(false);
+                          }}
+                          className="px-4 py-2 text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+                        >
+                          Clear All
+                        </button>
+                        <button
+                          onClick={() => setFilterOpen(false)}
+                          className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg"
+                        >
+                          Apply Filters
+                        </button>
                       </div>
                     </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Assignee
-                      </label>
-                      <select
-                        value={selectedAssignee}
-                        onChange={(e) => setSelectedAssignee(e.target.value)}
-                        className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="">All Assignees</option>
-                        {employees.map((emp: any) => (
-                          <option key={emp.id} value={emp.id}>
-                            {emp.name || emp.email}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Project
-                      </label>
-                      <select
-                        value={selectedProject}
-                        onChange={(e) => setSelectedProject(e.target.value)}
-                        className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="">All Projects</option>
-                        {projects.map((project: any) => (
-                          <option key={project.id} value={project.id}>
-                            {project.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    
-                    <div className="flex justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <button
-                        onClick={() => {
-                          setSelectedDate("");
-                          setSelectedProject("");
-                          setSelectedPriority("");
-                          setSelectedAssignee("");
-                          setFilterOpen(false);
-                        }}
-                        className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-                      >
-                        Clear All
-                      </button>
-                      <button
-                        onClick={() => setFilterOpen(false)}
-                        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      >
-                        Apply Filters
-                      </button>
-                    </div>
                   </div>
-                </div>
+                </motion.div>
               )}
             </div>
 
             <button
               onClick={() => setShowNewTaskModal(true)}
-              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white rounded-xl hover:from-purple-700 hover:via-blue-700 hover:to-cyan-700 transition-all shadow-xl hover:shadow-2xl transform hover:scale-105 backdrop-blur-sm border border-white/20"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 backdrop-blur-sm border border-white/20"
             >
               <Plus className="w-4 h-4" />
               New Task
@@ -939,13 +940,13 @@ const KanbanPage = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="relative grid grid-cols-4 gap-4">
           {columns.map((column) => (
             <div key={column.id} className="text-center">
-              <div className="text-2xl font-bold text-gray-900 dark:text-purple-100">
+              <div className="text-2xl font-bold text-purple-900 dark:text-purple-100">
                 {column.tasks.length}
               </div>
-              <div className="text-xs text-gray-500 dark:text-purple-300/70">
+              <div className="text-xs text-purple-600 dark:text-purple-400">
                 {column.title.replace(/[^\w\s]/gi, '')}
               </div>
             </div>
@@ -954,7 +955,7 @@ const KanbanPage = () => {
       </div>
 
       {/* Enhanced Kanban Board */}
-      <div className="flex-1 min-h-0 p-6">
+      <div className="flex-1 min-h-0 p-6 relative">
         {viewMode === "board" && (
           <div className="flex gap-6 h-full min-w-max overflow-x-auto w-full pb-4">
           {columns.map((column) => (
@@ -971,14 +972,14 @@ const KanbanPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`${column.glassEffect} rounded-t-2xl p-5 border-2 ${column.borderColor} relative overflow-hidden shadow-lg backdrop-blur-2xl`}
+                className={`${column.glassEffect} rounded-t-2xl p-5 border-2 ${column.borderColor} relative overflow-hidden shadow-lg`}
               >
-                <div className="absolute inset-0 bg-white/5"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-purple-50/5 dark:from-purple-900/10 dark:to-gray-900/10"></div>
                 <div className="relative flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
                     <motion.div
                       whileHover={{ scale: 1.15, rotate: 10 }}
-                      className={`w-12 h-12 rounded-2xl bg-white/90 dark:bg-slate-800/80 backdrop-blur-xl flex items-center justify-center ${column.iconColor} shadow-xl border border-white/50 dark:border-slate-600/50`}
+                      className={`w-12 h-12 rounded-2xl bg-white/90 dark:bg-gray-800/80 backdrop-blur-xl flex items-center justify-center ${column.iconColor} shadow-xl border border-white/50 dark:border-purple-600/50`}
                     >
                       {column.id === "pending" && <Circle className="w-5 h-5" />}
                       {column.id === "in_progress" && <Clock className="w-5 h-5" />}
@@ -986,14 +987,14 @@ const KanbanPage = () => {
                       {column.id === "completed" && <CheckCircle className="w-5 h-5" />}
                     </motion.div>
                     <div>
-                      <h2 className="text-sm font-bold text-gray-900 dark:text-slate-100">
+                      <h2 className="text-sm font-bold text-purple-900 dark:text-purple-100">
                         {column.title}
                       </h2>
                       <motion.p
                         key={column.tasks.length}
                         initial={{ scale: 0.8 }}
                         animate={{ scale: 1 }}
-                        className="text-xs text-gray-600 dark:text-slate-300 font-medium"
+                        className="text-xs text-purple-600 dark:text-purple-300 font-medium"
                       >
                         {column.tasks.length} tasks
                       </motion.p>
@@ -1007,7 +1008,7 @@ const KanbanPage = () => {
                       setNewTaskColumn(column.status);
                       setShowNewTaskModal(true);
                     }}
-                    className="w-9 h-9 bg-white/90 dark:bg-slate-800/80 backdrop-blur-xl rounded-xl flex items-center justify-center text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-slate-200 hover:bg-white dark:hover:bg-slate-700 transition-all shadow-xl border border-white/50 dark:border-slate-600/50"
+                    className="w-9 h-9 bg-white/90 dark:bg-gray-800/80 backdrop-blur-xl rounded-xl flex items-center justify-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 hover:bg-white dark:hover:bg-gray-700 transition-all shadow-xl border border-white/50 dark:border-purple-600/50"
                     title={`Add task to ${column.title}`}
                   >
                     <Plus className="w-4 h-4" />
@@ -1015,18 +1016,18 @@ const KanbanPage = () => {
                 </div>
 
                 {/* Enhanced Progress indicator */}
-                <div className="relative w-full bg-white/30 rounded-full h-2 overflow-hidden">
+                <div className="relative w-full bg-white/30 dark:bg-purple-900/30 rounded-full h-2 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${Math.min((column.tasks.length / Math.max(filteredTasks.length, 1)) * 100, 100)}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="bg-gradient-to-r from-gray-700 to-gray-800 h-2 rounded-full shadow-sm"
+                    className="bg-gradient-to-r from-purple-600 to-purple-700 h-2 rounded-full shadow-sm"
                   />
                 </div>
               </motion.div>
 
               {/* Enhanced Column Content */}
-              <div className={`flex-1 ${column.glassEffect} rounded-b-2xl border-2 border-t-0 ${column.borderColor} p-5 overflow-y-auto custom-scrollbar backdrop-blur-2xl`}>
+              <div className={`flex-1 ${column.glassEffect} rounded-b-2xl border-2 border-t-0 ${column.borderColor} p-5 overflow-y-auto custom-scrollbar`}>
                 <AnimatePresence>
                   {column.tasks.map((task: any, index: number) => (
                     <motion.div
@@ -1046,9 +1047,9 @@ const KanbanPage = () => {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-slate-500"
+                    className="flex flex-col items-center justify-center py-12 text-purple-400 dark:text-purple-500"
                   >
-                    <div className="w-16 h-16 bg-gray-200/60 dark:bg-slate-700/60 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border border-gray-300/30 dark:border-slate-600/30">
+                    <div className="w-16 h-16 bg-purple-100/60 dark:bg-purple-900/40 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm border border-purple-200/30 dark:border-purple-600/30">
                       {column.id === "pending" && <Circle className="w-6 h-6" />}
                       {column.id === "in_progress" && <Zap className="w-6 h-6" />}
                       {column.id === "review" && <Eye className="w-6 h-6" />}
@@ -1066,7 +1067,7 @@ const KanbanPage = () => {
                         setNewTaskColumn(column.status);
                         setShowNewTaskModal(true);
                       }}
-                      className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                      className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium"
                     >
                       + Add first task
                     </button>
@@ -1078,16 +1079,16 @@ const KanbanPage = () => {
           </div>
         )}
 
-        {/* List View */}
+        {/* List View with purple theme */}
         {viewMode === "list" && (
           <div className="flex-1 w-full">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+            <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-purple-200/50 dark:border-purple-600/50 p-6 shadow-lg">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                  <Eye className="w-6 h-6 text-blue-600" />
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent flex items-center gap-3">
+                  <Eye className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   Task List View
                 </h2>
-                <span className="text-sm text-gray-500">{filteredTasks.length} tasks</span>
+                <span className="text-sm text-purple-600 dark:text-purple-400">{filteredTasks.length} tasks</span>
               </div>
 
               <div className="space-y-3">
@@ -1097,7 +1098,7 @@ const KanbanPage = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
-                    className="bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-750 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-lg transition-all cursor-pointer group"
+                    className="backdrop-blur-sm bg-gradient-to-r from-white/80 to-purple-50/60 dark:from-gray-800/80 dark:to-purple-900/40 rounded-xl p-4 border border-purple-200/50 dark:border-purple-600/30 hover:shadow-lg transition-all cursor-pointer group"
                     onClick={() => {
                       setSelectedTask(task);
                       setShowTaskDetailModal(true);
@@ -1107,14 +1108,14 @@ const KanbanPage = () => {
                       <div className="flex items-center gap-4 flex-1">
                         <div className={`w-3 h-3 rounded-full ${
                           task.priority === "high" ? "bg-red-500" :
-                          task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+                          task.priority === "medium" ? "bg-purple-500" : "bg-green-500"
                         }`} />
 
                         <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 transition-colors">
+                          <h3 className="font-semibold text-purple-900 dark:text-purple-100 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
                             {task.title}
                           </h3>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          <p className="text-sm text-purple-600 dark:text-purple-400 mt-1">
                             {task.description || "No description"}
                           </p>
                         </div>
@@ -1123,13 +1124,13 @@ const KanbanPage = () => {
                           <img
                             src={getEmployeeAvatar(task.assigned_to)}
                             alt="avatar"
-                            className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                            className="w-8 h-8 rounded-full border-2 border-purple-200 dark:border-purple-600 shadow-sm"
                           />
                           <span className={`px-3 py-1 text-xs rounded-full font-medium ${
-                            task.status === "completed" ? "bg-green-100 text-green-700" :
-                            task.status === "in_progress" ? "bg-blue-100 text-blue-700" :
-                            task.status === "review" ? "bg-yellow-100 text-yellow-700" :
-                            "bg-gray-100 text-gray-700"
+                            task.status === "completed" ? "bg-green-100/80 dark:bg-green-900/40 text-green-700 dark:text-green-300" :
+                            task.status === "in_progress" ? "bg-purple-100/80 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300" :
+                            task.status === "review" ? "bg-yellow-100/80 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300" :
+                            "bg-gray-100/80 dark:bg-gray-900/40 text-gray-700 dark:text-gray-300"
                           }`}>
                             {task.status?.replace('_', ' ').toUpperCase()}
                           </span>
@@ -1138,24 +1139,24 @@ const KanbanPage = () => {
 
                       <div className="flex items-center gap-2 ml-4">
                         {task.due_date && (
-                          <span className="text-xs text-gray-500 flex items-center gap-1">
+                          <span className="text-xs text-purple-500 dark:text-purple-400 flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
                             {new Date(task.due_date).toLocaleDateString()}
                           </span>
                         )}
-                        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                        <ArrowRight className="w-4 h-4 text-purple-400 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors" />
                       </div>
                     </div>
 
                     {task.progress > 0 && (
                       <div className="mt-3">
-                        <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                        <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-400 mb-1">
                           <span>Progress</span>
                           <span>{task.progress}%</span>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-1.5">
+                        <div className="w-full bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-1.5">
                           <div
-                            className="bg-gradient-to-r from-blue-500 to-indigo-500 h-1.5 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-purple-500 to-purple-600 h-1.5 rounded-full transition-all duration-300"
                             style={{ width: `${task.progress}%` }}
                           />
                         </div>
@@ -1166,8 +1167,8 @@ const KanbanPage = () => {
 
                 {filteredTasks.length === 0 && (
                   <div className="text-center py-12">
-                    <Eye className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500">No tasks found</p>
+                    <Eye className="w-12 h-12 text-purple-300 dark:text-purple-600 mx-auto mb-4" />
+                    <p className="text-purple-600 dark:text-purple-400">No tasks found</p>
                   </div>
                 )}
               </div>
@@ -1175,20 +1176,20 @@ const KanbanPage = () => {
           </div>
         )}
 
-        {/* Timeline View */}
+        {/* Timeline View with purple theme */}
         {viewMode === "timeline" && (
           <div className="flex-1 w-full">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+            <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-purple-200/50 dark:border-purple-600/50 p-6 shadow-lg">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                  <TrendingUp className="w-6 h-6 text-purple-600" />
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent flex items-center gap-3">
+                  <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   Timeline View
                 </h2>
-                <span className="text-sm text-gray-500">{filteredTasks.length} tasks</span>
+                <span className="text-sm text-purple-600 dark:text-purple-400">{filteredTasks.length} tasks</span>
               </div>
 
               <div className="relative">
-                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 to-blue-500"></div>
+                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 to-purple-700"></div>
 
                 <div className="space-y-6">
                   {filteredTasks
@@ -1201,20 +1202,20 @@ const KanbanPage = () => {
                       transition={{ delay: index * 0.1 }}
                       className="relative flex items-start gap-6"
                     >
-                      <div className={`relative z-10 w-4 h-4 rounded-full border-4 border-white shadow-lg ${
+                      <div className={`relative z-10 w-4 h-4 rounded-full border-4 border-white dark:border-gray-900 shadow-lg ${
                         task.status === "completed" ? "bg-green-500" :
-                        task.status === "in_progress" ? "bg-blue-500" :
+                        task.status === "in_progress" ? "bg-purple-500" :
                         task.status === "review" ? "bg-yellow-500" :
                         "bg-gray-400"
                       }`}>
                         {task.status === "in_progress" && (
-                          <div className="absolute inset-0 rounded-full animate-ping bg-blue-400" />
+                          <div className="absolute inset-0 rounded-full animate-ping bg-purple-400" />
                         )}
                       </div>
 
                       <motion.div
-                        whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
-                        className="flex-1 bg-gradient-to-r from-white to-gray-50 dark:from-gray-800 dark:to-gray-750 rounded-xl p-4 border border-gray-200 dark:border-gray-600 cursor-pointer group"
+                        whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(139, 92, 246, 0.3)" }}
+                        className="flex-1 backdrop-blur-sm bg-gradient-to-r from-white/80 to-purple-50/60 dark:from-gray-800/80 dark:to-purple-900/40 rounded-xl p-4 border border-purple-200/50 dark:border-purple-600/30 cursor-pointer group"
                         onClick={() => {
                           setSelectedTask(task);
                           setShowTaskDetailModal(true);
@@ -1222,10 +1223,10 @@ const KanbanPage = () => {
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 transition-colors">
+                            <h3 className="font-semibold text-purple-900 dark:text-purple-100 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors">
                               {task.title}
                             </h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                            <p className="text-sm text-purple-600 dark:text-purple-400 mt-1">
                               {task.description || "No description"}
                             </p>
 
@@ -1234,38 +1235,38 @@ const KanbanPage = () => {
                                 <img
                                   src={getEmployeeAvatar(task.assigned_to)}
                                   alt="avatar"
-                                  className="w-6 h-6 rounded-full border-2 border-white shadow-sm"
+                                  className="w-6 h-6 rounded-full border-2 border-purple-200 dark:border-purple-600 shadow-sm"
                                 />
-                                <span className="text-sm text-gray-600 dark:text-gray-400">
+                                <span className="text-sm text-purple-600 dark:text-purple-400">
                                   {getEmployeeName(task.assigned_to)}
                                 </span>
                               </div>
 
                               {task.due_date && (
-                                <div className="flex items-center gap-1 text-sm text-gray-500">
+                                <div className="flex items-center gap-1 text-sm text-purple-500 dark:text-purple-400">
                                   <Calendar className="w-4 h-4" />
                                   {new Date(task.due_date).toLocaleDateString()}
                                 </div>
                               )}
 
-                              <span className={`px-2 py-1 text-xs rounded-full font-medium ${getPriorityBadge(task.priority)}`}>
+                              <span className={`px-2 py-1 text-xs rounded-full font-medium border ${getPriorityBadge(task.priority)}`}>
                                 {task.priority?.toUpperCase()}
                               </span>
                             </div>
                           </div>
 
-                          <Timer className="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
+                          <Timer className="w-5 h-5 text-purple-400 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors" />
                         </div>
 
                         {task.progress > 0 && (
                           <div className="mt-4">
-                            <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                            <div className="flex items-center justify-between text-xs text-purple-600 dark:text-purple-400 mb-2">
                               <span>Progress</span>
                               <span>{task.progress}%</span>
                             </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div className="w-full bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-2">
                               <div
-                                className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-300"
                                 style={{ width: `${task.progress}%` }}
                               />
                             </div>
@@ -1277,8 +1278,8 @@ const KanbanPage = () => {
 
                   {filteredTasks.length === 0 && (
                     <div className="text-center py-12 ml-16">
-                      <TrendingUp className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                      <p className="text-gray-500">No tasks in timeline</p>
+                      <TrendingUp className="w-12 h-12 text-purple-300 dark:text-purple-600 mx-auto mb-4" />
+                      <p className="text-purple-600 dark:text-purple-400">No tasks in timeline</p>
                     </div>
                   )}
                 </div>
@@ -1287,38 +1288,38 @@ const KanbanPage = () => {
           </div>
         )}
 
-        {/* Table View */}
+        {/* Table View with purple theme */}
         {viewMode === "table" && (
           <div className="flex-1 w-full">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden">
-              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
-                  <Activity className="w-6 h-6 text-green-600" />
+            <div className="backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 rounded-2xl border border-purple-200/50 dark:border-purple-600/50 overflow-hidden shadow-lg">
+              <div className="p-6 border-b border-purple-200/50 dark:border-purple-600/50">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent flex items-center gap-3">
+                  <Activity className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   Table View
                 </h2>
               </div>
 
               <div className="overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-gray-50 dark:bg-gray-700">
+                  <thead className="bg-purple-50/60 dark:bg-purple-900/40">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Task</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Assignee</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Priority</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Progress</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Due Date</th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Task</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Assignee</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Priority</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Progress</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Due Date</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-purple-700 dark:text-purple-300 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                  <tbody className="divide-y divide-purple-200/50 dark:divide-purple-600/30">
                     {filteredTasks.map((task, index) => (
                       <motion.tr
                         key={task.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.02 }}
-                        className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors cursor-pointer"
+                        className="bg-white/60 dark:bg-gray-900/60 hover:bg-purple-50/60 dark:hover:bg-purple-900/30 transition-colors cursor-pointer"
                         onClick={() => {
                           setSelectedTask(task);
                           setShowTaskDetailModal(true);
@@ -1328,11 +1329,11 @@ const KanbanPage = () => {
                           <div className="flex items-center gap-3">
                             <div className={`w-2 h-2 rounded-full ${
                               task.priority === "high" ? "bg-red-500" :
-                              task.priority === "medium" ? "bg-yellow-500" : "bg-green-500"
+                              task.priority === "medium" ? "bg-purple-500" : "bg-green-500"
                             }`} />
                             <div>
-                              <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">{task.title}</div>
-                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-xs">
+                              <div className="text-sm font-semibold text-purple-900 dark:text-purple-100">{task.title}</div>
+                              <div className="text-xs text-purple-600 dark:text-purple-400 truncate max-w-xs">
                                 {task.description || "No description"}
                               </div>
                             </div>
@@ -1343,19 +1344,19 @@ const KanbanPage = () => {
                             <img
                               src={getEmployeeAvatar(task.assigned_to)}
                               alt="avatar"
-                              className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                              className="w-8 h-8 rounded-full border-2 border-purple-200 dark:border-purple-600 shadow-sm"
                             />
-                            <span className="text-sm text-gray-900 dark:text-gray-100">
+                            <span className="text-sm text-purple-900 dark:text-purple-100">
                               {getEmployeeName(task.assigned_to)}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className={`px-3 py-1 text-xs rounded-full font-medium ${
-                            task.status === "completed" ? "bg-green-100 text-green-700 border border-green-200" :
-                            task.status === "in_progress" ? "bg-blue-100 text-blue-700 border border-blue-200" :
-                            task.status === "review" ? "bg-yellow-100 text-yellow-700 border border-yellow-200" :
-                            "bg-gray-100 text-gray-700 border border-gray-200"
+                          <span className={`px-3 py-1 text-xs rounded-full font-medium border ${
+                            task.status === "completed" ? "bg-green-100/80 dark:bg-green-900/40 text-green-700 dark:text-green-300 border-green-200/50 dark:border-green-600/30" :
+                            task.status === "in_progress" ? "bg-purple-100/80 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-200/50 dark:border-purple-600/30" :
+                            task.status === "review" ? "bg-yellow-100/80 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 border-yellow-200/50 dark:border-yellow-600/30" :
+                            "bg-gray-100/80 dark:bg-gray-900/40 text-gray-700 dark:text-gray-300 border-gray-200/50 dark:border-gray-600/30"
                           }`}>
                             {task.status?.replace('_', ' ').toUpperCase()}
                           </span>
@@ -1371,28 +1372,28 @@ const KanbanPage = () => {
                         <td className="px-6 py-4">
                           {task.progress > 0 ? (
                             <div className="flex items-center gap-2">
-                              <div className="w-16 bg-gray-200 rounded-full h-2">
+                              <div className="w-16 bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-2">
                                 <div
-                                  className="bg-gradient-to-r from-green-500 to-blue-500 h-2 rounded-full transition-all duration-300"
+                                  className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-300"
                                   style={{ width: `${task.progress}%` }}
                                 />
                               </div>
-                              <span className="text-xs text-gray-600">{task.progress}%</span>
+                              <span className="text-xs text-purple-600 dark:text-purple-400">{task.progress}%</span>
                             </div>
                           ) : (
-                            <span className="text-xs text-gray-400">Not started</span>
+                            <span className="text-xs text-purple-400">Not started</span>
                           )}
                         </td>
                         <td className="px-6 py-4">
                           {task.due_date ? (
                             <div className={`flex items-center gap-1 text-sm ${
-                              new Date(task.due_date) < new Date() && task.status !== "completed" ? 'text-red-600' : 'text-gray-600 dark:text-gray-400'
+                              new Date(task.due_date) < new Date() && task.status !== "completed" ? 'text-red-600 dark:text-red-400' : 'text-purple-600 dark:text-purple-400'
                             }`}>
                               <Calendar className="w-4 h-4" />
                               {new Date(task.due_date).toLocaleDateString()}
                             </div>
                           ) : (
-                            <span className="text-xs text-gray-400">No due date</span>
+                            <span className="text-xs text-purple-400">No due date</span>
                           )}
                         </td>
                         <td className="px-6 py-4">
@@ -1403,7 +1404,7 @@ const KanbanPage = () => {
                                 setSelectedTask(task);
                                 setShowTaskDetailModal(true);
                               }}
-                              className="p-1 text-gray-400 hover:text-blue-600 transition-colors"
+                              className="p-1 text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
                               title="View Details"
                             >
                               <Eye className="w-4 h-4" />
@@ -1412,7 +1413,7 @@ const KanbanPage = () => {
                               onClick={(e) => {
                                 e.stopPropagation();
                               }}
-                              className="p-1 text-gray-400 hover:text-green-600 transition-colors"
+                              className="p-1 text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors"
                               title="Edit Task"
                             >
                               <Edit className="w-4 h-4" />
@@ -1426,16 +1427,14 @@ const KanbanPage = () => {
 
                 {filteredTasks.length === 0 && (
                   <div className="text-center py-12">
-                    <Activity className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                    <p className="text-gray-500">No tasks found</p>
+                    <Activity className="w-12 h-12 text-purple-300 dark:text-purple-600 mx-auto mb-4" />
+                    <p className="text-purple-600 dark:text-purple-400">No tasks found</p>
                   </div>
                 )}
               </div>
             </div>
           </div>
         )}
-
-
       </div>
 
       {/* Enhanced New Task Modal */}
@@ -1453,62 +1452,64 @@ const KanbanPage = () => {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-2xl"
+              className="relative w-full max-w-lg backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 rounded-2xl shadow-2xl border border-purple-200/50 dark:border-purple-600/50"
             >
-              <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/50 dark:from-purple-900/50 dark:to-gray-900/50 rounded-2xl" />
+              
+              <div className="relative flex items-center justify-between p-6 border-b border-purple-200/50 dark:border-purple-600/50">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-purple-700 rounded-lg flex items-center justify-center">
                     <Plus className="w-4 h-4 text-white" />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">
                     Create New Task
                   </h2>
                 </div>
                 <button
                   onClick={() => setShowNewTaskModal(false)}
-                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="w-8 h-8 flex items-center justify-center text-purple-400 hover:text-purple-600 dark:hover:text-purple-300 transition-colors rounded-lg hover:bg-purple-100/60 dark:hover:bg-purple-900/60"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="relative p-6 space-y-6">
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                     Task Title *
                   </label>
                   <input
                     type="text"
                     value={newTaskForm.title}
                     onChange={(e) => setNewTaskForm(prev => ({ ...prev, title: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100 placeholder:text-purple-400"
                     placeholder="Enter a clear, actionable task title..."
                     autoFocus
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                     Description
                   </label>
                   <textarea
                     value={newTaskForm.description}
                     onChange={(e) => setNewTaskForm(prev => ({ ...prev, description: e.target.value }))}
                     rows={3}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100 placeholder:text-purple-400"
                     placeholder="Provide context and details for this task..."
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                       Priority
                     </label>
                     <select
                       value={newTaskForm.priority}
                       onChange={(e) => setNewTaskForm(prev => ({ ...prev, priority: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100"
                     >
                       <option value="low">🟢 Low Priority</option>
                       <option value="medium">🟡 Medium Priority</option>
@@ -1517,26 +1518,26 @@ const KanbanPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                       Due Date
                     </label>
                     <input
                       type="date"
                       value={newTaskForm.due_date}
                       onChange={(e) => setNewTaskForm(prev => ({ ...prev, due_date: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                     Assign To
                   </label>
                   <select
                     value={newTaskForm.assigned_to}
                     onChange={(e) => setNewTaskForm(prev => ({ ...prev, assigned_to: e.target.value }))}
-                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                    className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100"
                   >
                     <option value="">👤 Select team member...</option>
                     {employees.map((emp: any) => (
@@ -1549,13 +1550,13 @@ const KanbanPage = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                       Project
                     </label>
                     <select
                       value={newTaskForm.project_id}
                       onChange={(e) => setNewTaskForm(prev => ({ ...prev, project_id: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100"
                     >
                       <option value="">📁 Select project...</option>
                       {projects.map((project: any) => (
@@ -1567,24 +1568,24 @@ const KanbanPage = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">
                       Tags
                     </label>
                     <input
                       type="text"
                       value={newTaskForm.tags}
                       onChange={(e) => setNewTaskForm(prev => ({ ...prev, tags: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                      className="w-full px-4 py-3 border border-purple-200/50 dark:border-purple-600/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500/20 backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 text-purple-900 dark:text-purple-100 placeholder:text-purple-400"
                       placeholder="frontend, api, urgent"
                     />
                   </div>
                 </div>
 
                 {newTaskColumn && (
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+                  <div className="bg-purple-50/80 dark:bg-purple-900/40 p-4 rounded-xl border border-purple-200/50 dark:border-purple-600/30">
                     <div className="flex items-center gap-2">
-                      <Target className="w-4 h-4 text-blue-600" />
-                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <Target className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                      <p className="text-sm text-purple-700 dark:text-purple-300">
                         This task will be added to: <strong>{columns.find(c => c.status === newTaskColumn)?.title}</strong>
                       </p>
                     </div>
@@ -1592,16 +1593,16 @@ const KanbanPage = () => {
                 )}
               </div>
 
-              <div className="flex justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
+              <div className="relative flex justify-end gap-3 p-6 border-t border-purple-200/50 dark:border-purple-600/50">
                 <button
                   onClick={() => setShowNewTaskModal(false)}
-                  className="px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+                  className="px-6 py-3 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleAddTask}
-                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl"
+                  className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-xl"
                 >
                   <Save className="w-4 h-4" />
                   Create Task
@@ -1628,9 +1629,11 @@ const KanbanPage = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 40 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="relative w-full max-w-4xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700"
+              className="relative w-full max-w-4xl backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto border border-purple-200/50 dark:border-purple-600/50"
             >
-              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/50 dark:from-purple-900/50 dark:to-gray-900/50 rounded-3xl" />
+              
+              <div className="bg-gradient-to-r from-purple-600 to-purple-700 p-6 text-white relative overflow-hidden rounded-t-3xl">
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center gap-4">
@@ -1654,7 +1657,7 @@ const KanbanPage = () => {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-blue-100 text-sm"
+                        className="text-purple-100 text-sm"
                       >
                         Task #{selectedTask.id?.slice(-8)} • {selectedTask.status?.replace('_', ' ').toUpperCase()}
                       </motion.p>
@@ -1672,28 +1675,28 @@ const KanbanPage = () => {
                 </div>
               </div>
 
-              <div className="p-6">
+              <div className="relative p-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Main Content */}
                   <div className="md:col-span-2 space-y-6">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Description</h3>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Description</h3>
+                      <p className="text-purple-600 dark:text-purple-400">
                         {selectedTask.description || "No description provided."}
                       </p>
                     </div>
 
                     {selectedTask.progress > 0 && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Progress</h3>
+                        <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Progress</h3>
                         <div className="flex items-center gap-3">
-                          <div className="flex-1 bg-gray-200 rounded-full h-2">
+                          <div className="flex-1 bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-2">
                             <div
-                              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                              className="bg-gradient-to-r from-purple-600 to-purple-700 h-2 rounded-full transition-all duration-300"
                               style={{ width: `${selectedTask.progress}%` }}
                             />
                           </div>
-                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          <span className="text-sm font-medium text-purple-900 dark:text-purple-100">
                             {selectedTask.progress}%
                           </span>
                         </div>
@@ -1702,12 +1705,12 @@ const KanbanPage = () => {
 
                     {selectedTask.tags && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Tags</h3>
+                        <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Tags</h3>
                         <div className="flex flex-wrap gap-2">
                           {selectedTask.tags.split(',').map((tag: string, index: number) => (
                             <span
                               key={index}
-                              className="px-3 py-1 text-sm bg-blue-100 text-blue-600 rounded-lg"
+                              className="px-3 py-1 text-sm bg-purple-100/80 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 rounded-lg border border-purple-200/50 dark:border-purple-600/30"
                             >
                               #{tag.trim()}
                             </span>
@@ -1720,33 +1723,33 @@ const KanbanPage = () => {
                   {/* Sidebar */}
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Status</h3>
-                      <span className={`px-3 py-1 text-sm rounded-lg ${
-                        selectedTask.status === "completed" ? "bg-green-100 text-green-700" :
-                        selectedTask.status === "in_progress" ? "bg-blue-100 text-blue-700" :
-                        selectedTask.status === "review" ? "bg-yellow-100 text-yellow-700" :
-                        "bg-gray-100 text-gray-700"
+                      <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Status</h3>
+                      <span className={`px-3 py-1 text-sm rounded-lg border ${
+                        selectedTask.status === "completed" ? "bg-green-100/80 dark:bg-green-900/40 text-green-700 dark:text-green-300 border-green-200/50 dark:border-green-600/30" :
+                        selectedTask.status === "in_progress" ? "bg-purple-100/80 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 border-purple-200/50 dark:border-purple-600/30" :
+                        selectedTask.status === "review" ? "bg-yellow-100/80 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300 border-yellow-200/50 dark:border-yellow-600/30" :
+                        "bg-gray-100/80 dark:bg-gray-900/40 text-gray-700 dark:text-gray-300 border-gray-200/50 dark:border-gray-600/30"
                       }`}>
                         {selectedTask.status?.replace('_', ' ').toUpperCase()}
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Priority</h3>
+                      <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Priority</h3>
                       <span className={`px-3 py-1 text-sm rounded-lg border ${getPriorityBadge(selectedTask.priority)}`}>
                         {selectedTask.priority?.toUpperCase()}
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Assignee</h3>
+                      <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Assignee</h3>
                       <div className="flex items-center gap-2">
                         <img
                           src={getEmployeeAvatar(selectedTask.assigned_to)}
                           alt="avatar"
-                          className="w-8 h-8 rounded-full"
+                          className="w-8 h-8 rounded-full border-2 border-purple-200 dark:border-purple-600"
                         />
-                        <span className="text-sm text-gray-900 dark:text-gray-100">
+                        <span className="text-sm text-purple-900 dark:text-purple-100">
                           {getEmployeeName(selectedTask.assigned_to)}
                         </span>
                       </div>
@@ -1754,10 +1757,10 @@ const KanbanPage = () => {
 
                     {selectedTask.due_date && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Due Date</h3>
+                        <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Due Date</h3>
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-500" />
-                          <span className="text-sm text-gray-900 dark:text-gray-100">
+                          <Calendar className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+                          <span className="text-sm text-purple-900 dark:text-purple-100">
                             {new Date(selectedTask.due_date).toLocaleDateString()}
                           </span>
                         </div>
@@ -1766,9 +1769,9 @@ const KanbanPage = () => {
 
                     {selectedTask.project_id && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Project</h3>
+                        <h3 className="text-sm font-semibold text-purple-700 dark:text-purple-300 mb-2">Project</h3>
                         <span 
-                          className="px-3 py-1 text-sm text-white rounded-lg"
+                          className="px-3 py-1 text-sm text-white rounded-lg font-medium"
                           style={{ backgroundColor: getProjectColor(selectedTask.project_id) }}
                         >
                           {projects.find(p => p.id === selectedTask.project_id)?.name || "Unknown Project"}
