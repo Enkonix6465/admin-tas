@@ -45,6 +45,8 @@ function Layout() {
   const [sortOpen, setSortOpen] = useState(false);
   const [workspaceOpen, setWorkspaceOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [headerSearchQuery, setHeaderSearchQuery] = useState("");
   const [expandedSections, setExpandedSections] = useState({
     dashboard: true,
     projects: false,
