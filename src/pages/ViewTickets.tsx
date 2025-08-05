@@ -146,7 +146,7 @@ const AdminTicketsPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="h-full bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90 p-6">
       <h1 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">All Tickets</h1>
 
       <div className="flex gap-4 mb-4">
