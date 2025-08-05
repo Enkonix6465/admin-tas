@@ -313,9 +313,9 @@ const Calendar = () => {
             <button
               onClick={() => toggleView("calendar")}
               className={`px-3 py-1.5 rounded-lg transition-all font-medium ${
-                activeView === "calendar" 
-                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25" 
-                  : "text-purple-600 hover:bg-purple-100/60"
+                activeView === "calendar"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25"
+                  : "text-purple-600 dark:text-purple-400 hover:bg-purple-100/60 dark:hover:bg-purple-900/60"
               }`}
             >
               Calendar
