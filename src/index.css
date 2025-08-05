@@ -408,7 +408,7 @@ textarea {
   }
 
   .dark .liquid-glass {
-    background: var(--dark-card);
+    background: rgba(0, 0, 0, 0.9);
     border: 1px solid rgba(139, 92, 246, 0.2);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   }
