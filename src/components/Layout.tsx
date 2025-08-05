@@ -490,7 +490,7 @@ function Layout() {
               <div className="relative filter-dropdown">
                 <button
                   onClick={() => setFilterOpen(!filterOpen)}
-                  className="flex items-center gap-1 px-3 py-1.5 text-xs border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-purple-800 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-purple-700 shadow-sm transition-all duration-200 hover:shadow-md dark:shadow-purple-500/20"
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-black/80 shadow-sm transition-all duration-200 hover:shadow-md dark:shadow-purple-500/20"
                 >
                   <Filter className="w-4 h-4" />
                   Filter
