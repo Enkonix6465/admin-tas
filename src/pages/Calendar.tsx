@@ -444,7 +444,7 @@ const Calendar = () => {
             <div className="relative">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-2 px-4 py-2.5 text-sm border border-purple-200/50 rounded-xl bg-white/80 backdrop-blur-sm text-purple-700 hover:bg-purple-50/80 transition-colors shadow-sm font-medium"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm border border-purple-200/50 dark:border-purple-600/50 rounded-xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-purple-700 dark:text-purple-300 hover:bg-purple-50/80 dark:hover:bg-purple-900/80 transition-colors shadow-sm font-medium"
               >
                 <Filter className="w-4 h-4" />
                 <span className="hidden sm:inline">Filter</span>
