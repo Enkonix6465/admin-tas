@@ -61,8 +61,17 @@ const AdminTicketsPage = () => {
         })
       );
 
+      // Fetch users for filtering
+      const userMap: any = {};
+      const userSnapshot = await getDocs(collection(db, "employees"));
+      userSnapshot.forEach((doc) => {
+        const data = doc.data();
+        userMap[doc.id] = data.name || data.email || doc.id;
+      });
+
       setProjectsMap(projectMap);
       setTeamLeadMap(leadMap);
+      setUsersMap(userMap);
       setTickets(fetchedTickets);
     };
 
