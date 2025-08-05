@@ -272,25 +272,26 @@ export const getUsersByRole = async (role: Role) => {
 
 // Dashboard data functions
 export const getProjectStats = async (): Promise<ProjectStats> => {
-  try {
-    const projectsRef = collection(db, "projects");
-    const [totalQ, activeQ, completedQ, delayedQ] = await Promise.all([
-      getDocs(query(projectsRef)),
-      getDocs(query(projectsRef, where("status", "==", "active"))),
-      getDocs(query(projectsRef, where("status", "==", "completed"))),
-      getDocs(query(projectsRef, where("status", "==", "delayed"))),
-    ]);
+  return safeFirebaseOperation(
+    async () => {
+      const projectsRef = collection(db, "projects");
+      const [totalQ, activeQ, completedQ, delayedQ] = await Promise.all([
+        getDocs(query(projectsRef)),
+        getDocs(query(projectsRef, where("status", "==", "active"))),
+        getDocs(query(projectsRef, where("status", "==", "completed"))),
+        getDocs(query(projectsRef, where("status", "==", "delayed"))),
+      ]);
 
-    return {
-      total: totalQ.size,
-      active: activeQ.size,
-      completed: completedQ.size,
-      delayed: delayedQ.size,
-    };
-  } catch (error) {
-    console.error("Error fetching project stats:", error);
-    throw error;
-  }
+      return {
+        total: totalQ.size,
+        active: activeQ.size,
+        completed: completedQ.size,
+        delayed: delayedQ.size,
+      };
+    },
+    { total: 0, active: 0, completed: 0, delayed: 0 }, // Fallback stats
+    "getProjectStats"
+  );
 };
 
 export const getTaskStats = async (): Promise<TaskStats> => {
