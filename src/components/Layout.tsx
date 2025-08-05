@@ -571,21 +571,13 @@ function Layout() {
                 )}
               </div>
 
-              <button
-                onClick={() => setShowNewTaskModal(true)}
+              <Link
+                to="/TeamManager"
                 className="px-3 py-1.5 text-xs bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 shadow-md transition-all duration-200 hover:shadow-lg transform hover:scale-105"
-                title="Create new task"
+                title="View created teams"
               >
-                New Task
-              </button>
-
-              <button
-                onClick={() => setShowCreateTeamModal(true)}
-                className="px-3 py-1.5 text-xs bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 shadow-md transition-all duration-200 hover:shadow-lg transform hover:scale-105"
-                title="Create new team"
-              >
-                Create Team
-              </button>
+                Created Teams
+              </Link>
 
               <button
                 onClick={() => {
