@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 interface ThemeState {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
+  toggleTheme: () => void;
 }
 
 export const useThemeStore = create<ThemeState>()(
