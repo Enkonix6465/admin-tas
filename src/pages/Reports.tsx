@@ -1055,8 +1055,8 @@ const Reports = () => {
                 onClick={() => setSelectedReport(report.id)}
                 className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
                   selectedReport === report.id
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                    : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    ? "border-purple-500 bg-purple-50 dark:bg-purple-500/20"
+                    : "border-gray-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-purple-500/10"
                 }`}
               >
                 <div className="flex items-start gap-3">
