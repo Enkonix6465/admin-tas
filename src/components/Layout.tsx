@@ -247,6 +247,18 @@ function Layout() {
                     <FileText className="w-4 h-4" />
                     Reports
                   </Link>
+                  <Link
+                    to="/calendar"
+                    onClick={closeSidebar}
+                    className={`flex items-center gap-3 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 hover:shadow-sm ${
+                      isActive("/calendar")
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
+                    }`}
+                  >
+                    <Calendar className="w-4 h-4" />
+                    Calendar
+                  </Link>
                 </div>
               )}
             </div>
@@ -389,45 +401,7 @@ function Layout() {
               )}
             </div>
 
-            {/* Standalone Items */}
-            <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-              <Link
-                to="/MyTasks"
-                onClick={closeSidebar}
-                className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
-                  isActive("/MyTasks")
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
-                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
-                }`}
-              >
-                <Clock className="w-4 h-4" />
-                My Tasks
-              </Link>
-              <Link
-                to="/calendar"
-                onClick={closeSidebar}
-                className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
-                  isActive("/calendar")
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
-                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
-                }`}
-              >
-                <Calendar className="w-4 h-4" />
-                Calendar
-              </Link>
-              <Link
-                to="/settings"
-                onClick={closeSidebar}
-                className={`flex items-center gap-2 px-3 py-1.5 text-xs rounded-lg transition-all duration-200 hover:shadow-sm ${
-                  isActive("/settings")
-                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 font-medium"
-                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100"
-                }`}
-              >
-                <Settings className="w-4 h-4" />
-                Settings
-              </Link>
-            </div>
+
           </nav>
         </div>
 
@@ -635,6 +609,15 @@ function Layout() {
               >
                 Share
               </button>
+
+              {/* Settings Button */}
+              <Link
+                to="/settings"
+                className="p-2 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 border border-gray-200 dark:border-gray-600 shadow-sm transition-all duration-200 hover:shadow-md"
+                title="Settings"
+              >
+                <Settings className="w-4 h-4" />
+              </Link>
 
               {/* Theme Toggle */}
               <button

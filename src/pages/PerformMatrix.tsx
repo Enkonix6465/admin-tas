@@ -363,9 +363,7 @@ export default function EmployeePerformancePage() {
               <Download className="w-4 h-4 mr-2 inline" />
               Export
             </button>
-            <button className="px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:scale-105">
-              Generate Report
-            </button>
+
           </div>
         </div>
 
@@ -412,36 +410,7 @@ export default function EmployeePerformancePage() {
             </div>
           )}
         </div>
-        <button
-          onClick={() => {
-            if (selectedEmployee && performanceData) {
-              const exportData = {
-                employee: selectedEmployee,
-                performance: performanceData,
-                bestDay: bestDay,
-                trends: performanceTrends,
-                qualityProductivity: qualityProductivityData,
-                exportDate: new Date().toISOString()
-              };
 
-              const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `performance-${selectedEmployee.name?.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-              toast.success(`Performance report exported for ${selectedEmployee.name}! 📊`);
-            }
-          }}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          disabled={!selectedEmployee}
-        >
-          <Download className="w-4 h-4" />
-          Export Report
-        </button>
       </div>
 
       <div className="flex-1 overflow-hidden flex">
@@ -606,7 +575,7 @@ export default function EmployeePerformancePage() {
                 <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      Performance Trends (Last 30 Days)
+                      Performance & Productivity Trends
                     </h3>
                     <div className="flex items-center gap-1">
                       <TrendingUp className="w-4 h-4 text-green-500" />
@@ -616,72 +585,143 @@ export default function EmployeePerformancePage() {
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={performanceTrends}>
-                      <defs>
-                        <linearGradient id="performanceGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                      <YAxis />
-                      <Tooltip />
-                      <Area
-                        type="monotone"
-                        dataKey="performance"
-                        stroke="#3b82f6"
-                        fillOpacity={1}
-                        fill="url(#performanceGradient)"
-                        strokeWidth={2}
+                    <BarChart data={performanceTrends.slice(-10)}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" strokeOpacity={0.3} />
+                      <XAxis
+                        dataKey="date"
+                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        axisLine={false}
+                        tickLine={false}
                       />
-                    </AreaChart>
+                      <YAxis
+                        yAxisId="left"
+                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        yAxisId="right"
+                        orientation="right"
+                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: document.documentElement.classList.contains('dark') ? '#1f2937' : '#ffffff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                        }}
+                      />
+                      <Legend />
+                      <Bar
+                        yAxisId="left"
+                        dataKey="performance"
+                        name="Performance %"
+                        fill="#8b5cf6"
+                        radius={[4, 4, 0, 0]}
+                        stroke="#7c3aed"
+                        strokeWidth={1}
+                      />
+                      <Bar
+                        yAxisId="right"
+                        dataKey="productivity"
+                        name="Productivity Score"
+                        fill="#06b6d4"
+                        radius={[4, 4, 0, 0]}
+                        stroke="#0891b2"
+                        strokeWidth={1}
+                      />
+                    </BarChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Quality vs Productivity Matrix */}
+                {/* Performance Dimensions Radar */}
                 <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      Quality vs Productivity Matrix
+                      Performance Dimensions
                     </h3>
                     <div className="flex items-center gap-1">
                       <Trophy className="w-4 h-4 text-yellow-500" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {qualityProductivityData.length} tasks analyzed
+                        Multi-dimensional analysis
                       </span>
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={300}>
-                    <ScatterChart data={qualityProductivityData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        type="number"
-                        dataKey="productivity"
-                        name="Productivity"
-                        domain={[0, 120]}
-                        tick={{ fontSize: 10 }}
+                    <RadarChart data={[
+                      {
+                        dimension: 'Task Completion',
+                        value: performanceData.completionRate || 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'On-Time Delivery',
+                        value: performanceData.onTimeRate || 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Quality Score',
+                        value: qualityProductivityData.length > 0 ?
+                          qualityProductivityData.reduce((acc, item) => acc + item.quality, 0) / qualityProductivityData.length : 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Productivity',
+                        value: qualityProductivityData.length > 0 ?
+                          (qualityProductivityData.reduce((acc, item) => acc + item.productivity, 0) / qualityProductivityData.length) * 100 / 120 : 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Reliability',
+                        value: performanceData.total > 0 ?
+                          Math.max(0, 100 - (performanceData.reassigned / performanceData.total * 100)) : 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Consistency',
+                        value: performanceTrends.length > 0 ?
+                          100 - (Math.max(...performanceTrends.map(t => t.performance)) - Math.min(...performanceTrends.map(t => t.performance))) : 0,
+                        fullMark: 100
+                      }
+                    ]}>
+                      <PolarGrid
+                        stroke={document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'}
+                        strokeOpacity={0.6}
                       />
-                      <YAxis
-                        type="number"
-                        dataKey="quality"
-                        name="Quality"
-                        domain={[40, 100]}
-                        tick={{ fontSize: 10 }}
+                      <PolarAngleAxis
+                        dataKey="dimension"
+                        tick={{
+                          fontSize: 11,
+                          fill: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+                          fontWeight: 500
+                        }}
+                      />
+                      <PolarRadiusAxis
+                        angle={90}
+                        domain={[0, 100]}
+                        tick={{ fontSize: 9, fill: '#9ca3af' }}
+                        tickCount={5}
+                      />
+                      <Radar
+                        name="Performance Score"
+                        dataKey="value"
+                        stroke="#8b5cf6"
+                        fill="#8b5cf6"
+                        fillOpacity={0.3}
+                        strokeWidth={3}
+                        dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
                       />
                       <Tooltip
-                        cursor={{ strokeDasharray: '3 3' }}
-                        content={({ active, payload }) => {
+                        content={({ active, payload, label }) => {
                           if (active && payload && payload[0]) {
-                            const data = payload[0].payload;
                             return (
                               <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
-                                <p className="font-medium text-gray-900 dark:text-gray-100">{data.title}</p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Quality: {data.quality?.toFixed(1)}%
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Productivity: {data.productivity?.toFixed(1)}
+                                <p className="font-medium text-gray-900 dark:text-gray-100">{label}</p>
+                                <p className="text-sm text-purple-600 dark:text-purple-400">
+                                  Score: {payload[0].value?.toFixed(1)}%
                                 </p>
                               </div>
                             );
@@ -689,76 +729,11 @@ export default function EmployeePerformancePage() {
                           return null;
                         }}
                       />
-                      <Scatter dataKey="quality" fill="#8884d8" />
-                    </ScatterChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Monthly Performance Radar */}
-                <div className="liquid-glass-card">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Monthly Performance Overview
-                  </h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <RadarChart data={monthChartData.slice(-6)}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="month" />
-                      <PolarRadiusAxis angle={90} domain={[0, 'dataMax']} />
-                      <Radar
-                        name="Completed"
-                        dataKey="Completed"
-                        stroke="#10b981"
-                        fill="#10b981"
-                        fillOpacity={0.3}
-                        strokeWidth={2}
-                      />
-                      <Radar
-                        name="Reassigned"
-                        dataKey="Reassigned"
-                        stroke="#f59e0b"
-                        fill="#f59e0b"
-                        fillOpacity={0.3}
-                        strokeWidth={2}
-                      />
-                      <Legend />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
 
-                {/* Daily Activity Trends */}
-                <div className="liquid-glass-card">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Daily Activity Trends
-                  </h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={dateChartData.slice(-14)}>
-                      <defs>
-                        <linearGradient id="completedGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="Completed"
-                        stroke="#10b981"
-                        strokeWidth={2}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="Reassigned"
-                        stroke="#f59e0b"
-                        strokeWidth={2}
-                        strokeDasharray="5 5"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
+
               </div>
 
               {/* Task Details Table */}
