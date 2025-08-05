@@ -170,7 +170,7 @@ export default function Settings() {
           <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
             {profile.name.split(' ').map(n => n[0]).join('')}
           </div>
-          <button className="absolute bottom-0 right-0 bg-white dark:bg-gray-800 rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600">
+          <button className="absolute bottom-0 right-0 liquid-glass-card rounded-full p-2 shadow-md border border-gray-200 dark:border-gray-600">
             <Camera className="w-4 h-4 text-gray-600 dark:text-gray-400" />
           </button>
         </div>
@@ -719,7 +719,7 @@ export default function Settings() {
 
           {/* Content Area */}
           <div className="flex-1">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="liquid-glass-card rounded-lg shadow">
               <div className="px-6 py-6">
                 {renderTabContent()}
               </div>
