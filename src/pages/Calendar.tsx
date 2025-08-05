@@ -128,7 +128,7 @@ const Calendar = () => {
         // Mock data for fallback
         setProjects([
           { id: "proj-1", name: "Project Alpha", color: "#00D4FF" },
-          { id: "proj-2", name: "Project Beta", color: "#10b981" },
+          { id: "proj-2", name: "Project Beta", color: "#FF6600" },
           { id: "proj-3", name: "Project Gamma", color: "#f59e0b" },
         ]);
       }
@@ -205,7 +205,7 @@ const Calendar = () => {
       // Mock data for fallback
       setProjects([
         { id: "proj-1", name: "Mobile app design", color: "#00D4FF" },
-        { id: "proj-2", name: "Process", color: "#10b981" },
+        { id: "proj-2", name: "Process", color: "#FF6600" },
         { id: "proj-3", name: "Creative group", color: "#f59e0b" },
         { id: "proj-4", name: "HR", color: "#ef4444" },
         { id: "proj-5", name: "Landing (empty)", color: "#6366f1" },
@@ -288,7 +288,7 @@ const Calendar = () => {
     switch (event.priority) {
       case "high": return "#ef4444";
       case "medium": return "#f59e0b";
-      case "low": return "#10b981";
+      case "low": return "#FF6600";
       default: return "#6b7280";
     }
   };
