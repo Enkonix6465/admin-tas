@@ -723,7 +723,7 @@ export default function TeamManager() {
                           </div>
                           {isSelected && (
                             <div className="flex items-center gap-2">
-                              <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full">
+                              <span className="px-2 py-1 text-xs bg-cyan-100 dark:bg-purple-100 text-cyan-700 dark:text-purple-700 rounded-full">
                                 Selected
                               </span>
                               {teamLead === emp.id && (
