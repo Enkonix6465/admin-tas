@@ -382,7 +382,11 @@ export default function ProjectTasksViewer() {
         <select
           className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-md bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => {
+            console.log('Status filter changed to:', e.target.value);
+            setStatusFilter(e.target.value);
+            setFilterOpen(false);
+          }}
         >
           <option value="all">All Status</option>
           <option value="pending">Pending</option>
