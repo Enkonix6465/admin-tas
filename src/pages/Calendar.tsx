@@ -122,12 +122,12 @@ const Calendar = () => {
       console.warn("Projects data fetch failed:", error);
       // Mock data for fallback
       setProjects([
-        { id: "proj-1", name: "Mobile app design", color: "#3b82f6" },
-        { id: "proj-2", name: "Process", color: "#10b981" },
-        { id: "proj-3", name: "Creative group", color: "#f59e0b" },
-        { id: "proj-4", name: "HR", color: "#ef4444" },
-        { id: "proj-5", name: "Landing (empty)", color: "#6366f1" },
-        { id: "proj-6", name: "Upgrade Defnox", color: "#8b5cf6" },
+        { id: "proj-1", name: "Mobile app design", color: "#8b5cf6" },
+        { id: "proj-2", name: "Process", color: "#a855f7" },
+        { id: "proj-3", name: "Creative group", color: "#9333ea" },
+        { id: "proj-4", name: "HR", color: "#7c3aed" },
+        { id: "proj-5", name: "Landing (empty)", color: "#6d28d9" },
+        { id: "proj-6", name: "Upgrade Defnox", color: "#5b21b6" },
       ]);
     }
   };
@@ -204,20 +204,20 @@ const Calendar = () => {
     if (project) return project.color;
     
     switch (event.priority) {
-      case "high": return "#ef4444";
-      case "medium": return "#f59e0b";
-      case "low": return "#10b981";
-      default: return "#6b7280";
+      case "high": return "#dc2626";
+      case "medium": return "#ea580c";
+      case "low": return "#059669";
+      default: return "#8b5cf6";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-100 text-green-700 border-green-200";
-      case "in_progress": return "bg-blue-100 text-blue-700 border-blue-200";
-      case "review": return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      case "pending": return "bg-gray-100 text-gray-700 border-gray-200";
-      default: return "bg-gray-100 text-gray-700 border-gray-200";
+      case "completed": return "bg-green-50/80 text-green-700 border-green-200/50";
+      case "in_progress": return "bg-purple-50/80 text-purple-700 border-purple-200/50";
+      case "review": return "bg-yellow-50/80 text-yellow-700 border-yellow-200/50";
+      case "pending": return "bg-gray-50/80 text-gray-700 border-gray-200/50";
+      default: return "bg-gray-50/80 text-gray-700 border-gray-200/50";
     }
   };
 
@@ -273,50 +273,60 @@ const Calendar = () => {
   };
 
   return (
-    <div className="h-full bg-stone-100 dark:bg-gray-900 flex overflow-hidden">
+    <div className="h-full bg-gradient-to-br from-purple-50 via-white to-purple-100 flex overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/5 via-transparent to-purple-900/5 pointer-events-none" />
+      
       {/* Project Sidebar */}
       <motion.div
         initial={{ x: -300 }}
         animate={{ x: sidebarOpen ? 0 : -300 }}
         transition={{ type: "spring", damping: 20 }}
-        className="w-80 bg-stone-50 dark:bg-gray-800 border-r border-stone-200 dark:border-gray-700 flex flex-col flex-shrink-0 overflow-hidden shadow-lg"
+        className="w-80 backdrop-blur-xl bg-white/80 border-r border-purple-200/30 flex flex-col flex-shrink-0 overflow-hidden shadow-xl"
       >
+        {/* Liquid Glass Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-purple-400/5 to-purple-600/10 backdrop-blur-xl" />
+        <div className="absolute inset-0 bg-white/60" />
+        
         {/* Sidebar Header */}
-        <div className="p-6 border-b border-stone-200 dark:border-gray-700 flex-shrink-0">
+        <div className="relative p-6 border-b border-purple-200/30 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                 Project Board [{new Date().getFullYear()}]
               </h2>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="p-1.5 hover:bg-stone-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-purple-100/60 rounded-lg transition-colors"
               >
-                <Menu className="w-4 h-4" />
+                <Menu className="w-4 h-4 text-purple-600" />
               </motion.button>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span className="text-xs text-gray-500">ON TRACK</span>
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-xs text-purple-600 font-medium">ON TRACK</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-2 text-sm">
             <button
               onClick={() => toggleView("calendar")}
-              className={`px-2 py-1 rounded transition-colors ${
-                activeView === "calendar" ? "text-blue-600 font-medium bg-blue-50" : "hover:bg-stone-200"
+              className={`px-3 py-1.5 rounded-lg transition-all font-medium ${
+                activeView === "calendar" 
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25" 
+                  : "text-purple-600 hover:bg-purple-100/60"
               }`}
             >
               Calendar
             </button>
-            <span>•</span>
+            <span className="text-purple-400">•</span>
             <button
               onClick={() => toggleView("timeline")}
-              className={`px-2 py-1 rounded transition-colors ${
-                activeView === "timeline" ? "text-blue-600 font-medium bg-blue-50" : "hover:bg-stone-200"
+              className={`px-3 py-1.5 rounded-lg transition-all font-medium ${
+                activeView === "timeline" 
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25" 
+                  : "text-purple-600 hover:bg-purple-100/60"
               }`}
             >
               Timeline
@@ -325,19 +335,19 @@ const Calendar = () => {
         </div>
 
         {/* Project List */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="relative flex-1 overflow-y-auto p-4">
           <div className="space-y-2">
             <button
               onClick={() => setSelectedProject("all")}
-              className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+              className={`w-full text-left px-3 py-3 rounded-xl text-sm transition-all ${
                 selectedProject === "all"
-                  ? "bg-blue-100 text-blue-700 font-medium shadow-sm"
-                  : "text-gray-600 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25"
+                  : "text-purple-700 hover:bg-purple-100/60 backdrop-blur-sm"
               }`}
             >
               <div className="flex items-center gap-3">
                 <CalendarIcon className="w-4 h-4" />
-                <span>All Projects</span>
+                <span className="font-medium">All Projects</span>
               </div>
             </button>
 
@@ -345,10 +355,10 @@ const Calendar = () => {
               <button
                 key={project.id}
                 onClick={() => setSelectedProject(project.id)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors group ${
+                className={`w-full text-left px-3 py-3 rounded-xl text-sm transition-all group ${
                   selectedProject === project.id
-                    ? "bg-blue-100 text-blue-700 font-medium shadow-sm"
-                    : "text-gray-600 dark:text-gray-400 hover:bg-stone-200 dark:hover:bg-gray-700"
+                    ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25"
+                    : "text-purple-700 hover:bg-purple-100/60 backdrop-blur-sm"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -356,7 +366,7 @@ const Calendar = () => {
                     className="w-3 h-3 rounded-sm shadow-sm"
                     style={{ backgroundColor: project.color }}
                   />
-                  <span className="flex-1 truncate">{project.name}</span>
+                  <span className="flex-1 truncate font-medium">{project.name}</span>
                   <MoreHorizontal className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </button>
@@ -366,33 +376,39 @@ const Calendar = () => {
       </motion.div>
 
       {/* Main Calendar Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Compact Header Bar */}
-        <div className="bg-stone-50 dark:bg-gray-800 border-b border-stone-200 dark:border-gray-700 p-3 flex items-center justify-between flex-shrink-0 shadow-sm">
-          <div className="flex items-center gap-3">
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+        <div className="relative backdrop-blur-xl bg-white/90 border-b border-purple-200/30 p-4 flex items-center justify-between flex-shrink-0 shadow-sm">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-white/10 to-purple-600/5" />
+          
+          <div className="relative flex items-center gap-4">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
               {getDateLabel()}
             </h1>
             <div className="flex items-center gap-1">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={prevPeriod}
-                className="p-1 hover:bg-stone-200 dark:hover:bg-gray-700 rounded transition-colors"
+                className="p-2 hover:bg-purple-100/60 rounded-lg transition-colors"
               >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
+                <ChevronLeft className="w-4 h-4 text-purple-600" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={nextPeriod}
-                className="p-1 hover:bg-stone-200 dark:hover:bg-gray-700 rounded transition-colors"
+                className="p-2 hover:bg-purple-100/60 rounded-lg transition-colors"
               >
-                <ChevronRight className="w-4 h-4" />
-              </button>
+                <ChevronRight className="w-4 h-4 text-purple-600" />
+              </motion.button>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="relative flex items-center gap-3">
             {/* View Mode Toggle */}
             {activeView === "calendar" && (
-              <div className="flex items-center bg-stone-200 dark:bg-gray-700 rounded-lg p-1">
+              <div className="flex items-center bg-purple-100/60 backdrop-blur-sm rounded-xl p-1 shadow-sm">
                 {[
                   { id: "day", icon: Eye, label: "Day" },
                   { id: "week", icon: List, label: "Week" },
@@ -401,10 +417,10 @@ const Calendar = () => {
                   <button
                     key={mode.id}
                     onClick={() => setViewMode(mode.id)}
-                    className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md transition-all ${
+                    className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-all font-medium ${
                       viewMode === mode.id
-                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg shadow-purple-600/25'
+                        : 'text-purple-600 hover:bg-purple-200/50'
                     }`}
                   >
                     <mode.icon className="w-3 h-3" />
@@ -415,22 +431,22 @@ const Calendar = () => {
             )}
 
             <div className="relative">
-              <Search className="w-3 h-3 absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400" />
               <input
                 type="text"
                 placeholder="Search tasks..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-7 pr-3 py-1.5 text-sm border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
+                className="pl-10 pr-4 py-2.5 text-sm border border-purple-200/50 rounded-xl bg-white/80 backdrop-blur-sm text-purple-900 placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-300 w-52 shadow-sm"
               />
             </div>
 
             <div className="relative">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-1 px-2 py-1.5 text-sm border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm border border-purple-200/50 rounded-xl bg-white/80 backdrop-blur-sm text-purple-700 hover:bg-purple-50/80 transition-colors shadow-sm font-medium"
               >
-                <Filter className="w-3 h-3" />
+                <Filter className="w-4 h-4" />
                 <span className="hidden sm:inline">Filter</span>
                 <ChevronDown className="w-3 h-3" />
               </button>
@@ -440,85 +456,89 @@ const Calendar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-stone-300 dark:border-gray-700 rounded-lg shadow-xl z-20 p-4"
+                  className="absolute right-0 top-full mt-2 w-80 backdrop-blur-xl bg-white/95 border border-purple-200/50 rounded-xl shadow-2xl z-20 p-6"
                 >
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Filter Events</h3>
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/50 rounded-xl" />
+                  
+                  <div className="relative">
+                    <h3 className="text-sm font-semibold text-purple-900 mb-4">Filter Events</h3>
 
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Status
-                      </label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {["pending", "in_progress", "review", "completed"].map((status) => (
-                          <label key={status} className="flex items-center gap-2 text-sm">
-                            <input
-                              type="checkbox"
-                              className="rounded"
-                              checked={tempFilters.status.includes(status)}
-                              onChange={() => handleFilterChange("status", status)}
-                            />
-                            <span className="capitalize">{status.replace("_", " ")}</span>
-                          </label>
-                        ))}
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-purple-700 mb-2">
+                          Status
+                        </label>
+                        <div className="grid grid-cols-2 gap-2">
+                          {["pending", "in_progress", "review", "completed"].map((status) => (
+                            <label key={status} className="flex items-center gap-2 text-sm">
+                              <input
+                                type="checkbox"
+                                className="rounded border-purple-300 text-purple-600 focus:ring-purple-500/20"
+                                checked={tempFilters.status.includes(status)}
+                                onChange={() => handleFilterChange("status", status)}
+                              />
+                              <span className="capitalize text-purple-700">{status.replace("_", " ")}</span>
+                            </label>
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Priority
-                      </label>
-                      <div className="grid grid-cols-3 gap-2">
-                        {["high", "medium", "low"].map((priority) => (
-                          <label key={priority} className="flex items-center gap-2 text-sm">
-                            <input
-                              type="checkbox"
-                              className="rounded"
-                              checked={tempFilters.priority.includes(priority)}
-                              onChange={() => handleFilterChange("priority", priority)}
-                            />
-                            <span className="capitalize">{priority}</span>
-                          </label>
-                        ))}
+                      <div>
+                        <label className="block text-sm font-medium text-purple-700 mb-2">
+                          Priority
+                        </label>
+                        <div className="grid grid-cols-3 gap-2">
+                          {["high", "medium", "low"].map((priority) => (
+                            <label key={priority} className="flex items-center gap-2 text-sm">
+                              <input
+                                type="checkbox"
+                                className="rounded border-purple-300 text-purple-600 focus:ring-purple-500/20"
+                                checked={tempFilters.priority.includes(priority)}
+                                onChange={() => handleFilterChange("priority", priority)}
+                              />
+                              <span className="capitalize text-purple-700">{priority}</span>
+                            </label>
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Projects
-                      </label>
-                      <div className="max-h-32 overflow-y-auto space-y-2">
-                        {projects.map((project) => (
-                          <label key={project.id} className="flex items-center gap-2 text-sm">
-                            <input
-                              type="checkbox"
-                              className="rounded"
-                              checked={tempFilters.projects.includes(project.id)}
-                              onChange={() => handleFilterChange("projects", project.id)}
-                            />
-                            <div
-                              className="w-3 h-3 rounded-sm"
-                              style={{ backgroundColor: project.color }}
-                            />
-                            <span className="truncate">{project.name}</span>
-                          </label>
-                        ))}
+                      <div>
+                        <label className="block text-sm font-medium text-purple-700 mb-2">
+                          Projects
+                        </label>
+                        <div className="max-h-32 overflow-y-auto space-y-2">
+                          {projects.map((project) => (
+                            <label key={project.id} className="flex items-center gap-2 text-sm">
+                              <input
+                                type="checkbox"
+                                className="rounded border-purple-300 text-purple-600 focus:ring-purple-500/20"
+                                checked={tempFilters.projects.includes(project.id)}
+                                onChange={() => handleFilterChange("projects", project.id)}
+                              />
+                              <div
+                                className="w-3 h-3 rounded-sm"
+                                style={{ backgroundColor: project.color }}
+                              />
+                              <span className="truncate text-purple-700">{project.name}</span>
+                            </label>
+                          ))}
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="flex justify-between pt-3 border-t border-stone-200 dark:border-gray-700">
-                      <button
-                        onClick={clearFilters}
-                        className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-                      >
-                        Clear All
-                      </button>
-                      <button
-                        onClick={applyFilters}
-                        className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      >
-                        Apply Filters
-                      </button>
+                      <div className="flex justify-between pt-3 border-t border-purple-200/50">
+                        <button
+                          onClick={clearFilters}
+                          className="px-3 py-1.5 text-sm text-purple-600 hover:text-purple-700 transition-colors"
+                        >
+                          Clear All
+                        </button>
+                        <button
+                          onClick={applyFilters}
+                          className="px-4 py-1.5 text-sm bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg shadow-purple-600/25"
+                        >
+                          Apply Filters
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
@@ -527,7 +547,7 @@ const Calendar = () => {
 
             <button
               onClick={() => setCurrentDate(new Date())}
-              className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-4 py-2.5 text-sm bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg shadow-purple-600/25 font-medium"
             >
               Today
             </button>
@@ -535,20 +555,22 @@ const Calendar = () => {
         </div>
 
         {/* Calendar Grid */}
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 overflow-auto relative">
           {activeView === "timeline" ? (
             // Enhanced Timeline View with Completion Tracking
-            <div className="h-full bg-stone-50 dark:bg-gray-800 m-4 rounded-lg border border-stone-200 dark:border-gray-700 overflow-hidden shadow-sm">
-              <div className="p-4 border-b border-stone-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Project Timeline Chart</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Task completion schedule with time tracking</p>
+            <div className="h-full bg-white/60 backdrop-blur-sm m-4 rounded-2xl border border-purple-200/30 overflow-hidden shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 rounded-2xl" />
+              
+              <div className="relative p-6 border-b border-purple-200/30">
+                <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">Project Timeline Chart</h2>
+                <p className="text-sm text-purple-600 mt-1">Task completion schedule with time tracking</p>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6">
+              <div className="relative flex-1 overflow-y-auto p-6">
                 {/* Timeline Chart Visualization */}
                 <div className="relative">
                   {/* Timeline Axis */}
-                  <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-purple-500"></div>
+                  <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500 to-purple-700"></div>
 
                   <div className="space-y-6">
                     {getAllFilteredEvents()
@@ -573,7 +595,7 @@ const Calendar = () => {
                                 className={`w-6 h-6 rounded-full border-4 border-white shadow-lg ${
                                   isCompleted ? 'bg-green-500' :
                                   isOverdue ? 'bg-red-500' :
-                                  'bg-blue-500'
+                                  'bg-purple-500'
                                 }`}
                                 whileHover={{ scale: 1.2 }}
                                 style={{ backgroundColor: getEventColor(event) }}
@@ -588,7 +610,7 @@ const Calendar = () => {
                                     fill="none"
                                     stroke="currentColor"
                                     strokeWidth="2"
-                                    className="text-gray-200"
+                                    className="text-purple-200"
                                   />
                                   <circle
                                     cx="16"
@@ -601,7 +623,7 @@ const Calendar = () => {
                                     className={`${
                                       isCompleted ? 'text-green-500' :
                                       isOverdue ? 'text-red-500' :
-                                      'text-blue-500'
+                                      'text-purple-500'
                                     }`}
                                   />
                                 </svg>
@@ -610,25 +632,27 @@ const Calendar = () => {
 
                             {/* Event Card */}
                             <motion.div
-                              whileHover={{ y: -2, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
-                              className="flex-1 bg-white dark:bg-gray-700 rounded-xl border border-stone-200 dark:border-gray-600 p-4 shadow-sm"
+                              whileHover={{ y: -2, boxShadow: "0 20px 40px -10px rgba(139, 92, 246, 0.3)" }}
+                              className="flex-1 backdrop-blur-xl bg-white/80 rounded-xl border border-purple-200/50 p-4 shadow-lg"
                             >
+                              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 to-white/30 rounded-xl" />
+                              
                               {/* Card Header */}
-                              <div className="flex items-start justify-between mb-3">
+                              <div className="relative flex items-start justify-between mb-3">
                                 <div className="flex-1">
-                                  <h3 className="font-semibold text-gray-900 dark:text-gray-100 text-lg mb-1">
+                                  <h3 className="font-semibold text-purple-900 text-lg mb-1">
                                     {event.title}
                                   </h3>
-                                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                  <div className="flex items-center gap-2 text-sm text-purple-600">
                                     <Clock className="w-4 h-4" />
                                     <span>{format(event.date, "MMM d, yyyy 'at' h:mm a")}</span>
                                     {daysTillCompletion > 0 && (
-                                      <span className="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+                                      <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
                                         {daysTillCompletion} days left
                                       </span>
                                     )}
                                     {isOverdue && (
-                                      <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs">
+                                      <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
                                         {Math.abs(daysTillCompletion)} days overdue
                                       </span>
                                     )}
@@ -636,20 +660,20 @@ const Calendar = () => {
                                 </div>
 
                                 <div className="text-right">
-                                  <div className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                  <div className="text-sm font-medium text-purple-900">
                                     {completionProgress.toFixed(0)}%
                                   </div>
-                                  <div className="text-xs text-gray-500">completion</div>
+                                  <div className="text-xs text-purple-600">completion</div>
                                 </div>
                               </div>
 
                               {/* Progress Bar */}
-                              <div className="mb-3">
-                                <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                              <div className="relative mb-3">
+                                <div className="flex items-center justify-between text-xs text-purple-600 mb-1">
                                   <span>Progress</span>
                                   <span>{completionProgress.toFixed(0)}%</span>
                                 </div>
-                                <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                <div className="w-full bg-purple-100/60 rounded-full h-2">
                                   <motion.div
                                     initial={{ width: 0 }}
                                     animate={{ width: `${completionProgress}%` }}
@@ -657,20 +681,20 @@ const Calendar = () => {
                                     className={`h-2 rounded-full transition-all ${
                                       isCompleted ? 'bg-green-500' :
                                       isOverdue ? 'bg-red-500' :
-                                      'bg-blue-500'
+                                      'bg-gradient-to-r from-purple-500 to-purple-600'
                                     }`}
                                   />
                                 </div>
                               </div>
 
                               {/* Status and Project Info */}
-                              <div className="flex items-center justify-between">
+                              <div className="relative flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                   <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(event.status)}`}>
                                     {event.status.replace("_", " ")}
                                   </span>
                                   {event.priority && (
-                                    <span className={`px-2 py-1 rounded-full text-xs ${
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                                       event.priority === "high" ? "bg-red-100 text-red-700" :
                                       event.priority === "medium" ? "bg-yellow-100 text-yellow-700" :
                                       "bg-green-100 text-green-700"
@@ -686,7 +710,7 @@ const Calendar = () => {
                                       className="w-3 h-3 rounded-sm"
                                       style={{ backgroundColor: getEventColor(event) }}
                                     />
-                                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                                    <span className="text-sm text-purple-600 font-medium">
                                       {projects.find(p => p.id === event.project_id)?.name}
                                     </span>
                                   </div>
@@ -694,12 +718,12 @@ const Calendar = () => {
                               </div>
 
                               {/* Time Estimate */}
-                              <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                              <div className="relative mt-3 pt-3 border-t border-purple-200/50">
                                 <div className="flex items-center justify-between text-sm">
-                                  <span className="text-gray-600 dark:text-gray-400">
+                                  <span className="text-purple-600">
                                     Estimated completion time:
                                   </span>
-                                  <span className="font-medium text-gray-900 dark:text-gray-100">
+                                  <span className="font-medium text-purple-900">
                                     {isCompleted ? 'Completed' :
                                      isOverdue ? 'Overdue' :
                                      daysTillCompletion <= 1 ? 'Due today' :
@@ -714,7 +738,7 @@ const Calendar = () => {
                   </div>
 
                   {getAllFilteredEvents().length === 0 && (
-                    <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+                    <div className="text-center py-16 text-purple-600">
                       <CalendarIcon className="w-20 h-20 mx-auto mb-4 opacity-50" />
                       <p className="text-xl font-medium mb-2">No events in timeline</p>
                       <p className="text-sm">Add some tasks to see the timeline visualization</p>
@@ -725,14 +749,16 @@ const Calendar = () => {
             </div>
           ) : (
             // Calendar View
-            <div className="h-full bg-stone-50 dark:bg-gray-800 m-4 rounded-lg border border-stone-200 dark:border-gray-700 overflow-hidden flex flex-col shadow-sm">
+            <div className="h-full bg-white/60 backdrop-blur-sm m-4 rounded-2xl border border-purple-200/30 overflow-hidden flex flex-col shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 rounded-2xl" />
+              
               {/* Week Headers - Only show for month and week view */}
               {viewMode !== "day" && (
-                <div className={`grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-stone-200 dark:border-gray-700 flex-shrink-0`}>
+                <div className={`relative grid ${viewMode === "week" ? "grid-cols-7" : "grid-cols-7"} border-b border-purple-200/30 flex-shrink-0`}>
                   {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
                     <div
                       key={day}
-                      className="p-3 text-center text-sm font-medium text-gray-500 dark:text-gray-400 bg-stone-100 dark:bg-gray-700/50"
+                      className="p-3 text-center text-sm font-medium text-purple-700 bg-purple-50/60 backdrop-blur-sm"
                     >
                       {day}
                     </div>
@@ -741,7 +767,7 @@ const Calendar = () => {
               )}
 
               {/* Calendar Days */}
-              <div className={`flex-1 overflow-auto ${
+              <div className={`relative flex-1 overflow-auto ${
                 viewMode === "day" ? "p-4" :
                 viewMode === "week" ? "grid grid-cols-7" :
                 "grid grid-cols-7"
@@ -750,10 +776,10 @@ const Calendar = () => {
                   // Day view - single day layout
                   <div className="space-y-4">
                     <div className="text-center mb-6">
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                      <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                         {format(currentDate, "EEEE")}
                       </h2>
-                      <p className="text-lg text-gray-600 dark:text-gray-400">
+                      <p className="text-lg text-purple-600 mt-1">
                         {format(currentDate, "MMMM d, yyyy")}
                       </p>
                     </div>
@@ -765,37 +791,40 @@ const Calendar = () => {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
-                          className={`p-4 rounded-lg border ${getStatusColor(event.status)}`}
+                          className={`p-4 rounded-xl border backdrop-blur-sm ${getStatusColor(event.status)}`}
                           style={{
                             borderLeftWidth: "4px",
                             borderLeftColor: getEventColor(event)
                           }}
                         >
-                          <div className="font-medium text-lg mb-2">{event.title}</div>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-                            <span className="capitalize">{event.type}</span>
-                            <span>•</span>
-                            <span className="capitalize">{event.status}</span>
-                            {event.priority && (
-                              <>
-                                <span>•</span>
-                                <span className={`capitalize ${
-                                  event.priority === "high" ? "text-red-600" :
-                                  event.priority === "medium" ? "text-yellow-600" :
-                                  "text-green-600"
-                                }`}>
-                                  {event.priority} priority
-                                </span>
-                              </>
-                            )}
+                          <div className="absolute inset-0 bg-gradient-to-r from-purple-50/30 to-white/30 rounded-xl" />
+                          <div className="relative">
+                            <div className="font-medium text-lg mb-2 text-purple-900">{event.title}</div>
+                            <div className="flex items-center gap-4 text-sm text-purple-600">
+                              <span className="capitalize">{event.type}</span>
+                              <span>•</span>
+                              <span className="capitalize">{event.status}</span>
+                              {event.priority && (
+                                <>
+                                  <span>•</span>
+                                  <span className={`capitalize font-medium ${
+                                    event.priority === "high" ? "text-red-600" :
+                                    event.priority === "medium" ? "text-yellow-600" :
+                                    "text-green-600"
+                                  }`}>
+                                    {event.priority} priority
+                                  </span>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </motion.div>
                       ))}
 
                       {getEventsForDate(currentDate).length === 0 && (
-                        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+                        <div className="text-center py-12 text-purple-600">
                           <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                          <p className="text-lg">No events for today</p>
+                          <p className="text-lg font-medium">No events for today</p>
                           <p className="text-sm">Your schedule is clear!</p>
                         </div>
                       )}
@@ -814,15 +843,15 @@ const Calendar = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: index * 0.01 }}
-                        className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-stone-200 dark:border-gray-700 hover:bg-stone-100 dark:hover:bg-gray-700/50 transition-colors cursor-pointer relative ${
-                          !isCurrentMonth ? "text-gray-400 bg-stone-100/50 dark:bg-gray-800/50" : ""
-                        } ${isToday_ ? "bg-blue-100 dark:bg-blue-900/20" : ""}`}
+                        className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-purple-200/30 hover:bg-purple-50/30 transition-colors cursor-pointer relative ${
+                          !isCurrentMonth ? "text-purple-400 bg-purple-50/20" : ""
+                        } ${isToday_ ? "bg-purple-100/60" : ""}`}
                         onClick={() => setSelectedDate(day)}
                       >
                         <div className={`text-sm font-medium mb-2 ${
                           isToday_
-                            ? "w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs"
-                            : ""
+                            ? "w-6 h-6 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full flex items-center justify-center text-xs shadow-lg"
+                            : "text-purple-700"
                         }`}>
                           {format(day, "d")}
                         </div>
@@ -834,25 +863,25 @@ const Calendar = () => {
                               initial={{ opacity: 0, scale: 0.9 }}
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: eventIndex * 0.1 }}
-                              className={`text-xs px-2 py-1 rounded border text-left cursor-pointer hover:shadow-sm transition-all ${getStatusColor(event.status)}`}
+                              className={`text-xs px-2 py-1 rounded-lg border text-left cursor-pointer hover:shadow-sm transition-all backdrop-blur-sm ${getStatusColor(event.status)}`}
                               style={{
                                 borderLeftWidth: "3px",
                                 borderLeftColor: getEventColor(event)
                               }}
                               title={`${event.title} - ${event.status}`}
                             >
-                              <div className="font-medium truncate">{event.title}</div>
+                              <div className="font-medium truncate text-purple-900">{event.title}</div>
                               {event.assigned_to && viewMode === "week" && (
                                 <div className="flex items-center gap-1 mt-1 opacity-75">
                                   <User className="w-2 h-2" />
-                                  <span className="truncate">Assigned</span>
+                                  <span className="truncate text-purple-600">Assigned</span>
                                 </div>
                               )}
                             </motion.div>
                           ))}
 
                           {dayEvents.length > (viewMode === "week" ? 6 : 3) && (
-                            <div className="text-xs text-gray-500 px-2 py-1">
+                            <div className="text-xs text-purple-500 px-2 py-1 font-medium">
                               +{dayEvents.length - (viewMode === "week" ? 6 : 3)} more
                             </div>
                           )}
@@ -874,47 +903,49 @@ const Calendar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setSelectedDate(null)}
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 max-w-md w-full max-h-[80vh] overflow-y-auto"
+              className="backdrop-blur-xl bg-white/95 rounded-2xl border border-purple-200/50 p-6 max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 rounded-2xl" />
+              
+              <div className="relative mb-4">
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
                   {format(selectedDate, "EEEE, MMMM d, yyyy")}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                <p className="text-sm text-purple-600 mt-1">
                   Click outside to close
                 </p>
               </div>
               
-              <div className="space-y-3">
+              <div className="relative space-y-3">
                 {getEventsForDate(selectedDate).map((event, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                    className="flex items-start gap-3 p-3 bg-purple-50/60 backdrop-blur-sm rounded-xl border border-purple-200/30"
                   >
                     <div 
                       className="w-3 h-3 rounded-full mt-1 flex-shrink-0"
                       style={{ backgroundColor: getEventColor(event) }}
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 dark:text-gray-100 mb-1">
+                      <div className="font-medium text-purple-900 mb-1">
                         {event.title}
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+                      <div className="flex items-center gap-3 text-sm text-purple-600">
                         <span className="capitalize">{event.type}</span>
                         <span>•</span>
                         <span className="capitalize">{event.status}</span>
                         {event.priority && (
                           <>
                             <span>•</span>
-                            <span className={`capitalize ${
+                            <span className={`capitalize font-medium ${
                               event.priority === "high" ? "text-red-600" :
                               event.priority === "medium" ? "text-yellow-600" :
                               "text-green-600"
@@ -929,7 +960,7 @@ const Calendar = () => {
                 ))}
                 
                 {getEventsForDate(selectedDate).length === 0 && (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                  <div className="text-center py-8 text-purple-600">
                     <CalendarIcon className="w-8 h-8 mx-auto mb-2 opacity-50" />
                     <p>No events for this date</p>
                   </div>
