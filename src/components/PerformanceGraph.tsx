@@ -33,7 +33,7 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`bg-white dark:bg-purple-800/60 rounded-2xl p-6 border border-gray-200 dark:border-purple-500/30 backdrop-blur-sm ${className}`}
+      className={`liquid-glass-card ${className}`}
     >
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -176,4 +176,4 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
       </div>
     </motion.div>
   );
-}; 
+};
