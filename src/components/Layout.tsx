@@ -483,7 +483,7 @@ function Layout() {
                 <input
                   type="text"
                   placeholder="Search"
-                  className="pl-6 pr-2 py-1.5 text-xs border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-36 shadow-sm dark:shadow-purple-500/20 transition-all duration-200"
+                  className="pl-6 pr-2 py-1.5 text-xs border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent w-36 shadow-sm dark:shadow-purple-500/20 transition-all duration-200"
                 />
               </div>
 
