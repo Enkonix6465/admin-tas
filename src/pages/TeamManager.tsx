@@ -478,7 +478,7 @@ export default function TeamManager() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 to-orange-50 dark:bg-gradient-to-br dark:from-purple-900/20 dark:via-purple-800/30 dark:to-purple-900/20">
       {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-10">
+      <div className="bg-white/80 dark:bg-black/95 backdrop-blur-xl border-b border-cyan-300/50 dark:border-purple-500/40 sticky top-0 z-10">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
