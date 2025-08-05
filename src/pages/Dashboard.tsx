@@ -848,8 +848,8 @@ const Dashboard = () => {
                           ? Math.round((projectTasks.filter((t: any) => t.status === "completed").length / projectTasks.length) * 100)
                           : 0;
                       }),
-                      backgroundColor: 'rgba(124, 58, 237, 0.9)',
-                      borderColor: 'rgba(124, 58, 237, 1)',
+                      backgroundColor: 'rgba(0, 212, 255, 0.9)',
+                      borderColor: 'rgba(0, 212, 255, 1)',
                       borderWidth: 1,
                     },
                   ],
