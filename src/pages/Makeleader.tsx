@@ -163,7 +163,7 @@ export default function TeamLeadAssignmentPage() {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-slate-600 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400 font-medium">Loading team data...</p>
         </div>
       </div>
@@ -171,16 +171,16 @@ export default function TeamLeadAssignmentPage() {
   }
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+    <div className="h-full bg-gray-50 dark:bg-slate-900 flex flex-col relative overflow-hidden">
       {/* Header */}
-      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
+      <div className="liquid-glass border-b border-gray-200 dark:border-slate-700/50 px-6 py-4 shadow-sm dark:shadow-slate-900/40 relative z-10 dark:bg-slate-900/80">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-slate-100">
               Team Leadership Management
             </h1>
-            <span className="px-3 py-1 text-xs rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+            <span className="px-3 py-1 text-xs rounded-full font-medium bg-blue-100 dark:bg-slate-800 text-blue-700 dark:text-slate-300 border border-blue-200 dark:border-slate-600 flex items-center gap-2">
+              <div className="w-2 h-2 bg-blue-500 dark:bg-slate-400 rounded-full animate-pulse"></div>
               Live Management
             </span>
           </div>
@@ -205,7 +205,7 @@ export default function TeamLeadAssignmentPage() {
                 URL.revokeObjectURL(url);
                 toast.success("Team leads data exported! 📊");
               }}
-              className="px-4 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200"
+              className="px-4 py-2 text-sm bg-white dark:bg-slate-800 text-blue-700 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-slate-700 border border-blue-200 dark:border-slate-600 rounded-lg transition-all duration-200"
             >
               <Download className="w-4 h-4 mr-2 inline" />
               Export
@@ -216,24 +216,24 @@ export default function TeamLeadAssignmentPage() {
         {/* Search and Stats */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 border-b-2 border-purple-500 pb-2">
-              <Crown className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-base font-medium text-purple-600 dark:text-purple-400">Leadership Assignment</span>
+            <div className="flex items-center gap-3 border-b-2 border-slate-500 dark:border-slate-400 pb-2">
+              <Crown className="w-5 h-5 text-blue-600 dark:text-slate-400" />
+              <span className="text-base font-medium text-blue-600 dark:text-slate-400">Leadership Assignment</span>
             </div>
           </div>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-400" />
               <input
                 type="text"
                 placeholder="Search employees..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-full sm:w-48"
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800/90 text-gray-900 dark:text-slate-200 placeholder:dark:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm dark:shadow-slate-900/40 backdrop-blur-sm w-full sm:w-48"
               />
             </div>
-            <div className="flex items-center gap-2 px-3 py-2 bg-yellow-100 dark:bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-500/30 rounded-lg text-sm">
+            <div className="flex items-center gap-2 px-3 py-2 bg-yellow-100 dark:bg-slate-700 text-yellow-700 dark:text-slate-300 border border-yellow-200 dark:border-slate-600 rounded-lg text-sm">
               <Star className="w-4 h-4" />
               <span className="font-medium">Team Leads: {teamLeads.length}</span>
             </div>
@@ -247,18 +247,18 @@ export default function TeamLeadAssignmentPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="liquid-glass-card"
+          className="liquid-glass-card dark:bg-slate-800/50 dark:border-slate-700"
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-purple-100 dark:bg-purple-500/20 border border-purple-200 dark:border-purple-500/30">
-                <UserCheck className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              <div className="p-3 rounded-xl bg-blue-100 dark:bg-slate-700 border border-blue-200 dark:border-slate-600">
+                <UserCheck className="w-6 h-6 text-blue-600 dark:text-slate-300" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100">
                   Select Employees for Leadership
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-purple-300/70">
+                <p className="text-sm text-gray-500 dark:text-slate-400">
                   {filteredEmployees.length} employees available for team lead assignment
                 </p>
               </div>
@@ -267,7 +267,7 @@ export default function TeamLeadAssignmentPage() {
             <button
               onClick={assignTeamLeads}
               disabled={selectedIds.length === 0 || loading}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
             >
               <Crown className="w-4 h-4" />
               Assign as Team Lead ({selectedIds.length})
@@ -276,12 +276,12 @@ export default function TeamLeadAssignmentPage() {
 
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-800/50">
+              <thead className="bg-gray-50 dark:bg-slate-800/80">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     <input
                       type="checkbox"
-                      className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                      className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600"
                       checked={selectedIds.length === filteredEmployees.length && filteredEmployees.length > 0}
                       onChange={(e) => {
                         if (e.target.checked) {
@@ -292,68 +292,68 @@ export default function TeamLeadAssignmentPage() {
                       }}
                     />
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Employee
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Contact
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Location
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-slate-400 uppercase tracking-wider">
                     Status
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="bg-white dark:bg-slate-800/60 divide-y divide-gray-200 dark:divide-slate-700">
                 {filteredEmployees.map((emp, idx) => (
                   <motion.tr
                     key={`employee-select-${emp.id}-${idx}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
-                    className={`hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer ${
-                      selectedIds.includes(emp.id) ? "bg-purple-50 dark:bg-purple-500/10" : ""
+                    className={`hover:bg-gray-50 dark:hover:bg-slate-700/50 cursor-pointer ${
+                      selectedIds.includes(emp.id) ? "bg-blue-50 dark:bg-slate-700/60" : ""
                     }`}
                     onClick={() => toggleSelection(emp.id)}
                   >
                     <td className="px-6 py-4">
                       <input
                         type="checkbox"
-                        className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:bg-slate-700 dark:border-slate-600"
                         checked={selectedIds.includes(emp.id)}
                         onChange={() => toggleSelection(emp.id)}
                       />
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                        <div className="h-10 w-10 rounded-full bg-gradient-to-r from-slate-600 to-slate-700 flex items-center justify-center">
                           <User className="w-5 h-5 text-white" />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 dark:text-gray-100">
+                          <div className="font-medium text-gray-900 dark:text-slate-100">
                             {emp.name}
                           </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                          <div className="text-sm text-gray-500 dark:text-slate-400">
                             {emp.title || emp.type}
                           </div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-gray-100">
-                        <Mail className="w-4 h-4 text-gray-400" />
+                      <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-slate-200">
+                        <Mail className="w-4 h-4 text-gray-400 dark:text-slate-400" />
                         {emp.email}
                       </div>
-                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                        <Phone className="w-4 h-4 text-gray-400" />
+                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-slate-400">
+                        <Phone className="w-4 h-4 text-gray-400 dark:text-slate-400" />
                         {emp.phone}
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-gray-100">
-                        <MapPin className="w-4 h-4 text-gray-400" />
+                      <div className="flex items-center gap-2 text-sm text-gray-900 dark:text-slate-200">
+                        <MapPin className="w-4 h-4 text-gray-400 dark:text-slate-400" />
                         {emp.location}
                       </div>
                     </td>
@@ -361,8 +361,8 @@ export default function TeamLeadAssignmentPage() {
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                           emp.status === "Active"
-                            ? "bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400"
-                            : "bg-gray-100 text-gray-800 dark:bg-gray-500/20 dark:text-gray-400"
+                            ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                            : "bg-gray-100 text-gray-800 dark:bg-slate-700 dark:text-slate-400"
                         }`}
                       >
                         {emp.status === "Active" && <CheckCircle className="w-3 h-3 mr-1" />}
@@ -382,17 +382,17 @@ export default function TeamLeadAssignmentPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="liquid-glass-card"
+          className="liquid-glass-card dark:bg-slate-800/50 dark:border-slate-700"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-3 rounded-xl bg-yellow-100 dark:bg-yellow-500/20 border border-yellow-200 dark:border-yellow-500/30">
-              <Shield className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+            <div className="p-3 rounded-xl bg-yellow-100 dark:bg-slate-700 border border-yellow-200 dark:border-slate-600">
+              <Shield className="w-6 h-6 text-yellow-600 dark:text-slate-300" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-slate-100">
                 Current Team Leads
               </h3>
-              <p className="text-sm text-gray-500 dark:text-purple-300/70">
+              <p className="text-sm text-gray-500 dark:text-slate-400">
                 {teamLeads.length} team leads assigned
               </p>
             </div>
@@ -400,11 +400,11 @@ export default function TeamLeadAssignmentPage() {
 
           {teamLeads.length === 0 ? (
             <div className="text-center py-12">
-              <Crown className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+              <Crown className="mx-auto h-12 w-12 text-gray-400 dark:text-slate-500 mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-slate-100 mb-2">
                 No Team Leads Assigned
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600 dark:text-slate-400">
                 Select employees from the table above to assign them as team leads.
               </p>
             </div>
@@ -416,47 +416,47 @@ export default function TeamLeadAssignmentPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="p-4 border border-gray-200 dark:border-purple-500/30 rounded-xl bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-purple-900/20 hover:shadow-lg transition-all duration-200"
+                  className="p-4 border border-gray-200 dark:border-slate-700 rounded-xl bg-gradient-to-br from-white to-blue-50 dark:from-slate-800 dark:to-slate-700/50 hover:shadow-lg transition-all duration-200"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="h-12 w-12 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 flex items-center justify-center">
+                      <div className="h-12 w-12 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center">
                         <Award className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <div className="font-semibold text-gray-900 dark:text-gray-100">
+                        <div className="font-semibold text-gray-900 dark:text-slate-100">
                           {lead.name}
                         </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                        <div className="text-sm text-gray-500 dark:text-slate-400">
                           Team Lead
                         </div>
                       </div>
                     </div>
                     <button
                       onClick={() => removeTeamLead(lead.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                      className="p-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                   
                   <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-slate-300">
                       <Mail className="w-4 h-4" />
                       {lead.email}
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-slate-300">
                       <Phone className="w-4 h-4" />
                       {lead.phone}
                     </div>
-                    <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+                    <div className="flex items-center gap-2 text-gray-600 dark:text-slate-300">
                       <MapPin className="w-4 h-4" />
                       {lead.location}
                     </div>
                   </div>
                   
-                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-500/20 dark:text-green-400">
+                  <div className="mt-3 pt-3 border-t border-gray-200 dark:border-slate-600">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                       <Activity className="w-3 h-3 mr-1" />
                       {lead.status}
                     </span>
