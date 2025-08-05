@@ -939,7 +939,7 @@ const Reports = () => {
   ];
 
   // Custom colors for charts
-  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#84cc16', '#f97316'];
+  const colors = ['#00D4FF', '#FF6600', '#f59e0b', '#ef4444', '#00D4FF', '#06b6d4', '#84cc16', '#FF6600'];
 
   if (loading) {
     return (
