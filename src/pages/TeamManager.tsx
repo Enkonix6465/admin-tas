@@ -337,9 +337,8 @@ export default function TeamManager() {
         className="bg-white dark:bg-black/95 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-cyan-300/50 dark:border-purple-500/40"
       >
         {/* Team Header */}
-        <div 
-          className="p-6 text-white relative overflow-hidden"
-          style={{ backgroundColor: team.color || '#3B82F6' }}
+        <div
+          className="p-6 text-white relative overflow-hidden bg-gradient-to-br from-purple-600 to-purple-800 dark:from-purple-700 dark:to-purple-900"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
