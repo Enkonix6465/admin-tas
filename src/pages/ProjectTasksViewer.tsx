@@ -448,10 +448,10 @@ export default function ProjectTasksViewer() {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setSelectedProjectId(project.id)}
-                className={`p-3 rounded-lg border text-left transition-all ${
+                className={`liquid-glass-card text-left transition-all ${
                   selectedProjectId === project.id
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
-                    : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-gray-300 dark:hover:border-gray-600"
+                    ? "border-purple-500 bg-purple-50 dark:bg-purple-500/20"
+                    : "hover:border-purple-300 dark:hover:border-purple-500/50"
                 }`}
               >
                 <div className="flex items-center gap-3 mb-2">
