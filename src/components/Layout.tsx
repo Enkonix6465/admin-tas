@@ -47,6 +47,8 @@ function Layout() {
   const [projectOpen, setProjectOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [headerSearchQuery, setHeaderSearchQuery] = useState("");
+  const [showNewTaskModal, setShowNewTaskModal] = useState(false);
+  const [showCreateTeamModal, setShowCreateTeamModal] = useState(false);
   const [expandedSections, setExpandedSections] = useState({
     dashboard: true,
     projects: false,
@@ -474,7 +476,7 @@ function Layout() {
                         onClick={() => setProjectOpen(false)}
                         className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100 block"
                       >
-                        ���� Project Tasks
+                        💼 Project Tasks
                       </Link>
                       <hr className="my-1 border-gray-200 dark:border-purple-500/30" />
                       <Link
