@@ -526,7 +526,7 @@ textarea {
 
   /* Enhanced form inputs */
   .input-field {
-    @apply px-4 py-2 border border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-purple-500 focus:border-transparent transition-all;
+    @apply px-4 py-2 border border-gray-200 dark:border-purple-500/30 rounded-xl bg-white dark:bg-black/90 text-gray-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-purple-500 focus:border-transparent transition-all;
   }
 
   /* Vibrant card backgrounds */
