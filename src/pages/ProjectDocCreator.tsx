@@ -746,7 +746,7 @@ const ProjectDocCreator = () => {
                         key={template.id}
                         whileHover={{ scale: 1.02, x: 4 }}
                         onClick={() => handleTemplateSelect(template)}
-                        className="p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all group"
+                        className="p-4 rounded-xl border-2 border-gray-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-purple-500/10 cursor-pointer transition-all group"
                       >
                         <div className="flex items-start gap-3">
                           <div className={`w-10 h-10 bg-gradient-to-br ${template.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
