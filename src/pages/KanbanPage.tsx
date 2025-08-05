@@ -742,7 +742,7 @@ const KanbanPage = () => {
 
   if (loading) {
     return (
-      <div className="h-full bg-gradient-to-br from-blue-50 via-gray-50/30 to-slate-100 dark:from-gray-900 dark:via-gray-800/20 dark:to-gray-900 flex items-center justify-center">
+      <div className="h-full bg-gradient-to-br from-cyan-50 via-orange-50 to-cyan-100 dark:bg-gradient-to-br dark:from-purple-900/20 dark:via-purple-800/30 dark:to-purple-900/20 flex items-center justify-center">
         <div className="text-center">
           <div className="relative">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 dark:border-blue-400 dark:border-t-blue-300 mx-auto mb-4"></div>
