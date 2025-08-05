@@ -1189,7 +1189,7 @@ const KanbanPage = () => {
         {/* Timeline View */}
         {viewMode === "timeline" && (
           <div className="flex-1 w-full">
-            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-gray-700/50 p-6">
+            <div className="bg-white/80 dark:bg-black/80 backdrop-blur-xl rounded-2xl border border-gray-200/50 dark:border-purple-500/30 p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
                   <TrendingUp className="w-6 h-6 text-purple-600" />
