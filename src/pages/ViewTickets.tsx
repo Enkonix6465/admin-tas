@@ -207,7 +207,7 @@ const AdminTicketsPage = () => {
 
       <div className="flex gap-4 mb-4 flex-wrap">
         <select
-          className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
+          className="border border-cyan-300 dark:border-orange-500/40 p-2 rounded bg-white dark:bg-black/95 text-gray-900 dark:text-white"
           value={projectFilter}
           onChange={(e) => setProjectFilter(e.target.value)}
         >
