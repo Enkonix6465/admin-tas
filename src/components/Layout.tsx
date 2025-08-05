@@ -619,7 +619,7 @@ function Layout() {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 flex flex-col min-h-0 bg-stone-50/50 dark:bg-gradient-to-br dark:from-[rgba(88,28,135,0.4)] dark:via-[rgba(147,51,234,0.3)] dark:to-[rgba(168,85,247,0.2)] m-2 rounded-xl backdrop-blur-sm border dark:border-purple-500/20">
+        <main className="flex-1 flex flex-col min-h-0 bg-stone-50/50 dark:bg-gradient-to-br dark:from-black/90 dark:via-black/80 dark:to-black/90 m-2 rounded-xl backdrop-blur-sm border dark:border-purple-500/20">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
