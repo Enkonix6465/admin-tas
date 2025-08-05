@@ -395,7 +395,7 @@ const ProjectDocCreator = () => {
           id: "3",
           name: "E-commerce Revolution",
           description: "Modern e-commerce platform",
-          color: "#8B5CF6"
+          color: "#00D4FF"
         }
       ]);
     }
