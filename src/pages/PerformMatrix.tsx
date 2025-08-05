@@ -476,7 +476,7 @@ export default function EmployeePerformancePage() {
                             {empTasks.length} tasks
                           </span>
                           <span className="font-medium text-gray-900 dark:text-purple-100">
-                            {completionRate.toFixed(0)}%
+                            {completionRate.toFixed(0)}% performance
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 dark:bg-purple-900/30 rounded-full h-2 mt-2">
