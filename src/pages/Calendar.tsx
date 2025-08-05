@@ -718,12 +718,12 @@ const Calendar = () => {
                               </div>
 
                               {/* Time Estimate */}
-                              <div className="relative mt-3 pt-3 border-t border-purple-200/50">
+                              <div className="relative mt-3 pt-3 border-t border-purple-200/50 dark:border-purple-600/50">
                                 <div className="flex items-center justify-between text-sm">
-                                  <span className="text-purple-600">
+                                  <span className="text-purple-600 dark:text-purple-400">
                                     Estimated completion time:
                                   </span>
-                                  <span className="font-medium text-purple-900">
+                                  <span className="font-medium text-purple-900 dark:text-purple-100">
                                     {isCompleted ? 'Completed' :
                                      isOverdue ? 'Overdue' :
                                      daysTillCompletion <= 1 ? 'Due today' :
