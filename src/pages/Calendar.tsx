@@ -710,7 +710,7 @@ const Calendar = () => {
                                       className="w-3 h-3 rounded-sm"
                                       style={{ backgroundColor: getEventColor(event) }}
                                     />
-                                    <span className="text-sm text-purple-600 font-medium">
+                                    <span className="text-sm text-purple-600 dark:text-purple-400 font-medium">
                                       {projects.find(p => p.id === event.project_id)?.name}
                                     </span>
                                   </div>
