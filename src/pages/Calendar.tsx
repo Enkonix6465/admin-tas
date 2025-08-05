@@ -443,7 +443,7 @@ const Calendar = () => {
       {/* Main Calendar Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Compact Header Bar */}
-        <div className="bg-stone-50 dark:bg-gray-800 border-b border-stone-200 dark:border-gray-700 p-3 flex items-center justify-between flex-shrink-0 shadow-sm">
+        <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 p-3 flex items-center justify-between flex-shrink-0 shadow-sm dark:shadow-purple-500/20">
           <div className="flex items-center gap-3">
             <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
               {getDateLabel()}
