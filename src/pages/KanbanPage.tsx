@@ -579,24 +579,28 @@ const KanbanPage = () => {
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
-            <h4 className="text-sm font-bold text-purple-900 dark:text-purple-100 leading-tight mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-300 transition-colors duration-300">
-              {task.title}
-            </h4>
-            <div className="flex items-center gap-2 flex-wrap">
-              {getPriorityIcon(task.priority)}
-              <span className={`px-2 py-0.5 text-xs rounded-full border font-medium ${getPriorityBadge(task.priority)}`}>
-                {task.priority?.toUpperCase()}
+            <div className="flex items-center gap-2 mb-2">
+              <h4 className="text-sm font-semibold text-gray-900 dark:text-gray-100 leading-snug flex-1">
+                {task.title}
+              </h4>
+              <div className="flex items-center gap-1">
+                {getPriorityIcon(task.priority)}
+                {isOverdue && <AlertCircle className="w-3 h-3 text-red-500" />}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`px-2 py-1 text-xs rounded-md font-medium ${getPriorityBadge(task.priority)}`}>
+                {task.priority?.charAt(0).toUpperCase() + task.priority?.slice(1)}
               </span>
               {isOverdue && (
-                <span className="px-2 py-0.5 text-xs bg-red-100/80 dark:bg-red-900/40 text-red-700 dark:text-red-300 rounded-full border border-red-200/50 dark:border-red-600/30 flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3" />
+                <span className="px-2 py-1 text-xs bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-md font-medium">
                   Overdue
                 </span>
               )}
             </div>
           </div>
-          <button 
-            className="opacity-0 group-hover:opacity-100 text-purple-400 hover:text-purple-600 dark:text-purple-300 dark:hover:text-purple-200 p-1 transition-opacity rounded-lg hover:bg-purple-100/60 dark:hover:bg-purple-900/60"
+          <button
+            className="opacity-0 group-hover:opacity-100 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 p-1 transition-all rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={(e) => {
               e.stopPropagation();
             }}
