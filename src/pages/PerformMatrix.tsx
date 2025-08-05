@@ -586,7 +586,7 @@ export default function EmployeePerformancePage() {
                     <BarChart data={performanceTrends.slice(-10)}>
                       <XAxis
                         dataKey="date"
-                        tick={{ fontSize: 10, fill: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280' }}
+                        tick={false}
                         axisLine={false}
                         tickLine={false}
                       />
