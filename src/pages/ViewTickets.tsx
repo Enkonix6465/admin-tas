@@ -191,7 +191,7 @@ const AdminTicketsPage = () => {
     <div className="h-full bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90 p-6">
       <h1 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">All Tickets</h1>
 
-      <div className="flex gap-4 mb-4">
+      <div className="flex gap-4 mb-4 flex-wrap">
         <select
           className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
           value={projectFilter}
@@ -212,6 +212,28 @@ const AdminTicketsPage = () => {
           {uniqueStatuses.map((status) => (
             <option key={status}>{status}</option>
           ))}
+        </select>
+
+        <select
+          className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
+          value={userFilter}
+          onChange={(e) => setUserFilter(e.target.value)}
+        >
+          <option value="">Filter by User</option>
+          {uniqueUsers.map((user) => (
+            <option key={user}>{user}</option>
+          ))}
+        </select>
+
+        <select
+          className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100"
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
+        >
+          <option value="all">All Time</option>
+          <option value="today">Today</option>
+          <option value="week">Last 7 Days</option>
+          <option value="month">Last 30 Days</option>
         </select>
       </div>
 
