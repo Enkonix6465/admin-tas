@@ -233,7 +233,7 @@ function Projects() {
   };
 
   return (
-    <div className="h-full bg-gray-50 dark:bg-transparent p-4 space-y-6">
+    <div className="h-full bg-gradient-to-br from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-br dark:from-black/95 dark:to-black/90 p-4 space-y-6">
       {teams.map((team) => {
         const teamProjects = projects.filter((p) => p.teamId === team.id);
 
