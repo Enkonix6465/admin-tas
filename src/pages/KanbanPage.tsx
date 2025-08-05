@@ -153,7 +153,7 @@ const KanbanPage = () => {
         id: "mock-project-2",
         name: "Mobile Application",
         description: "iOS and Android app development",
-        color: "#10b981"
+        color: "#FF6600"
       },
       {
         id: "mock-project-3",
