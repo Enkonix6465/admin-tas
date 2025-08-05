@@ -83,7 +83,36 @@ const AdminTicketsPage = () => {
     const matchesProject = projectFilter
       ? projectsMap[ticket.projectId] === projectFilter
       : true;
-    return matchesStatus && matchesProject;
+    const matchesUser = userFilter ? ticket.createdByName === userFilter : true;
+
+    // Date filtering
+    const matchesDate = (() => {
+      if (dateFilter === "all") return true;
+
+      const ticketDate = ticket.createdAt?.seconds
+        ? new Date(ticket.createdAt.seconds * 1000)
+        : null;
+
+      if (!ticketDate) return false;
+
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      const monthAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+      switch (dateFilter) {
+        case "today":
+          return ticketDate >= today;
+        case "week":
+          return ticketDate >= weekAgo;
+        case "month":
+          return ticketDate >= monthAgo;
+        default:
+          return true;
+      }
+    })();
+
+    return matchesStatus && matchesProject && matchesUser && matchesDate;
   });
 
   const uniqueProjectNames = Array.from(new Set(Object.values(projectsMap)));
