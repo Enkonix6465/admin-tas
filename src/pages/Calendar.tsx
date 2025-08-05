@@ -361,7 +361,7 @@ const Calendar = () => {
         initial={{ x: -300 }}
         animate={{ x: sidebarOpen ? 0 : -300 }}
         transition={{ type: "spring", damping: 20 }}
-        className="w-80 bg-stone-50 dark:bg-purple-800 border-r border-stone-200 dark:border-purple-700 flex flex-col flex-shrink-0 overflow-hidden shadow-lg"
+        className="w-80 liquid-glass border-r border-gray-200 dark:border-purple-500/30 flex flex-col flex-shrink-0 overflow-hidden shadow-lg"
       >
         {/* Sidebar Header */}
         <div className="p-6 border-b border-stone-200 dark:border-purple-700 flex-shrink-0">
