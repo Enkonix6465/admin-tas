@@ -255,18 +255,18 @@ const AdminTicketsPage = () => {
         <table className="min-w-[1200px] w-full border-collapse text-sm text-left">
           <thead className="bg-white/50 dark:bg-black/50">
             <tr>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Ticket ID</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Title</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Description</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Priority</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Status</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Due Date</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Project</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Created By</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Created At</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Team Lead</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Review</th>
-              <th className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">Actions</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Ticket ID</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Title</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Description</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Priority</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Status</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Due Date</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Project</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Created By</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Created At</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Team Lead</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Review</th>
+              <th className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">Actions</th>
             </tr>
           </thead>
           <tbody>
