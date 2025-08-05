@@ -822,7 +822,7 @@ const Calendar = () => {
                       ))}
 
                       {getEventsForDate(currentDate).length === 0 && (
-                        <div className="text-center py-12 text-purple-600">
+                        <div className="text-center py-12 text-purple-600 dark:text-purple-400">
                           <CalendarIcon className="w-16 h-16 mx-auto mb-4 opacity-50" />
                           <p className="text-lg font-medium">No events for today</p>
                           <p className="text-sm">Your schedule is clear!</p>
