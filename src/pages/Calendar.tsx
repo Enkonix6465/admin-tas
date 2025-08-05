@@ -799,8 +799,8 @@ const Calendar = () => {
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-purple-50/30 to-white/30 rounded-xl" />
                           <div className="relative">
-                            <div className="font-medium text-lg mb-2 text-purple-900">{event.title}</div>
-                            <div className="flex items-center gap-4 text-sm text-purple-600">
+                            <div className="font-medium text-lg mb-2 text-purple-900 dark:text-purple-100">{event.title}</div>
+                            <div className="flex items-center gap-4 text-sm text-purple-600 dark:text-purple-400">
                               <span className="capitalize">{event.type}</span>
                               <span>•</span>
                               <span className="capitalize">{event.status}</span>
