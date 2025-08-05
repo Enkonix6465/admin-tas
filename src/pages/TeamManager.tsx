@@ -489,7 +489,7 @@ export default function TeamManager() {
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-600 to-orange-600 dark:from-purple-400 dark:to-purple-600 bg-clip-text text-transparent">
                   Team Galaxy
                 </h1>
-                <p className="text-gray-600 dark:text-gray-400 font-medium">
+                <p className="text-gray-600 dark:text-purple-300 font-medium">
                   Manage teams and collaborate effectively
                 </p>
               </div>
