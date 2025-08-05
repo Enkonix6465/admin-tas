@@ -234,19 +234,20 @@ export const deleteUser = async (userId: string) => {
 };
 
 export const getUsers = async () => {
-  try {
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
-    }));
-  } catch (error: any) {
-    console.error("Error fetching users:", error);
-    throw new Error(error.message || "Failed to fetch users");
-  }
+  return safeFirebaseOperation(
+    async () => {
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, orderBy("createdAt", "desc"));
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate?.()?.toISOString() || null,
+      }));
+    },
+    [], // Fallback: empty array
+    "getUsers"
+  );
 };
 
 export const getUsersByRole = async (role: Role) => {
