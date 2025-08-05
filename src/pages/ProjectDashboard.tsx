@@ -197,6 +197,30 @@ export default function ProjectDashboard() {
     project.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleCreateProject = async () => {
+    try {
+      const newProjectData = {
+        ...newProject,
+        created_by: currentUser?.uid || 'admin',
+        createdAt: serverTimestamp(),
+      };
+
+      const docRef = await addDoc(collection(db, "projects"), newProjectData);
+      setProjects(prev => [...prev, { id: docRef.id, ...newProjectData }]);
+      setShowNewProjectModal(false);
+      setNewProject({
+        name: '',
+        description: '',
+        startDate: '',
+        deadline: '',
+        teamId: ''
+      });
+    } catch (error) {
+      console.error("Error creating project:", error);
+      setError("Failed to create project. Please try again.");
+    }
+  };
+
   // Loading state
   if (loading) {
     return (
