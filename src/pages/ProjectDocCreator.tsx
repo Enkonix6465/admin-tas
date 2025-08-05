@@ -383,7 +383,7 @@ const ProjectDocCreator = () => {
           id: "1",
           name: "AI Analytics Platform",
           description: "Advanced analytics dashboard with AI insights",
-          color: "#3B82F6"
+          color: "#00D4FF"
         },
         {
           id: "2",
@@ -631,7 +631,7 @@ const ProjectDocCreator = () => {
                   <div className="flex items-center gap-3">
                     <div 
                       className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: project.color || '#3B82F6' }}
+                      style={{ backgroundColor: project.color || '#00D4FF' }}
                     />
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate">
