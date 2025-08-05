@@ -539,7 +539,7 @@ export default function ProjectTasksViewer() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                            className="hover:bg-white/90 dark:hover:bg-purple-500/10 transition-colors"
                           >
                             <td className="px-4 py-3">
                               <div className="flex items-start gap-3">
