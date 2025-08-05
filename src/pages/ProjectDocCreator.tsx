@@ -624,8 +624,8 @@ const ProjectDocCreator = () => {
                   onClick={() => handleProjectSelect(project)}
                   className={`w-full text-left p-3 rounded-xl border-2 transition-all ${
                     selectedProject?.id === project.id
-                      ? "border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 shadow-lg"
-                      : "border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      ? "border-purple-500 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 shadow-lg"
+                      : "border-gray-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-purple-500/10"
                   }`}
                 >
                   <div className="flex items-center gap-3">
