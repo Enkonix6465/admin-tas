@@ -573,7 +573,7 @@ export default function TeamManager() {
             {canManageTeams() && (
               <button
                 onClick={() => setShowCreateModal(true)}
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg hover:shadow-xl"
+                className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-orange-600 dark:from-purple-600 dark:to-purple-700 text-white rounded-lg hover:from-cyan-700 hover:to-orange-700 dark:hover:from-purple-700 dark:hover:to-purple-800 transition-all shadow-lg hover:shadow-xl"
               >
                 Create Your First Team
               </button>
