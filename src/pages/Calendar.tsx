@@ -390,17 +390,17 @@ const Calendar = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={prevPeriod}
-                className="p-2 hover:bg-purple-100/60 rounded-lg transition-colors"
+                className="p-2 hover:bg-purple-100/60 dark:hover:bg-purple-900/60 rounded-lg transition-colors"
               >
-                <ChevronLeft className="w-4 h-4 text-purple-600" />
+                <ChevronLeft className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={nextPeriod}
-                className="p-2 hover:bg-purple-100/60 rounded-lg transition-colors"
+                className="p-2 hover:bg-purple-100/60 dark:hover:bg-purple-900/60 rounded-lg transition-colors"
               >
-                <ChevronRight className="w-4 h-4 text-purple-600" />
+                <ChevronRight className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               </motion.button>
             </div>
           </div>
