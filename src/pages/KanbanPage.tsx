@@ -1197,7 +1197,7 @@ const KanbanPage = () => {
                       key={task.id}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: (typeof index === 'number' ? index : 0) * 0.1 }}
                       className="relative flex items-start gap-6"
                     >
                       <div className={`relative z-10 w-4 h-4 rounded-full border-4 border-white dark:border-gray-900 shadow-lg ${
