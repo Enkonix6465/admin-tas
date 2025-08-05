@@ -281,11 +281,11 @@ const Calendar = () => {
         initial={{ x: -300 }}
         animate={{ x: sidebarOpen ? 0 : -300 }}
         transition={{ type: "spring", damping: 20 }}
-        className="w-80 backdrop-blur-xl bg-white/80 border-r border-purple-200/30 flex flex-col flex-shrink-0 overflow-hidden shadow-xl"
+        className="w-80 backdrop-blur-xl bg-white/80 dark:bg-gray-900/80 border-r border-purple-200/30 dark:border-purple-600/30 flex flex-col flex-shrink-0 overflow-hidden shadow-xl"
       >
         {/* Liquid Glass Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-purple-400/5 to-purple-600/10 backdrop-blur-xl" />
-        <div className="absolute inset-0 bg-white/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-purple-400/5 to-purple-600/10 dark:from-purple-400/20 dark:via-purple-500/10 dark:to-purple-600/20 backdrop-blur-xl" />
+        <div className="absolute inset-0 bg-white/60 dark:bg-gray-900/60" />
         
         {/* Sidebar Header */}
         <div className="relative p-6 border-b border-purple-200/30 flex-shrink-0">
