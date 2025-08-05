@@ -229,13 +229,13 @@ function Projects() {
 
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow max-w-md w-full">
-            <h2 className="text-lg font-semibold mb-4">
+          <div className="liquid-glass-card max-w-md w-full mx-4">
+            <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-purple-100">
               {editingProject ? "Edit Project" : "Create Project"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium text-gray-900 dark:text-purple-100">
                   Project Name
                 </label>
                 <input
@@ -244,47 +244,47 @@ function Projects() {
                   onChange={(e) =>
                     setFormData({ ...formData, name: e.target.value })
                   }
-                  className="w-full mt-1 px-3 py-2 border rounded"
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-purple-500/30 bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Description</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-purple-100">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  className="w-full mt-1 px-3 py-2 border rounded"
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-purple-500/30 bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Start Date</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-purple-100">Start Date</label>
                 <input
                   type="date"
                   value={formData.startDate}
                   onChange={(e) =>
                     setFormData({ ...formData, startDate: e.target.value })
                   }
-                  className="w-full mt-1 px-3 py-2 border rounded"
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-purple-500/30 bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Deadline</label>
+                <label className="block text-sm font-medium text-gray-900 dark:text-purple-100">Deadline</label>
                 <input
                   type="date"
                   value={formData.deadline}
                   onChange={(e) =>
                     setFormData({ ...formData, deadline: e.target.value })
                   }
-                  className="w-full mt-1 px-3 py-2 border rounded"
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-purple-500/30 bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium text-gray-900 dark:text-purple-100">
                   Assign to Team
                 </label>
                 <select
@@ -292,7 +292,7 @@ function Projects() {
                   onChange={(e) =>
                     setFormData({ ...formData, teamId: e.target.value })
                   }
-                  className="w-full mt-1 px-3 py-2 border rounded"
+                  className="w-full mt-1 px-3 py-2 border border-gray-200 dark:border-purple-500/30 bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 >
                   <option value="">Select team</option>
@@ -307,13 +307,13 @@ function Projects() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 border rounded"
+                  className="px-4 py-2 border border-gray-200 dark:border-purple-500/30 bg-white dark:bg-black/50 text-gray-900 dark:text-purple-100 rounded-lg hover:bg-gray-50 dark:hover:bg-purple-500/20 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                  className="px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all"
                 >
                   {editingProject ? "Update" : "Create"}
                 </button>
