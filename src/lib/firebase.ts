@@ -26,10 +26,28 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:45780204594:web:24c9b2ffaf6b0ad05f102b",
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID || "G-KR98Y1EEK3",
 };
-const app = initializeApp(firebaseConfig);
-export const analytics = getAnalytics(app);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+let app;
+let analytics;
+let auth;
+let db;
+
+try {
+  app = initializeApp(firebaseConfig);
+  analytics = getAnalytics(app);
+  auth = getAuth(app);
+  db = getFirestore(app);
+
+  console.log("Firebase initialized successfully");
+} catch (error) {
+  console.error("Firebase initialization failed:", error);
+  // Create mock implementations for offline use
+  auth = null;
+  db = null;
+  analytics = null;
+}
+
+export { analytics, auth, db };
 
 export const ROLES = {
   SUPER_ADMIN: "super_admin",
