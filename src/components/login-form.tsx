@@ -110,8 +110,20 @@ export function LoginForm({
 
             <div className="max-w-sm mx-auto w-full space-y-8 relative z-10">
               {/* Theme Toggle */}
-              
-              
+              <div className="flex justify-end">
+                <button
+                  onClick={toggleTheme}
+                  className="p-3 rounded-xl bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border border-gray-200/60 dark:border-slate-600/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
+                  title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+                >
+                  {theme === 'light' ? (
+                    <Moon className="w-5 h-5 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-yellow-500 group-hover:text-yellow-600 transition-colors" />
+                  )}
+                </button>
+              </div>
+
               {/* Header */}
               <div className="text-center space-y-6">
                 <div className="w-20 h-20 bg-gradient-to-br from-purple-500 via-purple-600 to-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl mx-auto transform rotate-3 hover:rotate-0 transition-all duration-500 backdrop-blur-sm border-2 border-white/30 dark:border-white/20">
