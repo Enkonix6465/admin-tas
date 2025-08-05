@@ -920,12 +920,12 @@ const Dashboard = () => {
                     {
                       label: 'Tasks Created',
                       data: [6, 4, 7, 5, 9, 8, 6], // Enhanced mock data
-                      borderColor: 'rgba(147, 51, 234, 1)',
-                      backgroundColor: 'rgba(147, 51, 234, 0.15)',
+                      borderColor: 'rgba(255, 102, 0, 1)',
+                      backgroundColor: 'rgba(255, 102, 0, 0.15)',
                       borderWidth: 4,
                       fill: true,
                       tension: 0.4,
-                      pointBackgroundColor: 'rgba(147, 51, 234, 1)',
+                      pointBackgroundColor: 'rgba(255, 102, 0, 1)',
                       pointBorderColor: '#ffffff',
                       pointBorderWidth: 3,
                       pointRadius: 7,
