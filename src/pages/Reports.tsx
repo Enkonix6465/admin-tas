@@ -598,7 +598,7 @@ const Reports = () => {
 
       // Task status distribution for pie chart
       const statusDistribution = [
-        { name: 'Completed', value: emp.completedTasks, color: '#10b981' },
+        { name: 'Completed', value: emp.completedTasks, color: '#FF6600' },
         { name: 'In Progress', value: emp.inProgressTasks, color: '#00D4FF' },
         { name: 'Pending', value: emp.pendingTasks, color: '#f59e0b' },
         { name: 'Review', value: emp.reviewTasks, color: '#8b5cf6' },
@@ -812,7 +812,7 @@ const Reports = () => {
       },
       chartData: {
         statusDistribution: [
-          { name: "Completed", value: completedTasks, color: "#10b981" },
+          { name: "Completed", value: completedTasks, color: "#FF6600" },
           { name: "In Progress", value: inProgressTasks, color: "#00D4FF" },
           { name: "Pending", value: pendingTasks, color: "#f59e0b" },
           { name: "Overdue", value: overdueTasks, color: "#ef4444" },
@@ -1227,7 +1227,7 @@ const Reports = () => {
                                 />
                                 <Legend />
                                 <Line type="monotone" dataKey="assigned" stroke="#f59e0b" strokeWidth={3} name="Tasks Assigned" />
-                                <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Tasks Completed" />
+                                <Line type="monotone" dataKey="completed" stroke="#FF6600" strokeWidth={3} name="Tasks Completed" />
                                 <Line type="monotone" dataKey="onTime" stroke="#00D4FF" strokeWidth={3} name="On-Time Completions" />
                               </LineChart>
                             </ResponsiveContainer>
@@ -1254,7 +1254,7 @@ const Reports = () => {
                                 />
                                 <Legend />
                                 <Bar dataKey="assigned" fill="#94a3b8" name="Assigned" radius={[4, 4, 0, 0]} />
-                                <Bar dataKey="completed" fill="#10b981" name="Completed" radius={[4, 4, 0, 0]} />
+                                <Bar dataKey="completed" fill="#FF6600" name="Completed" radius={[4, 4, 0, 0]} />
                                 <Bar dataKey="overdue" fill="#ef4444" name="Overdue" radius={[4, 4, 0, 0]} />
                               </BarChart>
                             </ResponsiveContainer>
@@ -1508,8 +1508,8 @@ const Reports = () => {
                                 <Radar
                                   name="**On-Time Rate**"
                                   dataKey="onTimeRate"
-                                  stroke="#10b981"
-                                  fill="#10b981"
+                                  stroke="#FF6600"
+                                  fill="#FF6600"
                                   fillOpacity={0.2}
                                   strokeWidth={3}
                                 />
@@ -1567,10 +1567,10 @@ const Reports = () => {
                                 <Line
                                   type="monotone"
                                   dataKey="completed"
-                                  stroke="#10b981"
+                                  stroke="#FF6600"
                                   strokeWidth={4}
                                   name="**Completed Tasks**"
-                                  dot={{ fill: '#10b981', strokeWidth: 2, r: 6 }}
+                                  dot={{ fill: '#FF6600', strokeWidth: 2, r: 6 }}
                                 />
                                 <Line
                                   type="monotone"
@@ -1700,7 +1700,7 @@ const Reports = () => {
                                   {reportData.chartData.reassignmentAnalysis.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={
                                       entry.reassignmentRate > 20 ? '#ef4444' :
-                                      entry.reassignmentRate > 10 ? '#f59e0b' : '#10b981'
+                                      entry.reassignmentRate > 10 ? '#f59e0b' : '#FF6600'
                                     } />
                                   ))}
                                 </Pie>
@@ -1896,7 +1896,7 @@ const Reports = () => {
                             }}
                           />
                           <Legend />
-                          <Line type="monotone" dataKey="completed" stroke="#10b981" strokeWidth={3} name="Tasks Completed" />
+                          <Line type="monotone" dataKey="completed" stroke="#FF6600" strokeWidth={3} name="Tasks Completed" />
                           <Line type="monotone" dataKey="created" stroke="#00D4FF" strokeWidth={3} name="Tasks Created" />
                           <Line type="monotone" dataKey="productivity" stroke="#f59e0b" strokeWidth={3} name="Productivity %" />
                         </LineChart>
