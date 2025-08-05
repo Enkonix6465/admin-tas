@@ -61,10 +61,10 @@ export default function TeamManager() {
 
   const { user } = useAuthStore();
 
-  // Color options for teams - purple theme variations
+  // Color options for teams - neon blue/orange and purple variations
   const colorOptions = [
-    "#7C3AED", "#8B5CF6", "#A855F7", "#C084FC", "#DDD6FE",
-    "#6D28D9", "#5B21B6", "#4C1D95", "#6366F1", "#8B5CF6"
+    "#00D4FF", "#FF6600", "#7C3AED", "#8B5CF6", "#A855F7",
+    "#06B6D4", "#F97316", "#6D28D9", "#5B21B6", "#4C1D95"
   ];
 
   useEffect(() => {
