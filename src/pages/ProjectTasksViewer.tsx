@@ -167,7 +167,7 @@ export default function ProjectTasksViewer() {
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 mb-3 cursor-pointer hover:shadow-md transition-shadow"
+        className="liquid-glass-card p-3 mb-3 cursor-pointer hover:shadow-md transition-shadow"
       >
         <div className="flex items-start justify-between mb-2">
           <h4 className="font-medium text-gray-900 dark:text-gray-100 text-sm line-clamp-2">
