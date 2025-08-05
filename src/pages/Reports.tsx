@@ -423,6 +423,30 @@ const Reports = () => {
       };
     });
 
+    // Helper function to calculate individual performance score based on pending, ontime and late
+    function calculateIndividualPerformanceScore(pendingCount, onTimeCount, lateCount, totalTasks) {
+      if (totalTasks === 0) return 0;
+
+      // Performance score calculation based on task status distribution
+      const onTimeWeight = 50; // 50% weight for on-time completion
+      const pendingPenalty = 20; // 20% penalty for pending tasks
+      const latePenalty = 30; // 30% penalty for late tasks
+
+      // Calculate percentages
+      const onTimePercentage = (onTimeCount / totalTasks) * 100;
+      const pendingPercentage = (pendingCount / totalTasks) * 100;
+      const latePercentage = (lateCount / totalTasks) * 100;
+
+      // Calculate score: start with 100, add bonus for on-time, subtract penalties
+      let score = 100;
+      score += (onTimePercentage * onTimeWeight) / 100; // Bonus for on-time completion
+      score -= (pendingPercentage * pendingPenalty) / 100; // Penalty for pending tasks
+      score -= (latePercentage * latePenalty) / 100; // Penalty for late tasks
+
+      // Ensure score is between 0 and 100
+      return Math.max(0, Math.min(100, Math.round(score)));
+    }
+
     // Helper function to calculate timing-based performance score
     function calculateTimingScore(tasks, onTimeTasks, lateTasks, overdueTasks, pendingOverdueTasks) {
       if (tasks.length === 0) return 0;
