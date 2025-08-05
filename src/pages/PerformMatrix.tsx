@@ -637,49 +637,91 @@ export default function EmployeePerformancePage() {
                   </ResponsiveContainer>
                 </div>
 
-                {/* Quality vs Productivity Matrix */}
+                {/* Performance Dimensions Radar */}
                 <div className="liquid-glass-card">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      Quality vs Productivity Matrix
+                      Performance Dimensions
                     </h3>
                     <div className="flex items-center gap-1">
                       <Trophy className="w-4 h-4 text-yellow-500" />
                       <span className="text-sm text-gray-600 dark:text-gray-400">
-                        {qualityProductivityData.length} tasks analyzed
+                        Multi-dimensional analysis
                       </span>
                     </div>
                   </div>
                   <ResponsiveContainer width="100%" height={300}>
-                    <ScatterChart data={qualityProductivityData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis
-                        type="number"
-                        dataKey="productivity"
-                        name="Productivity"
-                        domain={[0, 120]}
-                        tick={{ fontSize: 10 }}
+                    <RadarChart data={[
+                      {
+                        dimension: 'Task Completion',
+                        value: performanceData.completionRate || 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'On-Time Delivery',
+                        value: performanceData.onTimeRate || 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Quality Score',
+                        value: qualityProductivityData.length > 0 ?
+                          qualityProductivityData.reduce((acc, item) => acc + item.quality, 0) / qualityProductivityData.length : 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Productivity',
+                        value: qualityProductivityData.length > 0 ?
+                          (qualityProductivityData.reduce((acc, item) => acc + item.productivity, 0) / qualityProductivityData.length) * 100 / 120 : 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Reliability',
+                        value: performanceData.total > 0 ?
+                          Math.max(0, 100 - (performanceData.reassigned / performanceData.total * 100)) : 0,
+                        fullMark: 100
+                      },
+                      {
+                        dimension: 'Consistency',
+                        value: performanceTrends.length > 0 ?
+                          100 - (Math.max(...performanceTrends.map(t => t.performance)) - Math.min(...performanceTrends.map(t => t.performance))) : 0,
+                        fullMark: 100
+                      }
+                    ]}>
+                      <PolarGrid
+                        stroke={document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'}
+                        strokeOpacity={0.6}
                       />
-                      <YAxis
-                        type="number"
-                        dataKey="quality"
-                        name="Quality"
-                        domain={[40, 100]}
-                        tick={{ fontSize: 10 }}
+                      <PolarAngleAxis
+                        dataKey="dimension"
+                        tick={{
+                          fontSize: 11,
+                          fill: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#374151',
+                          fontWeight: 500
+                        }}
+                      />
+                      <PolarRadiusAxis
+                        angle={90}
+                        domain={[0, 100]}
+                        tick={{ fontSize: 9, fill: '#9ca3af' }}
+                        tickCount={5}
+                      />
+                      <Radar
+                        name="Performance Score"
+                        dataKey="value"
+                        stroke="#8b5cf6"
+                        fill="#8b5cf6"
+                        fillOpacity={0.3}
+                        strokeWidth={3}
+                        dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
                       />
                       <Tooltip
-                        cursor={{ strokeDasharray: '3 3' }}
-                        content={({ active, payload }) => {
+                        content={({ active, payload, label }) => {
                           if (active && payload && payload[0]) {
-                            const data = payload[0].payload;
                             return (
                               <div className="bg-white dark:bg-gray-800 p-3 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg">
-                                <p className="font-medium text-gray-900 dark:text-gray-100">{data.title}</p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Quality: {data.quality?.toFixed(1)}%
-                                </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  Productivity: {data.productivity?.toFixed(1)}
+                                <p className="font-medium text-gray-900 dark:text-gray-100">{label}</p>
+                                <p className="text-sm text-purple-600 dark:text-purple-400">
+                                  Score: {payload[0].value?.toFixed(1)}%
                                 </p>
                               </div>
                             );
@@ -687,8 +729,7 @@ export default function EmployeePerformancePage() {
                           return null;
                         }}
                       />
-                      <Scatter dataKey="quality" fill="#8884d8" />
-                    </ScatterChart>
+                    </RadarChart>
                   </ResponsiveContainer>
                 </div>
 
