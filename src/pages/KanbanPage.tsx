@@ -811,7 +811,7 @@ const KanbanPage = () => {
                     } else if (mode.id === 'table') {
                       toast.success('Switched to Table view! 📊');
                     } else if (mode.id === 'board') {
-                      toast.success('Switched to Board view! ��');
+                      toast.success('Switched to Board view! 📋');
                     }
                   }}
                   className={`flex items-center gap-1 px-3 py-1.5 text-xs rounded-lg transition-all ${
@@ -1639,7 +1639,7 @@ const KanbanPage = () => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 40 }}
               transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="relative w-full max-w-4xl bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-gray-700"
+              className="relative w-full max-w-4xl bg-gradient-to-br from-white to-gray-50 dark:from-black/95 dark:to-black/90 rounded-3xl shadow-2xl max-h-[90vh] overflow-y-auto border border-gray-200 dark:border-purple-500/30"
             >
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white relative overflow-hidden">
                 <div className="absolute inset-0 bg-black/10"></div>
