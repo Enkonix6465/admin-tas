@@ -694,7 +694,7 @@ const KanbanPage = () => {
             {task.due_date && (
               <div className={`flex items-center gap-1 ${isOverdue ? 'text-red-600 dark:text-red-400' : 'text-gray-500 dark:text-gray-400'}`}>
                 <Calendar className="w-3 h-3" />
-                <span className="text-xs">{new Date(task.due_date).toLocaleDateString()}</span>
+                <span className="text-xs">{task.due_date ? new Date(task.due_date).toLocaleDateString() : 'No date'}</span>
               </div>
             )}
             {task.comments?.length > 0 && (
