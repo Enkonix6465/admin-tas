@@ -467,7 +467,7 @@ export default function EmployeeManagement() {
               <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                 {filteredEmployees.map((emp, idx) => (
                   <motion.tr
-                    key={emp.id}
+                    key={`employee-${emp.id}-${idx}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: idx * 0.05 }}
