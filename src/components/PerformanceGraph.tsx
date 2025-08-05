@@ -78,16 +78,15 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
         {/* On-Time Rate */}
         <motion.div
           whileHover={{ scale: 1.05 }}
-          className={`${getPerformanceBg(onTimeRate)} rounded-xl p-4 border border-gray-200 dark:border-purple-500/30`}
+          className="liquid-glass-stats group cursor-pointer"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <div className="flex items-center justify-between mb-2 relative z-10">
+            <span className="text-sm font-medium text-gray-600 dark:text-purple-300/90">
               On-Time Rate
             </span>
-            <Clock className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </div>
-          <div className="flex items-baseline gap-1">
-            <span className={`text-2xl font-bold ${getPerformanceColor(onTimeRate)}`}>
+          <div className="flex items-baseline gap-1 relative z-10">
+            <span className="text-3xl font-bold text-gray-900 dark:text-white">
               {onTimeRate}%
             </span>
           </div>
