@@ -117,6 +117,7 @@ const AdminTicketsPage = () => {
 
   const uniqueProjectNames = Array.from(new Set(Object.values(projectsMap)));
   const uniqueStatuses = Array.from(new Set(tickets.map((t) => t.status)));
+  const uniqueUsers = Array.from(new Set(tickets.map((t) => t.createdByName).filter(Boolean)));
 
   const getReviewColor = (review: string) => {
     switch (review?.toLowerCase()) {
