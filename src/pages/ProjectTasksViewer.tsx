@@ -492,7 +492,7 @@ export default function ProjectTasksViewer() {
               {/* Table View */}
               {activeTab === 'table' && (
                 <div className="liquid-glass-card overflow-hidden">
-                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-purple-500/30">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         Tasks for {selectedProject?.name}
