@@ -45,6 +45,14 @@ export default function ProjectDashboard() {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showNewProjectModal, setShowNewProjectModal] = useState(false);
+  const [newProject, setNewProject] = useState({
+    name: '',
+    description: '',
+    startDate: '',
+    deadline: '',
+    teamId: ''
+  });
 
   const { currentUser } = useAuthStore();
 
