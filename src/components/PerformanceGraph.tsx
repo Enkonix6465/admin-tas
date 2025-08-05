@@ -57,8 +57,8 @@ export const PerformanceGraph: React.FC<PerformanceGraphProps> = ({
               Overall Performance
             </span>
           </div>
-          <div className="flex items-baseline gap-1">
-            <span className={`text-2xl font-bold ${getPerformanceColor(overallPerformance)}`}>
+          <div className="flex items-baseline gap-1 relative z-10">
+            <span className="text-3xl font-bold text-gray-900 dark:text-white">
               {overallPerformance}%
             </span>
           </div>
