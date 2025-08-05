@@ -676,7 +676,6 @@ const Analytics = () => {
                             <stop offset="95%" stopColor={colors.info} stopOpacity={0.1}/>
                           </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
                         <XAxis dataKey="date" stroke="#6b7280" tick={{ fontSize: 10 }} />
                         <YAxis stroke="#6b7280" tick={{ fontSize: 10 }} />
                         <Tooltip
