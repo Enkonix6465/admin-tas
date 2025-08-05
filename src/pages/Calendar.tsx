@@ -928,17 +928,17 @@ const Calendar = () => {
                 {getEventsForDate(selectedDate).map((event, index) => (
                   <div
                     key={index}
-                    className="flex items-start gap-3 p-3 bg-purple-50/60 backdrop-blur-sm rounded-xl border border-purple-200/30"
+                    className="flex items-start gap-3 p-3 bg-purple-50/60 dark:bg-purple-900/60 backdrop-blur-sm rounded-xl border border-purple-200/30 dark:border-purple-600/30"
                   >
-                    <div 
+                    <div
                       className="w-3 h-3 rounded-full mt-1 flex-shrink-0"
                       style={{ backgroundColor: getEventColor(event) }}
                     />
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-purple-900 mb-1">
+                      <div className="font-medium text-purple-900 dark:text-purple-100 mb-1">
                         {event.title}
                       </div>
-                      <div className="flex items-center gap-3 text-sm text-purple-600">
+                      <div className="flex items-center gap-3 text-sm text-purple-600 dark:text-purple-400">
                         <span className="capitalize">{event.type}</span>
                         <span>•</span>
                         <span className="capitalize">{event.status}</span>
