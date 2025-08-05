@@ -704,8 +704,8 @@ export default function TeamManager() {
                         <div
                           key={emp.id}
                           onClick={() => toggleMember(emp.id)}
-                          className={`p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0 transition-colors ${
-                            isSelected ? "bg-purple-50 dark:bg-purple-900/20" : ""
+                          className={`p-3 cursor-pointer hover:bg-cyan-50 dark:hover:bg-purple-700/50 flex items-center gap-3 border-b border-cyan-300/50 dark:border-purple-500/40 last:border-b-0 transition-colors ${
+                            isSelected ? "bg-cyan-100 dark:bg-purple-900/30" : ""
                           }`}
                         >
                           <img
