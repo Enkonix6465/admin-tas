@@ -1368,18 +1368,18 @@ const KanbanPage = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          {task.progress > 0 ? (
+                          {task.progress && Number.isFinite(task.progress) && task.progress > 0 ? (
                             <div className="flex items-center gap-2">
-                              <div className="w-16 bg-purple-100/60 dark:bg-purple-900/40 rounded-full h-2">
+                              <div className="w-16 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                 <div
-                                  className="bg-gradient-to-r from-purple-500 to-purple-600 h-2 rounded-full transition-all duration-300"
-                                  style={{ width: `${task.progress}%` }}
+                                  className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                                  style={{ width: `${Math.min(Math.max(task.progress || 0, 0), 100)}%` }}
                                 />
                               </div>
-                              <span className="text-xs text-purple-600 dark:text-purple-400">{task.progress}%</span>
+                              <span className="text-xs text-gray-600 dark:text-gray-400">{Math.round(task.progress || 0)}%</span>
                             </div>
                           ) : (
-                            <span className="text-xs text-purple-400">Not started</span>
+                            <span className="text-xs text-gray-400">Not started</span>
                           )}
                         </td>
                         <td className="px-6 py-4">
