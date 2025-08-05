@@ -389,7 +389,7 @@ const ProjectDocCreator = () => {
           id: "2",
           name: "Mobile Banking App",
           description: "Next-generation banking experience",
-          color: "#10B981"
+          color: "#FF6600"
         },
         {
           id: "3",
