@@ -387,7 +387,7 @@ const Calendar = () => {
             >
               Calendar
             </button>
-            <span>•</span>
+            <span>��</span>
             <button
               onClick={() => toggleView("timeline")}
               className={`px-2 py-1 rounded transition-colors ${
@@ -445,7 +445,7 @@ const Calendar = () => {
         {/* Compact Header Bar */}
         <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 p-3 flex items-center justify-between flex-shrink-0 shadow-sm dark:shadow-purple-500/20">
           <div className="flex items-center gap-3">
-            <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
               {getDateLabel()}
             </h1>
             <div className="flex items-center gap-1">
