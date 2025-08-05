@@ -312,12 +312,12 @@ const AdminTicketsPage = () => {
                       )
                     : "N/A"}
                 </td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">
                   {teamLeadMap[ticket.teamLeadId] || ticket.teamLeadId}
                 </td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30">
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40">
                   <select
-                    className={`border border-gray-200 dark:border-purple-500/30 px-2 py-1 w-full rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100 ${getReviewColor(
+                    className={`border border-cyan-300 dark:border-orange-500/40 px-2 py-1 w-full rounded bg-white dark:bg-black/95 text-gray-900 dark:text-white ${getReviewColor(
                       ticket.review
                     )}`}
                     value={ticket.review || ""}
