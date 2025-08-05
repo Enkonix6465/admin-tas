@@ -910,16 +910,16 @@ const Calendar = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="backdrop-blur-xl bg-white/95 rounded-2xl border border-purple-200/50 p-6 max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+              className="backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 rounded-2xl border border-purple-200/50 dark:border-purple-600/50 p-6 max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 rounded-2xl" />
-              
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/30 dark:from-purple-900/50 dark:to-gray-900/30 rounded-2xl" />
+
               <div className="relative mb-4">
-                <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">
                   {format(selectedDate, "EEEE, MMMM d, yyyy")}
                 </h3>
-                <p className="text-sm text-purple-600 mt-1">
+                <p className="text-sm text-purple-600 dark:text-purple-400 mt-1">
                   Click outside to close
                 </p>
               </div>
