@@ -782,7 +782,7 @@ const KanbanPage = () => {
                     } else if (mode.id === 'timeline') {
                       toast.success('Switched to Timeline view! ⏰');
                     } else if (mode.id === 'table') {
-                      toast.success('Switched to Table view! 📊');
+                      toast.success('Switched to Table view! ��');
                     } else if (mode.id === 'board') {
                       toast.success('Switched to Board view! 📋');
                     }
@@ -1316,7 +1316,7 @@ const KanbanPage = () => {
                         key={task.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.02 }}
+                        transition={{ delay: (typeof index === 'number' ? index : 0) * 0.02 }}
                         className="bg-white/60 dark:bg-gray-900/60 hover:bg-purple-50/60 dark:hover:bg-purple-900/30 transition-colors cursor-pointer"
                         onClick={() => {
                           setSelectedTask(task);
