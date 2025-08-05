@@ -208,7 +208,7 @@ export default function EmployeeManagement() {
               value={form[name as keyof Employee]}
               onChange={handleChange}
               placeholder={placeholder}
-              className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-purple-800 text-gray-900 dark:text-purple-100 placeholder-gray-500 dark:placeholder-purple-300/70"
+              className="border border-gray-200 dark:border-purple-500/30 p-2 rounded bg-white dark:bg-black/95 text-gray-900 dark:text-purple-100 placeholder-gray-500 dark:placeholder-purple-300/70"
             />
           ))}
           <select
