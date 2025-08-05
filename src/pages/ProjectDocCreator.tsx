@@ -46,7 +46,6 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { db, auth } from "../lib/firebase";
-import PageHeader from "../components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FileText,
@@ -91,6 +90,7 @@ import {
   Linkedin,
   CheckCircle,
   X,
+  Activity
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -471,7 +471,7 @@ const ProjectDocCreator = () => {
       };
 
       await setDoc(docRef, docData, { merge: true });
-      toast.success("Document saved successfully! ��");
+      toast.success("Document saved successfully! 📄");
       setSelectedDoc({ id: docId, ...docData });
       fetchDocuments(selectedProject.id);
     } catch (error) {
@@ -525,29 +525,6 @@ const ProjectDocCreator = () => {
     template.category.toLowerCase() === docTypeFilter.toLowerCase()
   );
 
-  const filterContent = (
-    <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Document Type
-        </label>
-        <select
-          className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={docTypeFilter}
-          onChange={(e) => setDocTypeFilter(e.target.value)}
-        >
-          <option value="all">All Types</option>
-          <option value="business">Business</option>
-          <option value="meeting">Meeting</option>
-          <option value="technical">Technical</option>
-          <option value="report">Report</option>
-          <option value="documentation">Documentation</option>
-          <option value="creative">Creative</option>
-        </select>
-      </div>
-    </div>
-  );
-
   const tabs = [
     {
       id: "documents",
@@ -563,28 +540,41 @@ const ProjectDocCreator = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400 font-medium">Loading documents...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="h-full bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
-      <PageHeader
-        title="Creative Doc Studio"
-        subtitle={selectedProject ? `• ${selectedProject.name}` : ""}
-        status="Secure"
-        statusColor="bg-green-100 text-green-700"
-        tabs={tabs}
-        onTabChange={setActiveTab}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchPlaceholder="Search documents and templates..."
-        showFilters={true}
-        filterOpen={filterOpen}
-        onFilterToggle={() => setFilterOpen(!filterOpen)}
-        filterContent={filterContent}
-        customActions={
-          <div className="flex items-center gap-2">
+    <div className="h-full bg-gray-50 dark:bg-transparent flex flex-col relative overflow-hidden">
+      {/* Header */}
+      <div className="liquid-glass border-b border-gray-200 dark:border-purple-500/30 px-6 py-4 shadow-sm dark:shadow-purple-500/20 relative z-10">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-semibold text-gray-900 dark:text-purple-100">
+              Creative Doc Studio
+            </h1>
+            <span className="px-3 py-1 text-xs rounded-full font-medium bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30 flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+              Secure Studio
+            </span>
+            {selectedProject && (
+              <span className="px-3 py-1 text-xs rounded-full font-medium bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30">
+                {selectedProject.name}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
             <button
               onClick={handleNewDocument}
               disabled={!selectedProject}
-              className="flex items-center gap-2 px-3 py-2 text-sm bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 disabled:bg-gray-300 transition-all shadow-lg hover:shadow-xl"
+              className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
             >
               <Plus className="w-4 h-4" />
               New Document
@@ -592,30 +582,73 @@ const ProjectDocCreator = () => {
             {selectedDoc && (
               <button
                 onClick={() => setShowShareModal(true)}
-                className="flex items-center gap-2 px-3 py-2 text-sm bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg hover:shadow-xl"
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-white dark:bg-purple-500/20 text-purple-700 dark:text-purple-300 hover:bg-purple-50 dark:hover:bg-purple-500/30 border border-purple-200 dark:border-purple-500/30 rounded-lg transition-all duration-200"
               >
                 <Share className="w-4 h-4" />
                 Share
               </button>
             )}
           </div>
-        }
-      />
+        </div>
+
+        {/* Tabs and Search */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3 border-b-2 border-purple-500 pb-2">
+              <FileText className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <span className="text-base font-medium text-purple-600 dark:text-purple-400">Document Studio</span>
+            </div>
+            <div className="flex items-center gap-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors ${
+                    activeTab === tab.id
+                      ? "bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400"
+                      : "text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"
+                  }`}
+                >
+                  <tab.icon className="w-4 h-4" />
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-purple-300" />
+              <input
+                type="text"
+                placeholder="Search documents and templates..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 pr-4 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 placeholder:dark:text-purple-300/70 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm dark:shadow-purple-500/20 backdrop-blur-sm w-64"
+              />
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2 bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30 rounded-lg text-sm">
+              <Activity className="w-4 h-4" />
+              <span className="font-medium">Studio Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="flex-1 overflow-hidden flex">
         {/* Enhanced Sidebar */}
-        <div className="w-80 border-r border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl flex flex-col">
+        <div className="w-80 border-r border-gray-200 dark:border-purple-500/30 liquid-glass flex flex-col">
           {/* Project Selection */}
-          <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
-              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-purple-100">
                 Select Project
               </h2>
             </div>
-            <div className="space-y-2 max-h-48 overflow-y-auto">
+            <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
               {projects.map((project) => (
                 <motion.button
                   key={project.id}
@@ -624,20 +657,20 @@ const ProjectDocCreator = () => {
                   onClick={() => handleProjectSelect(project)}
                   className={`w-full text-left p-3 rounded-xl border-2 transition-all ${
                     selectedProject?.id === project.id
-                      ? "border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 shadow-lg"
-                      : "border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      ? "border-purple-500 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shadow-lg"
+                      : "border-gray-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-purple-500/10"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <div 
                       className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: project.color || '#3B82F6' }}
+                      style={{ backgroundColor: project.color || '#8B5CF6' }}
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate">
+                      <p className="font-semibold text-gray-900 dark:text-purple-100 text-sm truncate">
                         {project.name}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      <p className="text-xs text-gray-500 dark:text-purple-300/70 truncate">
                         {project.description}
                       </p>
                     </div>
@@ -654,34 +687,34 @@ const ProjectDocCreator = () => {
               {activeTab === "documents" ? (
                 <>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-purple-100 flex items-center gap-2">
                       <FileText className="w-5 h-5" />
                       Documents
                     </h3>
-                    <span className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full font-medium">
+                    <span className="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-full font-medium border border-blue-200 dark:border-blue-500/30">
                       {filteredDocuments.length}
                     </span>
                   </div>
 
                   {loading ? (
                     <div className="text-center py-8">
-                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent mx-auto mb-3"></div>
-                      <p className="text-gray-500">Loading documents...</p>
+                      <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-600 border-t-transparent mx-auto mb-3"></div>
+                      <p className="text-gray-500 dark:text-purple-300/70">Loading documents...</p>
                     </div>
                   ) : filteredDocuments.length === 0 ? (
                     <div className="text-center py-8">
-                      <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                        <FileText className="w-8 h-8 text-gray-400" />
+                      <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-purple-900/20 dark:to-blue-900/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <FileText className="w-8 h-8 text-gray-400 dark:text-purple-400" />
                       </div>
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                      <h3 className="text-sm font-semibold text-gray-900 dark:text-purple-100 mb-2">
                         No documents yet
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                      <p className="text-sm text-gray-500 dark:text-purple-300/70 mb-4">
                         Create your first document or use a template
                       </p>
                       <button
                         onClick={() => setActiveTab("templates")}
-                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                        className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 text-sm font-medium"
                       >
                         Browse Templates →
                       </button>
@@ -695,30 +728,30 @@ const ProjectDocCreator = () => {
                           onClick={() => handleDocumentSelect(doc)}
                           className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
                             selectedDoc?.id === doc.id
-                              ? "border-blue-500 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 shadow-lg"
-                              : "border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                              ? "border-purple-500 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 shadow-lg"
+                              : "border-gray-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-purple-500/10"
                           }`}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
                               <FileText className="w-5 h-5 text-white" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate">
+                              <h4 className="font-semibold text-gray-900 dark:text-purple-100 text-sm truncate">
                                 {doc.title || "Untitled Document"}
                               </h4>
-                              <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-purple-300/70">
                                 <User className="w-3 h-3" />
                                 {doc.createdBy}
                               </div>
-                              <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                              <div className="flex items-center gap-2 mt-1 text-xs text-gray-500 dark:text-purple-300/70">
                                 <Calendar className="w-3 h-3" />
                                 {new Date(doc.updatedAt).toLocaleDateString()}
                               </div>
                               {doc.template && (
                                 <div className="flex items-center gap-1 mt-1">
                                   <Layout className="w-3 h-3 text-purple-500" />
-                                  <span className="text-xs text-purple-600 font-medium">Template</span>
+                                  <span className="text-xs text-purple-600 dark:text-purple-400 font-medium">Template</span>
                                 </div>
                               )}
                             </div>
@@ -731,13 +764,29 @@ const ProjectDocCreator = () => {
               ) : (
                 <>
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-purple-100 flex items-center gap-2">
                       <Layout className="w-5 h-5" />
                       Templates
                     </h3>
-                    <span className="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded-full font-medium">
+                    <span className="px-2 py-1 text-xs bg-purple-100 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400 rounded-full font-medium border border-purple-200 dark:border-purple-500/30">
                       {filteredTemplates.length}
                     </span>
+                  </div>
+
+                  <div className="mb-4">
+                    <select
+                      className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-[rgba(15,17,41,0.6)] text-gray-900 dark:text-purple-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                      value={docTypeFilter}
+                      onChange={(e) => setDocTypeFilter(e.target.value)}
+                    >
+                      <option value="all">All Categories</option>
+                      <option value="business">Business</option>
+                      <option value="meeting">Meeting</option>
+                      <option value="technical">Technical</option>
+                      <option value="report">Report</option>
+                      <option value="documentation">Documentation</option>
+                      <option value="creative">Creative</option>
+                    </select>
                   </div>
 
                   <div className="space-y-3">
@@ -746,21 +795,21 @@ const ProjectDocCreator = () => {
                         key={template.id}
                         whileHover={{ scale: 1.02, x: 4 }}
                         onClick={() => handleTemplateSelect(template)}
-                        className="p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all group"
+                        className="p-4 rounded-xl border-2 border-gray-200 dark:border-purple-500/30 hover:border-purple-300 dark:hover:border-purple-500/50 hover:bg-gray-50 dark:hover:bg-purple-500/10 cursor-pointer transition-all group"
                       >
                         <div className="flex items-start gap-3">
                           <div className={`w-10 h-10 bg-gradient-to-br ${template.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
                             <template.icon className="w-5 h-5 text-white" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 text-sm group-hover:text-purple-600 transition-colors">
+                            <h4 className="font-semibold text-gray-900 dark:text-purple-100 text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                               {template.name}
                             </h4>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                            <p className="text-xs text-gray-500 dark:text-purple-300/70 mt-1 line-clamp-2">
                               {template.description}
                             </p>
                             <div className="flex items-center gap-2 mt-2">
-                              <span className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
+                              <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-purple-900/30 text-gray-600 dark:text-purple-300 rounded-full border border-gray-200 dark:border-purple-500/30">
                                 {template.category}
                               </span>
                               <Sparkles className="w-3 h-3 text-yellow-500" />
@@ -781,7 +830,7 @@ const ProjectDocCreator = () => {
           {selectedProject ? (
             <>
               {/* Enhanced Editor Header */}
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl">
+              <div className="px-6 py-4 border-b border-gray-200 dark:border-purple-500/30 liquid-glass">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex-1 min-w-0">
                     <input
@@ -789,7 +838,7 @@ const ProjectDocCreator = () => {
                       placeholder="Enter your document title..."
                       value={docTitle}
                       onChange={(e) => setDocTitle(e.target.value)}
-                      className="text-2xl font-bold text-gray-900 dark:text-gray-100 bg-transparent border-none outline-none w-full placeholder-gray-400 focus:placeholder-gray-300"
+                      className="text-2xl font-bold text-gray-900 dark:text-purple-100 bg-transparent border-none outline-none w-full placeholder-gray-400 dark:placeholder-purple-300/50 focus:placeholder-purple-300/30"
                     />
                   </div>
                   <div className="flex items-center gap-3">
@@ -797,8 +846,8 @@ const ProjectDocCreator = () => {
                       onClick={() => setPreviewMode(!previewMode)}
                       className={`flex items-center gap-2 px-4 py-2 text-sm border-2 rounded-lg transition-all ${
                         previewMode 
-                          ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                          : 'border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:border-blue-300'
+                          ? 'border-purple-500 bg-purple-50 dark:bg-purple-500/20 text-purple-700 dark:text-purple-400' 
+                          : 'border-gray-200 dark:border-purple-500/30 text-gray-700 dark:text-purple-300 hover:border-purple-300 dark:hover:border-purple-500/50'
                       }`}
                     >
                       {previewMode ? (
@@ -816,16 +865,20 @@ const ProjectDocCreator = () => {
                     <button
                       onClick={saveDocument}
                       disabled={loading || !content.trim() || !docTitle.trim()}
-                      className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 disabled:bg-gray-300 disabled:from-gray-300 disabled:to-gray-300 transition-all shadow-lg hover:shadow-xl"
+                      className="flex items-center gap-2 px-4 py-2 text-sm bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
                     >
-                      <Save className="w-4 h-4" />
+                      {loading ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : (
+                        <Save className="w-4 h-4" />
+                      )}
                       {loading ? "Saving..." : "Save"}
                     </button>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400">
+                  <div className="flex items-center gap-4 text-gray-500 dark:text-purple-300/70">
                     <div className="flex items-center gap-2">
                       <Lock className="w-4 h-4" />
                       <span>Secure document</span>
@@ -833,11 +886,11 @@ const ProjectDocCreator = () => {
                     {selectedTemplate && (
                       <div className="flex items-center gap-2">
                         <Layout className="w-4 h-4 text-purple-500" />
-                        <span className="text-purple-600">From {selectedTemplate.name} template</span>
+                        <span className="text-purple-600 dark:text-purple-400">From {selectedTemplate.name} template</span>
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-gray-500">
+                  <div className="flex items-center gap-2 text-gray-500 dark:text-purple-300/70">
                     <Clock className="w-4 h-4" />
                     <span>Auto-saved</span>
                   </div>
@@ -848,25 +901,25 @@ const ProjectDocCreator = () => {
               <div className="flex-1 overflow-hidden">
                 {previewMode ? (
                   <div
-                    className="h-full overflow-y-auto p-8 bg-white dark:bg-gray-800 relative"
+                    className="h-full overflow-y-auto p-8 liquid-glass relative"
                     onContextMenu={(e) => e.preventDefault()}
                     onCopy={(e) => e.preventDefault()}
                     style={{ userSelect: "none" }}
                   >
                     {/* Enhanced Watermark */}
                     <div
-                      className="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center text-6xl font-bold text-gray-500 transform rotate-45"
+                      className="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center text-6xl font-bold text-gray-500 dark:text-purple-500 transform rotate-45"
                       style={{ zIndex: 1 }}
                     >
                       CONFIDENTIAL - {userEmail}
                     </div>
                     
                     {/* Enhanced Document Header */}
-                    <div className="mb-8 pb-6 border-b-2 border-gray-200 dark:border-gray-700 relative z-10">
-                      <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+                    <div className="mb-8 pb-6 border-b-2 border-gray-200 dark:border-purple-500/30 relative z-10">
+                      <h1 className="text-4xl font-bold text-gray-900 dark:text-purple-100 mb-4">
                         {docTitle || "Untitled Document"}
                       </h1>
-                      <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600 dark:text-gray-400">
+                      <div className="flex flex-wrap items-center gap-6 text-sm text-gray-600 dark:text-purple-300/80">
                         <div className="flex items-center gap-2">
                           <Briefcase className="w-4 h-4" />
                           <span>Project: {selectedProject.name}</span>
@@ -882,7 +935,7 @@ const ProjectDocCreator = () => {
                         {selectedTemplate && (
                           <div className="flex items-center gap-2">
                             <Layout className="w-4 h-4 text-purple-500" />
-                            <span className="text-purple-600">Template: {selectedTemplate.name}</span>
+                            <span className="text-purple-600 dark:text-purple-400">Template: {selectedTemplate.name}</span>
                           </div>
                         )}
                       </div>
@@ -895,7 +948,7 @@ const ProjectDocCreator = () => {
                     />
                   </div>
                 ) : (
-                  <div className="h-full p-6 bg-white dark:bg-gray-800">
+                  <div className="h-full p-6 liquid-glass">
                     <QuillEditor
                       value={content}
                       onChange={setContent}
@@ -937,18 +990,18 @@ const ProjectDocCreator = () => {
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center bg-white dark:bg-gray-800">
+            <div className="flex-1 flex items-center justify-center liquid-glass">
               <div className="text-center max-w-md">
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-24 h-24 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <Sparkles className="w-12 h-12 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-purple-100 mb-3">
                   Welcome to Creative Doc Studio
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                <p className="text-gray-600 dark:text-purple-300/80 mb-6">
                   Choose a project from the sidebar to start creating amazing documents with our templates and tools
                 </p>
-                <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
+                <div className="flex items-center justify-center gap-4 text-sm text-gray-500 dark:text-purple-300/70">
                   <div className="flex items-center gap-2">
                     <Layout className="w-4 h-4" />
                     <span>Professional Templates</span>
@@ -1009,7 +1062,7 @@ const ProjectDocCreator = () => {
                         name="access"
                         checked={!shareSettings.public}
                         onChange={() => setShareSettings(prev => ({ ...prev, public: false }))}
-                        className="text-blue-600"
+                        className="text-purple-600"
                       />
                       <div>
                         <p className="font-medium">Private</p>
@@ -1022,7 +1075,7 @@ const ProjectDocCreator = () => {
                         name="access"
                         checked={shareSettings.public}
                         onChange={() => setShareSettings(prev => ({ ...prev, public: true }))}
-                        className="text-blue-600"
+                        className="text-purple-600"
                       />
                       <div>
                         <p className="font-medium">Public</p>
@@ -1042,7 +1095,7 @@ const ProjectDocCreator = () => {
                         type="checkbox"
                         checked={shareSettings.allowComments}
                         onChange={(e) => setShareSettings(prev => ({ ...prev, allowComments: e.target.checked }))}
-                        className="text-blue-600"
+                        className="text-purple-600"
                       />
                       <span className="text-sm">Allow comments</span>
                     </label>
@@ -1051,7 +1104,7 @@ const ProjectDocCreator = () => {
                         type="checkbox"
                         checked={shareSettings.allowDownload}
                         onChange={(e) => setShareSettings(prev => ({ ...prev, allowDownload: e.target.checked }))}
-                        className="text-blue-600"
+                        className="text-purple-600"
                       />
                       <span className="text-sm">Allow download</span>
                     </label>
