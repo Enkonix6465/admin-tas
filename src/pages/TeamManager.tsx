@@ -261,7 +261,7 @@ export default function TeamManager() {
     setTeamLead("");
     setEditId(null);
     setSearch("");
-    setTeamColor("#7C3AED");
+    setTeamColor("#00D4FF");
   };
 
   const handleEdit = (team) => {
