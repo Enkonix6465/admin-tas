@@ -455,31 +455,35 @@ function Layout() {
                   <div className="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-black/95 border border-gray-200 dark:border-purple-500/30 rounded shadow-lg z-[9999] p-2">
                     <div className="space-y-1">
                       <div className="px-2 py-1 text-xs font-medium text-gray-700 dark:text-purple-200">Recent Projects</div>
-                      <button
+                      <Link
+                        to="/KanbanPage"
                         onClick={() => setProjectOpen(false)}
-                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100"
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100 block"
                       >
                         📋 Project Board
-                      </button>
-                      <button
+                      </Link>
+                      <Link
+                        to="/ProjectDashboard"
                         onClick={() => setProjectOpen(false)}
-                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100"
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100 block"
                       >
-                        🚀 Product Launch Q4
-                      </button>
-                      <button
+                        🚀 Product Dashboard
+                      </Link>
+                      <Link
+                        to="/ProjectTasksViewer"
                         onClick={() => setProjectOpen(false)}
-                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100"
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded dark:text-purple-100 block"
                       >
-                        💼 Client Portal
-                      </button>
+                        ���� Project Tasks
+                      </Link>
                       <hr className="my-1 border-gray-200 dark:border-purple-500/30" />
-                      <button
+                      <Link
+                        to="/ProjectDashboard"
                         onClick={() => setProjectOpen(false)}
-                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded text-blue-600 dark:text-purple-300"
+                        className="w-full text-left px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-purple-700/40 rounded text-blue-600 dark:text-purple-300 block"
                       >
                         + Create project
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 )}
