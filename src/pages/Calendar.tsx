@@ -503,7 +503,7 @@ const Calendar = () => {
             <div className="relative">
               <button
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="flex items-center gap-1 px-2 py-1.5 text-sm border border-stone-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-stone-100 dark:hover:bg-gray-600 transition-colors"
+                className="flex items-center gap-1 px-2 py-1.5 text-sm border border-gray-200 dark:border-purple-500/30 rounded-lg bg-white dark:bg-black/90 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-black/80 transition-colors"
               >
                 <Filter className="w-3 h-3" />
                 <span className="hidden sm:inline">Filter</span>
