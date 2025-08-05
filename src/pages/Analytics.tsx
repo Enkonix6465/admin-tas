@@ -69,17 +69,17 @@ const Analytics = () => {
 
   // Pleasant color palette
   const colors = {
-    primary: '#8B5CF6', // Purple
+    primary: '#00D4FF', // Neon Blue
     secondary: '#06B6D4', // Cyan
-    success: '#10B981', // Emerald
+    success: '#FF6600', // Neon Orange
     warning: '#F59E0B', // Amber
-    info: '#3B82F6', // Blue
+    info: '#00D4FF', // Neon Blue
     light: '#F3F4F6', // Gray-100
     dark: '#1F2937', // Gray-800
     accent1: '#EC4899', // Pink
-    accent2: '#8B5CF6', // Purple
+    accent2: '#00D4FF', // Neon Blue
     accent3: '#06B6D4', // Cyan
-    accent4: '#10B981', // Emerald
+    accent4: '#FF6600', // Neon Orange
   };
 
   useEffect(() => {
