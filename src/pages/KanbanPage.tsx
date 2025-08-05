@@ -740,7 +740,7 @@ const KanbanPage = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center shadow-xl relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent animate-pulse" />
+
                 <Layers className="w-6 h-6 text-white relative z-10" />
               </div>
               <div>
