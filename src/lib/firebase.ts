@@ -49,6 +49,50 @@ try {
 
 export { analytics, auth, db };
 
+// Connection status utilities
+export const isFirebaseConnected = () => {
+  return db !== null && auth !== null;
+};
+
+export const checkFirebaseConnection = async () => {
+  if (!db) return false;
+  try {
+    // Try a simple query to check connection
+    const testRef = collection(db, "connection_test");
+    await getDocs(query(testRef, limit(1)));
+    return true;
+  } catch (error) {
+    console.warn("Firebase connection check failed:", error);
+    return false;
+  }
+};
+
+// Safe Firebase operation wrapper
+export const safeFirebaseOperation = async <T>(
+  operation: () => Promise<T>,
+  fallback: T,
+  operationName: string = "Firebase operation"
+): Promise<T> => {
+  if (!isFirebaseConnected()) {
+    console.warn(`${operationName} skipped - Firebase not connected. Using fallback.`);
+    return fallback;
+  }
+
+  try {
+    return await operation();
+  } catch (error: any) {
+    console.error(`${operationName} failed:`, error);
+
+    // If it's a network error, return fallback data
+    if (error.code === 'unavailable' || error.message?.includes('Failed to fetch')) {
+      console.warn(`${operationName} using fallback due to network error`);
+      return fallback;
+    }
+
+    throw error;
+  }
+};
+
 export const ROLES = {
   SUPER_ADMIN: "super_admin",
   ADMIN: "admin",
