@@ -554,11 +554,10 @@ const KanbanPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{
-          y: -4,
-          scale: 1.02,
-          boxShadow: "0 20px 25px -5px rgba(139, 92, 246, 0.3)"
+          y: -2,
+          boxShadow: "0 8px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 20px -5px rgba(139, 92, 246, 0.15)"
         }}
-        whileTap={{ scale: 0.98 }}
+        whileTap={{ scale: 0.99 }}
         layout
         draggable
         onDragStart={(e) => handleDragStart(e, task)}
@@ -566,7 +565,7 @@ const KanbanPage = () => {
           setSelectedTask(task);
           setShowTaskDetailModal(true);
         }}
-        className={`${getCardBgColor()} rounded-2xl p-5 mb-4 transition-all duration-500 cursor-pointer group relative overflow-hidden hover:shadow-2xl`}
+        className={`${getCardBgColor()} rounded-xl p-4 mb-3 transition-all duration-300 cursor-pointer group hover:shadow-lg backdrop-blur-sm`}
       >
 
 
