@@ -525,10 +525,10 @@ const Calendar = () => {
                         </div>
                       </div>
 
-                      <div className="flex justify-between pt-3 border-t border-purple-200/50">
+                      <div className="flex justify-between pt-3 border-t border-purple-200/50 dark:border-purple-600/50">
                         <button
                           onClick={clearFilters}
-                          className="px-3 py-1.5 text-sm text-purple-600 hover:text-purple-700 transition-colors"
+                          className="px-3 py-1.5 text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
                         >
                           Clear All
                         </button>
