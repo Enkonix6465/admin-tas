@@ -272,11 +272,11 @@ const AdminTicketsPage = () => {
           <tbody>
             {filteredTickets.map((ticket) => (
               <tr key={ticket.id} className="hover:bg-cyan-50 dark:hover:bg-orange-900/20">
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.projectTicketId}</td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.title}</td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.description}</td>
-                <td className="p-2 border border-gray-200 dark:border-purple-500/30 text-gray-900 dark:text-white">{ticket.priority}</td>
-                <td className="px-4 py-2 border border-gray-200 dark:border-purple-500/30">
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">{ticket.projectTicketId}</td>
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">{ticket.title}</td>
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">{ticket.description}</td>
+                <td className="p-2 border border-cyan-300 dark:border-orange-500/40 text-gray-900 dark:text-white">{ticket.priority}</td>
+                <td className="px-4 py-2 border border-cyan-300 dark:border-orange-500/40">
                   <span
                     className={`px-2 py-1 rounded-full text-white text-xs font-medium ${
                       ticket.status === "Done"
