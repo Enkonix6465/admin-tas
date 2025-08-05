@@ -870,7 +870,7 @@ const Calendar = () => {
                               }}
                               title={`${event.title} - ${event.status}`}
                             >
-                              <div className="font-medium truncate text-purple-900">{event.title}</div>
+                              <div className="font-medium truncate text-purple-900 dark:text-purple-100">{event.title}</div>
                               {event.assigned_to && viewMode === "week" && (
                                 <div className="flex items-center gap-1 mt-1 opacity-75">
                                   <User className="w-2 h-2" />
