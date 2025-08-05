@@ -410,36 +410,7 @@ export default function EmployeePerformancePage() {
             </div>
           )}
         </div>
-        <button
-          onClick={() => {
-            if (selectedEmployee && performanceData) {
-              const exportData = {
-                employee: selectedEmployee,
-                performance: performanceData,
-                bestDay: bestDay,
-                trends: performanceTrends,
-                qualityProductivity: qualityProductivityData,
-                exportDate: new Date().toISOString()
-              };
 
-              const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `performance-${selectedEmployee.name?.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
-              document.body.appendChild(a);
-              a.click();
-              document.body.removeChild(a);
-              URL.revokeObjectURL(url);
-              toast.success(`Performance report exported for ${selectedEmployee.name}! 📊`);
-            }
-          }}
-          className="flex items-center gap-2 px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          disabled={!selectedEmployee}
-        >
-          <Download className="w-4 h-4" />
-          Export Report
-        </button>
       </div>
 
       <div className="flex-1 overflow-hidden flex">
