@@ -1037,11 +1037,11 @@ const Reports = () => {
       <div className="flex-1 min-h-0 flex">
         {/* Report Types Sidebar */}
         <div className="w-80 border-r border-gray-200/50 dark:border-purple-500/30 bg-white/80 dark:bg-black/95 backdrop-blur-xl flex flex-col">
-          <div className="px-6 py-4 border-b border-gray-200/50 dark:border-gray-700/50">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+          <div className="px-6 py-4 border-b border-gray-200/50 dark:border-purple-500/30">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-purple-100">
               **Report Types**
             </h2>
-            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm font-semibold text-gray-500 dark:text-purple-300/80 mt-1">
               **Choose a report to analyze**
             </p>
           </div>
