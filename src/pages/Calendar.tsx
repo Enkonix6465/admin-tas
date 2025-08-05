@@ -881,7 +881,7 @@ const Calendar = () => {
                           ))}
 
                           {dayEvents.length > (viewMode === "week" ? 6 : 3) && (
-                            <div className="text-xs text-purple-500 px-2 py-1 font-medium">
+                            <div className="text-xs text-purple-500 dark:text-purple-400 px-2 py-1 font-medium">
                               +{dayEvents.length - (viewMode === "week" ? 6 : 3)} more
                             </div>
                           )}
