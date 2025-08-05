@@ -400,6 +400,9 @@ const Reports = () => {
         overallPerformanceScore: Math.round(overallPerformanceScore),
         performanceLevel,
 
+        // Individual Performance Score based on pending, ontime, and late
+        individualPerformanceScore: calculateIndividualPerformanceScore(pendingTasks.length, onTimeTasks.length, lateTasks.length, empTasks.length),
+
         // Priority analysis
         highPriorityTasks: highPriorityTasks.length,
         mediumPriorityTasks: mediumPriorityTasks.length,
