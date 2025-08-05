@@ -106,6 +106,7 @@ function Layout() {
 
   return (
     <div className="min-h-screen h-screen bg-gradient-to-br from-cyan-50 to-orange-50 dark:bg-gradient-to-br dark:from-purple-900/20 dark:via-purple-800/30 dark:to-purple-900/20 flex overflow-hidden">
+      <FirebaseConnectionStatus />
       {/* Compact Sidebar */}
       <div className={`${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
