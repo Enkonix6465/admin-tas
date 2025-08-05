@@ -595,7 +595,7 @@ function Layout() {
               {/* Settings Button */}
               <Link
                 to="/settings"
-                className="p-2 rounded-lg bg-white dark:bg-purple-800 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-purple-700 border border-gray-200 dark:border-purple-500/30 shadow-sm transition-all duration-200 hover:shadow-md dark:shadow-purple-500/20"
+                className="p-2 rounded-lg bg-white dark:bg-black/90 text-gray-700 dark:text-purple-300 hover:bg-gray-50 dark:hover:bg-black/80 border border-gray-200 dark:border-purple-500/30 shadow-sm transition-all duration-200 hover:shadow-md dark:shadow-purple-500/20"
                 title="Settings"
               >
                 <Settings className="w-4 h-4" />
