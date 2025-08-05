@@ -663,71 +663,7 @@ export default function EmployeePerformancePage() {
                   </ResponsiveContainer>
                 </div>
 
-                {/* Monthly Performance Radar */}
-                <div className="liquid-glass-card">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Monthly Performance Overview
-                  </h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <RadarChart data={monthChartData.slice(-6)}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="month" />
-                      <PolarRadiusAxis angle={90} domain={[0, 'dataMax']} />
-                      <Radar
-                        name="Completed"
-                        dataKey="Completed"
-                        stroke="#10b981"
-                        fill="#10b981"
-                        fillOpacity={0.3}
-                        strokeWidth={2}
-                      />
-                      <Radar
-                        name="Reassigned"
-                        dataKey="Reassigned"
-                        stroke="#f59e0b"
-                        fill="#f59e0b"
-                        fillOpacity={0.3}
-                        strokeWidth={2}
-                      />
-                      <Legend />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
 
-                {/* Daily Activity Trends */}
-                <div className="liquid-glass-card">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                    Daily Activity Trends
-                  </h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <LineChart data={dateChartData.slice(-14)}>
-                      <defs>
-                        <linearGradient id="completedGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                      <YAxis />
-                      <Tooltip />
-                      <Legend />
-                      <Line
-                        type="monotone"
-                        dataKey="Completed"
-                        stroke="#10b981"
-                        strokeWidth={2}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="Reassigned"
-                        stroke="#f59e0b"
-                        strokeWidth={2}
-                        strokeDasharray="5 5"
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
               </div>
 
               {/* Task Details Table */}
