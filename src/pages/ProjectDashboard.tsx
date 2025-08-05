@@ -62,6 +62,11 @@ export default function ProjectDashboard() {
         setLoading(true);
         setError(null);
 
+        // Check if Firebase is available
+        if (!db) {
+          throw new Error("Firebase not available");
+        }
+
         const projSnap = await getDocs(query(collection(db, "projects")));
         const teamSnap = await getDocs(query(collection(db, "teams")));
         const empSnap = await getDocs(query(collection(db, "employees")));
