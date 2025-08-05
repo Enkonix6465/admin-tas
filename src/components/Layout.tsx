@@ -423,7 +423,7 @@ function Layout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Compact Top Header */}
-        <header className="bg-gradient-to-r from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-r dark:from-black/95 dark:to-gray-900/90 backdrop-blur-xl border-b border-cyan-300 dark:border-orange-500/40 px-4 py-2 shadow-lg shadow-cyan-500/20 dark:shadow-orange-500/20">
+        <header className="bg-gradient-to-r from-cyan-100/95 to-orange-100/95 dark:bg-gradient-to-r dark:from-black/95 dark:to-black/90 backdrop-blur-xl border-b border-cyan-300 dark:border-purple-500/40 px-4 py-2 shadow-lg shadow-cyan-500/20 dark:shadow-purple-500/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <button
