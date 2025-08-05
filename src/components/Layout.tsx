@@ -550,7 +550,7 @@ function Layout() {
                   <ChevronDown className="w-4 h-4" />
                 </button>
                 {sortOpen && (
-                  <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-purple-800 border border-gray-200 dark:border-purple-500/30 rounded shadow-lg z-[9999] p-2">
+                  <div className="absolute right-0 top-full mt-1 w-40 bg-white dark:bg-black/95 border border-gray-200 dark:border-purple-500/30 rounded shadow-lg z-[9999] p-2">
                     <div className="space-y-1">
                       <button
                         onClick={() => setSortOpen(false)}
