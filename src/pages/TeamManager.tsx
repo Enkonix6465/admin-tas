@@ -400,7 +400,7 @@ export default function TeamManager() {
         </div>
 
         {/* Team Leader */}
-        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+        <div className="p-4 border-b border-cyan-300/50 dark:border-purple-500/40">
           <div className="flex items-center gap-3">
             <img
               src={leadInfo.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${leadInfo.name}`}
