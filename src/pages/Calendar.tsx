@@ -456,12 +456,12 @@ const Calendar = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
-                  className="absolute right-0 top-full mt-2 w-80 backdrop-blur-xl bg-white/95 border border-purple-200/50 rounded-xl shadow-2xl z-20 p-6"
+                  className="absolute right-0 top-full mt-2 w-80 backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 border border-purple-200/50 dark:border-purple-600/50 rounded-xl shadow-2xl z-20 p-6"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/50 rounded-xl" />
-                  
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-white/50 dark:from-purple-900/50 dark:to-gray-900/50 rounded-xl" />
+
                   <div className="relative">
-                    <h3 className="text-sm font-semibold text-purple-900 mb-4">Filter Events</h3>
+                    <h3 className="text-sm font-semibold text-purple-900 dark:text-purple-100 mb-4">Filter Events</h3>
 
                     <div className="space-y-4">
                       <div>
