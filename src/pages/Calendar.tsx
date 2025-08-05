@@ -378,11 +378,11 @@ const Calendar = () => {
       {/* Main Calendar Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Compact Header Bar */}
-        <div className="relative backdrop-blur-xl bg-white/90 border-b border-purple-200/30 p-4 flex items-center justify-between flex-shrink-0 shadow-sm">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-white/10 to-purple-600/5" />
-          
+        <div className="relative backdrop-blur-xl bg-white/90 dark:bg-gray-900/90 border-b border-purple-200/30 dark:border-purple-600/30 p-4 flex items-center justify-between flex-shrink-0 shadow-sm">
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-white/10 to-purple-600/5 dark:from-purple-400/10 dark:via-gray-900/10 dark:to-purple-600/10" />
+
           <div className="relative flex items-center gap-4">
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 dark:from-purple-400 dark:to-purple-300 bg-clip-text text-transparent">
               {getDateLabel()}
             </h1>
             <div className="flex items-center gap-1">
