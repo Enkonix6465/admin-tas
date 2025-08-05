@@ -276,7 +276,7 @@ const AdminTicketsPage = () => {
       {/* Edit Modal */}
       {editingTicket && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-purple-900/90 p-6 rounded-lg w-[400px] shadow-lg border border-gray-200 dark:border-purple-500/30">
+          <div className="liquid-glass-card w-[400px] shadow-lg">
             <h2 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Edit Ticket</h2>
             <label className="block mb-2 text-gray-900 dark:text-white">
               Title:
