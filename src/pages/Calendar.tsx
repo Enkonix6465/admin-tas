@@ -843,9 +843,9 @@ const Calendar = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: index * 0.01 }}
-                        className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-purple-200/30 hover:bg-purple-50/30 transition-colors cursor-pointer relative ${
-                          !isCurrentMonth ? "text-purple-400 bg-purple-50/20" : ""
-                        } ${isToday_ ? "bg-purple-100/60" : ""}`}
+                        className={`p-2 ${viewMode === "week" ? "min-h-[200px]" : "min-h-[120px]"} border-r border-b border-purple-200/30 dark:border-purple-600/30 hover:bg-purple-50/30 dark:hover:bg-purple-900/30 transition-colors cursor-pointer relative ${
+                          !isCurrentMonth ? "text-purple-400 bg-purple-50/20 dark:bg-purple-900/20" : ""
+                        } ${isToday_ ? "bg-purple-100/60 dark:bg-purple-900/60" : ""}`}
                         onClick={() => setSelectedDate(day)}
                       >
                         <div className={`text-sm font-medium mb-2 ${
