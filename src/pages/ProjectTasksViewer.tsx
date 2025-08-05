@@ -221,7 +221,7 @@ export default function ProjectTasksViewer() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-full">
         {columns.map((column) => (
           <div key={column.id} className="flex flex-col h-full">
-            <div className="flex items-center justify-between mb-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+            <div className="flex items-center justify-between mb-3 p-3 bg-white/80 dark:bg-black/95 border border-gray-200/50 dark:border-purple-500/30 rounded-lg">
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${
                   column.id === "pending" ? "bg-gray-400" :
