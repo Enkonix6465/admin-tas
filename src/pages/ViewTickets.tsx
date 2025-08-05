@@ -7,7 +7,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { db } from "../lib/firebase";
+import { db, isFirebaseConnected } from "../lib/firebase";
 import { format } from "date-fns";
 
 const AdminTicketsPage = () => {
