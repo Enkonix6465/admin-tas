@@ -427,24 +427,44 @@ const Reports = () => {
     function calculateIndividualPerformanceScore(pendingCount, onTimeCount, lateCount, totalTasks) {
       if (totalTasks === 0) return 0;
 
-      // Performance score calculation based on task status distribution
-      const onTimeWeight = 50; // 50% weight for on-time completion
-      const pendingPenalty = 20; // 20% penalty for pending tasks
-      const latePenalty = 30; // 30% penalty for late tasks
+      let totalScore = 0;
 
-      // Calculate percentages
-      const onTimePercentage = (onTimeCount / totalTasks) * 100;
-      const pendingPercentage = (pendingCount / totalTasks) * 100;
-      const latePercentage = (lateCount / totalTasks) * 100;
+      // On-time tasks get 100% score
+      totalScore += onTimeCount * 100;
 
-      // Calculate score: start with 100, add bonus for on-time, subtract penalties
-      let score = 100;
-      score += (onTimePercentage * onTimeWeight) / 100; // Bonus for on-time completion
-      score -= (pendingPercentage * pendingPenalty) / 100; // Penalty for pending tasks
-      score -= (latePercentage * latePenalty) / 100; // Penalty for late tasks
+      // Pending tasks get 50% score (incomplete but not delayed)
+      totalScore += pendingCount * 50;
 
-      // Ensure score is between 0 and 100
-      return Math.max(0, Math.min(100, Math.round(score)));
+      // Late tasks get reduced score based on delay (minimum 20%)
+      totalScore += lateCount * 20;
+
+      // Calculate average score
+      const averageScore = totalScore / totalTasks;
+
+      return Math.max(0, Math.min(100, Math.round(averageScore)));
+    }
+
+    // Helper function to calculate performance score with timing consideration
+    function calculateTimingBasedPerformanceScore(task) {
+      if (!task.due_date || !task.progress_updated_at || task.status !== 'completed') {
+        return 50; // Default score for incomplete or no due date
+      }
+
+      const dueDate = new Date(task.due_date);
+      const completionDate = new Date(task.progress_updated_at.seconds * 1000);
+
+      // If completed on time or early, 100% score
+      if (completionDate <= dueDate) {
+        return 100;
+      }
+
+      // If late, decrease score based on delay
+      const delayInDays = Math.ceil((completionDate - dueDate) / (1000 * 60 * 60 * 24));
+
+      // Decrease by 10% per day late, minimum 20%
+      const score = Math.max(20, 100 - (delayInDays * 10));
+
+      return Math.round(score);
     }
 
     // Helper function to calculate timing-based performance score
