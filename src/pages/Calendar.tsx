@@ -660,10 +660,10 @@ const Calendar = () => {
                                 </div>
 
                                 <div className="text-right">
-                                  <div className="text-sm font-medium text-purple-900">
+                                  <div className="text-sm font-medium text-purple-900 dark:text-purple-100">
                                     {completionProgress.toFixed(0)}%
                                   </div>
-                                  <div className="text-xs text-purple-600">completion</div>
+                                  <div className="text-xs text-purple-600 dark:text-purple-400">completion</div>
                                 </div>
                               </div>
 
