@@ -850,7 +850,7 @@ const KanbanPage = () => {
               </button>
 
               {filterOpen && (
-                <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-black/95 border border-gray-200 dark:border-purple-500/30 rounded-xl z-[99999] p-6 shadow-2xl">
+                <div className="absolute right-0 top-full mt-2 w-80 bg-white/95 dark:bg-black/95 backdrop-blur-xl border border-gray-200 dark:border-purple-500/30 rounded-xl z-[99999] p-6 shadow-2xl">
                   <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">Filter Tasks</h3>
                   
                   <div className="space-y-4">
