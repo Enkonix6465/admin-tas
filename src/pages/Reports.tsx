@@ -1242,7 +1242,6 @@ const Reports = () => {
                           <div className="h-64">
                             <ResponsiveContainer width="100%" height="100%">
                               <BarChart data={reportData.chartData.individualData.priorityPerformance}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
                                 <XAxis dataKey="priority" stroke="#6b7280" />
                                 <YAxis stroke="#6b7280" />
                                 <Tooltip
